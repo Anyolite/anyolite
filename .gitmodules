@@ -1,6 +1,3 @@
-[submodule "mruby"]
-	path = third_party/mruby
-	url = https://github.com/mruby/mruby
 [submodule "third_party/mruby"]
 	path = third_party/mruby
 	url = https://github.com/mruby/mruby
