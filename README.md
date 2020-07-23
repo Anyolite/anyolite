@@ -1,6 +1,6 @@
 # Anyolite
 
-Anyolite is planned to be a crystal shards which adds a full mruby interpreter to crystal.
+Anyolite is planned to be a crystal shard which adds a full mruby interpreter to crystal.
 
 # Goals of this project
 
