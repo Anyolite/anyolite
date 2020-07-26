@@ -7,4 +7,7 @@ authors:
 description: |
   TBD
 
+scripts:
+  postinstall: utility/install_ubuntu.sh
+
 license: MIT

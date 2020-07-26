@@ -1,5 +1,5 @@
-@[Link(ldflags: "#{__DIR__}/mruby/build/host/lib/libmruby.a -DMRB_INT64")]
-@[Link(ldflags: "#{__DIR__}/helper.o -DMRB_INT64")]
+@[Link(ldflags: "#{__DIR__}/build/mruby/lib/libmruby.a -DMRB_INT64")]
+@[Link(ldflags: "#{__DIR__}/build/helper.o -DMRB_INT64")]
 
 lib MRubyInternal
 
