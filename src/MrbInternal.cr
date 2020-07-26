@@ -1,7 +1,7 @@
 @[Link(ldflags: "#{__DIR__}/../build/mruby/lib/libmruby.a -DMRB_INT64")]
 @[Link(ldflags: "#{__DIR__}/../build/glue/return_functions.o -DMRB_INT64")]
 
-lib MRubyInternal
+lib MrbInternal
   type MrbState = Void
   type RClass = Void
 

@@ -1,9 +1,10 @@
-require "./mruby_internal.cr"
+require "./MrbInternal.cr"
 
-require "./mrb_state.cr"
-require "./mrb_class.cr"
-require "./mrb_cast.cr"
+require "./MrbState.cr"
+require "./MrbClass.cr"
+require "./MrbCast.cr"
+require "./MrbWrap.cr"
 
-require "./format_string.cr"
+require "./FormatString.cr"
 
-alias MrbFunc = Proc(MRubyInternal::MrbState*, MRubyInternal::MrbValue, MRubyInternal::MrbValue)
+alias MrbFunc = Proc(MrbInternal::MrbState*, MrbInternal::MrbValue, MrbInternal::MrbValue)
