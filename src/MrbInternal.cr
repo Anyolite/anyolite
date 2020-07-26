@@ -56,6 +56,9 @@ lib MrbInternal
   fun mrb_close(mrb : MrbState*)
   fun mrb_define_class(mrb : MrbState*, name : LibC::Char*, super : RClass*) : RClass*
   fun mrb_define_method(mrb : MrbState*, c : RClass*, name : LibC::Char*, func : MrbState*, MrbValue -> MrbValue, aspec : UInt32)
+  fun mrb_print_error(mrb : MrbState*)
+
+  fun mrb_get_args(mrb : MrbState*, format : LibC::Char*, ...) : MrbInt
 
   fun get_nil_value : MrbValue
   fun get_false_value : MrbValue

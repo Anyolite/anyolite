@@ -1,6 +1,6 @@
-module FormatString
+module MrbMacro
 
-  macro generate(proc)
+  macro format_string(proc)
     format_str = ""
 
     {% for arg in proc.args %}
@@ -21,5 +21,5 @@ module FormatString
 
     format_str
   end
-  
+
 end

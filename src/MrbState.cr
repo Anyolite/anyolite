@@ -24,6 +24,6 @@ class MrbState
   end
 
   def define_method(name : String, c : MrbClass, proc : MrbFunc)
-    MrbInternal.mrb_define_method(@mrb_ptr, c, name, proc, 0)
+    MrbInternal.mrb_define_method(@mrb_ptr, c, name, proc, 1)
   end
 end
