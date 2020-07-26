@@ -3,7 +3,7 @@ struct Proc
     return T
   end
 
-  def return_value
+  def return_type
     return R
   end
 end
