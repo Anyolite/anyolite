@@ -1,5 +1,5 @@
 @[Link(ldflags: "#{__DIR__}/build/mruby/lib/libmruby.a -DMRB_INT64")]
-@[Link(ldflags: "#{__DIR__}/build/helper.o -DMRB_INT64")]
+@[Link(ldflags: "#{__DIR__}/build/glue/return_functions.o -DMRB_INT64")]
 
 lib MRubyInternal
 
@@ -8,6 +8,7 @@ lib MRubyInternal
 
     alias MrbFloat = LibC::Float
     alias MrbInt = Int64
+    alias MrbBool = UInt8
     type MrbSymbol = UInt32
 
     union MrbValueUnion
@@ -61,6 +62,8 @@ lib MRubyInternal
     fun get_false_value() : MrbValue
     fun get_true_value() : MrbValue
     fun get_fixnum_value(value : MrbInt) : MrbValue
+    fun get_bool_value(value : MrbBool) : MrbValue
+    fun get_float_value(mrb: MrbState*, value : MrbFloat) : MrbValue
 
     fun get_object_class(mrb : MrbState*) : RClass*
 
@@ -131,6 +134,14 @@ module MrbCast
         return MRubyInternal.get_fixnum_value(value)
     end
 
+    def self.return_bool(value)
+        return MRubyInternal.get_bool_value(value ? 1 : 0)
+    end
+
+    def self.return_float(mrb, value)
+        return MRubyInternal.get_float_value(mrb, value)
+    end
+
 end
 
 MrbState.create do |mrb|
@@ -138,7 +149,7 @@ MrbState.create do |mrb|
     test_class = MrbClass.new(mrb, "Test")
 
     p = MrbFunc.new do |mrb, self|
-        MrbCast.return_fixnum(-1)
+        MrbCast.return_bool(false)
     end
 
     mrb.define_method("foo", test_class, p)

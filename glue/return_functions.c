@@ -30,3 +30,15 @@ extern mrb_value get_fixnum_value(mrb_int value) {
     return mrb_fixnum_value(value);
 
 }
+
+extern mrb_value get_bool_value(mrb_bool value) {
+
+    return mrb_bool_value(value);
+
+}
+
+extern mrb_value get_float_value(mrb_state* mrb, mrb_float value) {
+
+    return mrb_float_value(mrb, value);
+
+}
