@@ -7,6 +7,10 @@ end
 MrbState.create do |mrb|
   test_class = MrbClass.new(mrb, "Test")
 
+  # TODO: Try this without malloc.
+  # TODO: Maybe use macros to directly create the variables?
+  # TODO: Otherwise just let it be this way, for now.
+
   p = MrbFunc.new do |mrb, self|
     args = Tuple.new(Pointer(MrbInternal::MrbInt).malloc(size: 1), Pointer(MrbInternal::MrbBool).malloc(size: 1), Pointer(LibC::Char*).malloc(size: 1))
     format_string = MrbMacro.format_string(->dummy_method(Int32, Bool, String))
