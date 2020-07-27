@@ -22,4 +22,32 @@ module MrbMacro
     format_str
   end
 
+  macro cast_type_to_ruby(type)
+    {% if type.resolve <= Bool %}
+      MrbInternal::MrbBool
+    {% elsif type.resolve <= Int %}
+      MrbInternal::MrbInt
+    {% elsif type.resolve <= Float %}
+      MrbInternal::MrbFloat
+    {% elsif type.resolve <= String %}
+      LibC::Char*
+    {% else %}
+      MrbInternal::MrbValue
+    {% end %}
+  end
+
+  macro pointer_type(type)
+    {% if type.resolve <= Bool %}
+      Pointer(MrbInternal::MrbBool)
+    {% elsif type.resolve <= Int %}
+      Pointer(MrbInternal::MrbInt)
+    {% elsif type.resolve <= Float %}
+      Pointer(MrbInternal::MrbFloat)
+    {% elsif type.resolve <= String %}
+      Pointer(LibC::Char*)
+    {% else %}
+      Pointer(MrbInternal::MrbValue)
+    {% end %}
+  end
+
 end
