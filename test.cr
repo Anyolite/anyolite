@@ -13,9 +13,7 @@ end
 MrbState.create do |mrb|
   test_class = MrbClass.new(mrb, "Test")
 
-  p = MrbMacro.wrap_function(->test_method(Int32, Bool, String))
-
-  mrb.define_method("foo", test_class, p)
+  p = MrbMacro.wrap_function(mrb, test_class, "foo", ->test_method(Int32, Bool, String))
 
   mrb.load_string("puts 'Testing Ruby...'")
   mrb.load_string("$a = Test.new")
