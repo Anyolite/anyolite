@@ -50,4 +50,34 @@ module MrbMacro
     {% end %}
   end
 
+  macro generate_arg_tuple(proc)
+    Tuple.new(
+      {% for arg in proc.args %}
+        MrbMacro.pointer_type({{arg}}).malloc(size: 1),
+      {% end %}
+    )
+  end
+
+  macro get_raw_args(mrb, proc)
+    args = MrbMacro.generate_arg_tuple({{proc}})
+    format_string = MrbMacro.format_string({{proc}})
+    MrbInternal.mrb_get_args(mrb, format_string, *args)
+    args
+  end
+
+  macro get_converted_args(mrb, proc)
+    args = MrbMacro.get_raw_args(mrb, {{proc}})
+    # TODO: Convert arguments
+    Tuple.new(Int32.new(args[0].value), (args[1].value != 0), String.new(args[2].value))
+  end
+
+  macro wrap_function(proc)
+    MrbFunc.new do |mrb, self|
+      converted_args = MrbMacro.get_converted_args(mrb, {{proc}})
+      return_value = {{proc}}.call(*converted_args)
+      # TODO: Cast return value correctly
+      MrbCast.return_fixnum(return_value)
+    end
+  end
+
 end
