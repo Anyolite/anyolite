@@ -1,25 +1,22 @@
 module MrbMacro
-
   macro format_string(proc)
-    format_str = ""
+    {% format_str = "" %}
 
     {% for arg in proc.args %}
-
       {% if arg.resolve <= Bool %}
-        format_str += "b"
+        {% format_str += "b" %}
       {% elsif arg.resolve <= Int %}
-        format_str += "i"
+        {% format_str += "i" %}
       {% elsif arg.resolve <= Float %}
-        format_str += "f"
+        {% format_str += "f" %}
       {% elsif arg.resolve <= String %}
-        format_str += "z"
+        {% format_str += "z" %}
       {% else %}
-        format_str += "o"
+        {% format_str += "o" %}
       {% end %}
-      
     {% end %}
 
-    format_str
+    {{format_str}}
   end
 
   macro cast_type_to_ruby(type)
@@ -65,10 +62,33 @@ module MrbMacro
     args
   end
 
+  macro convert_arg(mrb, arg, arg_type)
+    {% if arg_type.resolve <= Bool %}
+      ({{arg}} != 0)
+    {% elsif arg_type.resolve <= Int %}
+      {{arg_type}}.new({{arg}})
+    {% elsif arg_type.resolve <= Float %}
+      {{arg_type}}.new({{arg}})
+    {% elsif arg_type.resolve <= String %}
+      {{arg_type}}.new({{arg}})
+    {% else %}
+      # TODO: General conversions
+      0
+    {% end %}
+  end
+
   macro get_converted_args(mrb, proc)
-    args = MrbMacro.get_raw_args(mrb, {{proc}})
-    # TODO: Convert arguments
-    Tuple.new(Int32.new(args[0].value), (args[1].value != 0), String.new(args[2].value))
+    args = MrbMacro.generate_arg_tuple({{proc}})
+    format_string = MrbMacro.format_string({{proc}})
+    MrbInternal.mrb_get_args(mrb, format_string, *args)
+
+    Tuple.new(
+      {% c = 0 %}
+      {% for arg in proc.args %}
+        MrbMacro.convert_arg(mrb, args[{{c}}].value, {{arg}}),
+        {% c += 1 %}
+      {% end %}
+    )
   end
 
   macro wrap_function(proc)
@@ -79,5 +99,4 @@ module MrbMacro
       MrbCast.return_fixnum(return_value)
     end
   end
-
 end
