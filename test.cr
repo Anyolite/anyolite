@@ -5,10 +5,15 @@ def dummy_method(*args)
   return 123
 end
 
+def test_method(int : Int32, bool : Bool, str : String)
+  puts str
+  return int * int * (bool ? -1 : 1)
+end
+
 MrbState.create do |mrb|
   test_class = MrbClass.new(mrb, "Test")
 
-  p = MrbMacro.wrap_function(->dummy_method(Int32, Bool, String))
+  p = MrbMacro.wrap_function(->test_method(Int32, Bool, String))
 
   mrb.define_method("foo", test_class, p)
 
