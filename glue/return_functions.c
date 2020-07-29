@@ -1,5 +1,6 @@
 #include <mruby.h>
 #include <mruby/class.h>
+#include <string.h>
 
 extern struct RClass* get_object_class(mrb_state* mrb) {
 
@@ -40,5 +41,11 @@ extern mrb_value get_bool_value(mrb_bool value) {
 extern mrb_value get_float_value(mrb_state* mrb, mrb_float value) {
 
     return mrb_float_value(mrb, value);
+
+}
+
+extern mrb_value get_string_value(mrb_state* mrb, char* value) {
+
+    return mrb_str_new(mrb, value, strlen(value));
 
 }

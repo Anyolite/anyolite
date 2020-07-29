@@ -1,4 +1,7 @@
 module MrbCast
+
+  # Explicit return methods
+
   def self.return_nil
     return MrbInternal.get_nil_value
   end
@@ -22,4 +25,32 @@ module MrbCast
   def self.return_float(mrb, value)
     return MrbInternal.get_float_value(mrb, value)
   end
+
+  def self.return_string(mrb, value)
+    return MrbInternal.get_string_value(mrb, value)
+  end
+
+  # Implicit return methods
+
+  def self.return_value(mrb : MrbInternal::MrbState*, value : Nil)
+    self.return_nil
+  end
+
+  def self.return_value(mrb : MrbInternal::MrbState*, value : Bool)
+    value ? self.return_true : return_false
+  end
+
+  def self.return_value(mrb : MrbInternal::MrbState*, value : Int)
+    self.return_fixnum(value)
+  end
+
+  def self.return_value(mrb : MrbInternal::MrbState*, value : Float)
+    self.return_float(mrb, value)
+  end
+
+  def self.return_value(mrb : MrbInternal::MrbState*, value : String)
+    self.return_string(mrb, value)
+  end
+
+  # TODO: Conversions of other objects
 end

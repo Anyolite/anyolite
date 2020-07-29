@@ -19,7 +19,8 @@ module MrbMacro
     {{format_str}}
   end
 
-  macro cast_type_to_ruby(type)
+  # NOTE: May be obsolete
+  macro type_in_ruby(type)
     {% if type.resolve <= Bool %}
       MrbInternal::MrbBool
     {% elsif type.resolve <= Int %}
@@ -77,6 +78,11 @@ module MrbMacro
     {% end %}
   end
 
+  macro call_and_return(mrb, proc, converted_args)
+    return_value = {{proc}}.call(*{{converted_args}})
+    MrbCast.return_value({{mrb}}, return_value)
+  end
+
   macro get_converted_args(mrb, proc)
     args = MrbMacro.generate_arg_tuple({{proc}})
     format_string = MrbMacro.format_string({{proc}})
@@ -94,9 +100,7 @@ module MrbMacro
   macro wrap_function(mrb_state, wrap_class, name, proc)
     wrapped_method = MrbFunc.new do |mrb, self|
       converted_args = MrbMacro.get_converted_args(mrb, {{proc}})
-      return_value = {{proc}}.call(*converted_args)
-      # TODO: Cast return value correctly
-      MrbCast.return_fixnum(return_value)
+      MrbMacro.call_and_return(mrb, {{proc}}, converted_args)
     end
 
     mrb.define_method({{name}}, {{wrap_class}}, wrapped_method)

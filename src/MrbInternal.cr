@@ -51,7 +51,7 @@ lib MrbInternal
     tt : MrbVType
   end
 
-  fun mrb_open : MrbState*
+  fun mrb_open() : MrbState*
   fun mrb_load_string(mrb : MrbState*, s : LibC::Char*)
   fun mrb_close(mrb : MrbState*)
   fun mrb_define_class(mrb : MrbState*, name : LibC::Char*, super : RClass*) : RClass*
@@ -60,12 +60,13 @@ lib MrbInternal
 
   fun mrb_get_args(mrb : MrbState*, format : LibC::Char*, ...) : MrbInt
 
-  fun get_nil_value : MrbValue
-  fun get_false_value : MrbValue
-  fun get_true_value : MrbValue
+  fun get_nil_value() : MrbValue
+  fun get_false_value() : MrbValue
+  fun get_true_value() : MrbValue
   fun get_fixnum_value(value : MrbInt) : MrbValue
   fun get_bool_value(value : MrbBool) : MrbValue
   fun get_float_value(mrb : MrbState*, value : MrbFloat) : MrbValue
+  fun get_string_value(mrb : MrbState*, value : LibC::Char*) : MrbValue
 
   fun get_object_class(mrb : MrbState*) : RClass*
 end

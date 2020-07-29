@@ -8,7 +8,11 @@ This project aims to provide an mruby interpreter to Crystal projects, allowing 
 
 # Todo
 
-* [ ] Provide basic structure
+* [X] Provide basic structure
+* [X] Ubuntu support
+* [ ] Windows support
+* [ ] Basic wrappers
+* [ ] Tidy up namespaces and methods
 * [ ] Design concept for data ownership
 * [ ] Bind mruby methods
 * [ ] Build tests
