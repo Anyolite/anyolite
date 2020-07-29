@@ -97,12 +97,17 @@ module MrbMacro
     )
   end
 
-  macro wrap_function(mrb_state, wrap_class, name, proc)
+  macro wrap_function(mrb_state, crystal_class, name, proc)
     wrapped_method = MrbFunc.new do |mrb, self|
       converted_args = MrbMacro.get_converted_args(mrb, {{proc}})
       MrbMacro.call_and_return(mrb, {{proc}}, converted_args)
     end
 
-    mrb.define_method({{name}}, {{wrap_class}}, wrapped_method)
+    mrb.define_method({{name}}, MrbClassCache.get({{crystal_class}}), wrapped_method)
+  end
+
+  macro wrap_class(mrb, crystal_class, name)
+    new_class = MrbClass.new({{mrb}}, {{name}})
+    MrbClassCache.register({{crystal_class}}, new_class)
   end
 end
