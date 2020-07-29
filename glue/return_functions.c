@@ -1,5 +1,6 @@
 #include <mruby.h>
 #include <mruby/class.h>
+#include <mruby/data.h>
 #include <string.h>
 
 extern struct RClass* get_object_class(mrb_state* mrb) {
@@ -47,5 +48,25 @@ extern mrb_value get_float_value(mrb_state* mrb, mrb_float value) {
 extern mrb_value get_string_value(mrb_state* mrb, char* value) {
 
     return mrb_str_new(mrb, value, strlen(value));
+
+}
+
+//! TODO: Put it in separate files
+
+extern const mrb_data_type* data_type(mrb_value value) {
+
+    return DATA_TYPE(value);
+
+}
+
+extern void set_instance_tt_as_data(struct RClass* ruby_class) {
+
+    MRB_SET_INSTANCE_TT(ruby_class, MRB_TT_DATA);
+
+}
+
+extern mrb_value new_empty_object(mrb_state* mrb, struct RClass* ruby_class) {
+
+    return mrb_obj_new(mrb, ruby_class, 0, NULL);
 
 }

@@ -63,6 +63,7 @@ module MrbMacro
     args
   end
 
+  # Converts Ruby values to Crystal values
   macro convert_arg(mrb, arg, arg_type)
     {% if arg_type.resolve <= Bool %}
       ({{arg}} != 0)
@@ -72,10 +73,22 @@ module MrbMacro
       {{arg_type}}.new({{arg}})
     {% elsif arg_type.resolve <= String %}
       {{arg_type}}.new({{arg}})
+    # TODO: Pointer as possible class
     {% else %}
-      # TODO: General conversions
-      0
+      MrbMacro.convert_from_ruby_object(mrb, arg, arg_type).value
     {% end %}
+  end
+
+  macro convert_from_ruby_object(mrb, obj, crystal_type)
+    # TODO: Add type check
+    ruby_type = MrbInternal.data_type({{obj}})
+    ptr = MrbInternal.mrb_data_get_ptr({{mrb}}, {{obj}}, ruby_type)
+    ptr.as({{crystal_type}})
+  end
+
+  macro init_ruby_object(mrb, obj, crystal_type, *args)
+    crystal_object = {{crystal_type}}.new(*args)
+    # TODO: Further stuff
   end
 
   macro call_and_return(mrb, proc, converted_args)
@@ -98,16 +111,17 @@ module MrbMacro
   end
 
   macro wrap_function(mrb_state, crystal_class, name, proc)
-    wrapped_method = MrbFunc.new do |mrb, self|
+    wrapped_method = MrbFunc.new do |mrb, obj|
       converted_args = MrbMacro.get_converted_args(mrb, {{proc}})
       MrbMacro.call_and_return(mrb, {{proc}}, converted_args)
     end
 
     mrb.define_method({{name}}, MrbClassCache.get({{crystal_class}}), wrapped_method)
-  end
+  end 
 
   macro wrap_class(mrb, crystal_class, name)
     new_class = MrbClass.new({{mrb}}, {{name}})
+    MrbInternal.set_instance_tt_as_data(new_class)
     MrbClassCache.register({{crystal_class}}, new_class)
   end
 end

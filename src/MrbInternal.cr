@@ -4,6 +4,7 @@
 lib MrbInternal
   type MrbState = Void
   type RClass = Void
+  type MrbDataType = Void
 
   alias MrbFloat = LibC::Float
   alias MrbInt = Int64
@@ -69,4 +70,9 @@ lib MrbInternal
   fun get_string_value(mrb : MrbState*, value : LibC::Char*) : MrbValue
 
   fun get_object_class(mrb : MrbState*) : RClass*
+
+  fun data_type(value : MrbValue) : MrbDataType*
+  fun mrb_data_get_ptr(mrb : MrbState*, obj : MrbValue, type : MrbDataType*) : Void*
+  fun set_instance_tt_as_data(ruby_class : RClass*) : Void
+  fun new_empty_object(mrb : MrbState*, ruby_class : RClass*) : MrbValue
 end
