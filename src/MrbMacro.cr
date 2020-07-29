@@ -75,7 +75,7 @@ module MrbMacro
       {{arg_type}}.new({{arg}})
     # TODO: Pointer as possible class
     {% else %}
-      MrbMacro.convert_from_ruby_object(mrb, arg, arg_type).value
+      MrbMacro.convert_from_ruby_object({{mrb}}, {{arg}}, {{arg_type}}).value
     {% end %}
   end
 
@@ -83,7 +83,7 @@ module MrbMacro
     # TODO: Add type check
     ruby_type = MrbInternal.data_type({{obj}})
     ptr = MrbInternal.mrb_data_get_ptr({{mrb}}, {{obj}}, ruby_type)
-    ptr.as({{crystal_type}})
+    ptr.as({{crystal_type}}*)
   end
 
   macro init_ruby_object(mrb, obj, crystal_type, *args)
