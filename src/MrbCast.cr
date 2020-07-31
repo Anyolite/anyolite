@@ -52,13 +52,11 @@ module MrbCast
     self.return_string(mrb, value)
   end
 
-  def self.return_value(mrb : MrbInternal::MrbState*, value)
-    crystal_class = value.class
-
-    ruby_class = MrbClassCache.get(value_class)
+  def self.return_value(mrb : MrbInternal::MrbState*, value : Object)
+    ruby_class = MrbClassCache.get(typeof(value))
     new_ruby_object = MrbInternal.new_empty_object(mrb, ruby_class)
 
-    MrbMacro.convert_from_ruby_object(mrb, new_ruby_object, crystal_class).value = value
+    MrbMacro.convert_from_ruby_object(mrb, new_ruby_object, typeof(value)).value = value
 
     return new_ruby_object
   end

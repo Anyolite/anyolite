@@ -119,6 +119,10 @@ module MrbMacro
     mrb.define_method({{name}}, MrbClassCache.get({{crystal_class}}), wrapped_method)
   end 
 
+  macro wrap_constructor(mrb_state, crystal_class, proc)
+    # TODO
+  end
+
   macro wrap_class(mrb, crystal_class, name)
     new_class = MrbClass.new({{mrb}}, {{name}})
     MrbInternal.set_instance_tt_as_data(new_class)

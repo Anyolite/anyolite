@@ -4,7 +4,6 @@
 lib MrbInternal
   type MrbState = Void
   type RClass = Void
-  type MrbDataType = Void
 
   alias MrbFloat = LibC::Float
   alias MrbInt = Int64
@@ -50,6 +49,11 @@ lib MrbInternal
   struct MrbValue
     value : MrbValueUnion
     tt : MrbVType
+  end
+
+  struct MrbDataType
+    struct_name : LibC::Char* 
+    dfree : MrbState*, Void* -> Void*
   end
 
   fun mrb_open() : MrbState*

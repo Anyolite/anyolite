@@ -1,15 +1,9 @@
 require "./anyolite.cr"
 
-# Prototype method for later instance method calls (if it works)
-def instance_proc_call(obj, *args)
-  a = yield obj, *args
-  return a
-end
-
 class Test
 
-  def test_method(int : Int32, bool : Bool, str : String)
-    a = "Args given: #{int}, #{bool}, #{str}"
+  def test_instance_method(int : Int32, bool : Bool, str : String)
+    a = "Args given for instance method: #{int}, #{bool}, #{str}"
     return a
   end
 
@@ -38,10 +32,9 @@ MrbState.create do |mrb|
   MrbMacro.wrap_class(mrb, Test, "Test")
   MrbMacro.wrap_function(mrb, Test, "foo", ->test_method(Int32, Bool, String))
 
-  a = Test.new
-  instance_proc_call(a, 3, true, "Hello") do |obj, *args|
-    obj.test_method(*args)
-  end
+  # WARNING: Test objects in Ruby have no internal data yet, so executing this in Ruby will likely segfault
+  p = ->(obj : Test, arg_1 : Int32, arg_2 : Bool, arg_3 : String){obj.test_instance_method(arg_1, arg_2, arg_3)}
+  MrbMacro.wrap_function(mrb, Test, "bar", ->p(Test, Int32, Bool, String))
 
   mrb.load_string("$a = Test.new")
   mrb.load_string("$b = $a.foo(17, true, 'bla')")
