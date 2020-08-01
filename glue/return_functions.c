@@ -70,3 +70,18 @@ extern mrb_value new_empty_object(mrb_state* mrb, struct RClass* ruby_class) {
     return mrb_obj_new(mrb, ruby_class, 0, NULL);
 
 }
+
+static void do_nothing(mrb_state* mrb, void* data) {
+
+}
+
+extern void set_data_ptr_and_type(mrb_value* ruby_object, void* data) {
+
+    static const mrb_data_type data_type = {
+        "test", do_nothing
+    };
+
+    DATA_PTR(*ruby_object) = data;
+    DATA_TYPE(*ruby_object) = &data_type;
+
+}

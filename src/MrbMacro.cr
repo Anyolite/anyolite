@@ -1,8 +1,8 @@
 module MrbMacro
-  macro format_string(proc)
+  macro format_string(args)
     {% format_str = "" %}
 
-    {% for arg in proc.args %}
+    {% for arg in args %}
       {% if arg.resolve <= Bool %}
         {% format_str += "b" %}
       {% elsif arg.resolve <= Int %}
@@ -48,9 +48,9 @@ module MrbMacro
     {% end %}
   end
 
-  macro generate_arg_tuple(proc)
+  macro generate_arg_tuple(args)
     Tuple.new(
-      {% for arg in proc.args %}
+      {% for arg in args %}
         MrbMacro.pointer_type({{arg}}).malloc(size: 1),
       {% end %}
     )
@@ -58,7 +58,7 @@ module MrbMacro
 
   macro get_raw_args(mrb, proc)
     args = MrbMacro.generate_arg_tuple({{proc}})
-    format_string = MrbMacro.format_string({{proc}})
+    format_string = MrbMacro.format_string({{proc.args}})
     MrbInternal.mrb_get_args(mrb, format_string, *args)
     args
   end
@@ -91,19 +91,37 @@ module MrbMacro
     # TODO: Further stuff
   end
 
-  macro call_and_return(mrb, proc, converted_args)
-    return_value = {{proc}}.call(*{{converted_args}})
+  macro call_and_return(mrb, proc, proc_args, converted_args)
+    {% if proc.args.size != proc_args.size %}
+      {% if proc_args.size > 0 %}
+        return_value = {{proc.name}}.call(*{{converted_args}})
+      {% else %}
+        return_value = ({{proc.name}}).call
+      {% end %}
+    {% else %}
+      {% if proc_args.size > 0 %}
+        return_value = {{proc}}.call(*{{converted_args}})
+      {% else %}
+        return_value = ({{proc}}).call
+      {% end %}
+    {% end %}
     MrbCast.return_value({{mrb}}, return_value)
   end
 
-  macro get_converted_args(mrb, proc)
-    args = MrbMacro.generate_arg_tuple({{proc}})
-    format_string = MrbMacro.format_string({{proc}})
+  macro get_converted_args(mrb, proc_args)
+    {% if proc_args.size > 0 %}
+      args = MrbMacro.generate_arg_tuple({{proc_args}})
+      format_string = MrbMacro.format_string({{proc_args}})
+    {% else %}
+      args = Tuple.new
+      format_string = ""
+    {% end %}
+    
     MrbInternal.mrb_get_args(mrb, format_string, *args)
 
     Tuple.new(
       {% c = 0 %}
-      {% for arg in proc.args %}
+      {% for arg in proc_args %}
         MrbMacro.convert_arg(mrb, args[{{c}}].value, {{arg}}),
         {% c += 1 %}
       {% end %}
@@ -112,15 +130,35 @@ module MrbMacro
 
   macro wrap_function(mrb_state, crystal_class, name, proc)
     wrapped_method = MrbFunc.new do |mrb, obj|
-      converted_args = MrbMacro.get_converted_args(mrb, {{proc}})
-      MrbMacro.call_and_return(mrb, {{proc}}, converted_args)
+      converted_args = MrbMacro.get_converted_args(mrb, {{proc.args}})
+      MrbMacro.call_and_return(mrb, {{proc}}, {{proc.args}}, converted_args)
     end
 
     mrb.define_method({{name}}, MrbClassCache.get({{crystal_class}}), wrapped_method)
-  end 
+  end
+
+  macro wrap_function(mrb_state, crystal_class, name, proc, proc_args)
+    wrapped_method = MrbFunc.new do |mrb, obj|
+      converted_args = MrbMacro.get_converted_args(mrb, {{proc_args}})
+      MrbMacro.call_and_return(mrb, {{proc}}, {{proc_args}}, converted_args)
+    end
+
+    mrb.define_method({{name}}, MrbClassCache.get({{crystal_class}}), wrapped_method)
+  end
 
   macro wrap_constructor(mrb_state, crystal_class, proc)
-    # TODO
+    wrapped_method = MrbFunc.new do |mrb, obj|
+      {% if proc.args.size > 0 %}
+        converted_args = MrbMacro.get_converted_args(mrb, {{proc.args}})
+        new_obj = ({{proc}}).call(*converted_args)
+      {% else %}
+        new_obj = ({{proc}}).call
+      {% end %}
+      MrbInternal.set_data_ptr_and_type(pointerof(obj), pointerof(new_obj))
+      obj
+    end
+
+    mrb.define_method("initialize", MrbClassCache.get({{crystal_class}}), wrapped_method)
   end
 
   macro wrap_class(mrb, crystal_class, name)
