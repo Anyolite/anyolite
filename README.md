@@ -1,6 +1,6 @@
 # Anyolite
 
-Anyolite is planned to be a crystal shard which adds a full mruby interpreter to crystal.
+Anyolite is a Crystal shard which adds a fully functional mruby interpreter to Crystal.
 
 # Goals of this project
 
@@ -8,7 +8,7 @@ This project aims to provide an mruby interpreter to Crystal projects, allowing 
 
 # How to use
 
-Imagine a crystal class for a really bad RPG:
+Imagine a Crystal class for a really bad RPG:
 
 ```crystal
 class Entity
