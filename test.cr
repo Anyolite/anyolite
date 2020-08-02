@@ -2,6 +2,8 @@ require "./anyolite.cr"
 
 class Test
 
+  property :x
+
   def test_instance_method(int : Int32, bool : Bool, str : String)
     puts "Old value is #{@x}"
     a = "Args given for instance method: #{int}, #{bool}, #{str}"

@@ -73,6 +73,8 @@ extern mrb_value new_empty_object(mrb_state* mrb, struct RClass* ruby_class) {
 
 static void do_nothing(mrb_state* mrb, void* data) {
 
+    printf("Ruby destructor called\n");
+
 }
 
 extern void set_data_ptr_and_type(mrb_value* ruby_object, void* data) {

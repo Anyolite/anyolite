@@ -86,11 +86,6 @@ module MrbMacro
     ptr.as({{crystal_type}}*)
   end
 
-  macro init_ruby_object(mrb, obj, crystal_type, *args)
-    crystal_object = {{crystal_type}}.new(*args)
-    # TODO: Further stuff
-  end
-
   macro call_and_return(mrb, proc, proc_args, converted_args)
     {% if proc.args.size != proc_args.size %}
       {% if proc_args.size > 0 %}
@@ -148,13 +143,18 @@ module MrbMacro
 
   macro wrap_constructor(mrb_state, crystal_class, proc)
     wrapped_method = MrbFunc.new do |mrb, obj|
+      # Create local object
       {% if proc.args.size > 0 %}
         converted_args = MrbMacro.get_converted_args(mrb, {{proc.args}})
         new_obj = ({{proc}}).call(*converted_args)
       {% else %}
         new_obj = ({{proc}}).call
       {% end %}
-      MrbInternal.set_data_ptr_and_type(pointerof(obj), pointerof(new_obj))
+
+      # Allocate memory so we do not lose this object
+      # This will register the object in the GC, so we need to be careful about that
+      new_obj_ptr = Pointer({{crystal_class}}).malloc(size: 1, value: new_obj)
+      MrbInternal.set_data_ptr_and_type(pointerof(obj), new_obj_ptr)
       obj
     end
 
