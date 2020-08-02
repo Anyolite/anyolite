@@ -1,5 +1,4 @@
 module MrbCast
-
   # Explicit return methods
 
   def self.return_nil

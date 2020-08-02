@@ -1,3 +1,5 @@
+# Helper methods which should not be used for trivial cases in the final version
+
 module MrbMacro
   macro format_string(args)
     {% format_str = "" %}
@@ -13,6 +15,31 @@ module MrbMacro
         {% format_str += "z" %}
       {% else %}
         {% format_str += "o" %}
+      {% end %}
+    {% end %}
+
+    {{format_str}}
+  end
+
+  macro format_string_without_first_arg(args)
+    {% format_str = "" %}
+    {% first_arg = true %}
+
+    {% for arg in args %}
+      {% if first_arg %}
+        {% first_arg = false %}
+      {% else %}
+        {% if arg.resolve <= Bool %}
+          {% format_str += "b" %}
+        {% elsif arg.resolve <= Int %}
+          {% format_str += "i" %}
+        {% elsif arg.resolve <= Float %}
+          {% format_str += "f" %}
+        {% elsif arg.resolve <= String %}
+          {% format_str += "z" %}
+        {% else %}
+          {% format_str += "o" %}
+        {% end %}
       {% end %}
     {% end %}
 
@@ -52,6 +79,19 @@ module MrbMacro
     Tuple.new(
       {% for arg in args %}
         MrbMacro.pointer_type({{arg}}).malloc(size: 1),
+      {% end %}
+    )
+  end
+
+  macro generate_arg_tuple_without_first_arg(args)
+    Tuple.new(
+      {% first_arg = true %}
+      {% for arg in args %}
+        {% if first_arg %}
+          {% first_arg = false %}
+        {% else %}
+          MrbMacro.pointer_type({{arg}}).malloc(size: 1),
+        {% end %}
       {% end %}
     )
   end
@@ -103,6 +143,24 @@ module MrbMacro
     MrbCast.return_value({{mrb}}, return_value)
   end
 
+  macro call_and_return_instance_method(mrb, proc, proc_args, converted_obj, converted_args)
+    {% if proc.args.size != proc_args.size %}
+      {% if proc_args.size > 1 %}
+        return_value = {{proc.name}}.call({{converted_obj}}, *{{converted_args}})
+      {% else %}
+        return_value = ({{proc.name}}).call({{converted_obj}})
+      {% end %}
+    {% else %}
+      {% if proc_args.size > 1 %}
+        return_value = {{proc}}.call({{converted_obj}}, *{{converted_args}})
+      {% else %}
+        return_value = ({{proc}}).call({{converted_obj}})
+      {% end %}
+    {% end %}
+
+    MrbCast.return_value({{mrb}}, return_value)
+  end
+
   macro get_converted_args(mrb, proc_args)
     {% if proc_args.size > 0 %}
       args = MrbMacro.generate_arg_tuple({{proc_args}})
@@ -123,6 +181,29 @@ module MrbMacro
     )
   end
 
+  macro get_converted_args_without_first_arg(mrb, proc_args)
+    {% if proc_args.size > 0 %}
+      args = MrbMacro.generate_arg_tuple_without_first_arg({{proc_args}})
+      format_string = MrbMacro.format_string_without_first_arg({{proc_args}})
+    {% else %}
+      args = Tuple.new
+      format_string = ""
+    {% end %}
+    
+    MrbInternal.mrb_get_args(mrb, format_string, *args)
+
+    Tuple.new(
+      {% c = 0 %}
+      {% for arg in proc_args %}
+        {% if c > 0 %}
+          MrbMacro.convert_arg(mrb, args[{{c - 1}}].value, {{arg}}),
+        {% end %}
+        {% c += 1 %}
+      {% end %}
+    )
+  end
+
+  # Call this if the Proc contains the argument types
   macro wrap_function(mrb_state, crystal_class, name, proc)
     wrapped_method = MrbFunc.new do |mrb, obj|
       converted_args = MrbMacro.get_converted_args(mrb, {{proc.args}})
@@ -132,10 +213,21 @@ module MrbMacro
     mrb.define_method({{name}}, MrbClassCache.get({{crystal_class}}), wrapped_method)
   end
 
-  macro wrap_function(mrb_state, crystal_class, name, proc, proc_args)
+  # Call this if the Proc args are given separately (for example in locally defined instance method procs)
+  macro wrap_function_with_args(mrb_state, crystal_class, name, proc, proc_args)
     wrapped_method = MrbFunc.new do |mrb, obj|
       converted_args = MrbMacro.get_converted_args(mrb, {{proc_args}})
       MrbMacro.call_and_return(mrb, {{proc}}, {{proc_args}}, converted_args)
+    end
+
+    mrb.define_method({{name}}, MrbClassCache.get({{crystal_class}}), wrapped_method)
+  end
+
+  macro wrap_instance_function_with_args(mrb_state, crystal_class, name, proc, proc_args)
+    wrapped_method = MrbFunc.new do |mrb, obj|
+      converted_args = MrbMacro.get_converted_args_without_first_arg(mrb, {{proc_args}})
+      converted_obj = MrbMacro.convert_from_ruby_object(mrb, obj, Test).value
+      MrbMacro.call_and_return_instance_method(mrb, {{proc}}, {{proc_args}}, converted_obj, converted_args)
     end
 
     mrb.define_method({{name}}, MrbClassCache.get({{crystal_class}}), wrapped_method)
@@ -159,11 +251,5 @@ module MrbMacro
     end
 
     mrb.define_method("initialize", MrbClassCache.get({{crystal_class}}), wrapped_method)
-  end
-
-  macro wrap_class(mrb, crystal_class, name)
-    new_class = MrbClass.new({{mrb}}, {{name}})
-    MrbInternal.set_instance_tt_as_data(new_class)
-    MrbClassCache.register({{crystal_class}}, new_class)
   end
 end

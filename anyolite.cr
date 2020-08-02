@@ -1,1 +1,1 @@
-require "./src/mruby.cr"
+require "./src/MrbWrap.cr"
