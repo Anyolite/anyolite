@@ -3,9 +3,9 @@ require "./anyolite.cr"
 class Test
   property :x
 
-  def test_instance_method(int : Int32, bool : Bool, str : String)
+  def test_instance_method(int : Int32, bool : Bool, str : String, fl : Float32)
     puts "Old value is #{@x}"
-    a = "Args given for instance method: #{int}, #{bool}, #{str}"
+    a = "Args given for instance method: #{int}, #{bool}, #{str}, #{fl}"
     @x += int
     puts "New value is #{@x}"
     return a
@@ -23,7 +23,7 @@ end
 MrbState.create do |mrb|
   MrbWrap.wrap_class(mrb, Test, "Test")
   MrbWrap.wrap_constructor(mrb, Test, [Int32])
-  MrbWrap.wrap_instance_method(mrb, Test, "bar", test_instance_method, [Int32, Bool, String])
+  MrbWrap.wrap_instance_method(mrb, Test, "bar", test_instance_method, [Int32, Bool, String, MrbWrap::Opt(Float32, 0.4)])
   MrbWrap.wrap_property(mrb, Test, "x", x, Int32)
 
   GC.disable

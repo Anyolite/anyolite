@@ -3,6 +3,7 @@
 module MrbMacro
   macro format_string(args)
     {% format_str = "" %}
+    {% optional_values = false %}
 
     {% for arg in args %}
       {% if arg.resolve <= Bool %}
@@ -13,6 +14,27 @@ module MrbMacro
         {% format_str += "f" %}
       {% elsif arg.resolve <= String %}
         {% format_str += "z" %}
+      {% elsif arg.resolve <= MrbWrap::Opt %}
+        {% if !optional_values %}
+          {% format_str += "|" %}
+          {% optional_values = true %}
+
+          {% new_arg = arg.type_vars[0] %}
+          {% if new_arg.resolve <= Bool %}
+            {% format_str += "b" %}
+          {% elsif new_arg.resolve <= Int %}
+            {% format_str += "i" %}
+          {% elsif new_arg.resolve <= Float %}
+            {% format_str += "f" %}
+          {% elsif new_arg.resolve <= String %}
+            {% format_str += "z" %}
+          {% elsif new_arg.resolve <= MrbWrap::Opt %}
+            # TODO: ERROR
+          {% else %}
+            {% format_str += "o" %}
+          {% end %}
+
+        {% end %}
       {% else %}
         {% format_str += "o" %}
       {% end %}
@@ -24,6 +46,7 @@ module MrbMacro
   macro format_string_without_first_arg(args)
     {% format_str = "" %}
     {% first_arg = true %}
+    {% optional_values = false %}
 
     {% for arg in args %}
       {% if first_arg %}
@@ -37,11 +60,34 @@ module MrbMacro
           {% format_str += "f" %}
         {% elsif arg.resolve <= String %}
           {% format_str += "z" %}
+        {% elsif arg.resolve <= MrbWrap::Opt %}
+          {% if !optional_values %}
+            {% format_str += "|" %}
+            {% optional_values = true %}
+            
+            {% new_arg = arg.type_vars[0] %}
+            {% if new_arg.resolve <= Bool %}
+              {% format_str += "b" %}
+            {% elsif new_arg.resolve <= Int %}
+              {% format_str += "i" %}
+            {% elsif new_arg.resolve <= Float %}
+              {% format_str += "f" %}
+            {% elsif new_arg.resolve <= String %}
+              {% format_str += "z" %}
+            {% elsif new_arg.resolve <= MrbWrap::Opt %}
+              # TODO: ERROR
+            {% else %}
+              {% format_str += "o" %}
+            {% end %}
+
+          {% end %}
         {% else %}
           {% format_str += "o" %}
         {% end %}
       {% end %}
     {% end %}
+
+    {% puts format_str %}
 
     {{format_str}}
   end
@@ -70,6 +116,23 @@ module MrbMacro
       Pointer(MrbInternal::MrbFloat)
     {% elsif type.resolve <= String %}
       Pointer(LibC::Char*)
+    {% elsif type.resolve <= MrbWrap::Opt %}
+
+      {% new_type = type.type_vars[0] %} 
+      {% if new_type.resolve <= Bool %}
+        Pointer(MrbInternal::MrbBool)
+      {% elsif new_type.resolve <= Int %}
+        Pointer(MrbInternal::MrbInt)
+      {% elsif new_type.resolve <= Float %}
+        Pointer(MrbInternal::MrbFloat)
+      {% elsif new_type.resolve <= String %}
+        Pointer(LibC::Char*)
+      {% elsif new_type.resolve <= MrbWrap::Opt %}
+        # ERROR
+      {% else %}
+        Pointer(MrbInternal::MrbValue)
+      {% end %}
+
     {% else %}
       Pointer(MrbInternal::MrbValue)
     {% end %}
@@ -78,7 +141,11 @@ module MrbMacro
   macro generate_arg_tuple(args)
     Tuple.new(
       {% for arg in args %}
-        MrbMacro.pointer_type({{arg}}).malloc(size: 1),
+        {% if arg.resolve <= MrbWrap::Opt %}
+          MrbMacro.pointer_type({{arg.type_vars[0]}}).malloc(size: 1, value: {{arg.type_vars[0]}}.new({{arg.type_vars[1]}})),
+        {% else %}
+          MrbMacro.pointer_type({{arg}}).malloc(size: 1),
+        {% end %}
       {% end %}
     )
   end
@@ -90,7 +157,11 @@ module MrbMacro
         {% if first_arg %}
           {% first_arg = false %}
         {% else %}
-          MrbMacro.pointer_type({{arg}}).malloc(size: 1),
+          {% if arg.resolve <= MrbWrap::Opt %}
+            MrbMacro.pointer_type({{arg.type_vars[0]}}).malloc(size: 1, value: {{arg.type_vars[0]}}.new({{arg.type_vars[1]}})),
+          {% else %}
+            MrbMacro.pointer_type({{arg}}).malloc(size: 1),
+          {% end %}
         {% end %}
       {% end %}
     )
@@ -113,6 +184,8 @@ module MrbMacro
       {{arg_type}}.new({{arg}})
     {% elsif arg_type.resolve <= String %}
       {{arg_type}}.new({{arg}})
+    {% elsif arg_type.resolve <= MrbWrap::Opt %}
+      {{arg_type.type_vars[0]}}.new({{arg}})
     # TODO: Pointer as possible class
     {% else %}
       MrbMacro.convert_from_ruby_object({{mrb}}, {{arg}}, {{arg_type}}).value
@@ -124,6 +197,18 @@ module MrbMacro
     ruby_type = MrbInternal.data_type({{obj}})
     ptr = MrbInternal.mrb_data_get_ptr({{mrb}}, {{obj}}, ruby_type)
     ptr.as({{crystal_type}}*)
+  end
+
+  macro get_true_args(args)
+    Tuple.new(
+      {% for arg in args %}
+        {% if arg.resolve <= MrbWrap::Opt %}
+          {{arg.type_vars[0]}},
+        {% else %}
+          {{arg}},
+        {% end %}
+      {% end %}
+    )
   end
 
   macro call_and_return(mrb, proc, proc_args, converted_args)

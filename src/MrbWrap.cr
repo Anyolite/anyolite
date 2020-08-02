@@ -10,6 +10,10 @@ require "./MrbTypeCache.cr"
 alias MrbFunc = Proc(MrbInternal::MrbState*, MrbInternal::MrbValue, MrbInternal::MrbValue)
 
 module MrbWrap
+  struct Opt(T, D)
+   
+  end
+
   macro wrap_class(mrb_state, crystal_class, name)
     new_class = MrbClass.new({{mrb_state}}, {{name}})
     MrbInternal.set_instance_tt_as_data(new_class)
@@ -27,7 +31,11 @@ module MrbWrap
 
       {% c = 0 %}
       {% for arg in proc_args %}
-        arg_{{c}} : {{arg}},
+        {% if arg.resolve <= Opt %}
+          arg_{{c}} : {{arg.type_vars[0]}},
+        {% else %}
+          arg_{{c}} : {{arg}},
+        {% end %}
         {% c += 1 %}
       {% end %}
 
