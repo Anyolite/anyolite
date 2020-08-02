@@ -1,3 +1,9 @@
+class Object
+  def finalize
+    
+  end
+end
+
 module MrbTypeCache
   @@cache = {} of String => MrbInternal::MrbDataType*
 

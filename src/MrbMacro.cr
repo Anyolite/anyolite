@@ -87,12 +87,9 @@ module MrbMacro
       {% end %}
     {% end %}
 
-    {% puts format_str %}
-
     {{format_str}}
   end
 
-  # NOTE: May be obsolete
   macro type_in_ruby(type)
     {% if type.resolve <= Bool %}
       MrbInternal::MrbBool
@@ -142,7 +139,7 @@ module MrbMacro
     Tuple.new(
       {% for arg in args %}
         {% if arg.resolve <= MrbWrap::Opt %}
-          MrbMacro.pointer_type({{arg.type_vars[0]}}).malloc(size: 1, value: {{arg.type_vars[0]}}.new({{arg.type_vars[1]}})),
+          MrbMacro.pointer_type({{arg.type_vars[0]}}).malloc(size: 1, value: MrbMacro.type_in_ruby({{arg.type_vars[0]}}).new({{arg.type_vars[1]}})),
         {% else %}
           MrbMacro.pointer_type({{arg}}).malloc(size: 1),
         {% end %}
@@ -158,7 +155,7 @@ module MrbMacro
           {% first_arg = false %}
         {% else %}
           {% if arg.resolve <= MrbWrap::Opt %}
-            MrbMacro.pointer_type({{arg.type_vars[0]}}).malloc(size: 1, value: {{arg.type_vars[0]}}.new({{arg.type_vars[1]}})),
+            MrbMacro.pointer_type({{arg.type_vars[0]}}).malloc(size: 1, value: MrbMacro.type_in_ruby({{arg.type_vars[0]}}).new({{arg.type_vars[1]}})),
           {% else %}
             MrbMacro.pointer_type({{arg}}).malloc(size: 1),
           {% end %}
@@ -185,7 +182,20 @@ module MrbMacro
     {% elsif arg_type.resolve <= String %}
       {{arg_type}}.new({{arg}})
     {% elsif arg_type.resolve <= MrbWrap::Opt %}
-      {{arg_type.type_vars[0]}}.new({{arg}})
+
+      {% new_type = arg_type.type_vars[0] %}
+      {% if new_type.resolve <= Bool %}
+        ({{arg}} != 0)
+      {% elsif new_type.resolve <= Int %}
+        {{new_type}}.new({{arg}})
+      {% elsif new_type.resolve <= Float %}
+        {{new_type}}.new({{arg}})
+      {% elsif new_type.resolve <= String %}
+        {{new_type}}.new({{arg}})
+      {% else %}
+        MrbMacro.convert_from_ruby_object({{mrb}}, {{arg}}, {{new_type}}).value
+      {% end %}
+
     # TODO: Pointer as possible class
     {% else %}
       MrbMacro.convert_from_ruby_object({{mrb}}, {{arg}}, {{arg_type}}).value
@@ -311,7 +321,7 @@ module MrbMacro
   macro wrap_instance_function_with_args(mrb_state, crystal_class, name, proc, proc_args)
     wrapped_method = MrbFunc.new do |mrb, obj|
       converted_args = MrbMacro.get_converted_args_without_first_arg(mrb, {{proc_args}})
-      converted_obj = MrbMacro.convert_from_ruby_object(mrb, obj, Test).value
+      converted_obj = MrbMacro.convert_from_ruby_object(mrb, obj, {{crystal_class}}).value
       MrbMacro.call_and_return_instance_method(mrb, {{proc}}, {{proc_args}}, converted_obj, converted_args)
     end
 

@@ -6,18 +6,100 @@ Anyolite is planned to be a crystal shard which adds a full mruby interpreter to
 
 This project aims to provide an mruby interpreter to Crystal projects, allowing scripting in a language very close to Crystal itself, therefore combining the best of both worlds.
 
+# How to use
+
+Imagine a crystal class for a really bad RPG:
+
+```crystal
+class Entity
+  property hp : Int32 = 0
+
+  def initialize(@hp)
+  end
+
+  def damage(diff : Int32)
+    @hp -= diff
+  end
+
+  def yell(sound : String, loud : Bool = false)
+    if loud
+      puts "Entity yelled: #{sound.upcase}"
+    else
+      puts "Entity yelled: #{sound}"
+    end
+  end
+
+  def absorb_hp_from(other : Entity)
+    @hp += other.hp
+    other.hp = 0
+  end
+end
+```
+
+Now, you want to wrap this class in Ruby. All you need to do is to execute the following code in Crystal:
+
+```crystal
+MrbState.create do |mrb|
+  MrbWrap.wrap_class(mrb, Entity, "Entity")
+  
+  # NOTE: Optional constructor arguments do not work yet
+  MrbWrap.wrap_constructor(mrb, Entity, [Int32])
+
+  MrbWrap.wrap_property(mrb, Entity, "hp", hp, Int32)
+  
+  MrbWrap.wrap_instance_method(mrb, Entity, "damage", damage, [Int32])
+
+  # Crystal does not allow false here, for some reason, so just use 0 and 1
+  MrbWrap.wrap_instance_method(mrb, Entity, "yell", yell, [String, MrbWrap::Opt(Bool, 0)])
+
+  MrbWrap.wrap_instance_method(mrb, Entity, "absorb_hp_from", absorb_hp_from, [Entity])
+
+  mrb.load_script_from_file("examples/hp_example.rb")
+end
+```
+
+The last line in the block calls the following example script:
+
+```ruby
+a = Entity.new(20)
+a.damage(13)
+puts a.hp
+
+b = Entity.new(10)
+a.absorb_hp_from(b)
+puts a.hp
+puts b.hp
+b.yell('Ouch, you stole my HP!', true)
+a.yell('Well, take better care of your public attributes!')
+```
+
+The syntax stays mostly the same as in Crystal, except for the keyword arguments.
+These might be added in the future, but technically you can always wrap the generated methods in pure Ruby methods with keywords.
+
+The example above gives a good overview over the things you can already do with Anyolite.
+More features will be added in the future.
+
 # Todo
+
+## General features
 
 * [X] Provide basic structure
 * [X] Ubuntu support
 * [ ] Windows support
-* [X] Wrappers for static methods
+* [ ] Mac support
+* [ ] Wrappers for module and class methods
 * [X] Wrappers for instance methods
-* [ ] Tidy up namespaces and methods
-* [ ] Design concept for data ownership
-* [ ] Bind mruby methods
+* [X] Tidy up namespaces and methods
+* [X] Design concept for data ownership
+* [X] Bind basic mruby methods
+* [X] Simple examples
 * [ ] Build tests
 * [ ] Test project
+
+## Quality of life features
+
+* [ ] Keyword argument wrapper (might not happen)
+* [ ] Optional constructor arguments
 
 # Why this name?
 
