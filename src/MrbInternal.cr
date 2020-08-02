@@ -1,10 +1,12 @@
 @[Link(ldflags: "#{__DIR__}/../build/mruby/lib/libmruby.a -DMRB_INT64")]
 @[Link(ldflags: "#{__DIR__}/../build/glue/return_functions.o -DMRB_INT64")]
 @[Link(ldflags: "#{__DIR__}/../build/glue/data_helper.o -DMRB_INT64")]
+@[Link(ldflags: "#{__DIR__}/../build/glue/script_helper.o -DMRB_INT64")]
 
 lib MrbInternal
   type MrbState = Void
   type RClass = Void
+  type File = Void
 
   alias MrbFloat = LibC::Float
   alias MrbInt = Int64
@@ -57,18 +59,19 @@ lib MrbInternal
     dfree : MrbState*, Void* -> Void
   end
 
-  fun mrb_open : MrbState*
-  fun mrb_load_string(mrb : MrbState*, s : LibC::Char*)
+  fun mrb_open() : MrbState*
   fun mrb_close(mrb : MrbState*)
+
   fun mrb_define_class(mrb : MrbState*, name : LibC::Char*, super : RClass*) : RClass*
   fun mrb_define_method(mrb : MrbState*, c : RClass*, name : LibC::Char*, func : MrbState*, MrbValue -> MrbValue, aspec : UInt32)
+
   fun mrb_print_error(mrb : MrbState*)
 
   fun mrb_get_args(mrb : MrbState*, format : LibC::Char*, ...) : MrbInt
 
-  fun get_nil_value : MrbValue
-  fun get_false_value : MrbValue
-  fun get_true_value : MrbValue
+  fun get_nil_value() : MrbValue
+  fun get_false_value() : MrbValue
+  fun get_true_value() : MrbValue
   fun get_fixnum_value(value : MrbInt) : MrbValue
   fun get_bool_value(value : MrbBool) : MrbValue
   fun get_float_value(mrb : MrbState*, value : MrbFloat) : MrbValue
@@ -81,4 +84,7 @@ lib MrbInternal
   fun set_instance_tt_as_data(ruby_class : RClass*) : Void
   fun new_empty_object(mrb : MrbState*, ruby_class : RClass*) : MrbValue
   fun set_data_ptr_and_type(ruby_object : MrbValue*, data : Void*, type : MrbDataType*)
+
+  fun load_script_from_file(mrb : MrbState*, filename : LibC::Char*) : MrbValue
+  fun execute_script_line(mrb : MrbState*, str : LibC::Char*) : MrbValue
 end

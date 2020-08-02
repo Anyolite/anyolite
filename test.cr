@@ -12,7 +12,7 @@ class Test
   end
 
   def initialize(@x : Int32 = 0)
-    puts "Test object initialized with #{@x}"
+    puts "Test object initialized with value #{@x}"
   end
 
   def finalize
@@ -26,17 +26,7 @@ MrbState.create do |mrb|
   MrbWrap.wrap_instance_method(mrb, Test, "bar", test_instance_method, [Int32, Bool, String])
   MrbWrap.wrap_property(mrb, Test, "x", x, Int32)
 
-  some_crystal_string = "some crystal string"
-
   GC.disable
-
-  mrb.load_string("$a = Test.new(5)")
-  mrb.load_string("puts $a.bar(19, false, '#{some_crystal_string}')")
-  mrb.load_string("puts $a.x")
-  mrb.load_string("$a.x = 123")
-  mrb.load_string("puts $a.x")
-
-  MrbInternal.mrb_print_error(mrb)
-
+  mrb.load_script_from_file("examples/test.rb")
   GC.enable
 end

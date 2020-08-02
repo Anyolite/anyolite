@@ -19,8 +19,12 @@ class MrbState
     return @mrb_ptr
   end
 
-  def load_string(str : String)
-    MrbInternal.mrb_load_string(@mrb_ptr, str)
+  def execute_script_line(str : String)
+    MrbInternal.execute_script_line(@mrb_ptr, str)
+  end
+
+  def load_script_from_file(filename : String)
+    MrbInternal.load_script_from_file(@mrb_ptr, filename)
   end
 
   def define_method(name : String, c : MrbClass, proc : MrbFunc)
