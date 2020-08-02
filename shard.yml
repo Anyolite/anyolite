@@ -5,7 +5,7 @@ authors:
   - Hadeweka
 
 description: |
-  TBD
+  A library which allows for binding crystal classes and methods to an embedded mruby interpreter.
 
 scripts:
   postinstall: utility/install_ubuntu.sh
