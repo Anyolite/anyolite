@@ -233,7 +233,7 @@ module MrbMacro
     mrb.define_method({{name}}, MrbClassCache.get({{crystal_class}}), wrapped_method)
   end
 
-  macro wrap_constructor(mrb_state, crystal_class, proc)
+  macro wrap_constructor_function(mrb_state, crystal_class, proc)
     wrapped_method = MrbFunc.new do |mrb, obj|
       # Create local object
       {% if proc.args.size > 0 %}

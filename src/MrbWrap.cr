@@ -9,10 +9,15 @@ require "./MrbClassCache.cr"
 alias MrbFunc = Proc(MrbInternal::MrbState*, MrbInternal::MrbValue, MrbInternal::MrbValue)
 
 module MrbWrap
-  macro wrap_class(mrb, crystal_class, name)
-    new_class = MrbClass.new({{mrb}}, {{name}})
+  macro wrap_class(mrb_state, crystal_class, name)
+    new_class = MrbClass.new({{mrb_state}}, {{name}})
     MrbInternal.set_instance_tt_as_data(new_class)
     MrbClassCache.register({{crystal_class}}, new_class)
+  end
+
+  # TODO: Accept single arguments in non-Array-form as well
+  macro wrap_constructor(mrb_state, crystal_class, proc_args = [] of Class)
+    MrbMacro.wrap_constructor_function({{mrb_state}}, {{crystal_class}}, ->{{crystal_class}}.new({{*proc_args}}))
   end
 
   macro wrap_instance_method(mrb_state, crystal_class, name, proc, proc_args = [] of Class)
