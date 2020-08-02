@@ -1,5 +1,6 @@
 @[Link(ldflags: "#{__DIR__}/../build/mruby/lib/libmruby.a -DMRB_INT64")]
 @[Link(ldflags: "#{__DIR__}/../build/glue/return_functions.o -DMRB_INT64")]
+@[Link(ldflags: "#{__DIR__}/../build/glue/data_helper.o -DMRB_INT64")]
 
 lib MrbInternal
   type MrbState = Void
@@ -53,7 +54,7 @@ lib MrbInternal
 
   struct MrbDataType
     struct_name : LibC::Char*
-    dfree : MrbState*, Void* -> Void*
+    dfree : MrbState*, Void* -> Void
   end
 
   fun mrb_open : MrbState*
@@ -79,5 +80,5 @@ lib MrbInternal
   fun mrb_data_get_ptr(mrb : MrbState*, obj : MrbValue, type : MrbDataType*) : Void*
   fun set_instance_tt_as_data(ruby_class : RClass*) : Void
   fun new_empty_object(mrb : MrbState*, ruby_class : RClass*) : MrbValue
-  fun set_data_ptr_and_type(ruby_object : MrbValue*, data : Void*)
+  fun set_data_ptr_and_type(ruby_object : MrbValue*, data : Void*, type : MrbDataType*)
 end

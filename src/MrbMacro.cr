@@ -245,8 +245,12 @@ module MrbMacro
 
       # Allocate memory so we do not lose this object
       # This will register the object in the GC, so we need to be careful about that
+      # Deleting the object in MRuby will also delete it in Crystal
       new_obj_ptr = Pointer({{crystal_class}}).malloc(size: 1, value: new_obj)
-      MrbInternal.set_data_ptr_and_type(pointerof(obj), new_obj_ptr)
+      destructor = MrbTypeCache.destructor_method({{crystal_class}})
+      MrbInternal.set_data_ptr_and_type(pointerof(obj), new_obj_ptr, MrbTypeCache.register({{crystal_class}}, destructor))
+
+      # Return object
       obj
     end
 

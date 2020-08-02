@@ -14,6 +14,10 @@ class Test
   def initialize(@x : Int32 = 0)
     puts "Test object initialized with #{@x}"
   end
+
+  def finalize
+    puts "Finalized with value #{@x}"
+  end
 end
 
 MrbState.create do |mrb|
