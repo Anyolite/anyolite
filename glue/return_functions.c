@@ -71,6 +71,8 @@ extern mrb_value new_empty_object(mrb_state* mrb, struct RClass* ruby_class) {
 
 }
 
+//! TODO: Transform these into Crystal and add GC.free
+
 static void do_nothing(mrb_state* mrb, void* data) {
 
     printf("Ruby destructor called\n");

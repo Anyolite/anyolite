@@ -55,9 +55,6 @@ MrbState.create do |mrb|
 
   GC.disable
 
-  # Something does not work properly yet
-  # This is possibly due to passing the Test instances as values instead of references (?)
-  # It needs to be fixed anyway
   mrb.load_string("$a = Test.new")
   mrb.load_string("$b = $a.foo(17, true, 'bla')")
   mrb.load_string("puts $b")

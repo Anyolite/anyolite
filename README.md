@@ -12,7 +12,7 @@ This project aims to provide an mruby interpreter to Crystal projects, allowing 
 * [X] Ubuntu support
 * [ ] Windows support
 * [X] Wrappers for static methods
-* [ ] Wrappers for instance methods
+* [X] Wrappers for instance methods
 * [ ] Tidy up namespaces and methods
 * [ ] Design concept for data ownership
 * [ ] Bind mruby methods
