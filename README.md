@@ -85,7 +85,7 @@ More features will be added in the future.
 
 * [X] Provide basic structure
 * [X] Ubuntu support
-* [ ] Windows support
+* [X] Windows support (not tested yet)
 * [ ] Mac support
 * [ ] Wrappers for module and class methods
 * [X] Wrappers for instance methods

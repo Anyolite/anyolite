@@ -1,7 +1,14 @@
-@[Link(ldflags: "#{__DIR__}/../build/mruby/lib/libmruby.a -DMRB_INT64")]
-@[Link(ldflags: "#{__DIR__}/../build/glue/return_functions.o -DMRB_INT64")]
-@[Link(ldflags: "#{__DIR__}/../build/glue/data_helper.o -DMRB_INT64")]
-@[Link(ldflags: "#{__DIR__}/../build/glue/script_helper.o -DMRB_INT64")]
+{% if flag?(:win32) %}
+  @[Link(ldflags: "#{__DIR__}/../build/mruby/lib/libmruby.lib -DMRB_INT64")]
+  @[Link(ldflags: "#{__DIR__}/../build/glue/return_functions.obj -DMRB_INT64")]
+  @[Link(ldflags: "#{__DIR__}/../build/glue/data_helper.obj -DMRB_INT64")]
+  @[Link(ldflags: "#{__DIR__}/../build/glue/script_helper.obj -DMRB_INT64")]
+{% else %}
+  @[Link(ldflags: "#{__DIR__}/../build/mruby/lib/libmruby.a -DMRB_INT64")]
+  @[Link(ldflags: "#{__DIR__}/../build/glue/return_functions.o -DMRB_INT64")]
+  @[Link(ldflags: "#{__DIR__}/../build/glue/data_helper.o -DMRB_INT64")]
+  @[Link(ldflags: "#{__DIR__}/../build/glue/script_helper.o -DMRB_INT64")]
+{% end %}
 
 lib MrbInternal
   type MrbState = Void
