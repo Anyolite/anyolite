@@ -3,9 +3,7 @@ all: build/glue/return_functions.o build/glue/data_helper.o build/glue/script_he
 
 build/mruby/lib/libmruby.a:
 	mkdir -p build
-	ls -l -a
-	git status
-	git submodule update --init --recursive
+	git clone https://github.com/mruby/mruby --recursive mruby
 	cd third_party/mruby; ruby minirake MRUBY_BUILD_DIR="../../build/mruby" MRUBY_CONFIG="../../utility/mruby_build_config.rb"
 
 build/glue/return_functions.o: glue/return_functions.c | build/mruby/lib/libmruby.a
