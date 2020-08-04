@@ -3,6 +3,7 @@ md build
 cd build
 md glue
 cd ..
+git submodule update --init --recursive
 cl /I third_party/mruby/include /D MRB_INT64 /c glue/return_functions.c /Fo"build\glue\return_functions.obj"
 cl /I third_party/mruby/include /D MRB_INT64 /c glue/data_helper.c /Fo"build\glue\data_helper.obj"
 cl /I third_party/mruby/include /D MRB_INT64 /c glue/script_helper.c /Fo"build\glue\script_helper.obj"
