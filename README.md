@@ -39,6 +39,8 @@ end
 Now, you want to wrap this class in Ruby. All you need to do is to execute the following code in Crystal:
 
 ```crystal
+require "anyolite"
+
 MrbState.create do |mrb|
   MrbWrap.wrap_class(mrb, Entity, "Entity")
   
