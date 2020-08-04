@@ -6,6 +6,22 @@ Anyolite is a Crystal shard which adds a fully functional mruby interpreter to C
 
 This project aims to provide an mruby interpreter to Crystal projects, allowing scripting in a language very close to Crystal itself, therefore combining the best of both worlds.
 
+# Prerequisites
+
+You need to have the following programs installed:
+* Ruby (for building mruby)
+* Bison (for building mruby)
+* Git (for downloading mruby)
+* GCC or Microsoft Visual Studio 19 (for building the object files required for Anyolite, depending on your OS)
+
+# Installing
+
+Put this shard as a requirement into your shard.yml project file and then call
+```bash
+shards install
+```
+from a terminal or the MSVC Developer Console (on Windows).
+
 # How to use
 
 Imagine a Crystal class for a really bad RPG:
