@@ -8,9 +8,9 @@ This project aims to provide an mruby interpreter to Crystal projects, allowing 
 
 # Prerequisites
 
-You need to have the following programs installed:
+You need to have the following programs installed (and in your PATH variable, if you are on Windows):
 * Ruby (for building mruby)
-* Rake (for building )
+* Rake (for building the whole project)
 * Bison (for building mruby)
 * Git (for downloading mruby)
 * GCC or Microsoft Visual Studio 19 (for building the object files required for Anyolite, depending on your OS)
