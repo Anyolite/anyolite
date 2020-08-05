@@ -8,6 +8,6 @@ description: |
   A library which allows for binding crystal classes and methods to an embedded mruby interpreter.
 
 scripts:
-  postinstall: make
+  postinstall: rake build_shard
 
 license: MIT

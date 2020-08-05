@@ -10,6 +10,7 @@ This project aims to provide an mruby interpreter to Crystal projects, allowing 
 
 You need to have the following programs installed:
 * Ruby (for building mruby)
+* Rake (for building )
 * Bison (for building mruby)
 * Git (for downloading mruby)
 * GCC or Microsoft Visual Studio 19 (for building the object files required for Anyolite, depending on your OS)
@@ -21,6 +22,12 @@ Put this shard as a requirement into your shard.yml project file and then call
 shards install
 ```
 from a terminal or the MSVC Developer Console (on Windows).
+
+Alternatively, you can clone this repository into the lib folder of your project and run
+```bash
+rake build_shard
+```
+manually to install the shard without using the crystal shards program.
 
 # How to use
 
