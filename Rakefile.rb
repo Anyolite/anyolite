@@ -28,7 +28,7 @@ ANYOLITE_COMPILER = determine_compiler
 task :install_mruby do
     FileUtils.mkdir_p(ANYOLITE_BUILDPATH)
 
-    unless Dir.exist?("#{ANYOLITE_MRUBY_DIR}/mruby")
+    unless Dir.exist?("#{ANYOLITE_MRUBY_DIR}/mruby/Rakefile")
         system "git clone #{ANYOLITE_MRUBY_FORK} --recursive #{ANYOLITE_MRUBY_DIR}/mruby"
     end
 end
