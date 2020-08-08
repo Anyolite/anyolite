@@ -23,7 +23,11 @@ module MrbWrap
   # TODO: Accept single arguments in non-Array-form as well
   # TODO: Optional parameters
   macro wrap_constructor(mrb_state, crystal_class, proc_args = [] of Class)
-    MrbMacro.wrap_constructor_function({{mrb_state}}, {{crystal_class}}, ->{{crystal_class}}.new({{*proc_args}}))
+    {% if proc_args.empty? %}
+      MrbMacro.wrap_constructor_function({{mrb_state}}, {{crystal_class}}, ->{{crystal_class}}.new)
+    {% else %}
+      MrbMacro.wrap_constructor_function({{mrb_state}}, {{crystal_class}}, ->{{crystal_class}}.new({{*proc_args}}))
+    {% end %}
   end
 
   macro wrap_instance_method(mrb_state, crystal_class, name, proc, proc_args = [] of Class)
