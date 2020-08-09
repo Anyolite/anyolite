@@ -5,7 +5,7 @@ MRuby::Build.new do |conf|
 
      # The definition for ssize_t is due to a compilation error from mruby on Windows, where ssize_t is apparently not defined
      # If this gets fixed, the following line can be removed safely
-    #conf.cc.flags << '-Dssize_t=int'
+    conf.cc.flags << '-Dssize_t=int'
     
     conf.yacc do |yacc|
       yacc.command = ENV['YACC'] || 'bison.exe'
