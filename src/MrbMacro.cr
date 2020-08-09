@@ -204,8 +204,7 @@ module MrbMacro
 
   macro convert_from_ruby_object(mrb, obj, crystal_type)
     # TODO: Add type check
-    ruby_type = MrbInternal.data_type({{obj}})
-    ptr = MrbInternal.mrb_data_get_ptr({{mrb}}, {{obj}}, ruby_type)
+    ptr = MrbInternal.get_data_ptr({{obj}})
     ptr.as({{crystal_type}}*)
   end
 

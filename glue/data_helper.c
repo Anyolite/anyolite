@@ -20,6 +20,12 @@ extern mrb_value new_empty_object(mrb_state* mrb, struct RClass* ruby_class) {
 
 }
 
+extern void* get_data_ptr(mrb_value ruby_object) {
+
+    return DATA_PTR(ruby_object);
+
+}
+
 extern void set_data_ptr_and_type(mrb_value* ruby_object, void* data, mrb_data_type* data_type) {
 
     DATA_PTR(*ruby_object) = data;

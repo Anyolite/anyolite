@@ -47,7 +47,6 @@ lib MrbInternal
     MRB_TT_STRING
     MRB_TT_RANGE
     MRB_TT_EXCEPTION
-    MRB_TT_FILE
     MRB_TT_ENV
     MRB_TT_DATA
     MRB_TT_FIBER
@@ -91,6 +90,7 @@ lib MrbInternal
   fun set_instance_tt_as_data(ruby_class : RClass*) : Void
   fun new_empty_object(mrb : MrbState*, ruby_class : RClass*) : MrbValue
   fun set_data_ptr_and_type(ruby_object : MrbValue*, data : Void*, type : MrbDataType*)
+  fun get_data_ptr(ruby_object : MrbValue) : Void*
 
   fun load_script_from_file(mrb : MrbState*, filename : LibC::Char*) : MrbValue
   fun execute_script_line(mrb : MrbState*, str : LibC::Char*) : MrbValue
