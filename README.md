@@ -110,9 +110,11 @@ More features will be added in the future.
 
 * [X] Provide basic structure
 * [X] Ubuntu support
-* [X] Windows support (not tested yet)
-* [ ] Mac support
+* [X] Windows support
+* [ ] Mac support (might be possible, not tested yet)
 * [ ] Wrappers for module and class methods
+* [ ] Wrapping classes into modules
+* [ ] Optional constructor arguments
 * [X] Wrappers for instance methods
 * [X] Tidy up namespaces and methods
 * [X] Design concept for data ownership
@@ -121,10 +123,9 @@ More features will be added in the future.
 * [ ] Build tests
 * [ ] Test project
 
-## Quality of life features
+## Possible features in the future
 
-* [ ] Keyword argument wrapper (might not happen)
-* [ ] Optional constructor arguments
+* [ ] Keyword argument wrapper
 
 # Why this name?
 
