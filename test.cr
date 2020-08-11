@@ -21,7 +21,8 @@ class Test
 end
 
 MrbState.create do |mrb|
-  MrbWrap.wrap_class(mrb, Test, "Test")
+  test_module = MrbModule.new(mrb, "TestModule")
+  MrbWrap.wrap_class(mrb, Test, "Test", under: test_module)
   MrbWrap.wrap_constructor(mrb, Test, [Int32])
   MrbWrap.wrap_instance_method(mrb, Test, "bar", test_instance_method, [Int32, Bool, String, MrbWrap::Opt(Float32, 0.4)])
   MrbWrap.wrap_property(mrb, Test, "x", x, Int32)
@@ -56,7 +57,9 @@ class Entity
 end
 
 MrbState.create do |mrb|
-  MrbWrap.wrap_class(mrb, Entity, "Entity")
+  test_module = MrbModule.new(mrb, "TestModule")
+
+  MrbWrap.wrap_class(mrb, Entity, "Entity", under: test_module)
   
   MrbWrap.wrap_constructor(mrb, Entity, [MrbWrap::Opt(Int32, 0)])
   

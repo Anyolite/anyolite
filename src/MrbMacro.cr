@@ -1,5 +1,6 @@
 # Helper methods which should not be used for trivial cases in the final version
 
+# TODO: Error if a required argument follows optional arguments
 module MrbMacro
   macro format_string(args)
     {% format_str = "" %}
@@ -207,7 +208,7 @@ module MrbMacro
     ptr = MrbInternal.get_data_ptr({{obj}})
     ptr.as({{crystal_type}}*)
   end
-  
+
   macro call_and_return(mrb, proc, proc_args, converted_args)
     {% if proc.args.size != proc_args.size %}
       {% if proc_args.size > 0 %}

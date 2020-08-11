@@ -68,8 +68,16 @@ lib MrbInternal
   fun mrb_open() : MrbState*
   fun mrb_close(mrb : MrbState*)
 
-  fun mrb_define_class(mrb : MrbState*, name : LibC::Char*, super : RClass*) : RClass*
-  fun mrb_define_method(mrb : MrbState*, c : RClass*, name : LibC::Char*, func : MrbState*, MrbValue -> MrbValue, aspec : UInt32)
+  fun mrb_define_module(mrb : MrbState*, name : LibC::Char*) : RClass*
+  fun mrb_define_module_under(mrb : MrbState*, under : RClass*, name : LibC::Char*) : RClass*
+  fun mrb_define_class(mrb : MrbState*, name : LibC::Char*, superclass : RClass*) : RClass*
+  fun mrb_define_class_under(mrb : MrbState*, under : RClass*, name : LibC::Char*, superclass : RClass*) : RClass*
+
+  fun mrb_define_method(mrb : MrbState*, c : RClass*, name : LibC::Char*, func : MrbState*, MrbValue -> MrbValue, aspec : UInt32) # TODO: Aspec values
+  fun mrb_define_class_method(mrb : MrbState*, c : RClass*, name : LibC::Char*, func : MrbState*, MrbValue -> MrbValue, aspect : UInt32)
+  fun mrb_define_module_function(mrb : MrbState*, c : RClass*, name : LibC::Char*, func : MrbState*, MrbValue -> MrbValue, aspect : UInt32)
+
+  fun mrb_define_const(mrb : MrbState*, c : RClass*, name : LibC::Char*, val : MrbValue)
 
   fun mrb_print_error(mrb : MrbState*)
 

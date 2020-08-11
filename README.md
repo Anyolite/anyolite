@@ -34,27 +34,29 @@ manually to install the shard without using the crystal shards program.
 Imagine a Crystal class for a really bad RPG:
 
 ```crystal
-class Entity
-  property hp : Int32 = 0
+module TestModule
+  class Entity
+    property hp : Int32 = 0
 
-  def initialize(@hp)
-  end
-
-  def damage(diff : Int32)
-    @hp -= diff
-  end
-
-  def yell(sound : String, loud : Bool = false)
-    if loud
-      puts "Entity yelled: #{sound.upcase}"
-    else
-      puts "Entity yelled: #{sound}"
+    def initialize(@hp)
     end
-  end
 
-  def absorb_hp_from(other : Entity)
-    @hp += other.hp
-    other.hp = 0
+    def damage(diff : Int32)
+      @hp -= diff
+    end
+
+    def yell(sound : String, loud : Bool = false)
+      if loud
+        puts "Entity yelled: #{sound.upcase}"
+      else
+        puts "Entity yelled: #{sound}"
+      end
+    end
+
+    def absorb_hp_from(other : Entity)
+      @hp += other.hp
+      other.hp = 0
+    end
   end
 end
 ```
@@ -65,7 +67,8 @@ Now, you want to wrap this class in Ruby. All you need to do is to execute the f
 require "anyolite"
 
 MrbState.create do |mrb|
-  MrbWrap.wrap_class(mrb, Entity, "Entity")
+  test_module = MrbModule.new(mrb, "TestModule")
+  MrbWrap.wrap_class(mrb, Entity, "Entity", under: test_module)
   
   MrbWrap.wrap_constructor(mrb, Entity, [MrbWrap::Opt(Int32, 0)])
 
@@ -85,11 +88,11 @@ end
 The last line in the block calls the following example script:
 
 ```ruby
-a = Entity.new(20)
+a = TestModule::Entity.new(20)
 a.damage(13)
 puts a.hp
 
-b = Entity.new(10)
+b = TestModule::Entity.new(10)
 a.absorb_hp_from(b)
 puts a.hp
 puts b.hp
@@ -110,17 +113,17 @@ More features will be added in the future.
 * [X] Provide basic structure
 * [X] Ubuntu support
 * [X] Windows support
-* [ ] Mac support (might be possible, not tested yet)
-* [ ] Wrappers for module and class methods
-* [ ] Wrapping classes into modules
+* [X] Wrapping classes into modules
 * [X] Optional constructor arguments
 * [X] Wrappers for instance methods
 * [X] Tidy up namespaces and methods
 * [X] Design concept for data ownership
 * [X] Bind basic mruby methods
 * [X] Simple examples
+* [ ] Wrappers for module and class methods
 * [ ] Build tests
 * [ ] Test project
+* [ ] Mac support (might be possible, not tested yet)
 
 ## Possible features in the future
 

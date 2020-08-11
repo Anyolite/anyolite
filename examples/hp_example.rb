@@ -1,8 +1,8 @@
-a = Entity.new(20)
+a = TestModule::Entity.new(20)
 a.damage(13)
 puts a.hp
 
-b = Entity.new(10)
+b = TestModule::Entity.new(10)
 a.absorb_hp_from(b)
 puts a.hp
 puts b.hp
