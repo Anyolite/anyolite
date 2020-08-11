@@ -21,6 +21,12 @@ module MrbWrap
     MrbClassCache.register({{crystal_class}}, new_class)
   end
 
+  # TODO: Maybe use MrbModuleCache for this?
+  macro wrap_module(mrb_state, crystal_module, name, under = nil)
+    new_module = MrbModule.new({{mrb_state}}, {{name}}, under: {{under}})
+    MrbClassCache.register({{crystal_module}}, new_module)
+  end
+
   # TODO: Accept single arguments in non-Array-form as well
   macro wrap_constructor(mrb_state, crystal_class, proc_args = [] of Class)
     {% if proc_args.empty? %}
