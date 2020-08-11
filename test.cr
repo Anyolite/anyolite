@@ -58,8 +58,7 @@ end
 MrbState.create do |mrb|
   MrbWrap.wrap_class(mrb, Entity, "Entity")
   
-  # NOTE: Optional constructor arguments do not work yet
-  MrbWrap.wrap_constructor(mrb, Entity, [Int32])
+  MrbWrap.wrap_constructor(mrb, Entity, [MrbWrap::Opt(Int32, 0)])
   
   MrbWrap.wrap_property(mrb, Entity, "hp", hp, Int32)
   

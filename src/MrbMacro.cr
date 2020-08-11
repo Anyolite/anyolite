@@ -207,19 +207,7 @@ module MrbMacro
     ptr = MrbInternal.get_data_ptr({{obj}})
     ptr.as({{crystal_type}}*)
   end
-
-  macro get_true_args(args)
-    Tuple.new(
-      {% for arg in args %}
-        {% if arg.resolve <= MrbWrap::Opt %}
-          {{arg.type_vars[0]}},
-        {% else %}
-          {{arg}},
-        {% end %}
-      {% end %}
-    )
-  end
-
+  
   macro call_and_return(mrb, proc, proc_args, converted_args)
     {% if proc.args.size != proc_args.size %}
       {% if proc_args.size > 0 %}

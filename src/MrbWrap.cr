@@ -26,7 +26,9 @@ module MrbWrap
     {% if proc_args.empty? %}
       MrbMacro.wrap_constructor_function({{mrb_state}}, {{crystal_class}}, ->{{crystal_class}}.new)
     {% else %}
-      MrbMacro.wrap_constructor_function({{mrb_state}}, {{crystal_class}}, ->{{crystal_class}}.new({{*proc_args}}))
+      # The following construct is ugly, but Crystal forbids a newline there for some reason
+      MrbMacro.wrap_constructor_function({{mrb_state}}, {{crystal_class}}, 
+      ->{{crystal_class}}.new({% for arg in proc_args %} {% if arg.resolve <= Opt %} {{arg.type_vars[0]}}, {% else %} {{arg}}, {% end %} {% end %}))
     {% end %}
   end
 

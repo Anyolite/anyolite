@@ -67,8 +67,7 @@ require "anyolite"
 MrbState.create do |mrb|
   MrbWrap.wrap_class(mrb, Entity, "Entity")
   
-  # NOTE: Optional constructor arguments do not work yet
-  MrbWrap.wrap_constructor(mrb, Entity, [Int32])
+  MrbWrap.wrap_constructor(mrb, Entity, [MrbWrap::Opt(Int32, 0)])
 
   MrbWrap.wrap_property(mrb, Entity, "hp", hp, Int32)
   
@@ -114,7 +113,7 @@ More features will be added in the future.
 * [ ] Mac support (might be possible, not tested yet)
 * [ ] Wrappers for module and class methods
 * [ ] Wrapping classes into modules
-* [ ] Optional constructor arguments
+* [X] Optional constructor arguments
 * [X] Wrappers for instance methods
 * [X] Tidy up namespaces and methods
 * [X] Design concept for data ownership
