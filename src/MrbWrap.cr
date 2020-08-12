@@ -30,11 +30,11 @@ module MrbWrap
   # TODO: Accept single arguments in non-Array-form as well
   macro wrap_constructor(mrb_state, crystal_class, proc_args = [] of Class)
     {% if proc_args.empty? %}
-      MrbMacro.wrap_constructor_function({{mrb_state}}, {{crystal_class}}, ->{{crystal_class}}.new)
+      MrbMacro.wrap_constructor_function({{mrb_state}}, {{crystal_class}}, ->{{crystal_class}}.new, {{proc_args}})
     {% else %}
       # The following construct is ugly, but Crystal forbids a newline there for some reason
       MrbMacro.wrap_constructor_function({{mrb_state}}, {{crystal_class}}, 
-      ->{{crystal_class}}.new({% for arg in proc_args %} {% if arg.resolve <= Opt %} {{arg.type_vars[0]}}, {% else %} {{arg}}, {% end %} {% end %}))
+      ->{{crystal_class}}.new({% for arg in proc_args %} {% if arg.resolve <= Opt %} {{arg.type_vars[0]}}, {% else %} {{arg}}, {% end %} {% end %}), {{proc_args}})
     {% end %}
   end
 
