@@ -18,7 +18,7 @@ lib MrbInternal
   alias MrbFloat = LibC::Float
   alias MrbInt = Int64
   alias MrbBool = UInt8
-  type MrbSymbol = UInt32
+  alias MrbSymbol = UInt32
 
   union MrbValueUnion
     value_float : MrbFloat
@@ -97,7 +97,7 @@ lib MrbInternal
   fun mrb_data_get_ptr(mrb : MrbState*, obj : MrbValue, type : MrbDataType*) : Void*
   fun set_instance_tt_as_data(ruby_class : RClass*) : Void
   fun new_empty_object(mrb : MrbState*, ruby_class : RClass*) : MrbValue
-  fun set_data_ptr_and_type(ruby_object : MrbValue*, data : Void*, type : MrbDataType*)
+  fun set_data_ptr_and_type(ruby_object : MrbValue, data : Void*, type : MrbDataType*)
   fun get_data_ptr(ruby_object : MrbValue) : Void*
 
   fun load_script_from_file(mrb : MrbState*, filename : LibC::Char*) : MrbValue

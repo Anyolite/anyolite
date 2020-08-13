@@ -165,9 +165,9 @@ module MrbMacro
     )
   end
 
-  macro get_raw_args(mrb, proc)
-    args = MrbMacro.generate_arg_tuple({{proc}})
-    format_string = MrbMacro.format_string({{proc.args}})
+  macro get_raw_args(mrb, proc_args)
+    args = MrbMacro.generate_arg_tuple({{proc_args}})
+    format_string = MrbMacro.format_string({{proc_args}})
     MrbInternal.mrb_get_args(mrb, format_string, *args)
     args
   end
@@ -293,7 +293,7 @@ module MrbMacro
       MrbMacro.call_and_return(mrb, {{proc}}, {{proc.args}}, converted_args)
     end
 
-    mrb.define_method({{name}}, MrbClassCache.get({{crystal_class}}), wrapped_method)
+    {{mrb_state}}.define_method({{name}}, MrbClassCache.get({{crystal_class}}), wrapped_method)
   end
 
   # Call this if the Proc args are given separately (for example in locally defined instance method procs)
@@ -303,7 +303,7 @@ module MrbMacro
       MrbMacro.call_and_return(mrb, {{proc}}, {{proc_args}}, converted_args)
     end
 
-    mrb.define_method({{name}}, MrbClassCache.get({{crystal_class}}), wrapped_method)
+    {{mrb_state}}.define_method({{name}}, MrbClassCache.get({{crystal_class}}), wrapped_method)
   end
 
   macro wrap_instance_function_with_args(mrb_state, crystal_class, name, proc, proc_args)
@@ -313,7 +313,7 @@ module MrbMacro
       MrbMacro.call_and_return_instance_method(mrb, {{proc}}, {{proc_args}}, converted_obj, converted_args)
     end
 
-    mrb.define_method({{name}}, MrbClassCache.get({{crystal_class}}), wrapped_method)
+    {{mrb_state}}.define_method({{name}}, MrbClassCache.get({{crystal_class}}), wrapped_method)
   end
 
   macro wrap_constructor_function(mrb_state, crystal_class, proc, proc_args)
@@ -331,12 +331,12 @@ module MrbMacro
       # Deleting the object in MRuby will also delete it in Crystal
       new_obj_ptr = Pointer({{crystal_class}}).malloc(size: 1, value: new_obj)
       destructor = MrbTypeCache.destructor_method({{crystal_class}})
-      MrbInternal.set_data_ptr_and_type(pointerof(obj), new_obj_ptr, MrbTypeCache.register({{crystal_class}}, destructor))
+      MrbInternal.set_data_ptr_and_type(obj, new_obj_ptr, MrbTypeCache.register({{crystal_class}}, destructor))
 
       # Return object
       obj
     end
 
-    mrb.define_method("initialize", MrbClassCache.get({{crystal_class}}), wrapped_method)
+    {{mrb_state}}.define_method("initialize", MrbClassCache.get({{crystal_class}}), wrapped_method)
   end
 end

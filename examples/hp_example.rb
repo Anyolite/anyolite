@@ -1,4 +1,5 @@
 a = TestModule::Entity.new(20)
+s = TestModule::Bla.new
 a.damage(13)
 puts a.hp
 

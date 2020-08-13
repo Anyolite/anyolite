@@ -56,11 +56,19 @@ class Entity
   end
 end
 
+class Bla
+
+  def initialize
+  end
+
+end
+
 MrbState.create do |mrb|
   test_module = MrbModule.new(mrb, "TestModule")
 
   MrbWrap.wrap_class(mrb, Entity, "Entity", under: test_module)
-  
+  MrbWrap.wrap_class(mrb, Bla, "Bla", under: test_module)
+
   MrbWrap.wrap_constructor(mrb, Entity, [MrbWrap::Opt(Int32, 0)])
   
   MrbWrap.wrap_property(mrb, Entity, "hp", hp, Int32)
@@ -71,6 +79,8 @@ MrbState.create do |mrb|
   MrbWrap.wrap_instance_method(mrb, Entity, "yell", yell, [String, MrbWrap::Opt(Bool, 0)])
 
   MrbWrap.wrap_instance_method(mrb, Entity, "absorb_hp_from", absorb_hp_from, [Entity])
+
+  MrbWrap.wrap_constructor(mrb, Bla)
 
   mrb.load_script_from_file("examples/hp_example.rb")
 end
