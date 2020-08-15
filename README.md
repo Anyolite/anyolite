@@ -106,28 +106,38 @@ These might be added in the future, but technically you can always wrap the gene
 The example above gives a good overview over the things you can already do with Anyolite.
 More features will be added in the future.
 
-# Todo
+# Roadmap
 
-## General features
+## Upcoming releases
 
-* [X] Provide basic structure
+### Version 0.1.0
+
+* [X] Basic structure
 * [X] Ubuntu support
-* [X] Windows support
-* [X] Wrapping classes into modules
-* [X] Optional constructor arguments
+* [X] Wrappers for classes
+* [X] Wrappers for modules
+* [X] Support for classes in modules
+* [X] Wrappers for properties
 * [X] Wrappers for instance methods
-* [X] Tidy up namespaces and methods
-* [X] Design concept for data ownership
-* [X] Bind basic mruby methods
+* [X] Optional values for simple argument types
+* [X] Garbace collector destroys Crystal objects properly
 * [X] Simple examples
 * [ ] Wrappers for module and class methods
 * [ ] Build tests
 * [ ] Test project
+
+### Version 0.2.0
+
+* [ ] Keyword argument support
+
+### Future updates
+
+* [ ] Windows support (currently not supported due to problems)
 * [ ] Mac support (might be possible, not tested yet)
 
-## Possible features in the future
+### Possible future updates
 
-* [ ] Keyword argument wrapper
+* [ ] Flag for Crystal-owned objects
 
 # Why this name?
 
