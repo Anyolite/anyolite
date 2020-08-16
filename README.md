@@ -2,9 +2,14 @@
 
 Anyolite is a Crystal shard which adds a fully functional mruby interpreter to Crystal.
 
-# Goals of this project
+# Description
 
-This project aims to provide an mruby interpreter to Crystal projects, allowing scripting in a language very close to Crystal itself, therefore combining the best of both worlds.
+Anyolite allows for wrapping Crystal classes and functions into mruby with little effort.
+This way, mruby can be used as a scripting language to Crystal projects, with the major advantage of a similar syntax.
+
+Anyolite also ensures that the Crystal garbage collector does not delete the mruby objects, avoiding memory leaks.
+
+This project is currently in the early development phase, so please report any bugs or missing relevant features.
 
 # Prerequisites
 
@@ -133,7 +138,7 @@ More features will be added in the future.
 
 ### Future updates
 
-* [ ] Windows support (currently not supported due to problems)
+* [ ] Windows support (currently not supported due to problems with Crystal)
 * [ ] Mac support (might be possible, not tested yet)
 
 ### Possible future updates
