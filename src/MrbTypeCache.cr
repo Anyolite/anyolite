@@ -15,8 +15,15 @@ module MrbTypeCache
 
   macro destructor_method(crystal_class)
     ->(mrb : MrbInternal::MrbState*, ptr : Void*) {
-      ptr.as({{crystal_class}}*).value.finalize
-      GC.free(ptr)
+      crystal_ptr = ptr.as({{crystal_class}}*)
+
+      # Call optional mruby callback
+      if (crystal_value = crystal_ptr.value).responds_to?(:mrb_finalize)
+        crystal_value.mrb_finalize(mrb)
+      end
+
+      # Delete the Crystal reference to this object
+      MrbRefTable.delete(crystal_ptr.value.object_id)
     }
   end
 end

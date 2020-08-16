@@ -7,6 +7,7 @@ require "./MrbMacro.cr"
 require "./MrbClassCache.cr"
 require "./MrbTypeCache.cr"
 require "./MrbModule.cr"
+require "./MrbRefTable.cr"
 
 alias MrbFunc = Proc(MrbInternal::MrbState*, MrbInternal::MrbValue, MrbInternal::MrbValue)
 

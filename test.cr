@@ -11,12 +11,24 @@ class Test
     return a
   end
 
+  # Gets called in Crystal and Mruby
   def initialize(@x : Int32 = 0)
     puts "Test object initialized with value #{@x}"
   end
 
+  # Gets called in Mruby
+  def mrb_initialize(mrb)
+    puts "Object registered in mruby"
+  end
+
+  # Gets called in Crystal unless program terminates early
   def finalize
     puts "Finalized with value #{@x}"
+  end
+
+  # Gets called in Mruby unless program crashes
+  def mrb_finalize(mrb)
+    puts "Mruby destructor called for value #{@x}"
   end
 end
 
@@ -26,10 +38,7 @@ MrbState.create do |mrb|
   MrbWrap.wrap_constructor(mrb, Test, [Int32])
   MrbWrap.wrap_instance_method(mrb, Test, "bar", test_instance_method, [Int32, Bool, String, MrbWrap::Opt(Float32, 0.4)])
   MrbWrap.wrap_property(mrb, Test, "x", x, Int32)
-
-  GC.disable
   mrb.load_script_from_file("examples/test.rb")
-  GC.enable
 end
 
 class Entity

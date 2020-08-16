@@ -326,10 +326,14 @@ module MrbMacro
         new_obj = ({{proc}}).call
       {% end %}
 
+      if new_obj.responds_to?(:mrb_initialize)
+        new_obj.mrb_initialize(mrb)
+      end
+
       # Allocate memory so we do not lose this object
-      # This will register the object in the GC, so we need to be careful about that
-      # Deleting the object in MRuby will also delete it in Crystal
       new_obj_ptr = Pointer({{crystal_class}}).malloc(size: 1, value: new_obj)
+      MrbRefTable.add(new_obj_ptr.value.object_id, new_obj_ptr.as(Void*))
+
       destructor = MrbTypeCache.destructor_method({{crystal_class}})
       MrbInternal.set_data_ptr_and_type(obj, new_obj_ptr, MrbTypeCache.register({{crystal_class}}, destructor))
 
