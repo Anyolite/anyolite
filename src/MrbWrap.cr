@@ -13,7 +13,6 @@ alias MrbFunc = Proc(MrbInternal::MrbState*, MrbInternal::MrbValue, MrbInternal:
 
 module MrbWrap
   struct Opt(T, D)
-   
   end
 
   macro wrap_class(mrb_state, crystal_class, name, under = nil)

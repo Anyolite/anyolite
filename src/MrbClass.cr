@@ -1,7 +1,7 @@
 class MrbClass
   @class_ptr : MrbInternal::RClass*
 
-  def initialize(@mrb : MrbState, @name : String, superclass : MrbClass | Nil = nil, @under : MrbModule | Nil= nil)
+  def initialize(@mrb : MrbState, @name : String, superclass : MrbClass | Nil = nil, @under : MrbModule | Nil = nil)
     actual_superclass = superclass ? superclass : MrbInternal.get_object_class(@mrb)
     if mod = @under
       @class_ptr = MrbInternal.mrb_define_class_under(@mrb, mod, @name, actual_superclass)

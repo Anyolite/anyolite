@@ -11,12 +11,12 @@ class Test
     return a
   end
 
-  # Gets called in Crystal and Mruby
+  # Gets called in Crystal and mruby
   def initialize(@x : Int32 = 0)
     puts "Test object initialized with value #{@x}"
   end
 
-  # Gets called in Mruby
+  # Gets called in mruby
   def mrb_initialize(mrb)
     puts "Object registered in mruby"
   end
@@ -26,7 +26,7 @@ class Test
     puts "Finalized with value #{@x}"
   end
 
-  # Gets called in Mruby unless program crashes
+  # Gets called in mruby unless program crashes
   def mrb_finalize(mrb)
     puts "Mruby destructor called for value #{@x}"
   end
@@ -66,10 +66,8 @@ class Entity
 end
 
 class Bla
-
   def initialize
   end
-
 end
 
 MrbState.create do |mrb|
@@ -79,9 +77,9 @@ MrbState.create do |mrb|
   MrbWrap.wrap_class(mrb, Bla, "Bla", under: test_module)
 
   MrbWrap.wrap_constructor(mrb, Entity, [MrbWrap::Opt(Int32, 0)])
-  
+
   MrbWrap.wrap_property(mrb, Entity, "hp", hp, Int32)
-  
+
   MrbWrap.wrap_instance_method(mrb, Entity, "damage", damage, [Int32])
 
   # Crystal does not allow false here, for some reason, so just use 0 and 1

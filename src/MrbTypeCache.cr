@@ -1,6 +1,5 @@
 class Object
   def finalize
-    
   end
 end
 
