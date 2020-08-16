@@ -125,7 +125,7 @@ More features will be added in the future.
 * [X] Wrappers for properties
 * [X] Wrappers for instance methods
 * [X] Optional values for simple argument types
-* [X] Crystal GC respects the Mruby GC
+* [X] Crystal GC respects the mruby GC
 * [X] Hooks for mruby object creation and deletion
 * [X] Simple examples
 * [ ] Wrappers for module and class methods
