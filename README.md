@@ -129,12 +129,14 @@ More features will be added in the future.
 * [X] Hooks for mruby object creation and deletion
 * [X] Simple examples
 * [X] Wrappers for module and class methods
+* [ ] Wrappers for constants
 * [ ] Build tests
 * [ ] Test project
 
 ### Version 0.2.0
 
 * [ ] Keyword argument support
+* [ ] Arrays as arguments and return values
 
 ### Future updates
 
@@ -144,6 +146,7 @@ More features will be added in the future.
 ### Possible future updates
 
 * [ ] Flag for Crystal-owned objects
+* [ ] Other types (Hashes, ...) as arguments and return values
 
 # Why this name?
 
