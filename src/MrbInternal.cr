@@ -65,7 +65,7 @@ lib MrbInternal
     dfree : MrbState*, Void* -> Void
   end
 
-  fun mrb_open : MrbState*
+  fun mrb_open() : MrbState*
   fun mrb_close(mrb : MrbState*)
 
   fun mrb_define_module(mrb : MrbState*, name : LibC::Char*) : RClass*
@@ -83,9 +83,9 @@ lib MrbInternal
 
   fun mrb_get_args(mrb : MrbState*, format : LibC::Char*, ...) : MrbInt
 
-  fun get_nil_value : MrbValue
-  fun get_false_value : MrbValue
-  fun get_true_value : MrbValue
+  fun get_nil_value() : MrbValue
+  fun get_false_value() : MrbValue
+  fun get_true_value() : MrbValue
   fun get_fixnum_value(value : MrbInt) : MrbValue
   fun get_bool_value(value : MrbBool) : MrbValue
   fun get_float_value(mrb : MrbState*, value : MrbFloat) : MrbValue

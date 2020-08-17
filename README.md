@@ -136,7 +136,6 @@ More features will be added in the future.
 ### Version 0.2.0
 
 * [ ] Keyword argument support
-* [ ] Arrays as arguments and return values
 
 ### Future updates
 
@@ -147,6 +146,7 @@ More features will be added in the future.
 
 * [ ] Flag for Crystal-owned objects
 * [ ] Other types (Hashes, ...) as arguments and return values
+* [ ] Arrays as arguments and return values
 
 # Why this name?
 
