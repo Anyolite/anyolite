@@ -1,7 +1,23 @@
 require "./anyolite.cr"
 
+module SomeModule
+  def self.test_method(int : Int32, str : String)
+    puts "#{str} and #{int}"
+  end
+end
+
 class Test
   property x : Int32 = 0
+
+  @@counter : Int32 = 0
+
+  def self.increase_counter
+    @@counter += 1
+  end
+
+  def self.counter
+    return @@counter
+  end
 
   def test_instance_method(int : Int32, bool : Bool, str : String, fl : Float32)
     puts "Old value is #{@x}"
@@ -13,6 +29,7 @@ class Test
 
   # Gets called in Crystal and mruby
   def initialize(@x : Int32 = 0)
+    Test.increase_counter()
     puts "Test object initialized with value #{@x}"
   end
 
@@ -34,7 +51,10 @@ end
 
 MrbState.create do |mrb|
   test_module = MrbModule.new(mrb, "TestModule")
+  MrbWrap.wrap_module_function(mrb, test_module, "test_method", SomeModule.test_method, [Int32, String])
+
   MrbWrap.wrap_class(mrb, Test, "Test", under: test_module)
+  MrbWrap.wrap_class_method(mrb, Test, "counter", Test.counter)
   MrbWrap.wrap_constructor(mrb, Test, [Int32])
   MrbWrap.wrap_instance_method(mrb, Test, "bar", test_instance_method, [Int32, Bool, String, MrbWrap::Opt(Float32, 0.4)])
   MrbWrap.wrap_property(mrb, Test, "x", x, Int32)

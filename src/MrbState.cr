@@ -27,7 +27,16 @@ class MrbState
     MrbInternal.load_script_from_file(@mrb_ptr, filename)
   end
 
+  # TODO: Arg count
   def define_method(name : String, c : MrbClass, proc : MrbFunc)
     MrbInternal.mrb_define_method(@mrb_ptr, c, name, proc, 1)
+  end
+
+  def define_module_function(name : String, mod : MrbModule, proc : MrbFunc)
+    MrbInternal.mrb_define_module_function(@mrb_ptr, mod, name, proc, 1)
+  end
+
+  def define_class_method(name : String, c : MrbClass, proc : MrbFunc)
+    MrbInternal.mrb_define_class_method(@mrb_ptr, c, name, proc, 1)
   end
 end

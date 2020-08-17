@@ -286,24 +286,22 @@ module MrbMacro
     )
   end
 
-  # Call this if the Proc contains the argument types
-  macro wrap_function(mrb_state, crystal_class, name, proc)
-    wrapped_method = MrbFunc.new do |mrb, obj|
-      converted_args = MrbMacro.get_converted_args(mrb, {{proc.args}})
-      MrbMacro.call_and_return(mrb, {{proc}}, {{proc.args}}, converted_args)
-    end
-
-    {{mrb_state}}.define_method({{name}}, MrbClassCache.get({{crystal_class}}), wrapped_method)
-  end
-
-  # Call this if the Proc args are given separately (for example in locally defined instance method procs)
-  macro wrap_function_with_args(mrb_state, crystal_class, name, proc, proc_args)
+  macro wrap_module_function_with_args(mrb_state, under_module, name, proc, proc_args)
     wrapped_method = MrbFunc.new do |mrb, obj|
       converted_args = MrbMacro.get_converted_args(mrb, {{proc_args}})
       MrbMacro.call_and_return(mrb, {{proc}}, {{proc_args}}, converted_args)
     end
 
-    {{mrb_state}}.define_method({{name}}, MrbClassCache.get({{crystal_class}}), wrapped_method)
+    {{mrb_state}}.define_module_function({{name}}, {{under_module}}, wrapped_method)
+  end
+
+  macro wrap_class_method_with_args(mrb_state, crystal_class, name, proc, proc_args)
+    wrapped_method = MrbFunc.new do |mrb, obj|
+      converted_args = MrbMacro.get_converted_args(mrb, {{proc_args}})
+      MrbMacro.call_and_return(mrb, {{proc}}, {{proc_args}}, converted_args)
+    end
+
+    {{mrb_state}}.define_class_method({{name}}, MrbClassCache.get({{crystal_class}}), wrapped_method)
   end
 
   macro wrap_instance_function_with_args(mrb_state, crystal_class, name, proc, proc_args)

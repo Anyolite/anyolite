@@ -128,7 +128,7 @@ More features will be added in the future.
 * [X] Crystal GC respects the mruby GC
 * [X] Hooks for mruby object creation and deletion
 * [X] Simple examples
-* [ ] Wrappers for module and class methods
+* [X] Wrappers for module and class methods
 * [ ] Build tests
 * [ ] Test project
 

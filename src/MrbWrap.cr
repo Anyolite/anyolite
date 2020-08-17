@@ -38,6 +38,24 @@ module MrbWrap
     {% end %}
   end
 
+  macro wrap_module_function(mrb_state, under_module, name, proc, proc_args = [] of Class)
+    {% if proc_args.empty? %}
+      MrbMacro.wrap_module_function_with_args({{mrb_state}}, {{under_module}}, {{name}}, ->{{proc}}, {{proc_args}})
+    {% else %}
+      MrbMacro.wrap_module_function_with_args({{mrb_state}}, {{under_module}}, {{name}}, 
+      ->{{proc}}({% for arg in proc_args %} {% if arg.resolve <= Opt %} {{arg.type_vars[0]}}, {% else %} {{arg}}, {% end %} {% end %}), {{proc_args}})
+    {% end %}
+  end
+
+  macro wrap_class_method(mrb_state, crystal_class, name, proc, proc_args = [] of Class)
+    {% if proc_args.empty? %}
+      MrbMacro.wrap_class_method_with_args({{mrb_state}}, {{crystal_class}}, {{name}}, ->{{proc}}, {{proc_args}})
+    {% else %}
+      MrbMacro.wrap_class_method_with_args({{mrb_state}}, {{crystal_class}}, {{name}}, 
+      ->{{proc}}({% for arg in proc_args %} {% if arg.resolve <= Opt %} {{arg.type_vars[0]}}, {% else %} {{arg}}, {% end %} {% end %}), {{proc_args}})
+    {% end %}
+  end
+
   macro wrap_instance_method(mrb_state, crystal_class, name, proc, proc_args = [] of Class)
     MrbMacro.wrap_instance_function_with_args({{mrb_state}}, {{crystal_class}}, {{name}}, ->(
       obj : {{crystal_class}},

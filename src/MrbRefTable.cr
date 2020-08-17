@@ -2,6 +2,8 @@
 # Therefore, the GC won't delete the wrapped objects until necessary
 # Note that this is currently one-directional, so Mruby might still delete Crystal objects generated from Crystal itself
 
+# TODO: Add reset method or transform it into a class
+
 module MrbRefTable
   @@content = {} of UInt64 => Void*
 
