@@ -132,6 +132,7 @@ More features will be added in the future.
 * [X] Wrappers for constants
 * [ ] Build tests
 * [ ] Test project
+* [ ] Documentation
 
 ### Version 0.2.0
 
