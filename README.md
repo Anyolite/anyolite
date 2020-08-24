@@ -129,7 +129,7 @@ More features will be added in the future.
 * [X] Hooks for mruby object creation and deletion
 * [X] Simple examples
 * [X] Wrappers for module and class methods
-* [ ] Wrappers for constants
+* [X] Wrappers for constants
 * [ ] Build tests
 * [ ] Test project
 

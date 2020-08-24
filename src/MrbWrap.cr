@@ -98,4 +98,8 @@ module MrbWrap
     MrbWrap.wrap_getter({{mrb_state}}, {{crystal_class}}, {{name}}, {{proc}})
     MrbWrap.wrap_setter({{mrb_state}}, {{crystal_class}}, {{name}} + "=", {{proc}}, {{proc_arg}})
   end
+
+  macro wrap_constant(mrb_state, under_module, name, crystal_value)
+    MrbInternal.mrb_define_const({{mrb_state}}, {{under_module}}, {{name}}, MrbCast.return_value({{mrb_state}}.to_unsafe, {{crystal_value}}))
+  end
 end

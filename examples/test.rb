@@ -12,3 +12,5 @@ a.x = 123
 puts "Value getter returns #{a.x}"
 
 puts "Values of Test: #{TestModule::Test.counter}"
+
+puts "Test constant is: #{TestModule::SOME_CONSTANT}"

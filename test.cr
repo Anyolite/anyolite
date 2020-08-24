@@ -52,6 +52,7 @@ end
 MrbState.create do |mrb|
   test_module = MrbModule.new(mrb, "TestModule")
   MrbWrap.wrap_module_function(mrb, test_module, "test_method", SomeModule.test_method, [Int32, String])
+  MrbWrap.wrap_constant(mrb, test_module, "SOME_CONSTANT", "Smile! 😊")
 
   MrbWrap.wrap_class(mrb, Test, "Test", under: test_module)
   MrbWrap.wrap_class_method(mrb, Test, "counter", Test.counter)
