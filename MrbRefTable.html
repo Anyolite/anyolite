@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="generator" content="Crystal Docs 0.35.1">
+<meta name="crystal_docs.project_version" content="master">
+<meta name="crystal_docs.project_name" content="anyolite">
+
+
+<link href="css/style.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="js/doc.js"></script>
+
+<svg class="hidden">
+  <symbol id="octicon-link" viewBox="0 0 16 16">
+    <path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path>
+  </symbol>
+</svg>
+
+  <meta id="repository-name" content="anyolite">
+  <title>MrbRefTable - anyolite master</title>
+  <script type="text/javascript">
+    CrystalDocs.base_path = "";
+  </script>
+</head>
+<body>
+
+<div class="sidebar">
+  <div class="sidebar-header">
+    <div class="search-box">
+      <input type="search" class="search-input" placeholder="Search..." spellcheck="false" aria-label="Search">
+    </div>
+
+    <div class="project-summary">
+      <h1 class="project-name">
+        <a href="index.html">
+          anyolite
+        </a>
+      </h1>
+
+      <span class="project-version">
+        master
+      </span>
+    </div>
+  </div>
+
+  <div class="search-results" class="hidden">
+    <ul class="search-list"></ul>
+  </div>
+
+  <div class="types-list">
+    <ul>
+  
+  <li class=" " data-id="anyolite/MrbCast" data-name="mrbcast">
+      <a href="MrbCast.html">MrbCast</a>
+      
+    </li>
+  
+  <li class=" " data-id="anyolite/MrbClass" data-name="mrbclass">
+      <a href="MrbClass.html">MrbClass</a>
+      
+    </li>
+  
+  <li class=" " data-id="anyolite/MrbClassCache" data-name="mrbclasscache">
+      <a href="MrbClassCache.html">MrbClassCache</a>
+      
+    </li>
+  
+  <li class=" " data-id="anyolite/MrbFunc" data-name="mrbfunc">
+      <a href="MrbFunc.html">MrbFunc</a>
+      
+    </li>
+  
+  <li class=" " data-id="anyolite/MrbMacro" data-name="mrbmacro">
+      <a href="MrbMacro.html">MrbMacro</a>
+      
+    </li>
+  
+  <li class=" " data-id="anyolite/MrbModule" data-name="mrbmodule">
+      <a href="MrbModule.html">MrbModule</a>
+      
+    </li>
+  
+  <li class=" current" data-id="anyolite/MrbRefTable" data-name="mrbreftable">
+      <a href="MrbRefTable.html">MrbRefTable</a>
+      
+    </li>
+  
+  <li class=" " data-id="anyolite/MrbState" data-name="mrbstate">
+      <a href="MrbState.html">MrbState</a>
+      
+    </li>
+  
+  <li class=" " data-id="anyolite/MrbTypeCache" data-name="mrbtypecache">
+      <a href="MrbTypeCache.html">MrbTypeCache</a>
+      
+    </li>
+  
+  <li class="parent " data-id="anyolite/MrbWrap" data-name="mrbwrap">
+      <a href="MrbWrap.html">MrbWrap</a>
+      
+        <ul>
+  
+  <li class=" " data-id="anyolite/MrbWrap/Opt" data-name="mrbwrap::opt(t, d)">
+      <a href="MrbWrap/Opt.html">Opt</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+</ul>
+
+  </div>
+</div>
+
+
+<div class="main-content">
+<h1 class="type-name">
+
+  <span class="kind">module</span> MrbRefTable
+
+</h1>
+
+
+
+
+
+  <h2>
+    <a id="overview" class="anchor" href="#overview">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Overview
+  </h2>
+
+  <p>This is a very simple approach to generate artificial references to the wrapped objects.
+Therefore, the GC won't delete the wrapped objects until necessary.
+Note that this is currently one-directional, so Mruby might still delete Crystal objects generated from Crystal itself.</p>
+
+<p><span class="flag orange">TODO</span>  Add reset method or transform this module into a class</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <h2>
+    <a id="defined-in" class="anchor" href="#defined-in">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Defined in:
+  </h2>
+  
+    
+      <a href="https://github.com/Anyolite/anyolite/blob/2dfc038406b2bbf7a4aea157ecf39b8d7333d233/src/MrbRefTable.cr#L6" target="_blank">
+        MrbRefTable.cr
+      </a>
+    
+    <br/>
+  
+
+
+
+
+
+
+
+  <h2>
+    <a id="class-method-summary" class="anchor" href="#class-method-summary">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Class Method Summary
+  </h2>
+  <ul class="list-summary">
+    
+      <li class="entry-summary">
+        <a href="#add(identification,value)-class-method" class="signature"><strong>.add</strong>(identification, value)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#delete(identification)-class-method" class="signature"><strong>.delete</strong>(identification)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#get(identification)-class-method" class="signature"><strong>.get</strong>(identification)</a>
+        
+      </li>
+    
+  </ul>
+
+
+
+
+
+
+
+<div class="methods-inherited">
+  
+</div>
+
+
+
+
+  <h2>
+    <a id="class-method-detail" class="anchor" href="#class-method-detail">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Class Method Detail
+  </h2>
+  
+    <div class="entry-detail" id="add(identification,value)-class-method">
+      <div class="signature">
+        
+        def self.<strong>add</strong>(identification, value)
+
+        <a class="method-permalink" href="#add(identification,value)-class-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/Anyolite/anyolite/blob/2dfc038406b2bbf7a4aea157ecf39b8d7333d233/src/MrbRefTable.cr#L13" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="delete(identification)-class-method">
+      <div class="signature">
+        
+        def self.<strong>delete</strong>(identification)
+
+        <a class="method-permalink" href="#delete(identification)-class-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/Anyolite/anyolite/blob/2dfc038406b2bbf7a4aea157ecf39b8d7333d233/src/MrbRefTable.cr#L17" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="get(identification)-class-method">
+      <div class="signature">
+        
+        def self.<strong>get</strong>(identification)
+
+        <a class="method-permalink" href="#get(identification)-class-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/Anyolite/anyolite/blob/2dfc038406b2bbf7a4aea157ecf39b8d7333d233/src/MrbRefTable.cr#L9" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+
+
+
+
+
+
+</div>
+
+</body>
+</html>

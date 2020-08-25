@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="generator" content="Crystal Docs 0.35.1">
+<meta name="crystal_docs.project_version" content="master">
+<meta name="crystal_docs.project_name" content="anyolite">
+
+
+<link href="css/style.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="js/doc.js"></script>
+
+<svg class="hidden">
+  <symbol id="octicon-link" viewBox="0 0 16 16">
+    <path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path>
+  </symbol>
+</svg>
+
+  <meta id="repository-name" content="anyolite">
+  <title>anyolite master</title>
+  <script type="text/javascript">
+  CrystalDocs.base_path = "";
+  </script>
+</head>
+<body>
+
+<div class="sidebar">
+  <div class="sidebar-header">
+    <div class="search-box">
+      <input type="search" class="search-input" placeholder="Search..." spellcheck="false" aria-label="Search">
+    </div>
+
+    <div class="project-summary">
+      <h1 class="project-name">
+        <a href="index.html">
+          anyolite
+        </a>
+      </h1>
+
+      <span class="project-version">
+        master
+      </span>
+    </div>
+  </div>
+
+  <div class="search-results" class="hidden">
+    <ul class="search-list"></ul>
+  </div>
+
+  <div class="types-list">
+    <ul>
+  
+  <li class=" " data-id="anyolite/MrbCast" data-name="mrbcast">
+      <a href="MrbCast.html">MrbCast</a>
+      
+    </li>
+  
+  <li class=" " data-id="anyolite/MrbClass" data-name="mrbclass">
+      <a href="MrbClass.html">MrbClass</a>
+      
+    </li>
+  
+  <li class=" " data-id="anyolite/MrbClassCache" data-name="mrbclasscache">
+      <a href="MrbClassCache.html">MrbClassCache</a>
+      
+    </li>
+  
+  <li class=" " data-id="anyolite/MrbFunc" data-name="mrbfunc">
+      <a href="MrbFunc.html">MrbFunc</a>
+      
+    </li>
+  
+  <li class=" " data-id="anyolite/MrbMacro" data-name="mrbmacro">
+      <a href="MrbMacro.html">MrbMacro</a>
+      
+    </li>
+  
+  <li class=" " data-id="anyolite/MrbModule" data-name="mrbmodule">
+      <a href="MrbModule.html">MrbModule</a>
+      
+    </li>
+  
+  <li class=" " data-id="anyolite/MrbRefTable" data-name="mrbreftable">
+      <a href="MrbRefTable.html">MrbRefTable</a>
+      
+    </li>
+  
+  <li class=" " data-id="anyolite/MrbState" data-name="mrbstate">
+      <a href="MrbState.html">MrbState</a>
+      
+    </li>
+  
+  <li class=" " data-id="anyolite/MrbTypeCache" data-name="mrbtypecache">
+      <a href="MrbTypeCache.html">MrbTypeCache</a>
+      
+    </li>
+  
+  <li class="parent " data-id="anyolite/MrbWrap" data-name="mrbwrap">
+      <a href="MrbWrap.html">MrbWrap</a>
+      
+        <ul>
+  
+  <li class=" " data-id="anyolite/MrbWrap/Opt" data-name="mrbwrap::opt(t, d)">
+      <a href="MrbWrap/Opt.html">Opt</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+</ul>
+
+  </div>
+</div>
+
+
+<div class="main-content">
+<h1><a id="anyolite" class="anchor" href="#anyolite">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Anyolite</h1>
+
+<p>Anyolite is a Crystal shard which adds a fully functional mruby interpreter to Crystal.</p>
+
+<h1><a id="description" class="anchor" href="#description">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Description</h1>
+
+<p>Anyolite allows for wrapping Crystal classes and functions into mruby with little effort.
+This way, mruby can be used as a scripting language to Crystal projects, with the major advantage of a similar syntax.</p>
+
+<p>Anyolite also ensures that the Crystal garbage collector does not delete the mruby objects, avoiding memory leaks.</p>
+
+<p>This project is currently in the early development phase, so please report any bugs or missing relevant features.</p>
+
+<h1><a id="prerequisites" class="anchor" href="#prerequisites">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Prerequisites</h1>
+
+<p>You need to have the following programs installed (and in your PATH variable, if you are on Windows):</p>
+
+<ul><li>Ruby (for building mruby)</li><li>Rake (for building the whole project)</li><li>Bison (for building mruby)</li><li>Git (for downloading mruby)</li><li>GCC or Microsoft Visual Studio 19 (for building the object files required for Anyolite, depending on your OS)</li></ul>
+
+<h1><a id="installing" class="anchor" href="#installing">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Installing</h1>
+
+<p>Put this shard as a requirement into your shard.yml project file and then call</p>
+
+<pre><code class="language-bash">shards install</code></pre>
+
+<p>from a terminal or the MSVC Developer Console (on Windows).</p>
+
+<p>Alternatively, you can clone this repository into the lib folder of your project and run</p>
+
+<pre><code class="language-bash">rake build_shard</code></pre>
+
+<p>manually to install the shard without using the crystal shards program.</p>
+
+<h1><a id="how-to-use" class="anchor" href="#how-to-use">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>How to use</h1>
+
+<p>Imagine a Crystal class for a really bad RPG:</p>
+
+<pre><code class="language-crystal"><span class="k">module</span> <span class="t">TestModule</span>
+  <span class="k">class</span> <span class="t">Entity</span>
+    property hp : <span class="t">Int32</span> <span class="o">=</span> <span class="n">0</span>
+
+    <span class="k">def</span> <span class="m">initialize</span>(@hp)
+    <span class="k">end</span>
+
+    <span class="k">def</span> <span class="m">damage</span>(diff : <span class="t">Int32</span>)
+      @hp -= diff
+    <span class="k">end</span>
+
+    <span class="k">def</span> <span class="m">yell</span>(sound : <span class="t">String</span>, loud : <span class="t">Bool</span> <span class="o">=</span> <span class="n">false</span>)
+      <span class="k">if</span> loud
+        puts <span class="s">&quot;Entity yelled: </span><span class="i">#{</span>sound.upcase<span class="i">}</span><span class="s">&quot;</span>
+      <span class="k">else</span>
+        puts <span class="s">&quot;Entity yelled: </span><span class="i">#{</span>sound<span class="i">}</span><span class="s">&quot;</span>
+      <span class="k">end</span>
+    <span class="k">end</span>
+
+    <span class="k">def</span> <span class="m">absorb_hp_from</span>(other : <span class="t">Entity</span>)
+      @hp += other.hp
+      other.hp <span class="o">=</span> <span class="n">0</span>
+    <span class="k">end</span>
+  <span class="k">end</span>
+<span class="k">end</span></code></pre>
+
+<p>Now, you want to wrap this class in Ruby. All you need to do is to execute the following code in Crystal:</p>
+
+<pre><code class="language-crystal"><span class="k">require</span> <span class="s">&quot;anyolite&quot;</span>
+
+<span class="t">MrbState</span>.create <span class="k">do</span> <span class="o">|</span>mrb<span class="o">|</span>
+  test_module <span class="o">=</span> <span class="t">MrbModule</span>.<span class="k">new</span>(mrb, <span class="s">&quot;TestModule&quot;</span>)
+  <span class="t">MrbWrap</span>.wrap_class(mrb, <span class="t">Entity</span>, <span class="s">&quot;Entity&quot;</span>, under: test_module)
+  
+  <span class="t">MrbWrap</span>.wrap_constructor(mrb, <span class="t">Entity</span>, [<span class="t">MrbWrap</span><span class="t">::</span><span class="t">Opt</span>(<span class="t">Int32</span>, <span class="n">0</span>)])
+
+  <span class="t">MrbWrap</span>.wrap_property(mrb, <span class="t">Entity</span>, <span class="s">&quot;hp&quot;</span>, hp, <span class="t">Int32</span>)
+  
+  <span class="t">MrbWrap</span>.wrap_instance_method(mrb, <span class="t">Entity</span>, <span class="s">&quot;damage&quot;</span>, damage, [<span class="t">Int32</span>])
+
+  <span class="c"># Crystal does not allow false here, for some reason, so just use 0 and 1</span>
+  <span class="t">MrbWrap</span>.wrap_instance_method(mrb, <span class="t">Entity</span>, <span class="s">&quot;yell&quot;</span>, yell, [<span class="t">String</span>, <span class="t">MrbWrap</span><span class="t">::</span><span class="t">Opt</span>(<span class="t">Bool</span>, <span class="n">0</span>)])
+
+  <span class="t">MrbWrap</span>.wrap_instance_method(mrb, <span class="t">Entity</span>, <span class="s">&quot;absorb_hp_from&quot;</span>, absorb_hp_from, [<span class="t">Entity</span>])
+
+  mrb.load_script_from_file(<span class="s">&quot;examples/hp_example.rb&quot;</span>)
+<span class="k">end</span></code></pre>
+
+<p>The last line in the block calls the following example script:</p>
+
+<pre><code class="language-ruby">a = TestModule::Entity.new(20)
+a.damage(13)
+puts a.hp
+
+b = TestModule::Entity.new(10)
+a.absorb_hp_from(b)
+puts a.hp
+puts b.hp
+b.yell('Ouch, you stole my HP!', true)
+a.yell('Well, take better care of your public attributes!')</code></pre>
+
+<p>The syntax stays mostly the same as in Crystal, except for the keyword arguments.
+These might be added in the future, but technically you can always wrap the generated methods in pure Ruby methods with keywords.</p>
+
+<p>The example above gives a good overview over the things you can already do with Anyolite.
+More features will be added in the future.</p>
+
+<h1><a id="roadmap" class="anchor" href="#roadmap">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Roadmap</h1>
+
+<h2><a id="releases" class="anchor" href="#releases">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Releases</h2>
+
+<h3><a id="version-0.1.0" class="anchor" href="#version-0.1.0">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Version 0.1.0</h3>
+
+<ul><li>[X] Basic structure</li><li>[X] Ubuntu support</li><li>[X] Wrappers for classes</li><li>[X] Wrappers for modules</li><li>[X] Support for classes in modules</li><li>[X] Wrappers for properties</li><li>[X] Wrappers for instance methods</li><li>[X] Wrappers for module and class methods</li><li>[X] Wrappers for constants</li><li>[X] Optional values for simple argument types</li><li>[X] Crystal GC respects the mruby GC</li><li>[X] Hooks for mruby object creation and deletion</li><li>[X] Simple examples</li><li>[X] Build tests</li><li>[X] Basic documentation</li></ul>
+
+<h2><a id="upcoming-releases" class="anchor" href="#upcoming-releases">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Upcoming releases</h2>
+
+<h3><a id="version-0.2.0" class="anchor" href="#version-0.2.0">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Version 0.2.0</h3>
+
+<ul><li>[ ] Keyword argument support</li><li>[ ] Module cache analogus to the class cache</li><li>[ ] Arguments can be specified consistently as arrays or standalone</li></ul>
+
+<h3><a id="future-updates" class="anchor" href="#future-updates">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Future updates</h3>
+
+<ul><li>[ ] Windows support (currently not supported due to problems with Crystal)</li><li>[ ] Mac support (might be possible, not tested yet)</li></ul>
+
+<h3><a id="possible-future-updates" class="anchor" href="#possible-future-updates">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Possible future updates</h3>
+
+<ul><li>[ ] Flag for Crystal-owned objects</li><li>[ ] Other types (Hashes, ...) as arguments and return values</li><li>[ ] Arrays as arguments and return values</li></ul>
+
+<h1><a id="why-this-name" class="anchor" href="#why-this-name">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Why this name?</h1>
+
+<p>https://en.wikipedia.org/wiki/Anyolite</p>
+
+<p>In short, it is a rare variant of the crystalline mineral called zoisite, with a ruby and crystal shards (of pargasite) embedded.</p>
+
+<p>The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.</p>
+</div>
+</body>
+</html>
