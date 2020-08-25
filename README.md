@@ -130,8 +130,8 @@ More features will be added in the future.
 * [X] Simple examples
 * [X] Wrappers for module and class methods
 * [X] Wrappers for constants
-* [ ] Build tests
-* [ ] Test project
+* [X] Build tests
+* [ ] Test specs
 * [ ] Documentation
 
 ### Version 0.2.0
