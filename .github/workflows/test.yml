@@ -11,12 +11,13 @@ jobs:
 
     runs-on: ubuntu-latest
 
-    container:
-      image: crystallang/crystal
-
     steps:
     - uses: actions/checkout@v2
-    - name: Prerequisites
+    - name: Install Crystal
+      uses: oprypin/install-crystal@v1
+      with:
+        crystal: nightly
+    - name: Install Ruby
       run: sudo apt install -y ruby
     - name: Build shard
       run: rake build_shard
