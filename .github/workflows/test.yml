@@ -16,7 +16,9 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    - name: BuildShard
+    - name: Prerequisites
+      run: sudo apt install -y ruby
+    - name: Build shard
       run: rake build_shard
-    - name: TestScript
+    - name: Test script
       run: crystal test.cr
