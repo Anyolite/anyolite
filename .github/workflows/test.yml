@@ -16,5 +16,9 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+    - name: Prerequisites
+      run: gem install rake
+    - name: BuildShard
+      run: rake build_shard
     - name: TestScript
       run: crystal test.cr
