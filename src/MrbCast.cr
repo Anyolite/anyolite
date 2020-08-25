@@ -1,3 +1,4 @@
+# Module for specific casts of Crystal values into mruby values
 module MrbCast
   # Explicit return methods
 

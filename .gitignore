@@ -1,3 +1,4 @@
 build/
 utility/mruby_build_config.rb.lock
 third_party/
+docs/

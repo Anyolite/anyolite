@@ -1,3 +1,4 @@
+# Reference to a mruby module
 class MrbModule
   @module_ptr : MrbInternal::RClass*
 

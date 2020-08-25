@@ -1,3 +1,4 @@
+# Cache for mruby class references
 module MrbClassCache
   @@cache = {} of String => MrbClass
 

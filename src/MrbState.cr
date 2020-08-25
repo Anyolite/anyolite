@@ -1,3 +1,4 @@
+# Wrapper for an mruby state reference
 class MrbState
   @mrb_ptr : MrbInternal::MrbState*
 
@@ -27,7 +28,7 @@ class MrbState
     MrbInternal.load_script_from_file(@mrb_ptr, filename)
   end
 
-  # TODO: Arg count
+  # TODO: Use internal mruby arg count in future versions
   def define_method(name : String, c : MrbClass, proc : MrbFunc)
     MrbInternal.mrb_define_method(@mrb_ptr, c, name, proc, 1)
   end

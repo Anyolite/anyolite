@@ -113,7 +113,7 @@ More features will be added in the future.
 
 # Roadmap
 
-## Upcoming releases
+## Releases
 
 ### Version 0.1.0
 
@@ -124,19 +124,22 @@ More features will be added in the future.
 * [X] Support for classes in modules
 * [X] Wrappers for properties
 * [X] Wrappers for instance methods
+* [X] Wrappers for module and class methods
+* [X] Wrappers for constants
 * [X] Optional values for simple argument types
 * [X] Crystal GC respects the mruby GC
 * [X] Hooks for mruby object creation and deletion
 * [X] Simple examples
-* [X] Wrappers for module and class methods
-* [X] Wrappers for constants
 * [X] Build tests
-* [ ] Test specs
-* [ ] Documentation
+* [X] Basic documentation
+
+## Upcoming releases
 
 ### Version 0.2.0
 
 * [ ] Keyword argument support
+* [ ] Module cache analogus to the class cache
+* [ ] Arguments can be specified consistently as arrays or standalone
 
 ### Future updates
 

@@ -1,10 +1,10 @@
 # Helper methods which should not be used for trivial cases in the final version
-
-# TODO: Error if a required argument follows optional arguments
 module MrbMacro
   macro format_string(args)
     {% format_str = "" %}
     {% optional_values = false %}
+
+    # TODO: Error if a required argument follows optional arguments
 
     {% for arg in args %}
       {% if arg.resolve <= Bool %}
