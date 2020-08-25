@@ -2,6 +2,14 @@
 
 Anyolite is a Crystal shard which adds a fully functional mruby interpreter to Crystal.
 
+
+![BuildUbuntu](https://github.com/Anyolite/anyolite/workflows/build/badge.svg)
+
+![Release](https://img.shields.io/github/v/release/Anyolite/anyolite)
+![ReleaseDate](https://img.shields.io/github/release-date/Anyolite/anyolite)
+
+![License](https://img.shields.io/github/license/Anyolite/anyolite)
+
 # Description
 
 Anyolite allows for wrapping Crystal classes and functions into mruby with little effort.
