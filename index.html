@@ -249,6 +249,14 @@ These might be added in the future, but technically you can always wrap the gene
 <p>The example above gives a good overview over the things you can already do with Anyolite.
 More features will be added in the future.</p>
 
+<h1><a id="limitations" class="anchor" href="#limitations">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Limitations</h1>
+
+<ul><li>Currently, Anyolite does not work on Windows due to Crystal compiler bugs</li><li>Returning objects of a wrapped class does only work if every constructor argument is optional</li><li>Arrays, hashes and other complex mruby objects are not directly supported</li><li>Configuration options for mruby are limited yet</li></ul>
+
 <h1><a id="roadmap" class="anchor" href="#roadmap">
   <svg class="octicon-link" aria-hidden="true">
     <use href="#octicon-link"/>
@@ -275,6 +283,14 @@ More features will be added in the future.</p>
   </svg>
 </a>Upcoming releases</h2>
 
+<h3><a id="version-0.1.1" class="anchor" href="#version-0.1.1">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Version 0.1.1</h3>
+
+<ul><li>[X] Fixed mruby function return values not being cached</li><li>[X] Fixed minor documentation errors</li><li>[X] Added compiletime errors for nested optional arguments</li></ul>
+
 <h3><a id="version-0.2.0" class="anchor" href="#version-0.2.0">
   <svg class="octicon-link" aria-hidden="true">
     <use href="#octicon-link"/>
@@ -289,7 +305,7 @@ More features will be added in the future.</p>
   </svg>
 </a>Future updates</h3>
 
-<ul><li>[ ] Windows support (currently not supported due to problems with Crystal)</li><li>[ ] Mac support (might be possible, not tested yet)</li></ul>
+<ul><li>[ ] Windows support (currently not supported due to problems with Crystal)</li><li>[ ] Mac support (might be possible, not tested yet)</li><li>[ ] Compiletime errors for macros</li><li>[ ] Support for more flexible mruby configuration options</li></ul>
 
 <h3><a id="possible-future-updates" class="anchor" href="#possible-future-updates">
   <svg class="octicon-link" aria-hidden="true">
