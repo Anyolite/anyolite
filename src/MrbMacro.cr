@@ -30,7 +30,7 @@ module MrbMacro
           {% elsif new_arg.resolve <= String %}
             {% format_str += "z" %}
           {% elsif new_arg.resolve <= MrbWrap::Opt %}
-            # TODO: ERROR
+            # Invalid
           {% else %}
             {% format_str += "o" %}
           {% end %}
@@ -76,7 +76,7 @@ module MrbMacro
             {% elsif new_arg.resolve <= String %}
               {% format_str += "z" %}
             {% elsif new_arg.resolve <= MrbWrap::Opt %}
-              # TODO: ERROR
+              # Invalid
             {% else %}
               {% format_str += "o" %}
             {% end %}
@@ -126,7 +126,7 @@ module MrbMacro
       {% elsif new_type.resolve <= String %}
         Pointer(LibC::Char*)
       {% elsif new_type.resolve <= MrbWrap::Opt %}
-        # ERROR
+        # Invalid
       {% else %}
         Pointer(MrbInternal::MrbValue)
       {% end %}
@@ -193,6 +193,8 @@ module MrbMacro
         {{new_type}}.new({{arg}})
       {% elsif new_type.resolve <= String %}
         {{new_type}}.new({{arg}})
+      {% elsif new_type.resolve <= MrbWrap::Opt %}
+        # Invalid
       {% else %}
         MrbMacro.convert_from_ruby_object({{mrb}}, {{arg}}, {{new_type}}).value
       {% end %}

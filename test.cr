@@ -43,6 +43,14 @@ class Test
     puts "Finalized with value #{@x}"
   end
 
+  def +(other)
+    Test.new(@x + other.x)
+  end
+
+  def add(other)
+    self + other
+  end
+
   # Gets called in mruby unless program crashes
   def mrb_finalize(mrb)
     puts "Mruby destructor called for value #{@x}"
@@ -56,8 +64,10 @@ MrbState.create do |mrb|
 
   MrbWrap.wrap_class(mrb, Test, "Test", under: test_module)
   MrbWrap.wrap_class_method(mrb, Test, "counter", Test.counter)
-  MrbWrap.wrap_constructor(mrb, Test, [Int32])
+  MrbWrap.wrap_constructor(mrb, Test, [MrbWrap::Opt(Int32, 0)])
   MrbWrap.wrap_instance_method(mrb, Test, "bar", test_instance_method, [Int32, Bool, String, MrbWrap::Opt(Float32, 0.4)])
+  MrbWrap.wrap_instance_method(mrb, Test, "add", add, [Test])
+  MrbWrap.wrap_instance_method(mrb, Test, "+", add, [Test])
   MrbWrap.wrap_property(mrb, Test, "x", x, Int32)
   mrb.load_script_from_file("examples/test.rb")
 end

@@ -118,6 +118,13 @@ These might be added in the future, but technically you can always wrap the gene
 The example above gives a good overview over the things you can already do with Anyolite.
 More features will be added in the future.
 
+# Limitations
+
+* Currently, Anyolite does not work on Windows due to Crystal compiler bugs
+* Returning objects of a wrapped class does only work if every constructor argument is optional
+* Arrays, hashes and other complex mruby objects are not directly supported
+* Configuration options for mruby are limited yet
+
 # Roadmap
 
 ## Releases
@@ -142,6 +149,12 @@ More features will be added in the future.
 
 ## Upcoming releases
 
+### Version 0.1.1
+
+* [X] Fixed mruby function return values not being cached
+* [X] Fixed minor documentation errors
+* [X] Added compiletime errors for nested optional arguments
+
 ### Version 0.2.0
 
 * [ ] Keyword argument support
@@ -152,6 +165,8 @@ More features will be added in the future.
 
 * [ ] Windows support (currently not supported due to problems with Crystal)
 * [ ] Mac support (might be possible, not tested yet)
+* [ ] Compiletime errors for macros
+* [ ] Support for more flexible mruby configuration options
 
 ### Possible future updates
 

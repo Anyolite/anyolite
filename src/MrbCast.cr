@@ -54,9 +54,12 @@ module MrbCast
 
   def self.return_value(mrb : MrbInternal::MrbState*, value : Object)
     ruby_class = MrbClassCache.get(typeof(value))
-    new_ruby_object = MrbInternal.new_empty_object(mrb, ruby_class)
 
+    # TODO: Allow non-defaultable constructors
+    new_ruby_object = MrbInternal.new_empty_object(mrb, ruby_class)
     MrbMacro.convert_from_ruby_object(mrb, new_ruby_object, typeof(value)).value = value
+
+    MrbRefTable.add(value.object_id, pointerof(value).as(Void*))
 
     return new_ruby_object
   end

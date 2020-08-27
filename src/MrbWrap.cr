@@ -22,8 +22,6 @@ module MrbWrap
     # :nodoc:
     def initialize
     end
-
-    # TODO: Delete reference to finalize in docs
   end
 
   # Wraps a Crystal class directly into an mruby class.
@@ -33,7 +31,7 @@ module MrbWrap
   # 
   # To inherit from another mruby class, specify an `MrbClass` as a *superclass*.
   #
-  # Each class can be defined in a specifiy module by setting *superclass* to a `MrbModule`.
+  # Each class can be defined in a specifiy module by setting *under* to a `MrbModule`.
   macro wrap_class(mrb_state, crystal_class, name, under = nil, superclass = nil)
     new_class = MrbClass.new({{mrb_state}}, {{name}}, under: {{under}}, superclass: {{superclass}})
     MrbInternal.set_instance_tt_as_data(new_class)

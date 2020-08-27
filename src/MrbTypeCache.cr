@@ -1,9 +1,3 @@
-# :nodoc:
-class Object
-  def finalize
-  end
-end
-
 # Cache for mruby data types, holding the destructor methods
 module MrbTypeCache
   @@cache = {} of String => MrbInternal::MrbDataType*

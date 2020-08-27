@@ -14,3 +14,5 @@ puts "Value getter returns #{a.x}"
 puts "Values of Test: #{TestModule::Test.counter}"
 
 puts "Test constant is: #{TestModule::SOME_CONSTANT}"
+
+puts "Sum is #{(a + b).x}"
