@@ -147,14 +147,14 @@ More features will be added in the future.
 * [X] Build tests
 * [X] Basic documentation
 
-## Upcoming releases
-
 ### Version 0.1.1
 
 * [X] Fixed mruby function return values not being cached
 * [X] Fixed minor documentation errors
 * [X] Added compiletime errors for nested optional arguments
 * [X] Added safeguards for reference table access
+
+## Upcoming releases
 
 ### Version 0.2.0
 
