@@ -162,7 +162,7 @@
   </h2>
   
     
-      <a href="https://github.com/Anyolite/anyolite/blob/8adb1b7f73f5f59177950c060060cbda1c6e3682/src/MrbWrap.cr#L16" target="_blank">
+      <a href="https://github.com/Anyolite/anyolite/blob/74bb1a17f94dc9a5f74d3a4785b3300e0c1d1e07/src/MrbWrap.cr#L16" target="_blank">
         MrbWrap.cr
       </a>
     
@@ -228,6 +228,11 @@
         <a href="#wrap_instance_method(mrb_state,crystal_class,name,proc,proc_args=[]ofClass)-macro" class="signature"><strong>wrap_instance_method</strong>(mrb_state, crystal_class, name, proc, proc_args = <span class="o">[]</span> <span class="k">of</span> <span class="t">Class</span>)</a>
         
           <div class="summary"><p>Wraps an instance method into mruby.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#wrap_instance_method(mrb_state,crystal_class,name,proc,proc_args=[]ofClass,use_splat_args=false,keyword_args=%7B%7DofSymbol=%3ETuple(Class,Object),use_double_splat_args=false)-macro" class="signature"><strong>wrap_instance_method</strong>(mrb_state, crystal_class, name, proc, proc_args = <span class="o">[]</span> <span class="k">of</span> <span class="t">Class</span>, use_splat_args = <span class="n">false</span>, keyword_args = {} <span class="k">of</span> <span class="t">Symbol</span> => <span class="t">Tuple</span>(<span class="t">Class</span>, <span class="t">Object</span>), use_double_splat_args = <span class="n">false</span>)</a>
         
       </li>
     
@@ -306,7 +311,7 @@ with <em>name</em> as its new designation, returning an <code><a href="MrbClass.
       <br/>
       <div>
         
-          [<a href="https://github.com/Anyolite/anyolite/blob/8adb1b7f73f5f59177950c060060cbda1c6e3682/src/MrbWrap.cr#L35" target="_blank">View source</a>]
+          [<a href="https://github.com/Anyolite/anyolite/blob/74bb1a17f94dc9a5f74d3a4785b3300e0c1d1e07/src/MrbWrap.cr#L35" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -332,7 +337,7 @@ with the arguments <em>proc_args</em> as an <code>Array of Class</code>.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/Anyolite/anyolite/blob/8adb1b7f73f5f59177950c060060cbda1c6e3682/src/MrbWrap.cr#L89" target="_blank">View source</a>]
+          [<a href="https://github.com/Anyolite/anyolite/blob/74bb1a17f94dc9a5f74d3a4785b3300e0c1d1e07/src/MrbWrap.cr#L89" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -356,7 +361,7 @@ with the name <em>name</em> and the parent <code><a href="MrbModule.html">MrbMod
       <br/>
       <div>
         
-          [<a href="https://github.com/Anyolite/anyolite/blob/8adb1b7f73f5f59177950c060060cbda1c6e3682/src/MrbWrap.cr#L168" target="_blank">View source</a>]
+          [<a href="https://github.com/Anyolite/anyolite/blob/74bb1a17f94dc9a5f74d3a4785b3300e0c1d1e07/src/MrbWrap.cr#L174" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -380,7 +385,7 @@ with the arguments <em>proc_args</em> as an <code>Array of Class</code>.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/Anyolite/anyolite/blob/8adb1b7f73f5f59177950c060060cbda1c6e3682/src/MrbWrap.cr#L58" target="_blank">View source</a>]
+          [<a href="https://github.com/Anyolite/anyolite/blob/74bb1a17f94dc9a5f74d3a4785b3300e0c1d1e07/src/MrbWrap.cr#L58" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -405,7 +410,7 @@ with the arguments <em>proc_args</em> as an <code>Array of Class</code>.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/Anyolite/anyolite/blob/8adb1b7f73f5f59177950c060060cbda1c6e3682/src/MrbWrap.cr#L147" target="_blank">View source</a>]
+          [<a href="https://github.com/Anyolite/anyolite/blob/74bb1a17f94dc9a5f74d3a4785b3300e0c1d1e07/src/MrbWrap.cr#L153" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -431,7 +436,23 @@ with the arguments <em>proc_args</em> as an <code>Array of Class</code>.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/Anyolite/anyolite/blob/8adb1b7f73f5f59177950c060060cbda1c6e3682/src/MrbWrap.cr#L104" target="_blank">View source</a>]
+          [<a href="https://github.com/Anyolite/anyolite/blob/74bb1a17f94dc9a5f74d3a4785b3300e0c1d1e07/src/MrbWrap.cr#L104" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="wrap_instance_method(mrb_state,crystal_class,name,proc,proc_args=[]ofClass,use_splat_args=false,keyword_args={}ofSymbol=&gt;Tuple(Class,Object),use_double_splat_args=false)-macro">
+      <div class="signature">
+        
+        macro <strong>wrap_instance_method</strong>(mrb_state, crystal_class, name, proc, proc_args = <span class="o">[]</span> <span class="k">of</span> <span class="t">Class</span>, use_splat_args = <span class="n">false</span>, keyword_args = {} <span class="k">of</span> <span class="t">Symbol</span> => <span class="t">Tuple</span>(<span class="t">Class</span>, <span class="t">Object</span>), use_double_splat_args = <span class="n">false</span>)
+
+        <a class="method-permalink" href="#wrap_instance_method(mrb_state,crystal_class,name,proc,proc_args=[]ofClass,use_splat_args=false,keyword_args=%7B%7DofSymbol=%3ETuple(Class,Object),use_double_splat_args=false)-macro">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/Anyolite/anyolite/blob/74bb1a17f94dc9a5f74d3a4785b3300e0c1d1e07/src/MrbWrap.cr#L129" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -457,7 +478,7 @@ with <em>name</em> as its new designation, returning an <code><a href="MrbModule
       <br/>
       <div>
         
-          [<a href="https://github.com/Anyolite/anyolite/blob/8adb1b7f73f5f59177950c060060cbda1c6e3682/src/MrbWrap.cr#L48" target="_blank">View source</a>]
+          [<a href="https://github.com/Anyolite/anyolite/blob/74bb1a17f94dc9a5f74d3a4785b3300e0c1d1e07/src/MrbWrap.cr#L48" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -483,7 +504,7 @@ with the arguments <em>proc_args</em> as an <code>Array of Class</code>.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/Anyolite/anyolite/blob/8adb1b7f73f5f59177950c060060cbda1c6e3682/src/MrbWrap.cr#L74" target="_blank">View source</a>]
+          [<a href="https://github.com/Anyolite/anyolite/blob/74bb1a17f94dc9a5f74d3a4785b3300e0c1d1e07/src/MrbWrap.cr#L74" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -509,7 +530,7 @@ with the argument <em>proc_arg</em> as its respective <code>Class</code>.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/Anyolite/anyolite/blob/8adb1b7f73f5f59177950c060060cbda1c6e3682/src/MrbWrap.cr#L159" target="_blank">View source</a>]
+          [<a href="https://github.com/Anyolite/anyolite/blob/74bb1a17f94dc9a5f74d3a4785b3300e0c1d1e07/src/MrbWrap.cr#L165" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -535,7 +556,7 @@ with the argument <em>proc_arg</em> as its respective <code>Class</code>.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/Anyolite/anyolite/blob/8adb1b7f73f5f59177950c060060cbda1c6e3682/src/MrbWrap.cr#L135" target="_blank">View source</a>]
+          [<a href="https://github.com/Anyolite/anyolite/blob/74bb1a17f94dc9a5f74d3a4785b3300e0c1d1e07/src/MrbWrap.cr#L141" target="_blank">View source</a>]
         
       </div>
     </div>
