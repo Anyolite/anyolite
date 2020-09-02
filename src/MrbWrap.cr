@@ -126,6 +126,12 @@ module MrbWrap
     )}, [{{crystal_class}}, {{*proc_args}}])
   end
 
+  macro wrap_instance_method(mrb_state, crystal_class, name, proc, proc_args = [] of Class, use_splat_args = false, keyword_args = {} of Symbol => Tuple(Class, Object), use_double_splat_args = false)
+    # TODO: Macro body
+    # TODO: Decide whether to use Tuple(Class, Object) or Tuple(Class) for the keyword argument types
+    # TODO: Is it possible to use something like Class | Tuple(Class, Object) ?
+  end
+
   # Wraps a setter into mruby.  
   # 
   # The setter *proc* (without the `=`) of the Crystal class *crystal_class* will be integrated into the `MrbState` *mrb_state*,

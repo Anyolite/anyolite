@@ -51,11 +51,24 @@ class Test
     self + other
   end
 
+  def keyword_test(strvar, intvar, *splat, floatvar = 0.123, boolvar : Bool = true, **other)
+    puts "str = #{strvar}, int = #{intvar}, splat = #{splat}, float = #{floatvar}, bool = #{boolvar}, other = #{other}"
+  end
+
   # Gets called in mruby unless program crashes
   def mrb_finalize(mrb)
     puts "Mruby destructor called for value #{@x}"
   end
 end
+
+Test.new.keyword_test("Hello", -123, true, floatvar: 0.3, boolvar: false, last_arg: "Hello")
+# Format string should be "zi*:"
+# Args should be contained in:
+# - char* (String)
+# - mrb_int (Integer)
+# - mrb_value* with mrb_int elements (Splat arguments)
+# - mrb_value* with mrb_int elements (Keyword arguments)
+# - mrb_value (Double splat argument hash)
 
 MrbState.create do |mrb|
   test_module = MrbModule.new(mrb, "TestModule")
@@ -69,6 +82,7 @@ MrbState.create do |mrb|
   MrbWrap.wrap_instance_method(mrb, Test, "add", add, [Test])
   MrbWrap.wrap_instance_method(mrb, Test, "+", add, [Test])
   MrbWrap.wrap_property(mrb, Test, "x", x, Int32)
+
   mrb.load_script_from_file("examples/test.rb")
 end
 

@@ -157,8 +157,23 @@ More features will be added in the future.
 
 ### Version 0.2.0
 
+## Major features
+
+* [ ] Option for splat arguments
 * [ ] Keyword argument support
+
+## Minor features
+
+* [ ] Casting from MrbValue objects to Crystal values
+
+## Safety
+
+* [ ] Class checks for arguments
 * [ ] Module cache analogus to the class cache
+* [ ] Method in mruby to determine owner of object
+
+## Usability
+
 * [ ] Arguments can be specified consistently as arrays or standalone
 
 ### Future updates
@@ -170,9 +185,9 @@ More features will be added in the future.
 
 ### Possible future updates
 
-* [ ] Flag for Crystal-owned objects
 * [ ] Other types (Hashes, ...) as arguments and return values
 * [ ] Arrays as arguments and return values
+* [ ] Better system for passing optional arguments
 
 # Why this name?
 
