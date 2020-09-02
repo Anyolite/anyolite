@@ -131,6 +131,8 @@ More features will be added in the future.
 
 ### Version 0.1.0
 
+#### Major features
+
 * [X] Basic structure
 * [X] Ubuntu support
 * [X] Wrappers for classes
@@ -149,30 +151,35 @@ More features will be added in the future.
 
 ### Version 0.1.1
 
+#### Safety
+
+* [X] Added safeguards for reference table access
+
+#### Bugfixes
+
 * [X] Fixed mruby function return values not being cached
 * [X] Fixed minor documentation errors
-* [X] Added safeguards for reference table access
 
 ## Upcoming releases
 
 ### Version 0.2.0
 
-## Major features
+#### Major features
 
 * [ ] Option for splat arguments
 * [ ] Keyword argument support
 
-## Minor features
+#### Minor features
 
 * [ ] Casting from MrbValue objects to Crystal values
 
-## Safety
+#### Safety
 
 * [ ] Class checks for arguments
 * [ ] Module cache analogus to the class cache
 * [ ] Method in mruby to determine owner of object
 
-## Usability
+#### Usability
 
 * [ ] Arguments can be specified consistently as arrays or standalone
 
