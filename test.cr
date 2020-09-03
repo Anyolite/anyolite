@@ -83,6 +83,51 @@ MrbState.create do |mrb|
   MrbWrap.wrap_instance_method(mrb, Test, "+", add, [Test])
   MrbWrap.wrap_property(mrb, Test, "x", x, Int32)
 
+  # TODO: Integrate this into a proper generalized method
+  # This is just a proof of concept, for now.
+  keyword_mrb_method = MrbFunc.new do |mrb, obj|
+    regular_args = MrbMacro.generate_arg_tuple([String, Int32])
+    format_string = MrbMacro.format_string([String, Int32]) + "*:"
+
+    splat_ptr = Pointer(Pointer(MrbInternal::MrbValue)).malloc(size: 1)
+    splat_arg_num = Pointer(MrbInternal::MrbInt).malloc(size: 1)
+
+    kw_names = Pointer(LibC::Char*).malloc(size: [:floatvar, :boolvar].size)
+    0.upto([:floatvar, :boolvar].size - 1) do |i|
+      kw_names[i] = [:floatvar, :boolvar][i].to_s.to_unsafe
+    end
+
+    keyword_args = MrbInternal::KWArgs.new
+    keyword_args.num = [:floatvar, :boolvar].size
+    keyword_args.values = Pointer(MrbInternal::MrbValue).malloc(size: [:floatvar, :boolvar].size)
+    keyword_args.table = kw_names
+    keyword_args.required = 0
+    keyword_args.rest = Pointer(MrbInternal::MrbValue).malloc(size: 1)
+
+    MrbInternal.mrb_get_args(mrb, format_string, *regular_args, splat_ptr, splat_arg_num, pointerof(keyword_args))
+
+    c = 0
+    MrbMacro.convert_args(mrb, regular_args, [String, Int32]).each do |a|
+      puts "Converted regular arg #{c} = #{a}"
+      c += 1
+    end
+
+    0.upto(splat_arg_num.value - 1) do |i|
+      puts "Splat arg #{i} = #{splat_ptr.value[i]}"
+    end
+
+    0.upto(keyword_args.num - 1) do |i|
+      puts "Keyword arg #{i} = #{keyword_args.values[i]}"
+    end
+
+    # TODO: Handle rest arguments
+    # TODO: Call Crystal function once all arguments are converted
+
+    MrbCast.return_value(mrb, nil)
+  end
+
+  mrb.define_method("keyword_test", MrbClassCache.get(Test), keyword_mrb_method)
+
   mrb.load_script_from_file("examples/test.rb")
 end
 

@@ -16,3 +16,5 @@ puts "Values of Test: #{TestModule::Test.counter}"
 puts "Test constant is: #{TestModule::SOME_CONSTANT}"
 
 puts "Sum is #{(a + b).x}"
+
+a.keyword_test("Hi there", -121212, true, false, false, "Hiiii", floatvar: -0.313)

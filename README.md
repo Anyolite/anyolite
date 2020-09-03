@@ -168,10 +168,11 @@ More features will be added in the future.
 
 * [ ] Option for splat arguments
 * [ ] Keyword argument support
+* [ ] Support for unspecified keyword arguments
 
 #### Minor features
 
-* [ ] Casting from MrbValue objects to Crystal values
+* [ ] Casting from MrbValue objects to closest Crystal values
 
 #### Safety
 
@@ -181,7 +182,12 @@ More features will be added in the future.
 
 #### Usability
 
+* [X] Simplified some macro functions
 * [ ] Arguments can be specified consistently as arrays or standalone
+
+#### Bugfixes
+
+* [X] Fixed erros when naming mrb_state instances anything other than 'mrb'
 
 ### Future updates
 

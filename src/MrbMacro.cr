@@ -168,7 +168,7 @@ module MrbMacro
   macro get_raw_args(mrb, proc_args)
     args = MrbMacro.generate_arg_tuple({{proc_args}})
     format_string = MrbMacro.format_string({{proc_args}})
-    MrbInternal.mrb_get_args(mrb, format_string, *args)
+    MrbInternal.mrb_get_args({{mrb}}, format_string, *args)
     args
   end
 
@@ -246,46 +246,44 @@ module MrbMacro
     MrbCast.return_value({{mrb}}, return_value)
   end
 
-  macro get_converted_args(mrb, proc_args)
-    {% if proc_args.size > 0 %}
-      args = MrbMacro.generate_arg_tuple({{proc_args}})
-      format_string = MrbMacro.format_string({{proc_args}})
-    {% else %}
-      args = Tuple.new
-      format_string = ""
-    {% end %}
-    
-    MrbInternal.mrb_get_args(mrb, format_string, *args)
-
+  macro convert_args(mrb, args, proc_args)
     Tuple.new(
       {% c = 0 %}
       {% for arg in proc_args %}
-        MrbMacro.convert_arg(mrb, args[{{c}}].value, {{arg}}),
+        MrbMacro.convert_arg({{mrb}}, {{args}}[{{c}}].value, {{arg}}),
         {% c += 1 %}
       {% end %}
     )
   end
 
-  macro get_converted_args_without_first_arg(mrb, proc_args)
-    {% if proc_args.size > 0 %}
-      args = MrbMacro.generate_arg_tuple_without_first_arg({{proc_args}})
-      format_string = MrbMacro.format_string_without_first_arg({{proc_args}})
-    {% else %}
-      args = Tuple.new
-      format_string = ""
-    {% end %}
-    
-    MrbInternal.mrb_get_args(mrb, format_string, *args)
-
+  macro convert_args_without_first_arg(mrb, args, proc_args)
     Tuple.new(
       {% c = 0 %}
       {% for arg in proc_args %}
         {% if c > 0 %}
-          MrbMacro.convert_arg(mrb, args[{{c - 1}}].value, {{arg}}),
+          MrbMacro.convert_arg({{mrb}}, {{args}}[{{c - 1}}].value, {{arg}}),
         {% end %}
         {% c += 1 %}
       {% end %}
     )
+  end
+
+  macro get_converted_args(mrb, proc_args)
+    args = MrbMacro.generate_arg_tuple({{proc_args}})
+    format_string = MrbMacro.format_string({{proc_args}})
+    
+    MrbInternal.mrb_get_args({{mrb}}, format_string, *args)
+
+    MrbMacro.convert_args({{mrb}}, args, {{proc_args}})
+  end
+
+  macro get_converted_args_without_first_arg(mrb, proc_args)
+    args = MrbMacro.generate_arg_tuple_without_first_arg({{proc_args}})
+    format_string = MrbMacro.format_string_without_first_arg({{proc_args}})
+    
+    MrbInternal.mrb_get_args({{mrb}}, format_string, *args)
+
+    MrbMacro.convert_args_without_first_arg({{mrb}}, args, {{proc_args}})
   end
 
   macro wrap_module_function_with_args(mrb_state, under_module, name, proc, proc_args)

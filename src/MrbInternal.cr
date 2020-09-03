@@ -65,6 +65,14 @@ lib MrbInternal
     dfree : MrbState*, Void* -> Void
   end
 
+  struct KWArgs
+    num : UInt32
+    values : MrbValue*
+    table : LibC::Char**
+    required : UInt32
+    rest : MrbValue*
+  end
+
   fun mrb_open() : MrbState*
   fun mrb_close(mrb : MrbState*)
 
