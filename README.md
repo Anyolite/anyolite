@@ -187,7 +187,7 @@ More features will be added in the future.
 
 #### Bugfixes
 
-* [X] Fixed erros when naming mrb_state instances anything other than 'mrb'
+* [X] Fixed erros when naming MrbState instances anything other than 'mrb'
 
 ### Future updates
 
