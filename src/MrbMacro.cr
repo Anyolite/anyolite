@@ -192,6 +192,7 @@ module MrbMacro
     MrbMacro.convert_args({{mrb}}, args, {{proc_args}})
   end
 
+  # TODO: Simplify macro structure
   macro wrap_module_function_with_args(mrb_state, under_module, name, proc, proc_args = [] of Class)
     {% if proc_args.class_name == "ArrayLiteral" %}
       {% proc_arg_array = proc_args %}

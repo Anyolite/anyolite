@@ -104,7 +104,8 @@ module MrbWrap
   macro wrap_instance_method(mrb_state, crystal_class, name, proc, proc_args = [] of Class)
     MrbMacro.wrap_instance_function_with_args({{mrb_state}}, {{crystal_class}}, {{name}}, {{proc}}, {{proc_args}})
   end
-
+  
+  # :nodoc:
   macro wrap_instance_method(mrb_state, crystal_class, name, proc, proc_args = [] of Class, use_splat_args = false, keyword_args = {} of Symbol => Tuple(Class, Object), use_double_splat_args = false)
     # TODO: Macro body
     # TODO: Decide whether to use Tuple(Class, Object) or Tuple(Class) for the keyword argument types
@@ -118,7 +119,7 @@ module MrbWrap
   # 
   # Its new name will be *name*.
   macro wrap_setter(mrb_state, crystal_class, name, proc, proc_arg)
-    MrbMacro.wrap_instance_function_with_args({{mrb_state}}, {{crystal_class}}, {{name}}, {{proc}}, {{proc_arg}}, operator: "=")
+    MrbMacro.wrap_instance_function_with_args({{mrb_state}}, {{crystal_class}}, {{name}}, {{proc}}, {{proc_arg}}, "=")
   end
 
   # Wraps a getter into mruby.  

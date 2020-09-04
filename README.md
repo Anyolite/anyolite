@@ -184,6 +184,7 @@ More features will be added in the future.
 
 * [X] Simplified some macro functions considerably
 * [X] Arguments can be specified consistently as arrays or standalone
+* [ ] Documentation builds only for releases
 
 #### Bugfixes
 
