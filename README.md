@@ -182,8 +182,8 @@ More features will be added in the future.
 
 #### Usability
 
-* [X] Simplified some macro functions
-* [ ] Arguments can be specified consistently as arrays or standalone
+* [X] Simplified some macro functions considerably
+* [X] Arguments can be specified consistently as arrays or standalone
 
 #### Bugfixes
 

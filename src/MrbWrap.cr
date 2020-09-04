@@ -102,28 +102,7 @@ module MrbWrap
   # 
   # Its new name will be *name*.
   macro wrap_instance_method(mrb_state, crystal_class, name, proc, proc_args = [] of Class)
-    MrbMacro.wrap_instance_function_with_args({{mrb_state}}, {{crystal_class}}, {{name}}, ->(
-      obj : {{crystal_class}},
-
-      {% c = 0 %}
-      {% for arg in proc_args %}
-        {% if arg.resolve <= Opt %}
-          arg_{{c}} : {{arg.type_vars[0]}},
-        {% else %}
-          arg_{{c}} : {{arg}},
-        {% end %}
-        {% c += 1 %}
-      {% end %}
-
-    ) {obj.{{proc}}(
-        
-      {% c = 0 %}
-      {% for arg in proc_args %}
-        arg_{{c}},
-        {% c += 1 %}
-      {% end %}
-
-    )}, [{{crystal_class}}, {{*proc_args}}])
+    MrbMacro.wrap_instance_function_with_args({{mrb_state}}, {{crystal_class}}, {{name}}, {{proc}}, {{proc_args}})
   end
 
   macro wrap_instance_method(mrb_state, crystal_class, name, proc, proc_args = [] of Class, use_splat_args = false, keyword_args = {} of Symbol => Tuple(Class, Object), use_double_splat_args = false)
@@ -139,10 +118,7 @@ module MrbWrap
   # 
   # Its new name will be *name*.
   macro wrap_setter(mrb_state, crystal_class, name, proc, proc_arg)
-    MrbMacro.wrap_instance_function_with_args({{mrb_state}}, {{crystal_class}}, {{name}}, ->(
-      obj : {{crystal_class}},
-      arg : {{proc_arg}}
-    ) {obj.{{proc}} = arg}, [{{crystal_class}}, {{proc_arg}}])
+    MrbMacro.wrap_instance_function_with_args({{mrb_state}}, {{crystal_class}}, {{name}}, {{proc}}, {{proc_arg}}, operator: "=")
   end
 
   # Wraps a getter into mruby.  
@@ -151,9 +127,7 @@ module MrbWrap
   # 
   # Its new name will be *name*.
   macro wrap_getter(mrb_state, crystal_class, name, proc)
-    MrbMacro.wrap_instance_function_with_args({{mrb_state}}, {{crystal_class}}, {{name}}, ->(
-      obj : {{crystal_class}}
-    ) {obj.{{proc}}}, [{{crystal_class}}])
+    MrbMacro.wrap_instance_function_with_args({{mrb_state}}, {{crystal_class}}, {{name}}, {{proc}})
   end
 
   # Wraps a property into mruby.  
@@ -164,7 +138,7 @@ module MrbWrap
   # Its new name will be *name*.
   macro wrap_property(mrb_state, crystal_class, name, proc, proc_arg)
     MrbWrap.wrap_getter({{mrb_state}}, {{crystal_class}}, {{name}}, {{proc}})
-    MrbWrap.wrap_setter({{mrb_state}}, {{crystal_class}}, {{name}} + "=", {{proc}}, {{proc_arg}})
+    MrbWrap.wrap_setter({{mrb_state}}, {{crystal_class}}, {{name}}, {{proc}}, {{proc_arg}})
   end
 
   # Wraps a constant value into mruby.

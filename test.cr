@@ -81,7 +81,7 @@ MrbState.create do |mrb|
   MrbWrap.wrap_instance_method(mrb, Test, "bar", test_instance_method, [Int32, Bool, String, MrbWrap::Opt(Float32, 0.4)])
   MrbWrap.wrap_instance_method(mrb, Test, "add", add, [Test])
   MrbWrap.wrap_instance_method(mrb, Test, "+", add, [Test])
-  MrbWrap.wrap_property(mrb, Test, "x", x, Int32)
+  MrbWrap.wrap_property(mrb, Test, "x", x, [Int32])
 
   # TODO: Integrate this into a proper generalized method
   # This is just a proof of concept, for now.
