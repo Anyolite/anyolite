@@ -44,6 +44,26 @@ module MrbMacro
     {{format_str}}
   end
 
+  macro format_char(arg, optional_values = false)
+    {% if arg.resolve <= Bool %}
+      "b"
+    {% elsif arg.resolve <= Int %}
+      "i"
+    {% elsif arg.resolve <= Float %}
+      "f"
+    {% elsif arg.resolve <= String %}
+      "z"
+    {% elsif arg.resolve <= MrbWrap::Opt %}
+      {% if optional_values != true %}
+        "|" + MrbMacro.format_char({{arg.type_vars[0]}}, optional_values: true)
+      {% else %}
+        MrbMacro.format_char({{arg.type_vars[0]}}, optional_values: true)
+      {% end %}
+    {% else %}
+      "o"
+    {% end %}
+  end
+
   macro type_in_ruby(type)
     {% if type.resolve <= Bool %}
       MrbInternal::MrbBool
