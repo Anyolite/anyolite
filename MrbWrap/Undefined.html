@@ -8,8 +8,8 @@
 <meta name="crystal_docs.project_name" content="anyolite">
 
 
-<link href="css/style.css" rel="stylesheet" type="text/css" />
-<script type="text/javascript" src="js/doc.js"></script>
+<link href="../css/style.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="../js/doc.js"></script>
 
 <svg class="hidden">
   <symbol id="octicon-link" viewBox="0 0 16 16">
@@ -18,9 +18,9 @@
 </svg>
 
   <meta id="repository-name" content="anyolite">
-  <title>MrbFunc - anyolite master</title>
+  <title>MrbWrap::Undefined - anyolite master</title>
   <script type="text/javascript">
-    CrystalDocs.base_path = "";
+    CrystalDocs.base_path = "../";
   </script>
 </head>
 <body>
@@ -33,7 +33,7 @@
 
     <div class="project-summary">
       <h1 class="project-name">
-        <a href="index.html">
+        <a href="../index.html">
           anyolite
         </a>
       </h1>
@@ -52,67 +52,67 @@
     <ul>
   
   <li class=" " data-id="anyolite/MrbCast" data-name="mrbcast">
-      <a href="MrbCast.html">MrbCast</a>
+      <a href="../MrbCast.html">MrbCast</a>
       
     </li>
   
   <li class=" " data-id="anyolite/MrbClass" data-name="mrbclass">
-      <a href="MrbClass.html">MrbClass</a>
+      <a href="../MrbClass.html">MrbClass</a>
       
     </li>
   
   <li class=" " data-id="anyolite/MrbClassCache" data-name="mrbclasscache">
-      <a href="MrbClassCache.html">MrbClassCache</a>
+      <a href="../MrbClassCache.html">MrbClassCache</a>
       
     </li>
   
-  <li class=" current" data-id="anyolite/MrbFunc" data-name="mrbfunc">
-      <a href="MrbFunc.html">MrbFunc</a>
+  <li class=" " data-id="anyolite/MrbFunc" data-name="mrbfunc">
+      <a href="../MrbFunc.html">MrbFunc</a>
       
     </li>
   
   <li class=" " data-id="anyolite/MrbMacro" data-name="mrbmacro">
-      <a href="MrbMacro.html">MrbMacro</a>
+      <a href="../MrbMacro.html">MrbMacro</a>
       
     </li>
   
   <li class=" " data-id="anyolite/MrbModule" data-name="mrbmodule">
-      <a href="MrbModule.html">MrbModule</a>
+      <a href="../MrbModule.html">MrbModule</a>
       
     </li>
   
   <li class=" " data-id="anyolite/MrbRefTable" data-name="mrbreftable">
-      <a href="MrbRefTable.html">MrbRefTable</a>
+      <a href="../MrbRefTable.html">MrbRefTable</a>
       
     </li>
   
   <li class=" " data-id="anyolite/MrbState" data-name="mrbstate">
-      <a href="MrbState.html">MrbState</a>
+      <a href="../MrbState.html">MrbState</a>
       
     </li>
   
   <li class=" " data-id="anyolite/MrbTypeCache" data-name="mrbtypecache">
-      <a href="MrbTypeCache.html">MrbTypeCache</a>
+      <a href="../MrbTypeCache.html">MrbTypeCache</a>
       
     </li>
   
-  <li class="parent " data-id="anyolite/MrbWrap" data-name="mrbwrap">
-      <a href="MrbWrap.html">MrbWrap</a>
+  <li class="parent open current" data-id="anyolite/MrbWrap" data-name="mrbwrap">
+      <a href="../MrbWrap.html">MrbWrap</a>
       
         <ul>
   
   <li class=" " data-id="anyolite/MrbWrap/Interpreted" data-name="mrbwrap::interpreted">
-      <a href="MrbWrap/Interpreted.html">Interpreted</a>
+      <a href="../MrbWrap/Interpreted.html">Interpreted</a>
       
     </li>
   
   <li class=" " data-id="anyolite/MrbWrap/Opt" data-name="mrbwrap::opt(t, d)">
-      <a href="MrbWrap/Opt.html">Opt</a>
+      <a href="../MrbWrap/Opt.html">Opt</a>
       
     </li>
   
-  <li class=" " data-id="anyolite/MrbWrap/Undefined" data-name="mrbwrap::undefined">
-      <a href="MrbWrap/Undefined.html">Undefined</a>
+  <li class=" current" data-id="anyolite/MrbWrap/Undefined" data-name="mrbwrap::undefined">
+      <a href="../MrbWrap/Undefined.html">Undefined</a>
       
     </li>
   
@@ -130,10 +130,12 @@
 <div class="main-content">
 <h1 class="type-name">
 
-  <span class="kind">alias</span> MrbFunc
+  <span class="kind">struct</span> MrbWrap::Undefined
 
 </h1>
 
+
+  <ul class="superclass-hierarchy"><li class="superclass"><a href="../MrbWrap/Undefined.html">MrbWrap::Undefined</a></li><li class="superclass">Struct</li><li class="superclass">Value</li><li class="superclass">Object</li></ul>
 
 
 
@@ -147,19 +149,9 @@
     Overview
   </h2>
 
-  <p>Alias for the mruby function pointers</p>
+  <p>Special struct representing undefined values in mruby</p>
 
 
-
-  <h2>
-    <a id="alias-definition" class="anchor" href="#alias-definition">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>
-    Alias Definition
-  </h2>
-  <code>Pointer(MrbInternal::MrbState), MrbInternal::MrbValue -> MrbInternal::MrbValue</code>
 
 
 
@@ -182,7 +174,7 @@
   </h2>
   
     
-      <a href="https://github.com/Anyolite/anyolite/blob/659cebf9be11f40dd63aeef41d608e305d03eccc/src/MrbWrap.cr#L13" target="_blank">
+      <a href="https://github.com/Anyolite/anyolite/blob/659cebf9be11f40dd63aeef41d608e305d03eccc/src/MrbWrap.cr#L31" target="_blank">
         MrbWrap.cr
       </a>
     
@@ -202,6 +194,36 @@
 
 
 <div class="methods-inherited">
+  
+    
+
+
+    
+
+
+    
+
+
+  
+    
+
+
+    
+
+
+    
+
+
+  
+    
+
+
+    
+
+
+    
+
+
   
 </div>
 
