@@ -194,6 +194,55 @@ module MrbMacro
     {{mrb_state}}.define_method({{name + operator}}, MrbClassCache.get({{crystal_class}}), wrapped_method)
   end
 
+  # :nodoc:
+  macro wrap_instance_function_with_keyword_args(mrb_state, crystal_class, name, proc, keyword_args, regular_args = [] of Class, use_splat = false, use_other_keywords = false, operator = "")
+    {% if regular_args.class_name == "ArrayLiteral" %}
+      {% regular_arg_array = regular_args %}
+    {% else %}
+      {% regular_arg_array = [procregular_args_args] %}
+    {% end %}
+
+    wrapped_method = MrbFunc.new do |mrb, obj|
+      regular_arg_tuple = MrbMacro.generate_arg_tuple(regular_arg_array)
+
+      format_string = MrbMacro.format_string(regular_arg_array) + 
+      {% if use_splat %}
+        "*" +
+      {% end %}
+      ":"
+
+      splat_ptr = Pointer(Pointer(MrbInternal::MrbValue)).malloc(size: 1)
+      splat_arg_num = Pointer(MrbInternal::MrbInt).malloc(size: 1)
+
+      # TODO: Might actually be irrelevant
+      #kw_names = Pointer(LibC::Char*).malloc(size: {{keyword_args.size}})
+      kw_names = [
+        {% for keyword in keyword_args.keys %}
+          keyword.to_s.to_unsafe
+        {% end %}
+      ]
+
+      keyword_args = MrbInternal::KWArgs.new
+      keyword_args.num = keyword_args.size
+      keyword_args.values = Pointer(MrbInternal::MrbValue).malloc(size: keyword_args.size)
+      keyword_args.table = kw_names
+      keyword_args.required = 0
+      keyword_args.rest = Pointer(MrbInternal::MrbValue).malloc(size: 1)
+
+      MrbInternal.mrb_get_args(mrb, format_string, *regular_args, 
+      {% if use_splat %}
+        splat_ptr, splat_arg_num,
+      {% end %}
+      pointerof(keyword_args))
+
+      # TODO: Complete and test this
+      converted_regular_args = MrbMacro.get_converted_args(mrb, {{regular_arg_array}})
+      converted_obj = MrbMacro.convert_from_ruby_object(mrb, obj, {{crystal_class}}).value
+
+      MrbCast.return_value(mrb, nil)
+    end
+  end
+
   macro wrap_constructor_function(mrb_state, crystal_class, proc, proc_args = [] of Class)
     {% if proc_args.class_name == "ArrayLiteral" %}
       {% proc_arg_array = proc_args %}

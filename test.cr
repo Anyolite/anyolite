@@ -92,10 +92,8 @@ MrbState.create do |mrb|
     splat_ptr = Pointer(Pointer(MrbInternal::MrbValue)).malloc(size: 1)
     splat_arg_num = Pointer(MrbInternal::MrbInt).malloc(size: 1)
 
-    kw_names = Pointer(LibC::Char*).malloc(size: {:floatvar => {Float32, 0.123}, :boolvar => {Bool, true}}.size)
-    0.upto({:floatvar => {Float32, 0.123}, :boolvar => {Bool, true}}.size - 1) do |i|
-      kw_names[i] = {:floatvar => {Float32, 0.123}, :boolvar => {Bool, true}}.keys[i].to_s.to_unsafe
-    end
+    #kw_names = Pointer(LibC::Char*).malloc(size: {:floatvar => {Float32, 0.123}, :boolvar => {Bool, true}}.size)
+    kw_names = [{:floatvar => {Float32, 0.123}, :boolvar => {Bool, true}}.keys[0].to_s.to_unsafe, {:floatvar => {Float32, 0.123}, :boolvar => {Bool, true}}.keys[1].to_s.to_unsafe]
 
     keyword_args = MrbInternal::KWArgs.new
     keyword_args.num = {:floatvar => {Float32, 0.123}, :boolvar => {Bool, true}}.size
