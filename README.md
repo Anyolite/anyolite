@@ -172,7 +172,7 @@ More features will be added in the future.
 
 #### Minor features
 
-* [ ] Casting from MrbValue objects to closest Crystal values
+* [X] Casting from MrbValue objects to closest Crystal values
 
 #### Safety
 

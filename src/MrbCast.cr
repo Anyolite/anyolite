@@ -64,5 +64,17 @@ module MrbCast
     return new_ruby_object
   end
 
-  # TODO: Conversions of other objects
+  def self.interpret_ruby_value(mrb : MrbInternal::MrbState*, value : MrbInternal::MrbValue)
+    case value.tt
+      when MrbInternal::MrbVType::MRB_TT_UNDEF then MrbWrap::Undef
+      when MrbInternal::MrbVType::MRB_TT_TRUE then true 
+      when MrbInternal::MrbVType::MRB_TT_FALSE then (value.value.value_int != 0 ? false : nil)  # TODO: Use proper mruby methods
+      when MrbInternal::MrbVType::MRB_TT_FIXNUM then value.value.value_int
+      when MrbInternal::MrbVType::MRB_TT_FLOAT then value.value.value_float
+      when MrbInternal::MrbVType::MRB_TT_STRING then String.new(MrbInternal.mrb_str_to_cstr(mrb, value))
+      else raise("MrbValue #{value} with #{value.tt} is not supported")
+    end
+  end
+
+  # TODO: Conversions of other objects like arrays and hashes
 end

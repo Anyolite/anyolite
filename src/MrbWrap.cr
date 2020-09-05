@@ -15,6 +15,9 @@ alias MrbFunc = Proc(MrbInternal::MrbState*, MrbInternal::MrbValue, MrbInternal:
 # Main wrapper module, which should be covering most of the use cases
 module MrbWrap
 
+  # Alias for all possible mruby return types
+  alias Interpreted = Nil | Bool | MrbInternal::MrbFloat | MrbInternal::MrbInt | String | Undefined
+
   # Helper structure which can be used to specify an optional argument of class *T* with default value *D*.
   #
   # No instances of this struct are necessary.
@@ -23,6 +26,16 @@ module MrbWrap
     def initialize
     end
   end
+
+  # Special struct representing undefined values in mruby
+  struct Undefined
+    # :nodoc:
+    def initialize
+    end
+  end
+
+  # Undefined mruby value
+  Undef = Undefined.new
 
   # Wraps a Crystal class directly into an mruby class.
   # 

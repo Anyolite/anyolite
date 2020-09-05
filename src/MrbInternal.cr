@@ -99,6 +99,8 @@ lib MrbInternal
   fun get_float_value(mrb : MrbState*, value : MrbFloat) : MrbValue
   fun get_string_value(mrb : MrbState*, value : LibC::Char*) : MrbValue
 
+  fun mrb_str_to_cstr(mrb : MrbState*, value : MrbValue) : LibC::Char*
+
   fun get_object_class(mrb : MrbState*) : RClass*
 
   fun data_type(value : MrbValue) : MrbDataType*

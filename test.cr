@@ -92,14 +92,14 @@ MrbState.create do |mrb|
     splat_ptr = Pointer(Pointer(MrbInternal::MrbValue)).malloc(size: 1)
     splat_arg_num = Pointer(MrbInternal::MrbInt).malloc(size: 1)
 
-    kw_names = Pointer(LibC::Char*).malloc(size: {:floatvar => {Float32, 0.123}, :boolvar => {Bool, false}}.size)
-    0.upto({:floatvar => {Float32, 0.123}, :boolvar => {Bool, false}}.size - 1) do |i|
-      kw_names[i] = {:floatvar => {Float32, 0.123}, :boolvar => {Bool, false}}.keys[i].to_s.to_unsafe
+    kw_names = Pointer(LibC::Char*).malloc(size: {:floatvar => {Float32, 0.123}, :boolvar => {Bool, true}}.size)
+    0.upto({:floatvar => {Float32, 0.123}, :boolvar => {Bool, true}}.size - 1) do |i|
+      kw_names[i] = {:floatvar => {Float32, 0.123}, :boolvar => {Bool, true}}.keys[i].to_s.to_unsafe
     end
 
     keyword_args = MrbInternal::KWArgs.new
-    keyword_args.num = {:floatvar => {Float32, 0.123}, :boolvar => {Bool, false}}.size
-    keyword_args.values = Pointer(MrbInternal::MrbValue).malloc(size: {:floatvar => {Float32, 0.123}, :boolvar => {Bool, false}}.size)
+    keyword_args.num = {:floatvar => {Float32, 0.123}, :boolvar => {Bool, true}}.size
+    keyword_args.values = Pointer(MrbInternal::MrbValue).malloc(size: {:floatvar => {Float32, 0.123}, :boolvar => {Bool, true}}.size)
     keyword_args.table = kw_names
     keyword_args.required = 0
     keyword_args.rest = Pointer(MrbInternal::MrbValue).malloc(size: 1)
@@ -112,18 +112,23 @@ MrbState.create do |mrb|
       c += 1
     end
 
+    final_splat_values = [] of MrbWrap::Interpreted # TODO: Will become a tuple
     0.upto(splat_arg_num.value - 1) do |i|
       puts "Splat arg #{i} = #{splat_ptr.value[i]}"
+      puts "=> #{MrbCast.interpret_ruby_value(mrb, splat_ptr.value[i])}"
+      final_splat_values.push(MrbCast.interpret_ruby_value(mrb, splat_ptr.value[i]))
     end
 
     0.upto(keyword_args.num - 1) do |i|
       puts "Keyword arg #{i} = #{keyword_args.values[i]}"
+      puts "=> #{MrbCast.interpret_ruby_value(mrb, keyword_args.values[i])}"
     end
 
-    # TODO: Handle rest arguments
-    # TODO: Call Crystal function once all arguments are converted
+    ret = Test.new.keyword_test(*MrbMacro.convert_args(mrb, regular_args, [String, Int32]), final_splat_values[0], final_splat_values[1], final_splat_values[2], final_splat_values[3], floatvar: MrbCast.interpret_ruby_value(mrb, keyword_args.values[0]))
 
-    MrbCast.return_value(mrb, nil)
+    # TODO: Handle rest arguments
+
+    MrbCast.return_value(mrb, ret)
   end
 
   mrb.define_method("keyword_test", MrbClassCache.get(Test), keyword_mrb_method)
