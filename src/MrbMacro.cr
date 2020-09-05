@@ -1,47 +1,11 @@
 # Helper methods which should not be used for trivial cases in the final version
 module MrbMacro
   macro format_string(args)
-    {% format_str = "" %}
-    {% optional_values = false %}
-
-    # TODO: Error if a required argument follows optional arguments
-
+    "" +
     {% for arg in args %}
-      {% if arg.resolve <= Bool %}
-        {% format_str += "b" %}
-      {% elsif arg.resolve <= Int %}
-        {% format_str += "i" %}
-      {% elsif arg.resolve <= Float %}
-        {% format_str += "f" %}
-      {% elsif arg.resolve <= String %}
-        {% format_str += "z" %}
-      {% elsif arg.resolve <= MrbWrap::Opt %}
-        {% if !optional_values %}
-          {% format_str += "|" %}
-          {% optional_values = true %}
-
-          {% new_arg = arg.type_vars[0] %}
-          {% if new_arg.resolve <= Bool %}
-            {% format_str += "b" %}
-          {% elsif new_arg.resolve <= Int %}
-            {% format_str += "i" %}
-          {% elsif new_arg.resolve <= Float %}
-            {% format_str += "f" %}
-          {% elsif new_arg.resolve <= String %}
-            {% format_str += "z" %}
-          {% elsif new_arg.resolve <= MrbWrap::Opt %}
-            # Invalid
-          {% else %}
-            {% format_str += "o" %}
-          {% end %}
-
-        {% end %}
-      {% else %}
-        {% format_str += "o" %}
-      {% end %}
+      MrbMacro.format_char({{arg}}) +
     {% end %}
-
-    {{format_str}}
+    ""
   end
 
   macro format_char(arg, optional_values = false)
@@ -73,6 +37,8 @@ module MrbMacro
       MrbInternal::MrbFloat
     {% elsif type.resolve <= String %}
       LibC::Char*
+    {% elsif type.resolve <= MrbWrap::Opt %}
+      MrbMacro.type_in_ruby({{type.type_vars[0]}})
     {% else %}
       MrbInternal::MrbValue
     {% end %}
@@ -88,22 +54,7 @@ module MrbMacro
     {% elsif type.resolve <= String %}
       Pointer(LibC::Char*)
     {% elsif type.resolve <= MrbWrap::Opt %}
-
-      {% new_type = type.type_vars[0] %} 
-      {% if new_type.resolve <= Bool %}
-        Pointer(MrbInternal::MrbBool)
-      {% elsif new_type.resolve <= Int %}
-        Pointer(MrbInternal::MrbInt)
-      {% elsif new_type.resolve <= Float %}
-        Pointer(MrbInternal::MrbFloat)
-      {% elsif new_type.resolve <= String %}
-        Pointer(LibC::Char*)
-      {% elsif new_type.resolve <= MrbWrap::Opt %}
-        # Invalid
-      {% else %}
-        Pointer(MrbInternal::MrbValue)
-      {% end %}
-
+      MrbMacro.pointer_type({{type.type_vars[0]}})
     {% else %}
       Pointer(MrbInternal::MrbValue)
     {% end %}
@@ -113,7 +64,7 @@ module MrbMacro
     Tuple.new(
       {% for arg in args %}
         {% if arg.resolve <= MrbWrap::Opt %}
-          MrbMacro.pointer_type({{arg.type_vars[0]}}).malloc(size: 1, value: MrbMacro.type_in_ruby({{arg.type_vars[0]}}).new({{arg.type_vars[1]}})),
+          MrbMacro.pointer_type({{arg}}).malloc(size: 1, value: MrbMacro.type_in_ruby({{arg}}).new({{arg.type_vars[1]}})),
         {% else %}
           MrbMacro.pointer_type({{arg}}).malloc(size: 1),
         {% end %}
@@ -139,23 +90,7 @@ module MrbMacro
     {% elsif arg_type.resolve <= String %}
       {{arg_type}}.new({{arg}})
     {% elsif arg_type.resolve <= MrbWrap::Opt %}
-
-      {% new_type = arg_type.type_vars[0] %}
-      {% if new_type.resolve <= Bool %}
-        ({{arg}} != 0)
-      {% elsif new_type.resolve <= Int %}
-        {{new_type}}.new({{arg}})
-      {% elsif new_type.resolve <= Float %}
-        {{new_type}}.new({{arg}})
-      {% elsif new_type.resolve <= String %}
-        {{new_type}}.new({{arg}})
-      {% elsif new_type.resolve <= MrbWrap::Opt %}
-        # Invalid
-      {% else %}
-        MrbMacro.convert_from_ruby_object({{mrb}}, {{arg}}, {{new_type}}).value
-      {% end %}
-
-    # TODO: Pointer as possible class
+      MrbMacro.convert_arg({{mrb}}, {{arg}}, {{arg_type.type_vars[0]}})
     {% else %}
       MrbMacro.convert_from_ruby_object({{mrb}}, {{arg}}, {{arg_type}}).value
     {% end %}
