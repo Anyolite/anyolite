@@ -64,14 +64,34 @@ module MrbCast
     return new_ruby_object
   end
 
+  # TODO: Safety measures
+
+  def self.cast_to_bool(mrb : MrbInternal::MrbState*, value : MrbInternal::MrbValue)
+    value.tt == MrbInternal::MrbVType::MRB_TT_TRUE ? true : false
+  end
+
+  def self.cast_to_int(mrb : MrbInternal::MrbState*, value : MrbInternal::MrbValue)
+    value.value.value_int
+  end
+
+  def self.cast_to_float(mrb : MrbInternal::MrbState*, value : MrbInternal::MrbValue)
+    value.value.value_float
+  end
+
+  def self.cast_to_string(mrb : MrbInternal::MrbState*, value : MrbInternal::MrbValue)
+    String.new(MrbInternal.mrb_str_to_cstr(mrb, value))
+  end
+
+  # TODO: Object casting
+
   def self.interpret_ruby_value(mrb : MrbInternal::MrbState*, value : MrbInternal::MrbValue)
     case value.tt
       when MrbInternal::MrbVType::MRB_TT_UNDEF then MrbWrap::Undef
-      when MrbInternal::MrbVType::MRB_TT_TRUE then true 
+      when MrbInternal::MrbVType::MRB_TT_TRUE then true
       when MrbInternal::MrbVType::MRB_TT_FALSE then (value.value.value_int != 0 ? false : nil)  # TODO: Use proper mruby methods
-      when MrbInternal::MrbVType::MRB_TT_FIXNUM then value.value.value_int
-      when MrbInternal::MrbVType::MRB_TT_FLOAT then value.value.value_float
-      when MrbInternal::MrbVType::MRB_TT_STRING then String.new(MrbInternal.mrb_str_to_cstr(mrb, value))
+      when MrbInternal::MrbVType::MRB_TT_FIXNUM then MrbCast.cast_to_int(mrb, value)
+      when MrbInternal::MrbVType::MRB_TT_FLOAT then MrbCast.cast_to_float(mrb, value)
+      when MrbInternal::MrbVType::MRB_TT_STRING then MrbCast.cast_to_string(mrb, value)
       else raise("MrbValue #{value} with #{value.tt} is not supported")
     end
   end

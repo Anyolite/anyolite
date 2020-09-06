@@ -175,7 +175,8 @@ More features will be added in the future.
 
 #### Major features
 
-* [ ] Keyword argument support
+* [X] Keyword argument support
+* [ ] Support for optional keywords
 * [ ] Support for arbitrary keyword arguments
 
 #### Minor features
@@ -186,7 +187,7 @@ More features will be added in the future.
 #### Safety
 
 * [ ] Class checks for arguments
-* [ ] Module cache analogus to the class cache
+* [ ] Module cache analogous to the class cache
 * [ ] Method in mruby to determine owner of object
 
 #### Usability

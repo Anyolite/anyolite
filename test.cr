@@ -76,42 +76,7 @@ MrbState.create do |mrb|
   MrbWrap.wrap_instance_method(mrb, Test, "+", add, [Test])
   MrbWrap.wrap_property(mrb, Test, "x", x, [Int32])
 
-  # TODO: Integrate this into a proper generalized method
-  # This is just a proof of concept, for now.
-  keyword_mrb_method = MrbFunc.new do |mrb, obj|
-    regular_args = MrbMacro.generate_arg_tuple([String, Int32])
-    format_string = MrbMacro.format_string([String, Int32]) + ":"
-    
-    kw_names = [{:floatvar => {Float32, 0.123}, :boolvar => {Bool, true}}.keys[0].to_s.to_unsafe, {:floatvar => {Float32, 0.123}, :boolvar => {Bool, true}}.keys[1].to_s.to_unsafe]
-
-    keyword_args = MrbInternal::KWArgs.new
-    keyword_args.num = {:floatvar => {Float32, 0.123}, :boolvar => {Bool, true}}.size
-    keyword_args.values = Pointer(MrbInternal::MrbValue).malloc(size: {:floatvar => {Float32, 0.123}, :boolvar => {Bool, true}}.size)
-    keyword_args.table = kw_names
-    keyword_args.required = 0
-    keyword_args.rest = Pointer(MrbInternal::MrbValue).malloc(size: 1)
-
-    MrbInternal.mrb_get_args(mrb, format_string, *regular_args, pointerof(keyword_args))
-
-    c = 0
-    MrbMacro.convert_args(mrb, regular_args, [String, Int32]).each do |a|
-      puts "Converted regular arg #{c} = #{a}"
-      c += 1
-    end
-
-    0.upto(keyword_args.num - 1) do |i|
-      puts "Keyword arg #{i} = #{keyword_args.values[i]}"
-      puts "=> #{MrbCast.interpret_ruby_value(mrb, keyword_args.values[i])}"
-    end
-
-    ret = Test.new.keyword_test(*MrbMacro.convert_args(mrb, regular_args, [String, Int32]), floatvar: MrbCast.interpret_ruby_value(mrb, keyword_args.values[0]))
-
-    # TODO: Handle rest arguments
-
-    MrbCast.return_value(mrb, ret)
-  end
-
-  mrb.define_method("keyword_test", MrbClassCache.get(Test), keyword_mrb_method)
+  MrbMacro.wrap_instance_function_with_keyword_args(mrb, Test, "keyword_test", keyword_test, {:floatvar => Float32, :boolvar => Bool}, [String, Int32], use_other_keywords = true)
 
   mrb.load_script_from_file("examples/test.rb")
 end
