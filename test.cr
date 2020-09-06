@@ -112,6 +112,7 @@ end
 
 # TODO: Update examples with keywords
 # TODO: Add and fix MrbWrap methods
+# TODO: Test other keyword argument types (strings, other classes)
 
 MrbState.create do |mrb|
   test_module = MrbModule.new(mrb, "TestModule")

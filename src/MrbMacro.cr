@@ -39,9 +39,9 @@ module MrbMacro
       MrbInternal::MrbInt
     {% elsif type.resolve <= Float %}
       MrbInternal::MrbFloat
-    {% elsif type.resolve <= String %}
+    {% elsif type.resolve <= String %}  # TODO: Default string arguments do not work here yet, can this be fixed?
       LibC::Char*
-    {% elsif type.resolve <= MrbWrap::Opt %}
+    {% elsif type.resolve <= MrbWrap::Opt %}  # TODO: Allow for nil as default argument
       MrbMacro.type_in_ruby({{type.type_vars[0]}})
     {% else %}
       MrbInternal::MrbValue

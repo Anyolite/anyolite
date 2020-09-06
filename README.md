@@ -82,7 +82,7 @@ module TestModule
 end
 ```
 
-Now, you want to wrap this class in Ruby. All you need to do is to execute the following code in Crystal (Note that earlier versions of Anyolite use `MrbWrap::Opt(Int32, 0)` and `MrbWrap::Opt(Bool, 0)` for the default arguments instead of tuples.)
+Now, you want to wrap this class in Ruby. All you need to do is to execute the following code in Crystal (Note that earlier versions of Anyolite use `MrbWrap::Opt(Int32, 0)` and `MrbWrap::Opt(Bool, 0)` for the default arguments instead of tuples.):
 
 ```crystal
 require "anyolite"
@@ -132,7 +132,8 @@ More features will be added in the future.
 * Currently, Anyolite does not work on Windows due to Crystal compiler bugs
 * Returning objects of a wrapped class does only work if every constructor argument is optional
 * Arrays, hashes and other complex mruby objects are not directly supported
-* Configuration options for mruby are limited yet
+* Configuration options for mruby are relatively limited (yet)
+* Default values for unnamed function arguments are limited to integers and floats
 
 # Roadmap
 
