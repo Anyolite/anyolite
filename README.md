@@ -175,7 +175,6 @@ More features will be added in the future.
 
 #### Major features
 
-* [ ] Option for splat arguments
 * [ ] Keyword argument support
 * [ ] Support for unspecified keyword arguments
 
@@ -212,6 +211,7 @@ More features will be added in the future.
 * [ ] Other types (Hashes, ...) as arguments and return values
 * [ ] Arrays as arguments and return values
 * [ ] Better system for passing optional arguments
+* [ ] Option for passing mruby splat arguments as an array
 
 # Why this name?
 
