@@ -172,7 +172,7 @@
   </h2>
   
     
-      <a href="https://github.com/Anyolite/anyolite/blob/cc3e1f713cfcc4f4a725428a48092a93110f7fb5/src/MrbCast.cr#L2" target="_blank">
+      <a href="https://github.com/Anyolite/anyolite/blob/08f0c71e7c4d7afb83f6574ea741006ecde18b3a/src/MrbCast.cr#L2" target="_blank">
         MrbCast.cr
       </a>
     
@@ -194,6 +194,26 @@
     Class Method Summary
   </h2>
   <ul class="list-summary">
+    
+      <li class="entry-summary">
+        <a href="#cast_to_bool(mrb:Pointer(MrbInternal::MrbState),value:MrbInternal::MrbValue)-class-method" class="signature"><strong>.cast_to_bool</strong>(mrb : Pointer(MrbInternal::MrbState), value : MrbInternal::MrbValue)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#cast_to_float(mrb:Pointer(MrbInternal::MrbState),value:MrbInternal::MrbValue)-class-method" class="signature"><strong>.cast_to_float</strong>(mrb : Pointer(MrbInternal::MrbState), value : MrbInternal::MrbValue)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#cast_to_int(mrb:Pointer(MrbInternal::MrbState),value:MrbInternal::MrbValue)-class-method" class="signature"><strong>.cast_to_int</strong>(mrb : Pointer(MrbInternal::MrbState), value : MrbInternal::MrbValue)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#cast_to_string(mrb:Pointer(MrbInternal::MrbState),value:MrbInternal::MrbValue)-class-method" class="signature"><strong>.cast_to_string</strong>(mrb : Pointer(MrbInternal::MrbState), value : MrbInternal::MrbValue)</a>
+        
+      </li>
     
       <li class="entry-summary">
         <a href="#interpret_ruby_value(mrb:Pointer(MrbInternal::MrbState),value:MrbInternal::MrbValue)-class-method" class="signature"><strong>.interpret_ruby_value</strong>(mrb : Pointer(MrbInternal::MrbState), value : MrbInternal::MrbValue)</a>
@@ -236,21 +256,6 @@
       </li>
     
       <li class="entry-summary">
-        <a href="#return_value(mrb:Pointer(MrbInternal::MrbState),value:Nil)-class-method" class="signature"><strong>.return_value</strong>(mrb : Pointer(MrbInternal::MrbState), value : Nil)</a>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#return_value(mrb:Pointer(MrbInternal::MrbState),value:Bool)-class-method" class="signature"><strong>.return_value</strong>(mrb : Pointer(MrbInternal::MrbState), value : Bool)</a>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#return_value(mrb:Pointer(MrbInternal::MrbState),value:Int)-class-method" class="signature"><strong>.return_value</strong>(mrb : Pointer(MrbInternal::MrbState), value : Int)</a>
-        
-      </li>
-    
-      <li class="entry-summary">
         <a href="#return_value(mrb:Pointer(MrbInternal::MrbState),value:Float)-class-method" class="signature"><strong>.return_value</strong>(mrb : Pointer(MrbInternal::MrbState), value : Float)</a>
         
       </li>
@@ -262,6 +267,21 @@
     
       <li class="entry-summary">
         <a href="#return_value(mrb:Pointer(MrbInternal::MrbState),value:Object)-class-method" class="signature"><strong>.return_value</strong>(mrb : Pointer(MrbInternal::MrbState), value : Object)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#return_value(mrb:Pointer(MrbInternal::MrbState),value:Bool)-class-method" class="signature"><strong>.return_value</strong>(mrb : Pointer(MrbInternal::MrbState), value : Bool)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#return_value(mrb:Pointer(MrbInternal::MrbState),value:Nil)-class-method" class="signature"><strong>.return_value</strong>(mrb : Pointer(MrbInternal::MrbState), value : Nil)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#return_value(mrb:Pointer(MrbInternal::MrbState),value:Int)-class-method" class="signature"><strong>.return_value</strong>(mrb : Pointer(MrbInternal::MrbState), value : Int)</a>
         
       </li>
     
@@ -289,6 +309,70 @@
     Class Method Detail
   </h2>
   
+    <div class="entry-detail" id="cast_to_bool(mrb:Pointer(MrbInternal::MrbState),value:MrbInternal::MrbValue)-class-method">
+      <div class="signature">
+        
+        def self.<strong>cast_to_bool</strong>(mrb : Pointer(MrbInternal::MrbState), value : MrbInternal::MrbValue)
+
+        <a class="method-permalink" href="#cast_to_bool(mrb:Pointer(MrbInternal::MrbState),value:MrbInternal::MrbValue)-class-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/Anyolite/anyolite/blob/08f0c71e7c4d7afb83f6574ea741006ecde18b3a/src/MrbCast.cr#L69" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="cast_to_float(mrb:Pointer(MrbInternal::MrbState),value:MrbInternal::MrbValue)-class-method">
+      <div class="signature">
+        
+        def self.<strong>cast_to_float</strong>(mrb : Pointer(MrbInternal::MrbState), value : MrbInternal::MrbValue)
+
+        <a class="method-permalink" href="#cast_to_float(mrb:Pointer(MrbInternal::MrbState),value:MrbInternal::MrbValue)-class-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/Anyolite/anyolite/blob/08f0c71e7c4d7afb83f6574ea741006ecde18b3a/src/MrbCast.cr#L77" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="cast_to_int(mrb:Pointer(MrbInternal::MrbState),value:MrbInternal::MrbValue)-class-method">
+      <div class="signature">
+        
+        def self.<strong>cast_to_int</strong>(mrb : Pointer(MrbInternal::MrbState), value : MrbInternal::MrbValue)
+
+        <a class="method-permalink" href="#cast_to_int(mrb:Pointer(MrbInternal::MrbState),value:MrbInternal::MrbValue)-class-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/Anyolite/anyolite/blob/08f0c71e7c4d7afb83f6574ea741006ecde18b3a/src/MrbCast.cr#L73" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="cast_to_string(mrb:Pointer(MrbInternal::MrbState),value:MrbInternal::MrbValue)-class-method">
+      <div class="signature">
+        
+        def self.<strong>cast_to_string</strong>(mrb : Pointer(MrbInternal::MrbState), value : MrbInternal::MrbValue)
+
+        <a class="method-permalink" href="#cast_to_string(mrb:Pointer(MrbInternal::MrbState),value:MrbInternal::MrbValue)-class-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/Anyolite/anyolite/blob/08f0c71e7c4d7afb83f6574ea741006ecde18b3a/src/MrbCast.cr#L81" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
     <div class="entry-detail" id="interpret_ruby_value(mrb:Pointer(MrbInternal::MrbState),value:MrbInternal::MrbValue)-class-method">
       <div class="signature">
         
@@ -300,7 +384,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/Anyolite/anyolite/blob/cc3e1f713cfcc4f4a725428a48092a93110f7fb5/src/MrbCast.cr#L67" target="_blank">View source</a>]
+          [<a href="https://github.com/Anyolite/anyolite/blob/08f0c71e7c4d7afb83f6574ea741006ecde18b3a/src/MrbCast.cr#L87" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -316,7 +400,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/Anyolite/anyolite/blob/cc3e1f713cfcc4f4a725428a48092a93110f7fb5/src/MrbCast.cr#L21" target="_blank">View source</a>]
+          [<a href="https://github.com/Anyolite/anyolite/blob/08f0c71e7c4d7afb83f6574ea741006ecde18b3a/src/MrbCast.cr#L21" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -332,7 +416,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/Anyolite/anyolite/blob/cc3e1f713cfcc4f4a725428a48092a93110f7fb5/src/MrbCast.cr#L13" target="_blank">View source</a>]
+          [<a href="https://github.com/Anyolite/anyolite/blob/08f0c71e7c4d7afb83f6574ea741006ecde18b3a/src/MrbCast.cr#L13" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -348,7 +432,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/Anyolite/anyolite/blob/cc3e1f713cfcc4f4a725428a48092a93110f7fb5/src/MrbCast.cr#L17" target="_blank">View source</a>]
+          [<a href="https://github.com/Anyolite/anyolite/blob/08f0c71e7c4d7afb83f6574ea741006ecde18b3a/src/MrbCast.cr#L17" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -364,7 +448,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/Anyolite/anyolite/blob/cc3e1f713cfcc4f4a725428a48092a93110f7fb5/src/MrbCast.cr#L25" target="_blank">View source</a>]
+          [<a href="https://github.com/Anyolite/anyolite/blob/08f0c71e7c4d7afb83f6574ea741006ecde18b3a/src/MrbCast.cr#L25" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -380,7 +464,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/Anyolite/anyolite/blob/cc3e1f713cfcc4f4a725428a48092a93110f7fb5/src/MrbCast.cr#L5" target="_blank">View source</a>]
+          [<a href="https://github.com/Anyolite/anyolite/blob/08f0c71e7c4d7afb83f6574ea741006ecde18b3a/src/MrbCast.cr#L5" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -396,7 +480,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/Anyolite/anyolite/blob/cc3e1f713cfcc4f4a725428a48092a93110f7fb5/src/MrbCast.cr#L29" target="_blank">View source</a>]
+          [<a href="https://github.com/Anyolite/anyolite/blob/08f0c71e7c4d7afb83f6574ea741006ecde18b3a/src/MrbCast.cr#L29" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -412,55 +496,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/Anyolite/anyolite/blob/cc3e1f713cfcc4f4a725428a48092a93110f7fb5/src/MrbCast.cr#L9" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="return_value(mrb:Pointer(MrbInternal::MrbState),value:Nil)-class-method">
-      <div class="signature">
-        
-        def self.<strong>return_value</strong>(mrb : Pointer(MrbInternal::MrbState), value : Nil)
-
-        <a class="method-permalink" href="#return_value(mrb:Pointer(MrbInternal::MrbState),value:Nil)-class-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/Anyolite/anyolite/blob/cc3e1f713cfcc4f4a725428a48092a93110f7fb5/src/MrbCast.cr#L35" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="return_value(mrb:Pointer(MrbInternal::MrbState),value:Bool)-class-method">
-      <div class="signature">
-        
-        def self.<strong>return_value</strong>(mrb : Pointer(MrbInternal::MrbState), value : Bool)
-
-        <a class="method-permalink" href="#return_value(mrb:Pointer(MrbInternal::MrbState),value:Bool)-class-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/Anyolite/anyolite/blob/cc3e1f713cfcc4f4a725428a48092a93110f7fb5/src/MrbCast.cr#L39" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="return_value(mrb:Pointer(MrbInternal::MrbState),value:Int)-class-method">
-      <div class="signature">
-        
-        def self.<strong>return_value</strong>(mrb : Pointer(MrbInternal::MrbState), value : Int)
-
-        <a class="method-permalink" href="#return_value(mrb:Pointer(MrbInternal::MrbState),value:Int)-class-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/Anyolite/anyolite/blob/cc3e1f713cfcc4f4a725428a48092a93110f7fb5/src/MrbCast.cr#L43" target="_blank">View source</a>]
+          [<a href="https://github.com/Anyolite/anyolite/blob/08f0c71e7c4d7afb83f6574ea741006ecde18b3a/src/MrbCast.cr#L9" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -476,7 +512,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/Anyolite/anyolite/blob/cc3e1f713cfcc4f4a725428a48092a93110f7fb5/src/MrbCast.cr#L47" target="_blank">View source</a>]
+          [<a href="https://github.com/Anyolite/anyolite/blob/08f0c71e7c4d7afb83f6574ea741006ecde18b3a/src/MrbCast.cr#L47" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -492,7 +528,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/Anyolite/anyolite/blob/cc3e1f713cfcc4f4a725428a48092a93110f7fb5/src/MrbCast.cr#L51" target="_blank">View source</a>]
+          [<a href="https://github.com/Anyolite/anyolite/blob/08f0c71e7c4d7afb83f6574ea741006ecde18b3a/src/MrbCast.cr#L51" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -508,7 +544,55 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/Anyolite/anyolite/blob/cc3e1f713cfcc4f4a725428a48092a93110f7fb5/src/MrbCast.cr#L55" target="_blank">View source</a>]
+          [<a href="https://github.com/Anyolite/anyolite/blob/08f0c71e7c4d7afb83f6574ea741006ecde18b3a/src/MrbCast.cr#L55" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="return_value(mrb:Pointer(MrbInternal::MrbState),value:Bool)-class-method">
+      <div class="signature">
+        
+        def self.<strong>return_value</strong>(mrb : Pointer(MrbInternal::MrbState), value : Bool)
+
+        <a class="method-permalink" href="#return_value(mrb:Pointer(MrbInternal::MrbState),value:Bool)-class-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/Anyolite/anyolite/blob/08f0c71e7c4d7afb83f6574ea741006ecde18b3a/src/MrbCast.cr#L39" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="return_value(mrb:Pointer(MrbInternal::MrbState),value:Nil)-class-method">
+      <div class="signature">
+        
+        def self.<strong>return_value</strong>(mrb : Pointer(MrbInternal::MrbState), value : Nil)
+
+        <a class="method-permalink" href="#return_value(mrb:Pointer(MrbInternal::MrbState),value:Nil)-class-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/Anyolite/anyolite/blob/08f0c71e7c4d7afb83f6574ea741006ecde18b3a/src/MrbCast.cr#L35" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="return_value(mrb:Pointer(MrbInternal::MrbState),value:Int)-class-method">
+      <div class="signature">
+        
+        def self.<strong>return_value</strong>(mrb : Pointer(MrbInternal::MrbState), value : Int)
+
+        <a class="method-permalink" href="#return_value(mrb:Pointer(MrbInternal::MrbState),value:Int)-class-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/Anyolite/anyolite/blob/08f0c71e7c4d7afb83f6574ea741006ecde18b3a/src/MrbCast.cr#L43" target="_blank">View source</a>]
         
       </div>
     </div>
