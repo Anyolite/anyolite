@@ -51,8 +51,8 @@ class Test
     self + other
   end
 
-  def keyword_test(strvar, intvar, *splat, floatvar = 0.123, boolvar : Bool = true, **other)
-    puts "str = #{strvar}, int = #{intvar}, splat = #{splat}, float = #{floatvar}, bool = #{boolvar}, other = #{other}"
+  def keyword_test(strvar, intvar, floatvar = 0.123, boolvar : Bool = true, **other)
+    puts "str = #{strvar}, int = #{intvar}, float = #{floatvar}, bool = #{boolvar}, other = #{other}"
   end
 
   # Gets called in mruby unless program crashes
@@ -61,14 +61,7 @@ class Test
   end
 end
 
-Test.new.keyword_test("Hello", -123, true, floatvar: 0.3, boolvar: false, last_arg: "Hello")
-# Format string should be "zi*:"
-# Args should be contained in:
-# - char* (String)
-# - mrb_int (Integer)
-# - mrb_value* with mrb_int elements (Splat arguments)
-# - mrb_value* with mrb_int elements (Keyword arguments)
-# - mrb_value (Double splat argument hash)
+Test.new.keyword_test("Hello", -123, floatvar: 0.3, boolvar: false, last_arg: "Hello")
 
 MrbState.create do |mrb|
   test_module = MrbModule.new(mrb, "TestModule")
@@ -87,12 +80,8 @@ MrbState.create do |mrb|
   # This is just a proof of concept, for now.
   keyword_mrb_method = MrbFunc.new do |mrb, obj|
     regular_args = MrbMacro.generate_arg_tuple([String, Int32])
-    format_string = MrbMacro.format_string([String, Int32]) + "*:"
-
-    splat_ptr = Pointer(Pointer(MrbInternal::MrbValue)).malloc(size: 1)
-    splat_arg_num = Pointer(MrbInternal::MrbInt).malloc(size: 1)
-
-    #kw_names = Pointer(LibC::Char*).malloc(size: {:floatvar => {Float32, 0.123}, :boolvar => {Bool, true}}.size)
+    format_string = MrbMacro.format_string([String, Int32]) + ":"
+    
     kw_names = [{:floatvar => {Float32, 0.123}, :boolvar => {Bool, true}}.keys[0].to_s.to_unsafe, {:floatvar => {Float32, 0.123}, :boolvar => {Bool, true}}.keys[1].to_s.to_unsafe]
 
     keyword_args = MrbInternal::KWArgs.new
@@ -102,7 +91,7 @@ MrbState.create do |mrb|
     keyword_args.required = 0
     keyword_args.rest = Pointer(MrbInternal::MrbValue).malloc(size: 1)
 
-    MrbInternal.mrb_get_args(mrb, format_string, *regular_args, splat_ptr, splat_arg_num, pointerof(keyword_args))
+    MrbInternal.mrb_get_args(mrb, format_string, *regular_args, pointerof(keyword_args))
 
     c = 0
     MrbMacro.convert_args(mrb, regular_args, [String, Int32]).each do |a|
@@ -110,19 +99,12 @@ MrbState.create do |mrb|
       c += 1
     end
 
-    final_splat_values = [] of MrbWrap::Interpreted # TODO: Will become a tuple
-    0.upto(splat_arg_num.value - 1) do |i|
-      puts "Splat arg #{i} = #{splat_ptr.value[i]}"
-      puts "=> #{MrbCast.interpret_ruby_value(mrb, splat_ptr.value[i])}"
-      final_splat_values.push(MrbCast.interpret_ruby_value(mrb, splat_ptr.value[i]))
-    end
-
     0.upto(keyword_args.num - 1) do |i|
       puts "Keyword arg #{i} = #{keyword_args.values[i]}"
       puts "=> #{MrbCast.interpret_ruby_value(mrb, keyword_args.values[i])}"
     end
 
-    ret = Test.new.keyword_test(*MrbMacro.convert_args(mrb, regular_args, [String, Int32]), final_splat_values[0], final_splat_values[1], final_splat_values[2], final_splat_values[3], floatvar: MrbCast.interpret_ruby_value(mrb, keyword_args.values[0]))
+    ret = Test.new.keyword_test(*MrbMacro.convert_args(mrb, regular_args, [String, Int32]), floatvar: MrbCast.interpret_ruby_value(mrb, keyword_args.values[0]))
 
     # TODO: Handle rest arguments
 

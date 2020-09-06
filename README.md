@@ -176,7 +176,7 @@ More features will be added in the future.
 #### Major features
 
 * [ ] Keyword argument support
-* [ ] Support for unspecified keyword arguments
+* [ ] Support for arbitrary keyword arguments
 
 #### Minor features
 
@@ -194,6 +194,7 @@ More features will be added in the future.
 * [X] Simplified some macro functions considerably
 * [X] Arguments can be specified consistently as arrays or standalone
 * [ ] Documentation builds only for releases
+* [ ] Better system for passing optional arguments
 
 #### Bugfixes
 
@@ -205,12 +206,11 @@ More features will be added in the future.
 * [ ] Mac support (might be possible, not tested yet)
 * [ ] Compiletime errors for macros
 * [ ] Support for more flexible mruby configuration options
+* [ ] Arrays as arguments and return values
 
 ### Possible future updates
 
 * [ ] Other types (Hashes, ...) as arguments and return values
-* [ ] Arrays as arguments and return values
-* [ ] Better system for passing optional arguments
 * [ ] Option for passing mruby splat arguments as an array
 
 # Why this name?
