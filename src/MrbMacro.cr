@@ -108,7 +108,7 @@ module MrbMacro
     {% elsif arg_type.resolve <= MrbWrap::Opt %}
       # TODO
     {% else %}
-      # TODO
+      MrbMacro.convert_from_ruby_object({{mrb}}, {{arg}}, {{arg_type}}).value
     {% end %}
   end
 
