@@ -187,7 +187,7 @@ More features will be added in the future.
 
 #### Breaking changes
 
-* [X] Optional arguments are passed using tuples instead of `MrbWrap::OPT`
+* [X] Optional arguments are passed using tuples instead of `MrbWrap::Opt`
 
 #### Safety
 
