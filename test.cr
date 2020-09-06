@@ -110,6 +110,9 @@ class Bla
   end
 end
 
+# TODO: Update examples with keywords
+# TODO: Add and fix MrbWrap methods
+
 MrbState.create do |mrb|
   test_module = MrbModule.new(mrb, "TestModule")
 

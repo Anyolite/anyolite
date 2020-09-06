@@ -253,6 +253,8 @@ module MrbMacro
         {% end %}
       ]
 
+      # TODO: Put sections of this function in macros
+
       # Keyword argument struct
       kw_args = MrbInternal::KWArgs.new
       kw_args.num = {{keyword_args}}.size
