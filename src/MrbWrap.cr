@@ -21,6 +21,7 @@ module MrbWrap
   # Helper structure which can be used to specify an optional argument of class *T* with default value *D*.
   #
   # No instances of this struct are necessary.
+  @[Deprecated("Will be dropped at version 0.2.0. Use tuples {T, D} instead.")]
   struct Opt(T, D)
     # :nodoc:
     def initialize
@@ -74,7 +75,7 @@ module MrbWrap
     {% else %}
       # The following construct is ugly, but Crystal forbids a newline there for some reason
       MrbMacro.wrap_constructor_function({{mrb_state}}, {{crystal_class}}, 
-      ->{{crystal_class}}.new({% for arg in proc_args %} {% if arg.resolve <= Opt %} {{arg.type_vars[0]}}, {% else %} {{arg}}, {% end %} {% end %}), {{proc_args}})
+      ->{{crystal_class}}.new({% for arg in proc_args %} {% if arg.class_name == "TupleLiteral" %} {{arg[0]}}, {% elsif arg.resolve <= Opt %} {{arg.type_vars[0]}}, {% else %} {{arg}}, {% end %} {% end %}), {{proc_args}})
     {% end %}
   end
 
@@ -89,7 +90,7 @@ module MrbWrap
       MrbMacro.wrap_module_function_with_args({{mrb_state}}, {{under_module}}, {{name}}, ->{{proc}}, {{proc_args}})
     {% else %}
       MrbMacro.wrap_module_function_with_args({{mrb_state}}, {{under_module}}, {{name}}, 
-      ->{{proc}}({% for arg in proc_args %} {% if arg.resolve <= Opt %} {{arg.type_vars[0]}}, {% else %} {{arg}}, {% end %} {% end %}), {{proc_args}})
+      ->{{proc}}({% for arg in proc_args %} {% if arg.class_name == "TupleLiteral" %} {{arg[0]}}, {% elsif arg.resolve <= Opt %} {{arg.type_vars[0]}}, {% else %} {{arg}}, {% end %} {% end %}), {{proc_args}})
     {% end %}
   end
 
@@ -104,7 +105,7 @@ module MrbWrap
       MrbMacro.wrap_class_method_with_args({{mrb_state}}, {{crystal_class}}, {{name}}, ->{{proc}}, {{proc_args}})
     {% else %}
       MrbMacro.wrap_class_method_with_args({{mrb_state}}, {{crystal_class}}, {{name}}, 
-      ->{{proc}}({% for arg in proc_args %} {% if arg.resolve <= Opt %} {{arg.type_vars[0]}}, {% else %} {{arg}}, {% end %} {% end %}), {{proc_args}})
+      ->{{proc}}({% for arg in proc_args %} {% if arg.class_name == "TupleLiteral" %} {{arg[0]}}, {% elsif arg.resolve <= Opt %} {{arg.type_vars[0]}}, {% else %} {{arg}}, {% end %} {% end %}), {{proc_args}})
     {% end %}
   end
 

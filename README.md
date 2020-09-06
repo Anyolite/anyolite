@@ -91,14 +91,14 @@ MrbState.create do |mrb|
   test_module = MrbModule.new(mrb, "TestModule")
   MrbWrap.wrap_class(mrb, Entity, "Entity", under: test_module)
   
-  MrbWrap.wrap_constructor(mrb, Entity, [MrbWrap::Opt(Int32, 0)])
+  MrbWrap.wrap_constructor(mrb, Entity, [{Int32, 0}])
 
   MrbWrap.wrap_property(mrb, Entity, "hp", hp, Int32)
   
   MrbWrap.wrap_instance_method(mrb, Entity, "damage", damage, [Int32])
 
   # Crystal does not allow false here, for some reason, so just use 0 and 1
-  MrbWrap.wrap_instance_method(mrb, Entity, "yell", yell, [String, MrbWrap::Opt(Bool, 0)])
+  MrbWrap.wrap_instance_method(mrb, Entity, "yell", yell, [String, {Bool, 0}])
 
   MrbWrap.wrap_instance_method(mrb, Entity, "absorb_hp_from", absorb_hp_from, [Entity])
 
@@ -176,13 +176,17 @@ More features will be added in the future.
 #### Major features
 
 * [X] Keyword argument support
-* [ ] Support for optional keywords
+* [X] Support for optional keywords
 * [ ] Support for arbitrary keyword arguments
 
 #### Minor features
 
 * [X] Casting from MrbValue objects to closest Crystal values
 * [X] Option to use a JSON config file
+
+#### Breaking changes
+
+* [X] Optional arguments are passed using tuples instead of `MrbWrap::OPT`
 
 #### Safety
 
@@ -195,7 +199,7 @@ More features will be added in the future.
 * [X] Simplified some macro functions considerably
 * [X] Arguments can be specified consistently as arrays or standalone
 * [ ] Documentation builds only for releases
-* [ ] Better system for passing optional arguments
+* [X] Uniform system for passing optional arguments
 
 #### Bugfixes
 

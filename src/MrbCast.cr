@@ -82,6 +82,10 @@ module MrbCast
     String.new(MrbInternal.mrb_str_to_cstr(mrb, value))
   end
 
+  def self.is_undef?(value : MrbInternal::MrbValue)
+    value.tt == MrbInternal::MrbVType::MRB_TT_UNDEF
+  end
+
   # TODO: Object casting
 
   def self.interpret_ruby_value(mrb : MrbInternal::MrbState*, value : MrbInternal::MrbValue)

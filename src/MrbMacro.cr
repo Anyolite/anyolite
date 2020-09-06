@@ -9,7 +9,10 @@ module MrbMacro
   end
 
   macro format_char(arg, optional_values = false)
-    {% if arg.resolve <= Bool %}
+    {% if arg.class_name == "TupleLiteral" %}
+      puts "TUPLE: #{{{arg}}}"
+      "|" + MrbMacro.format_char({{arg[0]}}, optional_values: true)
+    {% elsif arg.resolve <= Bool %}
       "b"
     {% elsif arg.resolve <= Int %}
       "i"
@@ -29,7 +32,9 @@ module MrbMacro
   end
 
   macro type_in_ruby(type)
-    {% if type.resolve <= Bool %}
+    {% if type.class_name == "TupleLiteral" %}
+      MrbMacro.type_in_ruby({{type[0]}})
+    {% elsif type.resolve <= Bool %}
       MrbInternal::MrbBool
     {% elsif type.resolve <= Int %}
       MrbInternal::MrbInt
@@ -45,7 +50,9 @@ module MrbMacro
   end
 
   macro pointer_type(type)
-    {% if type.resolve <= Bool %}
+    {% if type.class_name == "TupleLiteral" %}
+      MrbMacro.pointer_type({{type[0]}})
+    {% elsif type.resolve <= Bool %}
       Pointer(MrbInternal::MrbBool)
     {% elsif type.resolve <= Int %}
       Pointer(MrbInternal::MrbInt)
@@ -63,7 +70,9 @@ module MrbMacro
   macro generate_arg_tuple(args)
     Tuple.new(
       {% for arg in args %}
-        {% if arg.resolve <= MrbWrap::Opt %}
+        {% if arg.class_name == "TupleLiteral" %}
+          MrbMacro.pointer_type({{arg}}).malloc(size: 1, value: MrbMacro.type_in_ruby({{arg}}).new({{arg[1]}})),
+        {% elsif arg.resolve <= MrbWrap::Opt %}
           MrbMacro.pointer_type({{arg}}).malloc(size: 1, value: MrbMacro.type_in_ruby({{arg}}).new({{arg.type_vars[1]}})),
         {% else %}
           MrbMacro.pointer_type({{arg}}).malloc(size: 1),
@@ -81,7 +90,9 @@ module MrbMacro
 
   # Converts Ruby values to Crystal values
   macro convert_arg(mrb, arg, arg_type)
-    {% if arg_type.resolve <= Bool %}
+    {% if arg_type.class_name == "TupleLiteral" %}
+      MrbMacro.convert_arg({{mrb}}, {{arg}}, {{arg_type[0]}})
+    {% elsif arg_type.resolve <= Bool %}
       ({{arg}} != 0)
     {% elsif arg_type.resolve <= Int %}
       {{arg_type}}.new({{arg}})
@@ -97,7 +108,13 @@ module MrbMacro
   end
 
   macro convert_keyword_arg(mrb, arg, arg_type)
-    {% if arg_type.resolve <= Bool %}
+    {% if arg_type.class_name == "TupleLiteral" %}
+      if MrbCast.is_undef?({{arg}})
+        {{arg_type[1]}}
+      else
+        MrbMacro.convert_keyword_arg({{mrb}}, {{arg}}, {{arg_type[0]}})
+      end
+    {% elsif arg_type.resolve <= Bool %}
       MrbCast.cast_to_bool({{mrb}}, {{arg}})
     {% elsif arg_type.resolve <= Int %}
       MrbCast.cast_to_int({{mrb}}, {{arg}})
@@ -145,7 +162,6 @@ module MrbMacro
     return_value = {{converted_obj}}.{{proc}}{{operator.id}}(*{{converted_regular_args}},
       {% c = 0 %}
       {% for keyword in keyword_args.keys %}
-        # TODO: Default arguments
         {{keyword.id}}: MrbMacro.convert_keyword_arg({{mrb}}, {{kw_args}}.values[{{c}}], {{keyword_args[keyword]}}),
         {% c += 1 %}
       {% end %}
@@ -228,15 +244,9 @@ module MrbMacro
     {% end %}
 
     wrapped_method = MrbFunc.new do |mrb, obj|
-      regular_arg_tuple = MrbMacro.generate_arg_tuple({{regular_arg_array}}) # ???
+      regular_arg_tuple = MrbMacro.generate_arg_tuple({{regular_arg_array}})
       format_string = MrbMacro.format_string({{regular_arg_array}}) + ":"
 
-      # NOTE: Splat operators are technically possible, but could only be passed as an array to a Crystal function
-      #splat_ptr = Pointer(Pointer(MrbInternal::MrbValue)).malloc(size: 1)
-      #splat_arg_num = Pointer(MrbInternal::MrbInt).malloc(size: 1)
-
-      # TODO: Might actually be irrelevant
-      #kw_names = Pointer(LibC::Char*).malloc(size: {{keyword_args.size}})
       kw_names = [
         {% for keyword in keyword_args.keys %}
           {{keyword}}.to_s.to_unsafe,
@@ -248,7 +258,7 @@ module MrbMacro
       kw_args.num = {{keyword_args}}.size
       kw_args.values = Pointer(MrbInternal::MrbValue).malloc(size: {{keyword_args}}.size)
       kw_args.table = kw_names
-      kw_args.required = {{keyword_args}}.size  # TODO: Add optional keywords
+      kw_args.required = 0 # TODO: Count these
       kw_args.rest = Pointer(MrbInternal::MrbValue).malloc(size: 1)
 
       MrbInternal.mrb_get_args(mrb, format_string, *regular_arg_tuple, pointerof(kw_args))

@@ -70,13 +70,13 @@ MrbState.create do |mrb|
 
   MrbWrap.wrap_class(mrb, Test, "Test", under: test_module)
   MrbWrap.wrap_class_method(mrb, Test, "counter", Test.counter)
-  MrbWrap.wrap_constructor(mrb, Test, [MrbWrap::Opt(Int32, 0)])
+  MrbWrap.wrap_constructor(mrb, Test, [{Int32, 0}])
   MrbWrap.wrap_instance_method(mrb, Test, "bar", test_instance_method, [Int32, Bool, String, MrbWrap::Opt(Float32, 0.4)])
   MrbWrap.wrap_instance_method(mrb, Test, "add", add, [Test])
   MrbWrap.wrap_instance_method(mrb, Test, "+", add, [Test])
   MrbWrap.wrap_property(mrb, Test, "x", x, [Int32])
 
-  MrbMacro.wrap_instance_function_with_keyword_args(mrb, Test, "keyword_test", keyword_test, {:floatvar => Float32, :boolvar => Bool}, [String, Int32], use_other_keywords = true)
+  MrbMacro.wrap_instance_function_with_keyword_args(mrb, Test, "keyword_test", keyword_test, {:floatvar => {Float32, 0.3}, :boolvar => {Bool, false}}, [String, Int32], use_other_keywords = true)
 
   mrb.load_script_from_file("examples/test.rb")
 end
@@ -116,14 +116,13 @@ MrbState.create do |mrb|
   MrbWrap.wrap_class(mrb, Entity, "Entity", under: test_module)
   MrbWrap.wrap_class(mrb, Bla, "Bla", under: test_module)
 
-  MrbWrap.wrap_constructor(mrb, Entity, [MrbWrap::Opt(Int32, 0)])
+  MrbWrap.wrap_constructor(mrb, Entity, [{Int32, 0}])
 
   MrbWrap.wrap_property(mrb, Entity, "hp", hp, Int32)
 
   MrbWrap.wrap_instance_method(mrb, Entity, "damage", damage, [Int32])
 
-  # Crystal does not allow false here, for some reason, so just use 0 and 1
-  MrbWrap.wrap_instance_method(mrb, Entity, "yell", yell, [String, MrbWrap::Opt(Bool, 0)])
+  MrbWrap.wrap_instance_method(mrb, Entity, "yell", yell, [String, {Bool, 0}])
 
   MrbWrap.wrap_instance_method(mrb, Entity, "absorb_hp_from", absorb_hp_from, [Entity])
 
