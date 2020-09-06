@@ -223,7 +223,7 @@ which allows for changing multiple options when installing the shard. Possible o
   <span class="k">end</span>
 <span class="k">end</span></code></pre>
 
-<p>Now, you want to wrap this class in Ruby. All you need to do is to execute the following code in Crystal:</p>
+<p>Now, you want to wrap this class in Ruby. All you need to do is to execute the following code in Crystal (Note that earlier versions of Anyolite use <code><a href="MrbWrap/Opt.html">MrbWrap::Opt</a>(Int32, 0)</code> and <code><a href="MrbWrap/Opt.html">MrbWrap::Opt</a>(Bool, 0)</code> for the default arguments instead of tuples.)</p>
 
 <pre><code class="language-crystal"><span class="k">require</span> <span class="s">&quot;anyolite&quot;</span>
 
@@ -394,7 +394,7 @@ More features will be added in the future.</p>
   </svg>
 </a>Possible future updates</h3>
 
-<ul><li>[ ] Other types (Hashes, ...) as arguments and return values</li><li>[ ] Option for passing mruby splat arguments as an array</li></ul>
+<ul><li>[ ] Other types (Hashes, ...) as arguments and return values</li><li>[ ] Option for passing mruby splat arguments as an array</li><li>[ ] More variety for default parameters for unnamed options</li></ul>
 
 <h1><a id="why-this-name" class="anchor" href="#why-this-name">
   <svg class="octicon-link" aria-hidden="true">
