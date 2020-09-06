@@ -231,14 +231,14 @@ which allows for changing multiple options when installing the shard. Possible o
   test_module <span class="o">=</span> <span class="t">MrbModule</span>.<span class="k">new</span>(mrb, <span class="s">&quot;TestModule&quot;</span>)
   <span class="t">MrbWrap</span>.wrap_class(mrb, <span class="t">Entity</span>, <span class="s">&quot;Entity&quot;</span>, under: test_module)
   
-  <span class="t">MrbWrap</span>.wrap_constructor(mrb, <span class="t">Entity</span>, [<span class="t">MrbWrap</span><span class="t">::</span><span class="t">Opt</span>(<span class="t">Int32</span>, <span class="n">0</span>)])
+  <span class="t">MrbWrap</span>.wrap_constructor(mrb, <span class="t">Entity</span>, [{<span class="t">Int32</span>, <span class="n">0</span>}])
 
   <span class="t">MrbWrap</span>.wrap_property(mrb, <span class="t">Entity</span>, <span class="s">&quot;hp&quot;</span>, hp, <span class="t">Int32</span>)
   
   <span class="t">MrbWrap</span>.wrap_instance_method(mrb, <span class="t">Entity</span>, <span class="s">&quot;damage&quot;</span>, damage, [<span class="t">Int32</span>])
 
   <span class="c"># Crystal does not allow false here, for some reason, so just use 0 and 1</span>
-  <span class="t">MrbWrap</span>.wrap_instance_method(mrb, <span class="t">Entity</span>, <span class="s">&quot;yell&quot;</span>, yell, [<span class="t">String</span>, <span class="t">MrbWrap</span><span class="t">::</span><span class="t">Opt</span>(<span class="t">Bool</span>, <span class="n">0</span>)])
+  <span class="t">MrbWrap</span>.wrap_instance_method(mrb, <span class="t">Entity</span>, <span class="s">&quot;yell&quot;</span>, yell, [<span class="t">String</span>, {<span class="t">Bool</span>, <span class="n">0</span>}])
 
   <span class="t">MrbWrap</span>.wrap_instance_method(mrb, <span class="t">Entity</span>, <span class="s">&quot;absorb_hp_from&quot;</span>, absorb_hp_from, [<span class="t">Entity</span>])
 
@@ -338,7 +338,7 @@ More features will be added in the future.</p>
   </svg>
 </a>Major features</h4>
 
-<ul><li>[X] Keyword argument support</li><li>[ ] Support for optional keywords</li><li>[ ] Support for arbitrary keyword arguments</li></ul>
+<ul><li>[X] Keyword argument support</li><li>[X] Support for optional keywords</li><li>[ ] Support for arbitrary keyword arguments</li></ul>
 
 <h4><a id="minor-features" class="anchor" href="#minor-features">
   <svg class="octicon-link" aria-hidden="true">
@@ -347,6 +347,14 @@ More features will be added in the future.</p>
 </a>Minor features</h4>
 
 <ul><li>[X] Casting from MrbValue objects to closest Crystal values</li><li>[X] Option to use a JSON config file</li></ul>
+
+<h4><a id="breaking-changes" class="anchor" href="#breaking-changes">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Breaking changes</h4>
+
+<ul><li>[X] Optional arguments are passed using tuples instead of <code>MrbWrap::OPT</code></li></ul>
 
 <h4><a id="safety" class="anchor" href="#safety">
   <svg class="octicon-link" aria-hidden="true">
@@ -362,7 +370,7 @@ More features will be added in the future.</p>
   </svg>
 </a>Usability</h4>
 
-<ul><li>[X] Simplified some macro functions considerably</li><li>[X] Arguments can be specified consistently as arrays or standalone</li><li>[ ] Documentation builds only for releases</li><li>[ ] Better system for passing optional arguments</li></ul>
+<ul><li>[X] Simplified some macro functions considerably</li><li>[X] Arguments can be specified consistently as arrays or standalone</li><li>[ ] Documentation builds only for releases</li><li>[X] Uniform system for passing optional arguments</li></ul>
 
 <h4><a id="bugfixes" class="anchor" href="#bugfixes">
   <svg class="octicon-link" aria-hidden="true">
