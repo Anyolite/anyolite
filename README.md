@@ -41,6 +41,15 @@ rake build_shard
 ```
 manually to install the shard without using the crystal shards program.
 
+If you want to use other options for Anyolite, you can set `ANYOLITE_CONFIG_PATH` to the filename of a config file,
+which allows for changing multiple options when installing the shard. Possible options are:
+
+* `ANYOLITE_BUILDPATH` - The relative directory in which Anyolite will be built
+* `ANYOLITE_MRUBY_FORK` - The web address of the mruby repository
+* `ANYOLITE_MRUBY_DIR` - The relative directory mruby will be installed in
+* `ANYOLITE_MRUBY_CONFIG_PATH` - The config file which is used for building mruby
+* `ANYOLITE_COMPILER` - The C compiler used for building Anyolite
+
 # How to use
 
 Imagine a Crystal class for a really bad RPG:
@@ -173,6 +182,7 @@ More features will be added in the future.
 #### Minor features
 
 * [X] Casting from MrbValue objects to closest Crystal values
+* [X] Option to use a JSON config file
 
 #### Safety
 
