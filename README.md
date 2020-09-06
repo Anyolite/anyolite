@@ -41,7 +41,7 @@ rake build_shard
 ```
 manually to install the shard without using the crystal shards program.
 
-If you want to use other options for Anyolite, you can set `ANYOLITE_CONFIG_PATH` to the filename of a config file,
+If you want to use other options for Anyolite, you can set `ANYOLITE_CONFIG_PATH` to the filename of a JSON config file,
 which allows for changing multiple options when installing the shard. Possible options are:
 
 * `ANYOLITE_BUILDPATH` - The relative directory in which Anyolite will be built
