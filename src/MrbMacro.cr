@@ -10,7 +10,6 @@ module MrbMacro
 
   macro format_char(arg, optional_values = false)
     {% if arg.class_name == "TupleLiteral" %}
-      puts "TUPLE: #{{{arg}}}"
       "|" + MrbMacro.format_char({{arg[0]}}, optional_values: true)
     {% elsif arg.resolve <= Bool %}
       "b"

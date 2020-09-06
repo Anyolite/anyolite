@@ -82,7 +82,7 @@ module TestModule
 end
 ```
 
-Now, you want to wrap this class in Ruby. All you need to do is to execute the following code in Crystal:
+Now, you want to wrap this class in Ruby. All you need to do is to execute the following code in Crystal (Note that earlier versions of Anyolite use `MrbWrap::Opt(Int32, 0)` and `MrbWrap::Opt(Bool, 0)` for the default arguments instead of tuples.)
 
 ```crystal
 require "anyolite"
@@ -217,6 +217,7 @@ More features will be added in the future.
 
 * [ ] Other types (Hashes, ...) as arguments and return values
 * [ ] Option for passing mruby splat arguments as an array
+* [ ] More variety for default parameters for unnamed options
 
 # Why this name?
 
