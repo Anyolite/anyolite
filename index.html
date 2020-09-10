@@ -270,7 +270,7 @@ More features will be added in the future.</p>
   </svg>
 </a>Limitations</h1>
 
-<ul><li>Currently, Anyolite does not work on Windows due to Crystal compiler bugs</li><li>Returning objects of a wrapped class does only work if every constructor argument is optional</li><li>Arrays, hashes and other complex mruby objects are not directly supported</li><li>Configuration options for mruby are relatively limited (yet)</li><li>Default values for unnamed function arguments are limited to integers and floats</li></ul>
+<ul><li>Currently, Anyolite does not work on Windows due to Crystal compiler bugs</li><li>Returning objects of a wrapped class does only work if every constructor argument is optional</li><li>Arrays, hashes and other complex mruby objects are not directly supported</li><li>Configuration options for mruby are relatively limited (yet)</li><li>Default values for unnamed function arguments are limited to integers and floats</li><li>Optional keyword arguments need a default value (can be a different one than the Crystal value, though)</li><li>Keywords will always be given to functions, even if optional (then with default values)</li><li>Splat arguments and arbitrary keywords are not possible due to compiletime symbols in Crystal</li></ul>
 
 <h1><a id="roadmap" class="anchor" href="#roadmap">
   <svg class="octicon-link" aria-hidden="true">
@@ -338,7 +338,7 @@ More features will be added in the future.</p>
   </svg>
 </a>Major features</h4>
 
-<ul><li>[X] Keyword argument support</li><li>[X] Support for optional keywords</li><li>[ ] Support for arbitrary keyword arguments</li></ul>
+<ul><li>[X] Keyword argument support</li><li>[X] Support for optional keywords</li></ul>
 
 <h4><a id="minor-features" class="anchor" href="#minor-features">
   <svg class="octicon-link" aria-hidden="true">
@@ -362,7 +362,7 @@ More features will be added in the future.</p>
   </svg>
 </a>Safety</h4>
 
-<ul><li>[ ] Class checks for arguments</li><li>[ ] Module cache analogous to the class cache</li><li>[ ] Method in mruby to determine owner of object</li></ul>
+<ul><li>[X] Class checks for arguments</li><li>[ ] Checks for correct keyword classes</li><li>[ ] Module cache analogous to the class cache</li><li>[ ] Method in mruby to determine owner of object</li></ul>
 
 <h4><a id="usability" class="anchor" href="#usability">
   <svg class="octicon-link" aria-hidden="true">
@@ -394,7 +394,7 @@ More features will be added in the future.</p>
   </svg>
 </a>Possible future updates</h3>
 
-<ul><li>[ ] Other types (Hashes, ...) as arguments and return values</li><li>[ ] Option for passing mruby splat arguments as an array</li><li>[ ] More variety for default parameters for unnamed options</li></ul>
+<ul><li>[ ] Other types (Hashes, ...) as arguments and return values</li><li>[ ] Option for passing mruby splat arguments as an array</li><li>[ ] Support for arbitrary keyword arguments as hashes</li><li>[ ] More variety for default parameters for unnamed options</li></ul>
 
 <h1><a id="why-this-name" class="anchor" href="#why-this-name">
   <svg class="octicon-link" aria-hidden="true">
