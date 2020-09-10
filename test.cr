@@ -64,11 +64,11 @@ end
 Test.new.keyword_test("Hello", -123, floatvar: 0.3, boolvar: false, last_arg: "Hello")
 
 MrbState.create do |mrb|
-  test_module = MrbModule.new(mrb, "TestModule")
-  MrbWrap.wrap_module_function(mrb, test_module, "test_method", SomeModule.test_method, [Int32, String])
-  MrbWrap.wrap_constant(mrb, test_module, "SOME_CONSTANT", "Smile! 😊")
+  MrbWrap.wrap_module(mrb, SomeModule, "TestModule")
+  MrbWrap.wrap_module_function(mrb, MrbModuleCache.get(SomeModule), "test_method", SomeModule.test_method, [Int32, String])
+  MrbWrap.wrap_constant(mrb, MrbModuleCache.get(SomeModule), "SOME_CONSTANT", "Smile! 😊")
 
-  MrbWrap.wrap_class(mrb, Test, "Test", under: test_module)
+  MrbWrap.wrap_class(mrb, Test, "Test", under: MrbModuleCache.get(SomeModule))
   MrbWrap.wrap_class_method(mrb, Test, "counter", Test.counter)
   MrbWrap.wrap_constructor(mrb, Test, [{Int32, 0}])
   MrbWrap.wrap_instance_method(mrb, Test, "bar", test_instance_method, [Int32, Bool, String, MrbWrap::Opt(Float32, 0.4)])
@@ -76,9 +76,12 @@ MrbState.create do |mrb|
   MrbWrap.wrap_instance_method(mrb, Test, "+", add, [Test])
   MrbWrap.wrap_property(mrb, Test, "x", x, [Int32])
 
-  MrbMacro.wrap_instance_function_with_keyword_args(mrb, Test, "keyword_test", keyword_test, 
-    {:floatvar => {Float32, 0.123}, :strvarkw => {String, "nothing"}, :boolvar => {Bool, true}, :othervar => {Test, Test.new(17)}}, 
-    [String, Int32], use_other_keywords = true)
+  MrbMacro.wrap_instance_function_with_keyword_args(mrb, Test, "keyword_test", keyword_test, {
+    :floatvar => {Float32, 0.123}, 
+    :strvarkw => {String, "nothing"}, 
+    :boolvar => {Bool, true}, 
+    :othervar => {Test, Test.new(17)}
+  }, [String, Int32], use_other_keywords = true)
 
   mrb.load_script_from_file("examples/test.rb")
 end

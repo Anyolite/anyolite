@@ -5,6 +5,7 @@ require "./MrbClass.cr"
 require "./MrbCast.cr"
 require "./MrbMacro.cr"
 require "./MrbClassCache.cr"
+require "./MrbModuleCache.cr"
 require "./MrbTypeCache.cr"
 require "./MrbModule.cr"
 require "./MrbRefTable.cr"
@@ -61,8 +62,8 @@ module MrbWrap
   # The parent module can be specified with the `MrbModule` argument *under*.
   macro wrap_module(mrb_state, crystal_module, name, under = nil)
     new_module = MrbModule.new({{mrb_state}}, {{name}}, under: {{under}})
-    MrbClassCache.register({{crystal_module}}, new_module)
-    MrbClassCache.get({{crystal_module}})
+    MrbModuleCache.register({{crystal_module}}, new_module)
+    MrbModuleCache.get({{crystal_module}})
   end
 
   # Wraps the constructor of a Crystal class into mruby.

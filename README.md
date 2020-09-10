@@ -195,7 +195,7 @@ More features will be added in the future.
 
 * [X] Class checks for arguments
 * [X] Checks for correct keyword classes
-* [ ] Module cache analogous to the class cache
+* [X] Module cache analogous to the class cache
 * [ ] Method in mruby to determine owner of object
 
 #### Usability
