@@ -1,6 +1,8 @@
 a = TestModule::Test.new(5)
 b = TestModule::Test.new(32)
 
+s = TestModule::Bla.new
+
 puts a.bar(19, false, 'Example string')
 puts a.bar(19, false, 'Example string', 0.5)
 
@@ -17,4 +19,4 @@ puts "Test constant is: #{TestModule::SOME_CONSTANT}"
 
 puts "Sum is #{(a + b).x}"
 
-a.keyword_test("Hi there", -121212, floatvar: -0.313, strvarkw: "💎", othervar: b, whatever: "XYZ")
+a.keyword_test("Hi there", -121212, floatvar: -0.313, strvarkw: "💎", othervar: b)

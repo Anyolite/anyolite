@@ -82,25 +82,25 @@ module TestModule
 end
 ```
 
-Now, you want to wrap this class in Ruby. All you need to do is to execute the following code in Crystal (Note that earlier versions of Anyolite use `MrbWrap::Opt(Int32, 0)` and `MrbWrap::Opt(Bool, 0)` for the default arguments instead of tuples.):
+Now, you want to wrap this class in Ruby. All you need to do is to execute the following code in Crystal:
 
 ```crystal
 require "anyolite"
 
 MrbState.create do |mrb|
   test_module = MrbModule.new(mrb, "TestModule")
+
   MrbWrap.wrap_class(mrb, Entity, "Entity", under: test_module)
-  
+
   MrbWrap.wrap_constructor(mrb, Entity, [{Int32, 0}])
 
   MrbWrap.wrap_property(mrb, Entity, "hp", hp, Int32)
-  
-  MrbWrap.wrap_instance_method(mrb, Entity, "damage", damage, [Int32])
 
-  # Crystal does not allow false here, for some reason, so just use 0 and 1
-  MrbWrap.wrap_instance_method(mrb, Entity, "yell", yell, [String, {Bool, 0}])
+  MrbWrap.wrap_instance_method_with_keywords(mrb, Entity, "damage", damage, {:diff => Int32})
 
-  MrbWrap.wrap_instance_method(mrb, Entity, "absorb_hp_from", absorb_hp_from, [Entity])
+  MrbWrap.wrap_instance_method_with_keywords(mrb, Entity, "yell", yell, {:sound => String, :loud => {Bool, false}})
+
+  MrbWrap.wrap_instance_method_with_keywords(mrb, Entity, "absorb_hp_from", absorb_hp_from, {:other => Entity})
 
   mrb.load_script_from_file("examples/hp_example.rb")
 end
@@ -110,15 +110,15 @@ The last line in the block calls the following example script:
 
 ```ruby
 a = TestModule::Entity.new(20)
-a.damage(13)
+a.damage(diff: 13)
 puts a.hp
 
 b = TestModule::Entity.new(10)
-a.absorb_hp_from(b)
+a.absorb_hp_from(other: b)
 puts a.hp
 puts b.hp
-b.yell('Ouch, you stole my HP!', true)
-a.yell('Well, take better care of your public attributes!')
+b.yell(sound: 'Ouch, you stole my HP!', loud: true)
+a.yell(sound: 'Well, take better care of your public attributes!')
 ```
 
 The syntax stays mostly the same as in Crystal, except for the keyword arguments.
@@ -196,7 +196,6 @@ More features will be added in the future.
 * [X] Class checks for arguments
 * [X] Checks for correct keyword classes
 * [X] Module cache analogous to the class cache
-* [ ] Method in mruby to determine owner of object
 
 #### Usability
 
@@ -204,6 +203,7 @@ More features will be added in the future.
 * [X] Arguments can be specified consistently as arrays or standalone
 * [X] Documentation builds only for releases
 * [X] Uniform system for passing optional arguments
+* [ ] Updated examples and documentation for keyword support
 
 #### Bugfixes
 
@@ -223,6 +223,7 @@ More features will be added in the future.
 * [ ] Option for passing mruby splat arguments as an array
 * [ ] Support for arbitrary keyword arguments as hashes
 * [ ] More variety for default parameters for unnamed options
+* [ ] Method in mruby to determine owner of object (if possible)
 
 # Why this name?
 
