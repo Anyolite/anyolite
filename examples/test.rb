@@ -17,10 +17,4 @@ puts "Test constant is: #{TestModule::SOME_CONSTANT}"
 
 puts "Sum is #{(a + b).x}"
 
-class Boo
-
-end
-
-c = Boo.new
-
 a.keyword_test("Hi there", -121212, floatvar: -0.313, strvarkw: "💎", othervar: b, whatever: "XYZ")

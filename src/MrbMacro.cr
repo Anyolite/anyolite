@@ -164,7 +164,6 @@ module MrbMacro
     MrbCast.return_value({{mrb}}, return_value)
   end
 
-  # :nodoc:
   macro call_and_return_keyword_instance_method(mrb, proc, converted_obj, converted_regular_args, keyword_args, kw_args, operator = "")
     return_value = {{converted_obj}}.{{proc}}{{operator.id}}(*{{converted_regular_args}},
       {% c = 0 %}
@@ -242,7 +241,6 @@ module MrbMacro
     {{mrb_state}}.define_method({{name + operator}}, MrbClassCache.get({{crystal_class}}), wrapped_method)
   end
 
-  # :nodoc:
   macro wrap_instance_function_with_keyword_args(mrb_state, crystal_class, name, proc, keyword_args, regular_args = [] of Class, use_other_keywords = false, operator = "")
     {% if regular_args.class_name == "ArrayLiteral" %}
       {% regular_arg_array = regular_args %}
@@ -267,7 +265,7 @@ module MrbMacro
       kw_args.num = {{keyword_args}}.size
       kw_args.values = Pointer(MrbInternal::MrbValue).malloc(size: {{keyword_args}}.size)
       kw_args.table = kw_names
-      kw_args.required = 0 # TODO: Count these
+      kw_args.required = {{keyword_args.values.select {|i| i.class_name != "TupleLiteral"}.size}}
       kw_args.rest = Pointer(MrbInternal::MrbValue).malloc(size: 1)
 
       MrbInternal.mrb_get_args(mrb, format_string, *regular_arg_tuple, pointerof(kw_args))

@@ -64,29 +64,47 @@ module MrbCast
     return new_ruby_object
   end
 
-  # TODO: Safety measures
+  # TODO: Use proper casting methods from mruby
 
   def self.cast_to_bool(mrb : MrbInternal::MrbState*, value : MrbInternal::MrbValue)
-    value.tt == MrbInternal::MrbVType::MRB_TT_TRUE ? true : false
+    if value.tt == MrbInternal::MrbVType::MRB_TT_TRUE
+      true
+    elsif value.tt == MrbInternal::MrbVType::MRB_TT_FALSE && value.value.value_int != 0
+      false
+    else
+      raise("ERROR: Wrong arg") # TODO: Proper mruby message
+    end
   end
 
   def self.cast_to_int(mrb : MrbInternal::MrbState*, value : MrbInternal::MrbValue)
-    value.value.value_int
+    if value.tt == MrbInternal::MrbVType::MRB_TT_FIXNUM
+      value.value.value_int
+    else
+      raise("ERROR: Wrong arg") # TODO: Proper mruby message
+    end
   end
 
   def self.cast_to_float(mrb : MrbInternal::MrbState*, value : MrbInternal::MrbValue)
-    value.value.value_float
+    if value.tt == MrbInternal::MrbVType::MRB_TT_FLOAT
+      value.value.value_float
+    else
+      raise("ERROR: Wrong arg") # TODO: Proper mruby message
+    end
   end
 
   def self.cast_to_string(mrb : MrbInternal::MrbState*, value : MrbInternal::MrbValue)
-    String.new(MrbInternal.mrb_str_to_cstr(mrb, value))
+    if value.tt == MrbInternal::MrbVType::MRB_TT_STRING
+      String.new(MrbInternal.mrb_str_to_cstr(mrb, value))
+    else
+      raise("ERROR: Wrong arg") # TODO: Proper mruby message
+    end
   end
 
   def self.is_undef?(value : MrbInternal::MrbValue)
     value.tt == MrbInternal::MrbVType::MRB_TT_UNDEF
   end
 
-  # TODO: Object casting
+  # TODO: Object casting for this method
 
   def self.interpret_ruby_value(mrb : MrbInternal::MrbState*, value : MrbInternal::MrbValue)
     case value.tt
