@@ -32,3 +32,9 @@ extern void set_data_ptr_and_type(mrb_value ruby_object, void* data, mrb_data_ty
     DATA_TYPE(ruby_object) = data_type;
 
 }
+
+extern struct RClass* get_class_of_obj(mrb_state* mrb, mrb_value object) {
+
+    return mrb_class(mrb, object);
+
+}

@@ -122,14 +122,22 @@ module MrbMacro
     {% elsif arg_type.resolve <= String %}
       MrbCast.cast_to_string({{mrb}}, {{arg}})
     {% elsif arg_type.resolve <= MrbWrap::Opt %}
-      # TODO
+      if MrbCast.is_undef?({{arg}})
+        {{arg_type.type_vars[1]}}
+      else
+        MrbMacro.convert_keyword_arg({{mrb}}, {{arg}}, {{arg_type.type_vars[0]}})
+      end
     {% else %}
       MrbMacro.convert_from_ruby_object({{mrb}}, {{arg}}, {{arg_type}}).value
     {% end %}
   end
 
   macro convert_from_ruby_object(mrb, obj, crystal_type)
-    # TODO: Add type check
+    if MrbInternal.mrb_obj_is_kind_of({{mrb}}, {{obj}}, MrbClassCache.get({{crystal_type}})) == 0
+      obj_class = MrbInternal.get_class_of_obj({{mrb}}, {{obj}})
+      # TODO: Raise argument error in mruby instead
+      raise("ERROR: Invalid data type #{obj_class} for object #{{{obj}}}:\n Should be #{{{crystal_type}}} -> MrbClassCache.get({{crystal_type}}) instead.")
+    end
     ptr = MrbInternal.get_data_ptr({{obj}})
     ptr.as({{crystal_type}}*)
   end

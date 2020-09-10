@@ -51,8 +51,8 @@ class Test
     self + other
   end
 
-  def keyword_test(strvar, intvar, floatvar = 0.123, boolvar : Bool = true, **other)
-    puts "str = #{strvar}, int = #{intvar}, float = #{floatvar}, bool = #{boolvar}, other = #{other}"
+  def keyword_test(strvar, intvar, floatvar = 0.123, strvarkw : String = "nothing", boolvar : Bool = true, othervar : Test = Test.new(17), **other)
+    puts "str = #{strvar}, int = #{intvar}, float = #{floatvar}, stringkw = #{strvarkw}, bool = #{boolvar}, other.x = #{othervar.x}, other = #{other}"
   end
 
   # Gets called in mruby unless program crashes
@@ -76,7 +76,9 @@ MrbState.create do |mrb|
   MrbWrap.wrap_instance_method(mrb, Test, "+", add, [Test])
   MrbWrap.wrap_property(mrb, Test, "x", x, [Int32])
 
-  MrbMacro.wrap_instance_function_with_keyword_args(mrb, Test, "keyword_test", keyword_test, {:floatvar => {Float32, 0.3}, :boolvar => {Bool, false}}, [String, Int32], use_other_keywords = true)
+  MrbMacro.wrap_instance_function_with_keyword_args(mrb, Test, "keyword_test", keyword_test, 
+    {:floatvar => {Float32, 0.123}, :strvarkw => {String, "nothing"}, :boolvar => {Bool, true}, :othervar => {Test, Test.new(17)}}, 
+    [String, Int32], use_other_keywords = true)
 
   mrb.load_script_from_file("examples/test.rb")
 end
@@ -112,7 +114,6 @@ end
 
 # TODO: Update examples with keywords
 # TODO: Add and fix MrbWrap methods
-# TODO: Test other keyword argument types (strings, other classes)
 
 MrbState.create do |mrb|
   test_module = MrbModule.new(mrb, "TestModule")

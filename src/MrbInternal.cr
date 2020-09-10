@@ -101,6 +101,7 @@ lib MrbInternal
 
   fun mrb_str_to_cstr(mrb : MrbState*, value : MrbValue) : LibC::Char*
 
+  # Base class, not to be confused with `get_class_of_obj`
   fun get_object_class(mrb : MrbState*) : RClass*
 
   fun data_type(value : MrbValue) : MrbDataType*
@@ -109,6 +110,9 @@ lib MrbInternal
   fun new_empty_object(mrb : MrbState*, ruby_class : RClass*) : MrbValue
   fun set_data_ptr_and_type(ruby_object : MrbValue, data : Void*, type : MrbDataType*)
   fun get_data_ptr(ruby_object : MrbValue) : Void*
+
+  fun mrb_obj_is_kind_of(mrb : MrbState*, obj : MrbValue, c : RClass*) : MrbBool
+  fun get_class_of_obj(mrb : MrbState*, obj : MrbValue) : RClass*
 
   fun load_script_from_file(mrb : MrbState*, filename : LibC::Char*) : MrbValue
   fun execute_script_line(mrb : MrbState*, str : LibC::Char*) : MrbValue

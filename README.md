@@ -134,6 +134,9 @@ More features will be added in the future.
 * Arrays, hashes and other complex mruby objects are not directly supported
 * Configuration options for mruby are relatively limited (yet)
 * Default values for unnamed function arguments are limited to integers and floats
+* Optional keyword arguments need a default value (can be a different one than the Crystal value, though)
+* Keywords will always be given to functions, even if optional (then with default values)
+* Splat arguments and arbitrary keywords are not possible due to compiletime symbols in Crystal
 
 # Roadmap
 
@@ -178,7 +181,6 @@ More features will be added in the future.
 
 * [X] Keyword argument support
 * [X] Support for optional keywords
-* [ ] Support for arbitrary keyword arguments
 
 #### Minor features
 
@@ -191,7 +193,8 @@ More features will be added in the future.
 
 #### Safety
 
-* [ ] Class checks for arguments
+* [X] Class checks for arguments
+* [ ] Checks for correct keyword classes
 * [ ] Module cache analogous to the class cache
 * [ ] Method in mruby to determine owner of object
 
@@ -218,6 +221,7 @@ More features will be added in the future.
 
 * [ ] Other types (Hashes, ...) as arguments and return values
 * [ ] Option for passing mruby splat arguments as an array
+* [ ] Support for arbitrary keyword arguments as hashes
 * [ ] More variety for default parameters for unnamed options
 
 # Why this name?
