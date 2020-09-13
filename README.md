@@ -229,6 +229,7 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 #### Usability
 * [ ] Operator suffixes as general optional argument for MrbWrap functions
 * [ ] Logging of any reference table operations for debugging
+* [ ] Reference counting in reference table
 
 #### Bugfixes
 * [ ] Fixed structs not being able to be wrapped
