@@ -14,9 +14,15 @@ Anyolite is a Crystal shard which adds a fully functional mruby interpreter to C
 Anyolite allows for wrapping Crystal classes and functions into mruby with little effort.
 This way, mruby can be used as a scripting language to Crystal projects, with the major advantage of a similar syntax.
 
-Anyolite also ensures that the Crystal garbage collector does not delete the mruby objects, avoiding memory leaks.
-
 This project is currently in the early development phase, so please report any bugs or missing relevant features.
+
+# Features
+
+* Bindings to an mruby interpreter
+* Wrapping of nearly arbitrary Crystal classes and methods to mruby
+* Easy syntax without unnecessary bolderplate code
+* Support for keyword arguments and default values
+* Simple system to prevent garbage collector conflicts
 
 # Prerequisites
 
@@ -137,77 +143,88 @@ More features will be added in the future.
 * Optional keyword arguments need a default value (can be a different one than the Crystal value, though)
 * Keywords will always be given to functions, even if optional (then with default values)
 * Splat arguments and arbitrary keywords are not possible due to compiletime symbols in Crystal
+* Only one type per argument is allowed
+
+# Why this name?
+
+https://en.wikipedia.org/wiki/Anyolite
+
+In short, it is a rare variant of the crystalline mineral called zoisite, with a ruby and crystal shards (of pargasite) embedded.
+
+The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 
 # Roadmap
 
 ## Releases
 
-### Version 0.1.0
+### Version 0.2.0
 
 #### Major features
 
-* [X] Basic structure
-* [X] Ubuntu support
-* [X] Wrappers for classes
-* [X] Wrappers for modules
-* [X] Support for classes in modules
-* [X] Wrappers for properties
-* [X] Wrappers for instance methods
-* [X] Wrappers for module and class methods
-* [X] Wrappers for constants
-* [X] Optional values for simple argument types
-* [X] Crystal GC respects the mruby GC
-* [X] Hooks for mruby object creation and deletion
-* [X] Simple examples
-* [X] Build tests
-* [X] Basic documentation
+* Keyword argument support
+* Support for optional keywords
+
+#### Minor features
+
+* Casting from MrbValue objects to closest Crystal values
+* Option to use a JSON config file
+
+#### Breaking changes
+
+* Optional arguments are passed using tuples instead of `MrbWrap::Opt`
+
+#### Safety
+
+* Class checks for arguments
+* Checks for correct keyword classes
+* Module cache analogous to the class cache
+
+#### Usability
+
+* Simplified some macro functions considerably
+* Arguments can be specified consistently as arrays or standalone
+* Documentation builds only for releases
+* Uniform system for passing optional arguments
+* Updated examples and documentation for keyword support
+
+#### Bugfixes
+
+* Fixed erros when naming MrbState instances anything other than 'mrb'
 
 ### Version 0.1.1
 
 #### Safety
 
-* [X] Added safeguards for reference table access
+* Added safeguards for reference table access
 
 #### Bugfixes
 
-* [X] Fixed mruby function return values not being cached
-* [X] Fixed minor documentation errors
+* Fixed mruby function return values not being cached
+* Fixed minor documentation errors
 
-## Upcoming releases
-
-### Version 0.2.0
+### Version 0.1.0
 
 #### Major features
 
-* [X] Keyword argument support
-* [X] Support for optional keywords
+* Basic structure
+* Ubuntu support
+* Wrappers for classes
+* Wrappers for modules
+* Support for classes in modules
+* Wrappers for properties
+* Wrappers for instance methods
+* Wrappers for module and class methods
+* Wrappers for constants
+* Optional values for simple argument types
+* Crystal GC respects the mruby GC
+* Hooks for mruby object creation and deletion
+* Simple examples
+* Build tests
+* Basic documentation
 
-#### Minor features
+## Upcoming releases
 
-* [X] Casting from MrbValue objects to closest Crystal values
-* [X] Option to use a JSON config file
-
-#### Breaking changes
-
-* [X] Optional arguments are passed using tuples instead of `MrbWrap::Opt`
-
-#### Safety
-
-* [X] Class checks for arguments
-* [X] Checks for correct keyword classes
-* [X] Module cache analogous to the class cache
-
-#### Usability
-
-* [X] Simplified some macro functions considerably
-* [X] Arguments can be specified consistently as arrays or standalone
-* [X] Documentation builds only for releases
-* [X] Uniform system for passing optional arguments
-* [X] Updated examples and documentation for keyword support
-
-#### Bugfixes
-
-* [X] Fixed erros when naming MrbState instances anything other than 'mrb'
+Currently none planned
 
 ### Future updates
 
@@ -217,6 +234,7 @@ More features will be added in the future.
 * [ ] Support for more flexible mruby configuration options
 * [ ] Arrays as arguments and return values
 * [ ] MrbClass/MrbModule and Class can be both used as arguments
+* [ ] More stable type casting
 
 ### Possible future updates
 
@@ -225,11 +243,3 @@ More features will be added in the future.
 * [ ] Support for arbitrary keyword arguments as hashes
 * [ ] More variety for default parameters for unnamed options
 * [ ] Method in mruby to determine owner of object (if possible)
-
-# Why this name?
-
-https://en.wikipedia.org/wiki/Anyolite
-
-In short, it is a rare variant of the crystalline mineral called zoisite, with a ruby and crystal shards (of pargasite) embedded.
-
-The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
