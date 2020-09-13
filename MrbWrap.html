@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="generator" content="Crystal Docs 0.35.1">
-<meta name="crystal_docs.project_version" content="master">
+<meta name="crystal_docs.project_version" content="0.2.0">
 <meta name="crystal_docs.project_name" content="anyolite">
 
 
@@ -18,7 +18,7 @@
 </svg>
 
   <meta id="repository-name" content="anyolite">
-  <title>MrbWrap - anyolite master</title>
+  <title>MrbWrap - anyolite 0.2.0</title>
   <script type="text/javascript">
     CrystalDocs.base_path = "";
   </script>
@@ -39,7 +39,7 @@
       </h1>
 
       <span class="project-version">
-        master
+        0.2.0
       </span>
     </div>
   </div>
@@ -81,6 +81,11 @@
       
     </li>
   
+  <li class=" " data-id="anyolite/MrbModuleCache" data-name="mrbmodulecache">
+      <a href="MrbModuleCache.html">MrbModuleCache</a>
+      
+    </li>
+  
   <li class=" " data-id="anyolite/MrbRefTable" data-name="mrbreftable">
       <a href="MrbRefTable.html">MrbRefTable</a>
       
@@ -103,11 +108,6 @@
   
   <li class=" " data-id="anyolite/MrbWrap/Interpreted" data-name="mrbwrap::interpreted">
       <a href="MrbWrap/Interpreted.html">Interpreted</a>
-      
-    </li>
-  
-  <li class=" " data-id="anyolite/MrbWrap/Opt" data-name="mrbwrap::opt(t, d)">
-      <a href="MrbWrap/Opt.html">Opt</a>
       
     </li>
   
@@ -172,7 +172,7 @@
   </h2>
   
     
-      <a href="https://github.com/Anyolite/anyolite/blob/b6c5e0dbdc62e3ef1f11fa5c46f79e3dbbadfdbc/src/MrbWrap.cr#L16" target="_blank">
+      <a href="https://github.com/Anyolite/anyolite/blob/v0.2.0/src/MrbWrap.cr#L17" target="_blank">
         MrbWrap.cr
       </a>
     
@@ -237,6 +237,13 @@
       </li>
     
       <li class="entry-summary">
+        <a href="#wrap_class_method_with_keywords(mrb_state,crystal_class,name,proc,keyword_args,regular_args=[]ofClass)-macro" class="signature"><strong>wrap_class_method_with_keywords</strong>(mrb_state, crystal_class, name, proc, keyword_args, regular_args = <span class="o">[]</span> <span class="k">of</span> <span class="t">Class</span>)</a>
+        
+          <div class="summary"><p>Wraps a class method into mruby, using keyword arguments.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
         <a href="#wrap_constant(mrb_state,under_module,name,crystal_value)-macro" class="signature"><strong>wrap_constant</strong>(mrb_state, under_module, name, crystal_value)</a>
         
           <div class="summary"><p>Wraps a constant value into mruby.</p></div>
@@ -247,6 +254,13 @@
         <a href="#wrap_constructor(mrb_state,crystal_class,proc_args=[]ofClass)-macro" class="signature"><strong>wrap_constructor</strong>(mrb_state, crystal_class, proc_args = <span class="o">[]</span> <span class="k">of</span> <span class="t">Class</span>)</a>
         
           <div class="summary"><p>Wraps the constructor of a Crystal class into mruby.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#wrap_constructor_with_keywords(mrb_state,crystal_class,keyword_args,regular_args=[]ofClass)-macro" class="signature"><strong>wrap_constructor_with_keywords</strong>(mrb_state, crystal_class, keyword_args, regular_args = <span class="o">[]</span> <span class="k">of</span> <span class="t">Class</span>)</a>
+        
+          <div class="summary"><p>Wraps the constructor of a Crystal class into mruby, using keyword arguments.</p></div>
         
       </li>
     
@@ -265,6 +279,13 @@
       </li>
     
       <li class="entry-summary">
+        <a href="#wrap_instance_method_with_keywords(mrb_state,crystal_class,name,proc,keyword_args,regular_args=[]ofClass)-macro" class="signature"><strong>wrap_instance_method_with_keywords</strong>(mrb_state, crystal_class, name, proc, keyword_args, regular_args = <span class="o">[]</span> <span class="k">of</span> <span class="t">Class</span>)</a>
+        
+          <div class="summary"><p>Wraps an instance method into mruby, using keyword arguments.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
         <a href="#wrap_module(mrb_state,crystal_module,name,under=nil)-macro" class="signature"><strong>wrap_module</strong>(mrb_state, crystal_module, name, under = <span class="n">nil</span>)</a>
         
           <div class="summary"><p>Wraps a Crystal module into an mruby module.</p></div>
@@ -275,6 +296,13 @@
         <a href="#wrap_module_function(mrb_state,under_module,name,proc,proc_args=[]ofClass)-macro" class="signature"><strong>wrap_module_function</strong>(mrb_state, under_module, name, proc, proc_args = <span class="o">[]</span> <span class="k">of</span> <span class="t">Class</span>)</a>
         
           <div class="summary"><p>Wraps a module function into mruby.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#wrap_module_function_with_keywords(mrb_state,under_module,name,proc,keyword_args,regular_args=[]ofClass)-macro" class="signature"><strong>wrap_module_function_with_keywords</strong>(mrb_state, under_module, name, proc, keyword_args, regular_args = <span class="o">[]</span> <span class="k">of</span> <span class="t">Class</span>)</a>
+        
+          <div class="summary"><p>Wraps a module function into mruby, using keyword arguments.</p></div>
         
       </li>
     
@@ -339,7 +367,7 @@ with <em>name</em> as its new designation, returning an <code><a href="MrbClass.
       <br/>
       <div>
         
-          [<a href="https://github.com/Anyolite/anyolite/blob/b6c5e0dbdc62e3ef1f11fa5c46f79e3dbbadfdbc/src/MrbWrap.cr#L49" target="_blank">View source</a>]
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.2.0/src/MrbWrap.cr#L40" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -365,7 +393,34 @@ with the arguments <em>proc_args</em> as an <code>Array of Class</code>.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/Anyolite/anyolite/blob/b6c5e0dbdc62e3ef1f11fa5c46f79e3dbbadfdbc/src/MrbWrap.cr#L103" target="_blank">View source</a>]
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.2.0/src/MrbWrap.cr#L103" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="wrap_class_method_with_keywords(mrb_state,crystal_class,name,proc,keyword_args,regular_args=[]ofClass)-macro">
+      <div class="signature">
+        
+        macro <strong>wrap_class_method_with_keywords</strong>(mrb_state, crystal_class, name, proc, keyword_args, regular_args = <span class="o">[]</span> <span class="k">of</span> <span class="t">Class</span>)
+
+        <a class="method-permalink" href="#wrap_class_method_with_keywords(mrb_state,crystal_class,name,proc,keyword_args,regular_args=[]ofClass)-macro">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Wraps a class method into mruby, using keyword arguments.</p>
+
+<p>The class method <em>proc</em> of the Crystal class <em>crystal_class</em> will be integrated into the <code><a href="MrbState.html">MrbState</a></code> <em>mrb_state</em>,
+with the arguments <em>regular_args</em> as an <code>Array of Class</code> and <em>keyword_args</em> as a <code>Hash of Symbol => Class</code>.
+Alternatively, a <code>Tuple</code> with the <code>Class</code> and a default value for the <code>Class</code> can be used instead of the <code>Class</code>.</p>
+
+<p>Its new name will be <em>name</em>.</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.2.0/src/MrbWrap.cr#L114" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -389,7 +444,7 @@ with the name <em>name</em> and the parent <code><a href="MrbModule.html">MrbMod
       <br/>
       <div>
         
-          [<a href="https://github.com/Anyolite/anyolite/blob/b6c5e0dbdc62e3ef1f11fa5c46f79e3dbbadfdbc/src/MrbWrap.cr#L163" target="_blank">View source</a>]
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.2.0/src/MrbWrap.cr#L173" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -413,7 +468,32 @@ with the arguments <em>proc_args</em> as an <code>Array of Class</code>.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/Anyolite/anyolite/blob/b6c5e0dbdc62e3ef1f11fa5c46f79e3dbbadfdbc/src/MrbWrap.cr#L72" target="_blank">View source</a>]
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.2.0/src/MrbWrap.cr#L63" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="wrap_constructor_with_keywords(mrb_state,crystal_class,keyword_args,regular_args=[]ofClass)-macro">
+      <div class="signature">
+        
+        macro <strong>wrap_constructor_with_keywords</strong>(mrb_state, crystal_class, keyword_args, regular_args = <span class="o">[]</span> <span class="k">of</span> <span class="t">Class</span>)
+
+        <a class="method-permalink" href="#wrap_constructor_with_keywords(mrb_state,crystal_class,keyword_args,regular_args=[]ofClass)-macro">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Wraps the constructor of a Crystal class into mruby, using keyword arguments.</p>
+
+<p>The constructor for the Crystal class <em>crystal_class</em> will be integrated into the <code><a href="MrbState.html">MrbState</a></code> <em>mrb_state</em>,
+with the arguments <em>regular_args</em> as an <code>Array of Class</code> and <em>keyword_args</em> as a <code>Hash of Symbol => Class</code>.
+Alternatively, a <code>Tuple</code> with the <code>Class</code> and a default value for the <code>Class</code> can be used instead of the <code>Class</code>.</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.2.0/src/MrbWrap.cr#L72" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -438,7 +518,7 @@ with the arguments <em>proc_args</em> as an <code>Array of Class</code>.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/Anyolite/anyolite/blob/b6c5e0dbdc62e3ef1f11fa5c46f79e3dbbadfdbc/src/MrbWrap.cr#L144" target="_blank">View source</a>]
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.2.0/src/MrbWrap.cr#L154" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -464,7 +544,34 @@ with the arguments <em>proc_args</em> as an <code>Array of Class</code>.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/Anyolite/anyolite/blob/b6c5e0dbdc62e3ef1f11fa5c46f79e3dbbadfdbc/src/MrbWrap.cr#L118" target="_blank">View source</a>]
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.2.0/src/MrbWrap.cr#L124" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="wrap_instance_method_with_keywords(mrb_state,crystal_class,name,proc,keyword_args,regular_args=[]ofClass)-macro">
+      <div class="signature">
+        
+        macro <strong>wrap_instance_method_with_keywords</strong>(mrb_state, crystal_class, name, proc, keyword_args, regular_args = <span class="o">[]</span> <span class="k">of</span> <span class="t">Class</span>)
+
+        <a class="method-permalink" href="#wrap_instance_method_with_keywords(mrb_state,crystal_class,name,proc,keyword_args,regular_args=[]ofClass)-macro">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Wraps an instance method into mruby, using keyword arguments.</p>
+
+<p>The instance method <em>proc</em> of the Crystal class <em>crystal_class</em> will be integrated into the <code><a href="MrbState.html">MrbState</a></code> <em>mrb_state</em>,
+with the arguments <em>regular_args</em> as an <code>Array of Class</code> and <em>keyword_args</em> as a <code>Hash of Symbol => Class</code>.
+Alternatively, a <code>Tuple</code> with the <code>Class</code> and a default value for the <code>Class</code> can be used instead of the <code>Class</code>.</p>
+
+<p>Its new name will be <em>name</em>.</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.2.0/src/MrbWrap.cr#L135" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -490,7 +597,7 @@ with <em>name</em> as its new designation, returning an <code><a href="MrbModule
       <br/>
       <div>
         
-          [<a href="https://github.com/Anyolite/anyolite/blob/b6c5e0dbdc62e3ef1f11fa5c46f79e3dbbadfdbc/src/MrbWrap.cr#L62" target="_blank">View source</a>]
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.2.0/src/MrbWrap.cr#L53" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -516,7 +623,34 @@ with the arguments <em>proc_args</em> as an <code>Array of Class</code>.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/Anyolite/anyolite/blob/b6c5e0dbdc62e3ef1f11fa5c46f79e3dbbadfdbc/src/MrbWrap.cr#L88" target="_blank">View source</a>]
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.2.0/src/MrbWrap.cr#L82" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="wrap_module_function_with_keywords(mrb_state,under_module,name,proc,keyword_args,regular_args=[]ofClass)-macro">
+      <div class="signature">
+        
+        macro <strong>wrap_module_function_with_keywords</strong>(mrb_state, under_module, name, proc, keyword_args, regular_args = <span class="o">[]</span> <span class="k">of</span> <span class="t">Class</span>)
+
+        <a class="method-permalink" href="#wrap_module_function_with_keywords(mrb_state,under_module,name,proc,keyword_args,regular_args=[]ofClass)-macro">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Wraps a module function into mruby, using keyword arguments.</p>
+
+<p>The function <em>proc</em> under the <code><a href="MrbModule.html">MrbModule</a></code> <em>under_module</em> will be integrated into the <code><a href="MrbState.html">MrbState</a></code> <em>mrb_state</em>,
+with the arguments <em>regular_args</em> as an <code>Array of Class</code> and <em>keyword_args</em> as a <code>Hash of Symbol => Class</code>.
+Alternatively, a <code>Tuple</code> with the <code>Class</code> and a default value for the <code>Class</code> can be used instead of the <code>Class</code>.</p>
+
+<p>Its new name will be <em>name</em>.</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.2.0/src/MrbWrap.cr#L93" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -542,7 +676,7 @@ with the argument <em>proc_arg</em> as its respective <code>Class</code>.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/Anyolite/anyolite/blob/b6c5e0dbdc62e3ef1f11fa5c46f79e3dbbadfdbc/src/MrbWrap.cr#L154" target="_blank">View source</a>]
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.2.0/src/MrbWrap.cr#L164" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -568,7 +702,7 @@ with the argument <em>proc_arg</em> as its respective <code>Class</code>.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/Anyolite/anyolite/blob/b6c5e0dbdc62e3ef1f11fa5c46f79e3dbbadfdbc/src/MrbWrap.cr#L135" target="_blank">View source</a>]
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.2.0/src/MrbWrap.cr#L145" target="_blank">View source</a>]
         
       </div>
     </div>

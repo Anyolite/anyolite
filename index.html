@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="generator" content="Crystal Docs 0.35.1">
-<meta name="crystal_docs.project_version" content="master">
+<meta name="crystal_docs.project_version" content="0.2.0">
 <meta name="crystal_docs.project_name" content="anyolite">
 
 
@@ -18,7 +18,7 @@
 </svg>
 
   <meta id="repository-name" content="anyolite">
-  <title>anyolite master</title>
+  <title>anyolite 0.2.0</title>
   <script type="text/javascript">
   CrystalDocs.base_path = "";
   </script>
@@ -39,7 +39,7 @@
       </h1>
 
       <span class="project-version">
-        master
+        0.2.0
       </span>
     </div>
   </div>
@@ -81,6 +81,11 @@
       
     </li>
   
+  <li class=" " data-id="anyolite/MrbModuleCache" data-name="mrbmodulecache">
+      <a href="MrbModuleCache.html">MrbModuleCache</a>
+      
+    </li>
+  
   <li class=" " data-id="anyolite/MrbRefTable" data-name="mrbreftable">
       <a href="MrbRefTable.html">MrbRefTable</a>
       
@@ -103,11 +108,6 @@
   
   <li class=" " data-id="anyolite/MrbWrap/Interpreted" data-name="mrbwrap::interpreted">
       <a href="MrbWrap/Interpreted.html">Interpreted</a>
-      
-    </li>
-  
-  <li class=" " data-id="anyolite/MrbWrap/Opt" data-name="mrbwrap::opt(t, d)">
-      <a href="MrbWrap/Opt.html">Opt</a>
       
     </li>
   
@@ -152,9 +152,15 @@
 <p>Anyolite allows for wrapping Crystal classes and functions into mruby with little effort.
 This way, mruby can be used as a scripting language to Crystal projects, with the major advantage of a similar syntax.</p>
 
-<p>Anyolite also ensures that the Crystal garbage collector does not delete the mruby objects, avoiding memory leaks.</p>
-
 <p>This project is currently in the early development phase, so please report any bugs or missing relevant features.</p>
+
+<h1><a id="features" class="anchor" href="#features">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Features</h1>
+
+<ul><li>Bindings to an mruby interpreter</li><li>Wrapping of nearly arbitrary Crystal classes and methods to mruby</li><li>Easy syntax without unnecessary bolderplate code</li><li>Support for keyword arguments and default values</li><li>Simple system to prevent garbage collector conflicts</li></ul>
 
 <h1><a id="prerequisites" class="anchor" href="#prerequisites">
   <svg class="octicon-link" aria-hidden="true">
@@ -223,24 +229,24 @@ which allows for changing multiple options when installing the shard. Possible o
   <span class="k">end</span>
 <span class="k">end</span></code></pre>
 
-<p>Now, you want to wrap this class in Ruby. All you need to do is to execute the following code in Crystal (Note that earlier versions of Anyolite use <code><a href="MrbWrap/Opt.html">MrbWrap::Opt</a>(Int32, 0)</code> and <code><a href="MrbWrap/Opt.html">MrbWrap::Opt</a>(Bool, 0)</code> for the default arguments instead of tuples.):</p>
+<p>Now, you want to wrap this class in Ruby. All you need to do is to execute the following code in Crystal:</p>
 
 <pre><code class="language-crystal"><span class="k">require</span> <span class="s">&quot;anyolite&quot;</span>
 
 <span class="t">MrbState</span>.create <span class="k">do</span> <span class="o">|</span>mrb<span class="o">|</span>
   test_module <span class="o">=</span> <span class="t">MrbModule</span>.<span class="k">new</span>(mrb, <span class="s">&quot;TestModule&quot;</span>)
+
   <span class="t">MrbWrap</span>.wrap_class(mrb, <span class="t">Entity</span>, <span class="s">&quot;Entity&quot;</span>, under: test_module)
-  
-  <span class="t">MrbWrap</span>.wrap_constructor(mrb, <span class="t">Entity</span>, [{<span class="t">Int32</span>, <span class="n">0</span>}])
+
+  <span class="t">MrbWrap</span>.wrap_constructor_with_keywords(mrb, <span class="t">Entity</span>, {<span class="n">:hp</span> => {<span class="t">Int32</span>, <span class="n">0</span>}})
 
   <span class="t">MrbWrap</span>.wrap_property(mrb, <span class="t">Entity</span>, <span class="s">&quot;hp&quot;</span>, hp, <span class="t">Int32</span>)
-  
-  <span class="t">MrbWrap</span>.wrap_instance_method(mrb, <span class="t">Entity</span>, <span class="s">&quot;damage&quot;</span>, damage, [<span class="t">Int32</span>])
 
-  <span class="c"># Crystal does not allow false here, for some reason, so just use 0 and 1</span>
-  <span class="t">MrbWrap</span>.wrap_instance_method(mrb, <span class="t">Entity</span>, <span class="s">&quot;yell&quot;</span>, yell, [<span class="t">String</span>, {<span class="t">Bool</span>, <span class="n">0</span>}])
+  <span class="t">MrbWrap</span>.wrap_instance_method_with_keywords(mrb, <span class="t">Entity</span>, <span class="s">&quot;damage&quot;</span>, damage, {<span class="n">:diff</span> => <span class="t">Int32</span>})
 
-  <span class="t">MrbWrap</span>.wrap_instance_method(mrb, <span class="t">Entity</span>, <span class="s">&quot;absorb_hp_from&quot;</span>, absorb_hp_from, [<span class="t">Entity</span>])
+  <span class="t">MrbWrap</span>.wrap_instance_method_with_keywords(mrb, <span class="t">Entity</span>, <span class="s">&quot;yell&quot;</span>, yell, {<span class="n">:sound</span> => <span class="t">String</span>, <span class="n">:loud</span> => {<span class="t">Bool</span>, <span class="n">false</span>}})
+
+  <span class="t">MrbWrap</span>.wrap_instance_method_with_keywords(mrb, <span class="t">Entity</span>, <span class="s">&quot;absorb_hp_from&quot;</span>, absorb_hp_from, {<span class="n">:other</span> => <span class="t">Entity</span>})
 
   mrb.load_script_from_file(<span class="s">&quot;examples/hp_example.rb&quot;</span>)
 <span class="k">end</span></code></pre>
@@ -248,15 +254,15 @@ which allows for changing multiple options when installing the shard. Possible o
 <p>The last line in the block calls the following example script:</p>
 
 <pre><code class="language-ruby">a = TestModule::Entity.new(20)
-a.damage(13)
+a.damage(diff: 13)
 puts a.hp
 
 b = TestModule::Entity.new(10)
-a.absorb_hp_from(b)
+a.absorb_hp_from(other: b)
 puts a.hp
 puts b.hp
-b.yell('Ouch, you stole my HP!', true)
-a.yell('Well, take better care of your public attributes!')</code></pre>
+b.yell(sound: 'Ouch, you stole my HP!', loud: true)
+a.yell(sound: 'Well, take better care of your public attributes!')</code></pre>
 
 <p>The syntax stays mostly the same as in Crystal, except for the keyword arguments.
 These might be added in the future, but technically you can always wrap the generated methods in pure Ruby methods with keywords.</p>
@@ -270,7 +276,19 @@ More features will be added in the future.</p>
   </svg>
 </a>Limitations</h1>
 
-<ul><li>Currently, Anyolite does not work on Windows due to Crystal compiler bugs</li><li>Returning objects of a wrapped class does only work if every constructor argument is optional</li><li>Arrays, hashes and other complex mruby objects are not directly supported</li><li>Configuration options for mruby are relatively limited (yet)</li><li>Default values for unnamed function arguments are limited to integers and floats</li><li>Optional keyword arguments need a default value (can be a different one than the Crystal value, though)</li><li>Keywords will always be given to functions, even if optional (then with default values)</li><li>Splat arguments and arbitrary keywords are not possible due to compiletime symbols in Crystal</li></ul>
+<ul><li>Currently, Anyolite does not work on Windows due to Crystal compiler bugs</li><li>Returning objects of a wrapped class does only work if every constructor argument is optional</li><li>Arrays, hashes and other complex mruby objects are not directly supported</li><li>Configuration options for mruby are relatively limited (yet)</li><li>Default values for unnamed function arguments are limited to integers and floats</li><li>Optional keyword arguments need a default value (can be a different one than the Crystal value, though)</li><li>Keywords will always be given to functions, even if optional (then with default values)</li><li>Splat arguments and arbitrary keywords are not possible due to compiletime symbols in Crystal</li><li>Only one type per argument is allowed</li></ul>
+
+<h1><a id="why-this-name" class="anchor" href="#why-this-name">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Why this name?</h1>
+
+<p>https://en.wikipedia.org/wiki/Anyolite</p>
+
+<p>In short, it is a rare variant of the crystalline mineral called zoisite, with a ruby and crystal shards (of pargasite) embedded.</p>
+
+<p>The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.</p>
 
 <h1><a id="roadmap" class="anchor" href="#roadmap">
   <svg class="octicon-link" aria-hidden="true">
@@ -284,11 +302,11 @@ More features will be added in the future.</p>
   </svg>
 </a>Releases</h2>
 
-<h3><a id="version-0.1.0" class="anchor" href="#version-0.1.0">
+<h3><a id="version-0.2.0" class="anchor" href="#version-0.2.0">
   <svg class="octicon-link" aria-hidden="true">
     <use href="#octicon-link"/>
   </svg>
-</a>Version 0.1.0</h3>
+</a>Version 0.2.0</h3>
 
 <h4><a id="major-features" class="anchor" href="#major-features">
   <svg class="octicon-link" aria-hidden="true">
@@ -296,7 +314,47 @@ More features will be added in the future.</p>
   </svg>
 </a>Major features</h4>
 
-<ul><li>[X] Basic structure</li><li>[X] Ubuntu support</li><li>[X] Wrappers for classes</li><li>[X] Wrappers for modules</li><li>[X] Support for classes in modules</li><li>[X] Wrappers for properties</li><li>[X] Wrappers for instance methods</li><li>[X] Wrappers for module and class methods</li><li>[X] Wrappers for constants</li><li>[X] Optional values for simple argument types</li><li>[X] Crystal GC respects the mruby GC</li><li>[X] Hooks for mruby object creation and deletion</li><li>[X] Simple examples</li><li>[X] Build tests</li><li>[X] Basic documentation</li></ul>
+<ul><li>Keyword argument support</li><li>Support for optional keywords</li></ul>
+
+<h4><a id="minor-features" class="anchor" href="#minor-features">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Minor features</h4>
+
+<ul><li>Casting from MrbValue objects to closest Crystal values</li><li>Option to use a JSON config file</li></ul>
+
+<h4><a id="breaking-changes" class="anchor" href="#breaking-changes">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Breaking changes</h4>
+
+<ul><li>Optional arguments are passed using tuples instead of <code>MrbWrap::Opt</code></li></ul>
+
+<h4><a id="safety" class="anchor" href="#safety">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Safety</h4>
+
+<ul><li>Class checks for arguments</li><li>Checks for correct keyword classes</li><li>Module cache analogous to the class cache</li></ul>
+
+<h4><a id="usability" class="anchor" href="#usability">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Usability</h4>
+
+<ul><li>Simplified some macro functions considerably</li><li>Arguments can be specified consistently as arrays or standalone</li><li>Documentation builds only for releases</li><li>Uniform system for passing optional arguments</li><li>Updated examples and documentation for keyword support</li></ul>
+
+<h4><a id="bugfixes" class="anchor" href="#bugfixes">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Bugfixes</h4>
+
+<ul><li>Fixed erros when naming MrbState instances anything other than 'mrb'</li></ul>
 
 <h3><a id="version-0.1.1" class="anchor" href="#version-0.1.1">
   <svg class="octicon-link" aria-hidden="true">
@@ -310,7 +368,7 @@ More features will be added in the future.</p>
   </svg>
 </a>Safety</h4>
 
-<ul><li>[X] Added safeguards for reference table access</li></ul>
+<ul><li>Added safeguards for reference table access</li></ul>
 
 <h4><a id="bugfixes" class="anchor" href="#bugfixes">
   <svg class="octicon-link" aria-hidden="true">
@@ -318,19 +376,13 @@ More features will be added in the future.</p>
   </svg>
 </a>Bugfixes</h4>
 
-<ul><li>[X] Fixed mruby function return values not being cached</li><li>[X] Fixed minor documentation errors</li></ul>
+<ul><li>Fixed mruby function return values not being cached</li><li>Fixed minor documentation errors</li></ul>
 
-<h2><a id="upcoming-releases" class="anchor" href="#upcoming-releases">
+<h3><a id="version-0.1.0" class="anchor" href="#version-0.1.0">
   <svg class="octicon-link" aria-hidden="true">
     <use href="#octicon-link"/>
   </svg>
-</a>Upcoming releases</h2>
-
-<h3><a id="version-0.2.0" class="anchor" href="#version-0.2.0">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>Version 0.2.0</h3>
+</a>Version 0.1.0</h3>
 
 <h4><a id="major-features" class="anchor" href="#major-features">
   <svg class="octicon-link" aria-hidden="true">
@@ -338,47 +390,15 @@ More features will be added in the future.</p>
   </svg>
 </a>Major features</h4>
 
-<ul><li>[X] Keyword argument support</li><li>[X] Support for optional keywords</li></ul>
+<ul><li>Basic structure</li><li>Ubuntu support</li><li>Wrappers for classes</li><li>Wrappers for modules</li><li>Support for classes in modules</li><li>Wrappers for properties</li><li>Wrappers for instance methods</li><li>Wrappers for module and class methods</li><li>Wrappers for constants</li><li>Optional values for simple argument types</li><li>Crystal GC respects the mruby GC</li><li>Hooks for mruby object creation and deletion</li><li>Simple examples</li><li>Build tests</li><li>Basic documentation</li></ul>
 
-<h4><a id="minor-features" class="anchor" href="#minor-features">
+<h2><a id="upcoming-releases" class="anchor" href="#upcoming-releases">
   <svg class="octicon-link" aria-hidden="true">
     <use href="#octicon-link"/>
   </svg>
-</a>Minor features</h4>
+</a>Upcoming releases</h2>
 
-<ul><li>[X] Casting from MrbValue objects to closest Crystal values</li><li>[X] Option to use a JSON config file</li></ul>
-
-<h4><a id="breaking-changes" class="anchor" href="#breaking-changes">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>Breaking changes</h4>
-
-<ul><li>[X] Optional arguments are passed using tuples instead of <code><a href="MrbWrap/Opt.html">MrbWrap::Opt</a></code></li></ul>
-
-<h4><a id="safety" class="anchor" href="#safety">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>Safety</h4>
-
-<ul><li>[X] Class checks for arguments</li><li>[ ] Checks for correct keyword classes</li><li>[ ] Module cache analogous to the class cache</li><li>[ ] Method in mruby to determine owner of object</li></ul>
-
-<h4><a id="usability" class="anchor" href="#usability">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>Usability</h4>
-
-<ul><li>[X] Simplified some macro functions considerably</li><li>[X] Arguments can be specified consistently as arrays or standalone</li><li>[ ] Documentation builds only for releases</li><li>[X] Uniform system for passing optional arguments</li></ul>
-
-<h4><a id="bugfixes" class="anchor" href="#bugfixes">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>Bugfixes</h4>
-
-<ul><li>[X] Fixed erros when naming MrbState instances anything other than 'mrb'</li></ul>
+<p>Currently none planned</p>
 
 <h3><a id="future-updates" class="anchor" href="#future-updates">
   <svg class="octicon-link" aria-hidden="true">
@@ -386,7 +406,7 @@ More features will be added in the future.</p>
   </svg>
 </a>Future updates</h3>
 
-<ul><li>[ ] Windows support (currently not supported due to problems with Crystal)</li><li>[ ] Mac support (might be possible, not tested yet)</li><li>[ ] Compiletime errors for macros</li><li>[ ] Support for more flexible mruby configuration options</li><li>[ ] Arrays as arguments and return values</li></ul>
+<ul><li>[ ] Windows support (currently not supported due to problems with Crystal)</li><li>[ ] Mac support (might be possible, not tested yet)</li><li>[ ] Compiletime errors for macros</li><li>[ ] Support for more flexible mruby configuration options</li><li>[ ] Arrays as arguments and return values</li><li>[ ] MrbClass/MrbModule and Class can be both used as arguments</li><li>[ ] More stable type casting</li></ul>
 
 <h3><a id="possible-future-updates" class="anchor" href="#possible-future-updates">
   <svg class="octicon-link" aria-hidden="true">
@@ -394,19 +414,7 @@ More features will be added in the future.</p>
   </svg>
 </a>Possible future updates</h3>
 
-<ul><li>[ ] Other types (Hashes, ...) as arguments and return values</li><li>[ ] Option for passing mruby splat arguments as an array</li><li>[ ] Support for arbitrary keyword arguments as hashes</li><li>[ ] More variety for default parameters for unnamed options</li></ul>
-
-<h1><a id="why-this-name" class="anchor" href="#why-this-name">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>Why this name?</h1>
-
-<p>https://en.wikipedia.org/wiki/Anyolite</p>
-
-<p>In short, it is a rare variant of the crystalline mineral called zoisite, with a ruby and crystal shards (of pargasite) embedded.</p>
-
-<p>The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.</p>
+<ul><li>[ ] Other types (Hashes, ...) as arguments and return values</li><li>[ ] Option for passing mruby splat arguments as an array</li><li>[ ] Support for arbitrary keyword arguments as hashes</li><li>[ ] More variety for default parameters for unnamed options</li><li>[ ] Method in mruby to determine owner of object (if possible)</li></ul>
 </div>
 </body>
 </html>

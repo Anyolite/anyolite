@@ -18,7 +18,7 @@
 </svg>
 
   <meta id="repository-name" content="anyolite">
-  <title>MrbClass - anyolite 0.2.0</title>
+  <title>MrbModuleCache - anyolite 0.2.0</title>
   <script type="text/javascript">
     CrystalDocs.base_path = "";
   </script>
@@ -56,7 +56,7 @@
       
     </li>
   
-  <li class=" current" data-id="anyolite/MrbClass" data-name="mrbclass">
+  <li class=" " data-id="anyolite/MrbClass" data-name="mrbclass">
       <a href="MrbClass.html">MrbClass</a>
       
     </li>
@@ -81,7 +81,7 @@
       
     </li>
   
-  <li class=" " data-id="anyolite/MrbModuleCache" data-name="mrbmodulecache">
+  <li class=" current" data-id="anyolite/MrbModuleCache" data-name="mrbmodulecache">
       <a href="MrbModuleCache.html">MrbModuleCache</a>
       
     </li>
@@ -130,12 +130,10 @@
 <div class="main-content">
 <h1 class="type-name">
 
-  <span class="kind">class</span> MrbClass
+  <span class="kind">module</span> MrbModuleCache
 
 </h1>
 
-
-  <ul class="superclass-hierarchy"><li class="superclass"><a href="MrbClass.html">MrbClass</a></li><li class="superclass">Reference</li><li class="superclass">Object</li></ul>
 
 
 
@@ -149,7 +147,7 @@
     Overview
   </h2>
 
-  <p>Reference to a mruby class</p>
+  <p>Cache for mruby class references</p>
 
 
 
@@ -174,8 +172,8 @@
   </h2>
   
     
-      <a href="https://github.com/Anyolite/anyolite/blob/v0.2.0/src/MrbClass.cr#L2" target="_blank">
-        MrbClass.cr
+      <a href="https://github.com/Anyolite/anyolite/blob/v0.2.0/src/MrbModuleCache.cr#L2" target="_blank">
+        MrbModuleCache.cr
       </a>
     
     <br/>
@@ -185,43 +183,31 @@
 
 
 
+
+
   <h2>
-    <a id="constructors" class="anchor" href="#constructors">
+    <a id="class-method-summary" class="anchor" href="#class-method-summary">
   <svg class="octicon-link" aria-hidden="true">
     <use href="#octicon-link"/>
   </svg>
 </a>
-    Constructors
+    Class Method Summary
   </h2>
   <ul class="list-summary">
     
       <li class="entry-summary">
-        <a href="#new(mrb:MrbState,name:String,superclass:MrbClass?=nil,under:MrbModule?=nil)-class-method" class="signature"><strong>.new</strong>(mrb : MrbState, name : String, superclass : MrbClass? = <span class="n">nil</span>, under : MrbModule? = <span class="n">nil</span>)</a>
+        <a href="#get(crystal_module:Class)-class-method" class="signature"><strong>.get</strong>(crystal_module : Class)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#register(crystal_module:Class,mrb_module:MrbModule)-class-method" class="signature"><strong>.register</strong>(crystal_module : Class, mrb_module : MrbModule)</a>
         
       </li>
     
   </ul>
 
 
-
-
-
-  <h2>
-    <a id="instance-method-summary" class="anchor" href="#instance-method-summary">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>
-    Instance Method Summary
-  </h2>
-  <ul class="list-summary">
-    
-      <li class="entry-summary">
-        <a href="#to_unsafe-instance-method" class="signature"><strong>#to_unsafe</strong></a>
-        
-      </li>
-    
-  </ul>
 
 
 
@@ -229,84 +215,54 @@
 
 <div class="methods-inherited">
   
-    
-
-
-    
-
-
-    
-
-
-  
-    
-
-
-    
-
-
-    
-
-
-  
 </div>
 
 
+
+
   <h2>
-    <a id="constructor-detail" class="anchor" href="#constructor-detail">
+    <a id="class-method-detail" class="anchor" href="#class-method-detail">
   <svg class="octicon-link" aria-hidden="true">
     <use href="#octicon-link"/>
   </svg>
 </a>
-    Constructor Detail
+    Class Method Detail
   </h2>
   
-    <div class="entry-detail" id="new(mrb:MrbState,name:String,superclass:MrbClass?=nil,under:MrbModule?=nil)-class-method">
+    <div class="entry-detail" id="get(crystal_module:Class)-class-method">
       <div class="signature">
         
-        def self.<strong>new</strong>(mrb : <a href="MrbState.html">MrbState</a>, name : String, superclass : <a href="MrbClass.html">MrbClass</a>? = <span class="n">nil</span>, under : <a href="MrbModule.html">MrbModule</a>? = <span class="n">nil</span>)
+        def self.<strong>get</strong>(crystal_module : Class)
 
-        <a class="method-permalink" href="#new(mrb:MrbState,name:String,superclass:MrbClass?=nil,under:MrbModule?=nil)-class-method">#</a>
+        <a class="method-permalink" href="#get(crystal_module:Class)-class-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/Anyolite/anyolite/blob/v0.2.0/src/MrbClass.cr#L5" target="_blank">View source</a>]
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.2.0/src/MrbModuleCache.cr#L9" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="register(crystal_module:Class,mrb_module:MrbModule)-class-method">
+      <div class="signature">
+        
+        def self.<strong>register</strong>(crystal_module : Class, mrb_module : <a href="MrbModule.html">MrbModule</a>)
+
+        <a class="method-permalink" href="#register(crystal_module:Class,mrb_module:MrbModule)-class-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.2.0/src/MrbModuleCache.cr#L5" target="_blank">View source</a>]
         
       </div>
     </div>
   
 
 
-
-
-
-  <h2>
-    <a id="instance-method-detail" class="anchor" href="#instance-method-detail">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>
-    Instance Method Detail
-  </h2>
-  
-    <div class="entry-detail" id="to_unsafe-instance-method">
-      <div class="signature">
-        
-        def <strong>to_unsafe</strong>
-
-        <a class="method-permalink" href="#to_unsafe-instance-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/Anyolite/anyolite/blob/v0.2.0/src/MrbClass.cr#L14" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
 
 
 
