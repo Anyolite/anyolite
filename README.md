@@ -92,7 +92,7 @@ MrbState.create do |mrb|
 
   MrbWrap.wrap_class(mrb, Entity, "Entity", under: test_module)
 
-  MrbWrap.wrap_constructor(mrb, Entity, [{Int32, 0}])
+  MrbWrap.wrap_constructor_with_keywords(mrb, Entity, {:hp => {Int32, 0}})
 
   MrbWrap.wrap_property(mrb, Entity, "hp", hp, Int32)
 
@@ -203,7 +203,7 @@ More features will be added in the future.
 * [X] Arguments can be specified consistently as arrays or standalone
 * [X] Documentation builds only for releases
 * [X] Uniform system for passing optional arguments
-* [ ] Updated examples and documentation for keyword support
+* [X] Updated examples and documentation for keyword support
 
 #### Bugfixes
 
@@ -216,6 +216,7 @@ More features will be added in the future.
 * [ ] Compiletime errors for macros
 * [ ] Support for more flexible mruby configuration options
 * [ ] Arrays as arguments and return values
+* [ ] MrbClass/MrbModule and Class can be both used as arguments
 
 ### Possible future updates
 
