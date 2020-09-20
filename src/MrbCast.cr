@@ -61,6 +61,10 @@ module MrbCast
 
     MrbRefTable.add(value.object_id, pointerof(value).as(Void*))
 
+    # TODO: Assign destructor
+
+    puts "> Added class #{value.class} (cast)"
+
     return new_ruby_object
   end
 

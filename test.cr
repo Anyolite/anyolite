@@ -118,6 +118,9 @@ end
 
 # TODO: Accept MrbClass and Class
 
+puts MrbRefTable.inspect
+MrbRefTable.reset
+
 MrbState.create do |mrb|
   test_module = MrbModule.new(mrb, "TestModule")
 
@@ -135,3 +138,5 @@ MrbState.create do |mrb|
 
   mrb.load_script_from_file("examples/hp_example.rb")
 end
+
+puts MrbRefTable.inspect
