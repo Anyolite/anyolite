@@ -11,3 +11,5 @@ scripts:
   postinstall: rake build_shard
 
 license: MIT
+
+crystal: '>= 0.34.0'
