@@ -62,6 +62,7 @@ module MrbCast
     MrbRefTable.add(value.object_id, pointerof(value).as(Void*))
 
     # TODO: Assign destructor
+    # TODO: Maybe the two problems can be solved with one fix
 
     puts "> Added class #{value.class} (cast)"
 
