@@ -14,9 +14,9 @@ extern void set_instance_tt_as_data(struct RClass* ruby_class) {
 
 }
 
-extern mrb_value new_empty_object(mrb_state* mrb, struct RClass* ruby_class) {
+extern mrb_value new_empty_object(mrb_state* mrb, struct RClass* ruby_class, void* data_ptr, const mrb_data_type* data_type) {
 
-    return mrb_obj_new(mrb, ruby_class, 0, NULL);
+    return mrb_obj_value(mrb_data_object_alloc(mrb, ruby_class, data_ptr, data_type));
 
 }
 

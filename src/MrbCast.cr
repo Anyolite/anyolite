@@ -55,14 +55,21 @@ module MrbCast
   def self.return_value(mrb : MrbInternal::MrbState*, value : Object)
     ruby_class = MrbClassCache.get(typeof(value))
 
+    destructor = MrbTypeCache.destructor_method(typeof(value))
+
+    ptr = Pointer(typeof(value)).malloc(size: 1, value: value)
+
+    puts "Returning ... #{ptr} -> #{value.to_s}"
+
     # TODO: Allow non-defaultable constructors
-    new_ruby_object = MrbInternal.new_empty_object(mrb, ruby_class)
+    new_ruby_object = MrbInternal.new_empty_object(mrb, ruby_class, ptr.as(Void*), MrbTypeCache.register(typeof(value), destructor))
     MrbMacro.convert_from_ruby_object(mrb, new_ruby_object, typeof(value)).value = value
 
-    MrbRefTable.add(value.object_id, pointerof(value).as(Void*))
+    MrbRefTable.add(value.object_id, ptr.as(Void*))
 
     # TODO: Assign destructor
     # TODO: Maybe the two problems can be solved with one fix
+    # TODO: They are linked, so fix this
 
     puts "> Added class #{value.class} (cast)"
 

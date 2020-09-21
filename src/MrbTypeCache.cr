@@ -3,8 +3,10 @@ module MrbTypeCache
   @@cache = {} of String => MrbInternal::MrbDataType*
 
   def self.register(crystal_class : Class, destructor : Proc(MrbInternal::MrbState*, Void*, Void))
-    new_type = MrbInternal::MrbDataType.new(struct_name: crystal_class.name, dfree: destructor)
-    @@cache[crystal_class.name] = Pointer(MrbInternal::MrbDataType).malloc(size: 1, value: new_type)
+    unless @@cache[crystal_class.name]?
+      new_type = MrbInternal::MrbDataType.new(struct_name: crystal_class.name, dfree: destructor)
+      @@cache[crystal_class.name] = Pointer(MrbInternal::MrbDataType).malloc(size: 1, value: new_type)
+    end
     return @@cache[crystal_class.name]
   end
 
@@ -17,8 +19,11 @@ module MrbTypeCache
         crystal_value.mrb_finalize(mrb)
       end
 
+      puts "> Destructor for #{crystal_ptr} with value #{crystal_ptr}."
+
       # Delete the Crystal reference to this object
       MrbRefTable.delete(crystal_ptr.value.object_id)
+
     }
   end
 end

@@ -136,7 +136,6 @@ More features will be added in the future.
 # Limitations
 
 * Currently, Anyolite does not work on Windows due to Crystal compiler bugs
-* Returning objects of a wrapped class does only work if every constructor argument is optional
 * Arrays, hashes and other complex mruby objects are not directly supported
 * Configuration options for mruby are relatively limited (yet)
 * Default values for unnamed function arguments are limited to integers and floats
@@ -228,12 +227,15 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 
 #### Usability
 * [ ] Operator suffixes as general optional argument for MrbWrap functions
-* [ ] Logging of any reference table operations for debugging
-* [ ] Reference counting in reference table
+* [X] Logging of any reference table operations for debugging
+* [X] Reference counting in reference table
+* [X] Reference table can be cleared
 
 #### Bugfixes
 * [ ] Fixed structs not being able to be wrapped
 * [X] Fixed example in documentation
+* [X] Fixed memory leak when returning nontrivial objects in mruby
+* [X] Removed constructor limitations for types being able to be used as return values 
 
 ### Future updates
 

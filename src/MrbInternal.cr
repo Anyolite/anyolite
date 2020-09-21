@@ -107,7 +107,7 @@ lib MrbInternal
   fun data_type(value : MrbValue) : MrbDataType*
   fun mrb_data_get_ptr(mrb : MrbState*, obj : MrbValue, type : MrbDataType*) : Void*
   fun set_instance_tt_as_data(ruby_class : RClass*) : Void
-  fun new_empty_object(mrb : MrbState*, ruby_class : RClass*) : MrbValue
+  fun new_empty_object(mrb : MrbState*, ruby_class : RClass*, data_ptr : Void*, type : MrbDataType*) : MrbValue
   fun set_data_ptr_and_type(ruby_object : MrbValue, data : Void*, type : MrbDataType*)
   fun get_data_ptr(ruby_object : MrbValue) : Void*
 

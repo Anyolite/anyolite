@@ -23,8 +23,8 @@ module MrbRefTable
   end
 
   def self.delete(identification)
-    puts "* Deleted ref #{identification}"
     if @@content[identification]?
+      puts "* Deleted ref #{identification} -> #{@@content[identification]}"
       @@content[identification] = {@@content[identification][0], @@content[identification][1] - 1}
       if @@content[identification][1] <= 0
         @@content.delete(identification)

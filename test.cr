@@ -44,11 +44,19 @@ class Test
   end
 
   def +(other)
-    Test.new(@x + other.x)
+    ret = Test.new(@x + other.x)
+    puts "+ returning: #{ret} with #{ret.object_id}"
+    ret
   end
 
   def add(other)
-    self + other
+    ret = self + other
+    puts "Add returning: #{ret} with #{ret.object_id}"
+    ret
+  end
+
+  def to_s
+    "Test obj with x = #{@x}"
   end
 
   def keyword_test(strvar : String, intvar : Int32, floatvar = 0.123, strvarkw : String = "nothing", boolvar : Bool = true, othervar : Test = Test.new(17))
@@ -120,6 +128,8 @@ end
 
 puts MrbRefTable.inspect
 MrbRefTable.reset
+
+puts "------------------------------"
 
 MrbState.create do |mrb|
   test_module = MrbModule.new(mrb, "TestModule")

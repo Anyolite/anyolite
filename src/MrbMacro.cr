@@ -365,7 +365,7 @@ module MrbMacro
       new_obj_ptr = Pointer({{crystal_class}}).malloc(size: 1, value: new_obj)
       MrbRefTable.add(new_obj_ptr.value.object_id, new_obj_ptr.as(Void*))
 
-      puts "> Added class #{{{crystal_class}}} (regular)"
+      puts "> Added class #{{{crystal_class}}} (regular): #{new_obj_ptr} -> #{new_obj_ptr.value.to_s}"
 
       destructor = MrbTypeCache.destructor_method({{crystal_class}})
       MrbInternal.set_data_ptr_and_type(obj, new_obj_ptr, MrbTypeCache.register({{crystal_class}}, destructor))
@@ -419,7 +419,7 @@ module MrbMacro
       new_obj_ptr = Pointer({{crystal_class}}).malloc(size: 1, value: new_obj)
       MrbRefTable.add(new_obj_ptr.value.object_id, new_obj_ptr.as(Void*))
 
-      puts "> Added class #{{{crystal_class}}} (keyword)"
+      puts "> Added class #{{{crystal_class}}} (keyword): #{new_obj_ptr} -> #{new_obj_ptr.value.to_s}"
 
       destructor = MrbTypeCache.destructor_method({{crystal_class}})
       MrbInternal.set_data_ptr_and_type(obj, new_obj_ptr, MrbTypeCache.register({{crystal_class}}, destructor))
