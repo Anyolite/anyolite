@@ -44,19 +44,11 @@ class Test
   end
 
   def +(other)
-    ret = Test.new(@x + other.x)
-    puts "+ returning: #{ret} with #{ret.object_id}"
-    ret
+    Test.new(@x + other.x)
   end
 
   def add(other)
     ret = self + other
-    puts "Add returning: #{ret} with #{ret.object_id}"
-    ret
-  end
-
-  def to_s
-    "Test obj with x = #{@x}"
   end
 
   def keyword_test(strvar : String, intvar : Int32, floatvar = 0.123, strvarkw : String = "nothing", boolvar : Bool = true, othervar : Test = Test.new(17))
@@ -68,25 +60,6 @@ class Test
     puts "Mruby destructor called for value #{@x}"
   end
 end
-
-struct XXX
-  property x = 3
-end
-
-a = XXX.new 
-
-puts pointerof(a)
-puts a.hash
-
-b = XXX.new 
-
-puts pointerof(b)
-puts b.hash
-
-b.x = 5
-
-puts pointerof(b)
-puts b.hash
 
 MrbState.create do |mrb|
   MrbWrap.wrap_module(mrb, SomeModule, "TestModule")
@@ -145,7 +118,7 @@ end
 
 # TODO: Accept MrbClass and Class
 
-puts MrbRefTable.inspect
+puts "Reference table: #{MrbRefTable.inspect}"
 MrbRefTable.reset
 
 puts "------------------------------"
@@ -168,4 +141,4 @@ MrbState.create do |mrb|
   mrb.load_script_from_file("examples/hp_example.rb")
 end
 
-puts MrbRefTable.inspect
+puts "Reference table: #{MrbRefTable.inspect}"

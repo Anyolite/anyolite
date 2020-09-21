@@ -59,8 +59,6 @@ module MrbCast
 
     ptr = Pointer(typeof(value)).malloc(size: 1, value: value)
 
-    puts "Returning ... #{ptr} -> #{value.to_s}"
-
     new_ruby_object = MrbInternal.new_empty_object(mrb, ruby_class, ptr.as(Void*), MrbTypeCache.register(typeof(value), destructor))
     MrbMacro.convert_from_ruby_object(mrb, new_ruby_object, typeof(value)).value = value
 
@@ -69,8 +67,6 @@ module MrbCast
     elsif typeof(value) <= Struct
       MrbRefTable.add(value.hash, ptr.as(Void*))
     end
-
-    puts "> Added class #{value.class} (cast)"
 
     return new_ruby_object
   end

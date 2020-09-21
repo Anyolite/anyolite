@@ -19,11 +19,8 @@ module MrbTypeCache
         crystal_value.mrb_finalize(mrb)
       end
 
-      puts "> Destructor for #{crystal_ptr} with value #{crystal_ptr}."
-
       # Delete the Crystal reference to this object
       MrbRefTable.delete(crystal_ptr.value.object_id)
-
     }
   end
 end

@@ -127,9 +127,6 @@ b.yell(sound: 'Ouch, you stole my HP!', loud: true)
 a.yell(sound: 'Well, take better care of your public attributes!')
 ```
 
-The syntax stays mostly the same as in Crystal, except for the keyword arguments.
-These might be added in the future, but technically you can always wrap the generated methods in pure Ruby methods with keywords.
-
 The example above gives a good overview over the things you can already do with Anyolite.
 More features will be added in the future.
 
@@ -155,6 +152,20 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 # Roadmap
 
 ## Releases
+
+### Version 0.2.1
+
+#### Usability
+* Operator suffixes as general optional argument for MrbWrap functions
+* Option to inspect reference table
+* Reference counting in reference table
+* Reference table can be cleared
+
+#### Bugfixes
+* Fixed structs not being able to be wrapped
+* Fixed example in documentation
+* Fixed memory leak when returning nontrivial objects in mruby
+* Removed constructor limitations for types being able to be used as return values 
 
 ### Version 0.2.0
 
@@ -223,19 +234,7 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 
 ## Upcoming releases
 
-### Version 0.2.1
-
-#### Usability
-* [ ] Operator suffixes as general optional argument for MrbWrap functions
-* [X] Logging of any reference table operations for debugging
-* [X] Reference counting in reference table
-* [X] Reference table can be cleared
-
-#### Bugfixes
-* [X] Fixed structs not being able to be wrapped
-* [X] Fixed example in documentation
-* [X] Fixed memory leak when returning nontrivial objects in mruby
-* [X] Removed constructor limitations for types being able to be used as return values 
+None planned yet
 
 ### Future updates
 
@@ -247,6 +246,8 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 * [ ] MrbClass/MrbModule and Class can be both used as arguments
 * [ ] More stable type casting
 * [ ] More stable struct reference table management
+* [ ] Logging options for reference table
+* [ ] Crystal specs for testing
 
 ### Possible future updates
 

@@ -12,7 +12,6 @@ module MrbRefTable
   end
 
   def self.add(identification, value)
-    puts "* Added ref #{identification} -> #{value}"
     if @@content[identification]?
       if value != @@content[identification][0]
         puts "WARNING: Value #{identification} replaced pointers."
@@ -24,7 +23,6 @@ module MrbRefTable
 
   def self.delete(identification)
     if @@content[identification]?
-      puts "* Deleted ref #{identification} -> #{@@content[identification]}"
       @@content[identification] = {@@content[identification][0], @@content[identification][1] - 1}
       if @@content[identification][1] <= 0
         @@content.delete(identification)
