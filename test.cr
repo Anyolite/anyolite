@@ -69,6 +69,25 @@ class Test
   end
 end
 
+struct XXX
+  property x = 3
+end
+
+a = XXX.new 
+
+puts pointerof(a)
+puts a.hash
+
+b = XXX.new 
+
+puts pointerof(b)
+puts b.hash
+
+b.x = 5
+
+puts pointerof(b)
+puts b.hash
+
 MrbState.create do |mrb|
   MrbWrap.wrap_module(mrb, SomeModule, "TestModule")
   MrbWrap.wrap_module_function_with_keywords(mrb, MrbModuleCache.get(SomeModule), "test_method", SomeModule.test_method, {:int => Int32, :str => String})

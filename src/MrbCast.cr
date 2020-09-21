@@ -61,15 +61,14 @@ module MrbCast
 
     puts "Returning ... #{ptr} -> #{value.to_s}"
 
-    # TODO: Allow non-defaultable constructors
     new_ruby_object = MrbInternal.new_empty_object(mrb, ruby_class, ptr.as(Void*), MrbTypeCache.register(typeof(value), destructor))
     MrbMacro.convert_from_ruby_object(mrb, new_ruby_object, typeof(value)).value = value
 
-    MrbRefTable.add(value.object_id, ptr.as(Void*))
-
-    # TODO: Assign destructor
-    # TODO: Maybe the two problems can be solved with one fix
-    # TODO: They are linked, so fix this
+    if typeof(value) <= Reference
+      MrbRefTable.add(value.object_id, ptr.as(Void*))
+    elsif typeof(value) <= Struct
+      MrbRefTable.add(value.hash, ptr.as(Void*))
+    end
 
     puts "> Added class #{value.class} (cast)"
 

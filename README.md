@@ -232,7 +232,7 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 * [X] Reference table can be cleared
 
 #### Bugfixes
-* [ ] Fixed structs not being able to be wrapped
+* [X] Fixed structs not being able to be wrapped
 * [X] Fixed example in documentation
 * [X] Fixed memory leak when returning nontrivial objects in mruby
 * [X] Removed constructor limitations for types being able to be used as return values 
@@ -246,6 +246,7 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 * [ ] Arrays as arguments and return values
 * [ ] MrbClass/MrbModule and Class can be both used as arguments
 * [ ] More stable type casting
+* [ ] More stable struct reference table management
 
 ### Possible future updates
 
