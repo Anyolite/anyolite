@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="generator" content="Crystal Docs 0.35.1">
-<meta name="crystal_docs.project_version" content="0.2.0">
+<meta name="crystal_docs.project_version" content="0.2.1">
 <meta name="crystal_docs.project_name" content="anyolite">
 
 
@@ -18,7 +18,7 @@
 </svg>
 
   <meta id="repository-name" content="anyolite">
-  <title>anyolite 0.2.0</title>
+  <title>anyolite 0.2.1</title>
   <script type="text/javascript">
   CrystalDocs.base_path = "";
   </script>
@@ -39,7 +39,7 @@
       </h1>
 
       <span class="project-version">
-        0.2.0
+        0.2.1
       </span>
     </div>
   </div>
@@ -253,19 +253,16 @@ which allows for changing multiple options when installing the shard. Possible o
 
 <p>The last line in the block calls the following example script:</p>
 
-<pre><code class="language-ruby">a = TestModule::Entity.new(20)
+<pre><code class="language-ruby">a = TestModule::Entity.new(hp: 20)
 a.damage(diff: 13)
 puts a.hp
 
-b = TestModule::Entity.new(10)
+b = TestModule::Entity.new(hp: 10)
 a.absorb_hp_from(other: b)
 puts a.hp
 puts b.hp
 b.yell(sound: 'Ouch, you stole my HP!', loud: true)
 a.yell(sound: 'Well, take better care of your public attributes!')</code></pre>
-
-<p>The syntax stays mostly the same as in Crystal, except for the keyword arguments.
-These might be added in the future, but technically you can always wrap the generated methods in pure Ruby methods with keywords.</p>
 
 <p>The example above gives a good overview over the things you can already do with Anyolite.
 More features will be added in the future.</p>
@@ -276,7 +273,7 @@ More features will be added in the future.</p>
   </svg>
 </a>Limitations</h1>
 
-<ul><li>Currently, Anyolite does not work on Windows due to Crystal compiler bugs</li><li>Returning objects of a wrapped class does only work if every constructor argument is optional</li><li>Arrays, hashes and other complex mruby objects are not directly supported</li><li>Configuration options for mruby are relatively limited (yet)</li><li>Default values for unnamed function arguments are limited to integers and floats</li><li>Optional keyword arguments need a default value (can be a different one than the Crystal value, though)</li><li>Keywords will always be given to functions, even if optional (then with default values)</li><li>Splat arguments and arbitrary keywords are not possible due to compiletime symbols in Crystal</li><li>Only one type per argument is allowed</li></ul>
+<ul><li>Currently, Anyolite does not work on Windows due to Crystal compiler bugs</li><li>Arrays, hashes and other complex mruby objects are not directly supported</li><li>Configuration options for mruby are relatively limited (yet)</li><li>Default values for unnamed function arguments are limited to integers and floats</li><li>Optional keyword arguments need a default value (can be a different one than the Crystal value, though)</li><li>Keywords will always be given to functions, even if optional (then with default values)</li><li>Splat arguments and arbitrary keywords are not possible due to compiletime symbols in Crystal</li><li>Only one type per argument is allowed</li></ul>
 
 <h1><a id="why-this-name" class="anchor" href="#why-this-name">
   <svg class="octicon-link" aria-hidden="true">
@@ -301,6 +298,28 @@ More features will be added in the future.</p>
     <use href="#octicon-link"/>
   </svg>
 </a>Releases</h2>
+
+<h3><a id="version-0.2.1" class="anchor" href="#version-0.2.1">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Version 0.2.1</h3>
+
+<h4><a id="usability" class="anchor" href="#usability">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Usability</h4>
+
+<ul><li>Operator suffixes as general optional argument for MrbWrap functions</li><li>Option to inspect reference table</li><li>Reference counting in reference table</li><li>Reference table can be cleared</li></ul>
+
+<h4><a id="bugfixes" class="anchor" href="#bugfixes">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Bugfixes</h4>
+
+<ul><li>Fixed structs not being able to be wrapped</li><li>Fixed example in documentation</li><li>Fixed memory leak when returning nontrivial objects in mruby</li><li>Removed constructor limitations for types being able to be used as return values </li></ul>
 
 <h3><a id="version-0.2.0" class="anchor" href="#version-0.2.0">
   <svg class="octicon-link" aria-hidden="true">
@@ -398,7 +417,7 @@ More features will be added in the future.</p>
   </svg>
 </a>Upcoming releases</h2>
 
-<p>Currently none planned</p>
+<p>None planned yet</p>
 
 <h3><a id="future-updates" class="anchor" href="#future-updates">
   <svg class="octicon-link" aria-hidden="true">
@@ -406,7 +425,7 @@ More features will be added in the future.</p>
   </svg>
 </a>Future updates</h3>
 
-<ul><li>[ ] Windows support (currently not supported due to problems with Crystal)</li><li>[ ] Mac support (might be possible, not tested yet)</li><li>[ ] Compiletime errors for macros</li><li>[ ] Support for more flexible mruby configuration options</li><li>[ ] Arrays as arguments and return values</li><li>[ ] MrbClass/MrbModule and Class can be both used as arguments</li><li>[ ] More stable type casting</li></ul>
+<ul><li>[ ] Windows support (currently not supported due to problems with Crystal)</li><li>[ ] Mac support (might be possible, not tested yet)</li><li>[ ] Compiletime errors for macros</li><li>[ ] Support for more flexible mruby configuration options</li><li>[ ] Arrays as arguments and return values</li><li>[ ] MrbClass/MrbModule and Class can be both used as arguments</li><li>[ ] More stable type casting</li><li>[ ] More stable struct reference table management</li><li>[ ] Logging options for reference table</li><li>[ ] Crystal specs for testing</li></ul>
 
 <h3><a id="possible-future-updates" class="anchor" href="#possible-future-updates">
   <svg class="octicon-link" aria-hidden="true">

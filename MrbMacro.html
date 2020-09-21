@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="generator" content="Crystal Docs 0.35.1">
-<meta name="crystal_docs.project_version" content="0.2.0">
+<meta name="crystal_docs.project_version" content="0.2.1">
 <meta name="crystal_docs.project_name" content="anyolite">
 
 
@@ -18,7 +18,7 @@
 </svg>
 
   <meta id="repository-name" content="anyolite">
-  <title>MrbMacro - anyolite 0.2.0</title>
+  <title>MrbMacro - anyolite 0.2.1</title>
   <script type="text/javascript">
     CrystalDocs.base_path = "";
   </script>
@@ -39,7 +39,7 @@
       </h1>
 
       <span class="project-version">
-        0.2.0
+        0.2.1
       </span>
     </div>
   </div>
@@ -172,7 +172,7 @@
   </h2>
   
     
-      <a href="https://github.com/Anyolite/anyolite/blob/v0.2.0/src/MrbMacro.cr#L2" target="_blank">
+      <a href="https://github.com/Anyolite/anyolite/blob/v0.2.1/src/MrbMacro.cr#L2" target="_blank">
         MrbMacro.cr
       </a>
     
@@ -200,7 +200,7 @@
   <ul class="list-summary">
     
       <li class="entry-summary">
-        <a href="#call_and_return(mrb,proc,proc_args,converted_args)-macro" class="signature"><strong>call_and_return</strong>(mrb, proc, proc_args, converted_args)</a>
+        <a href="#call_and_return(mrb,proc,proc_args,converted_args,operator=&quot;&quot;)-macro" class="signature"><strong>call_and_return</strong>(mrb, proc, proc_args, converted_args, operator = <span class="s">&quot;&quot;</span>)</a>
         
       </li>
     
@@ -215,7 +215,7 @@
       </li>
     
       <li class="entry-summary">
-        <a href="#call_and_return_keyword_method(mrb,proc,converted_regular_args,keyword_args,kw_args,empty_regular=false)-macro" class="signature"><strong>call_and_return_keyword_method</strong>(mrb, proc, converted_regular_args, keyword_args, kw_args, empty_regular = <span class="n">false</span>)</a>
+        <a href="#call_and_return_keyword_method(mrb,proc,converted_regular_args,keyword_args,kw_args,operator=&quot;&quot;,empty_regular=false)-macro" class="signature"><strong>call_and_return_keyword_method</strong>(mrb, proc, converted_regular_args, keyword_args, kw_args, operator = <span class="s">&quot;&quot;</span>, empty_regular = <span class="n">false</span>)</a>
         
       </li>
     
@@ -287,22 +287,22 @@
       </li>
     
       <li class="entry-summary">
-        <a href="#wrap_class_method_with_args(mrb_state,crystal_class,name,proc,proc_args=[]ofClass)-macro" class="signature"><strong>wrap_class_method_with_args</strong>(mrb_state, crystal_class, name, proc, proc_args = <span class="o">[]</span> <span class="k">of</span> <span class="t">Class</span>)</a>
+        <a href="#wrap_class_method_with_args(mrb_state,crystal_class,name,proc,proc_args=[]ofClass,operator=&quot;&quot;)-macro" class="signature"><strong>wrap_class_method_with_args</strong>(mrb_state, crystal_class, name, proc, proc_args = <span class="o">[]</span> <span class="k">of</span> <span class="t">Class</span>, operator = <span class="s">&quot;&quot;</span>)</a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#wrap_class_method_with_keyword_args(mrb_state,crystal_class,name,proc,keyword_args,regular_args=[]ofClass)-macro" class="signature"><strong>wrap_class_method_with_keyword_args</strong>(mrb_state, crystal_class, name, proc, keyword_args, regular_args = <span class="o">[]</span> <span class="k">of</span> <span class="t">Class</span>)</a>
+        <a href="#wrap_class_method_with_keyword_args(mrb_state,crystal_class,name,proc,keyword_args,regular_args=[]ofClass,operator=&quot;&quot;)-macro" class="signature"><strong>wrap_class_method_with_keyword_args</strong>(mrb_state, crystal_class, name, proc, keyword_args, regular_args = <span class="o">[]</span> <span class="k">of</span> <span class="t">Class</span>, operator = <span class="s">&quot;&quot;</span>)</a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#wrap_constructor_function_with_args(mrb_state,crystal_class,proc,proc_args=[]ofClass)-macro" class="signature"><strong>wrap_constructor_function_with_args</strong>(mrb_state, crystal_class, proc, proc_args = <span class="o">[]</span> <span class="k">of</span> <span class="t">Class</span>)</a>
+        <a href="#wrap_constructor_function_with_args(mrb_state,crystal_class,proc,proc_args=[]ofClass,operator=&quot;&quot;)-macro" class="signature"><strong>wrap_constructor_function_with_args</strong>(mrb_state, crystal_class, proc, proc_args = <span class="o">[]</span> <span class="k">of</span> <span class="t">Class</span>, operator = <span class="s">&quot;&quot;</span>)</a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#wrap_constructor_function_with_keyword_args(mrb_state,crystal_class,proc,keyword_args,regular_args=[]ofClass)-macro" class="signature"><strong>wrap_constructor_function_with_keyword_args</strong>(mrb_state, crystal_class, proc, keyword_args, regular_args = <span class="o">[]</span> <span class="k">of</span> <span class="t">Class</span>)</a>
+        <a href="#wrap_constructor_function_with_keyword_args(mrb_state,crystal_class,proc,keyword_args,regular_args=[]ofClass,operator=&quot;&quot;)-macro" class="signature"><strong>wrap_constructor_function_with_keyword_args</strong>(mrb_state, crystal_class, proc, keyword_args, regular_args = <span class="o">[]</span> <span class="k">of</span> <span class="t">Class</span>, operator = <span class="s">&quot;&quot;</span>)</a>
         
       </li>
     
@@ -322,7 +322,7 @@
       </li>
     
       <li class="entry-summary">
-        <a href="#wrap_module_function_with_keyword_args(mrb_state,under_module,name,proc,keyword_args,regular_args=[]ofClass)-macro" class="signature"><strong>wrap_module_function_with_keyword_args</strong>(mrb_state, under_module, name, proc, keyword_args, regular_args = <span class="o">[]</span> <span class="k">of</span> <span class="t">Class</span>)</a>
+        <a href="#wrap_module_function_with_keyword_args(mrb_state,under_module,name,proc,keyword_args,regular_args=[]ofClass,operator=&quot;&quot;)-macro" class="signature"><strong>wrap_module_function_with_keyword_args</strong>(mrb_state, under_module, name, proc, keyword_args, regular_args = <span class="o">[]</span> <span class="k">of</span> <span class="t">Class</span>, operator = <span class="s">&quot;&quot;</span>)</a>
         
       </li>
     
@@ -350,18 +350,18 @@
     Macro Detail
   </h2>
   
-    <div class="entry-detail" id="call_and_return(mrb,proc,proc_args,converted_args)-macro">
+    <div class="entry-detail" id="call_and_return(mrb,proc,proc_args,converted_args,operator=&amp;quot;&amp;quot;)-macro">
       <div class="signature">
         
-        macro <strong>call_and_return</strong>(mrb, proc, proc_args, converted_args)
+        macro <strong>call_and_return</strong>(mrb, proc, proc_args, converted_args, operator = <span class="s">&quot;&quot;</span>)
 
-        <a class="method-permalink" href="#call_and_return(mrb,proc,proc_args,converted_args)-macro">#</a>
+        <a class="method-permalink" href="#call_and_return(mrb,proc,proc_args,converted_args,operator=&quot;&quot;)-macro">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/Anyolite/anyolite/blob/v0.2.0/src/MrbMacro.cr#L129" target="_blank">View source</a>]
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.2.1/src/MrbMacro.cr#L129" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -377,7 +377,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/Anyolite/anyolite/blob/v0.2.0/src/MrbMacro.cr#L156" target="_blank">View source</a>]
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.2.1/src/MrbMacro.cr#L156" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -393,23 +393,23 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/Anyolite/anyolite/blob/v0.2.0/src/MrbMacro.cr#L161" target="_blank">View source</a>]
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.2.1/src/MrbMacro.cr#L161" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="call_and_return_keyword_method(mrb,proc,converted_regular_args,keyword_args,kw_args,empty_regular=false)-macro">
+    <div class="entry-detail" id="call_and_return_keyword_method(mrb,proc,converted_regular_args,keyword_args,kw_args,operator=&amp;quot;&amp;quot;,empty_regular=false)-macro">
       <div class="signature">
         
-        macro <strong>call_and_return_keyword_method</strong>(mrb, proc, converted_regular_args, keyword_args, kw_args, empty_regular = <span class="n">false</span>)
+        macro <strong>call_and_return_keyword_method</strong>(mrb, proc, converted_regular_args, keyword_args, kw_args, operator = <span class="s">&quot;&quot;</span>, empty_regular = <span class="n">false</span>)
 
-        <a class="method-permalink" href="#call_and_return_keyword_method(mrb,proc,converted_regular_args,keyword_args,kw_args,empty_regular=false)-macro">#</a>
+        <a class="method-permalink" href="#call_and_return_keyword_method(mrb,proc,converted_regular_args,keyword_args,kw_args,operator=&quot;&quot;,empty_regular=false)-macro">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/Anyolite/anyolite/blob/v0.2.0/src/MrbMacro.cr#L134" target="_blank">View source</a>]
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.2.1/src/MrbMacro.cr#L134" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -430,7 +430,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/Anyolite/anyolite/blob/v0.2.0/src/MrbMacro.cr#L83" target="_blank">View source</a>]
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.2.1/src/MrbMacro.cr#L83" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -446,7 +446,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/Anyolite/anyolite/blob/v0.2.0/src/MrbMacro.cr#L183" target="_blank">View source</a>]
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.2.1/src/MrbMacro.cr#L183" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -462,7 +462,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/Anyolite/anyolite/blob/v0.2.0/src/MrbMacro.cr#L119" target="_blank">View source</a>]
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.2.1/src/MrbMacro.cr#L119" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -478,7 +478,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/Anyolite/anyolite/blob/v0.2.0/src/MrbMacro.cr#L99" target="_blank">View source</a>]
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.2.1/src/MrbMacro.cr#L99" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -494,7 +494,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/Anyolite/anyolite/blob/v0.2.0/src/MrbMacro.cr#L11" target="_blank">View source</a>]
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.2.1/src/MrbMacro.cr#L11" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -510,7 +510,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/Anyolite/anyolite/blob/v0.2.0/src/MrbMacro.cr#L3" target="_blank">View source</a>]
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.2.1/src/MrbMacro.cr#L3" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -526,7 +526,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/Anyolite/anyolite/blob/v0.2.0/src/MrbMacro.cr#L63" target="_blank">View source</a>]
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.2.1/src/MrbMacro.cr#L63" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -542,7 +542,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/Anyolite/anyolite/blob/v0.2.0/src/MrbMacro.cr#L202" target="_blank">View source</a>]
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.2.1/src/MrbMacro.cr#L202" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -558,7 +558,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/Anyolite/anyolite/blob/v0.2.0/src/MrbMacro.cr#L213" target="_blank">View source</a>]
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.2.1/src/MrbMacro.cr#L213" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -574,7 +574,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/Anyolite/anyolite/blob/v0.2.0/src/MrbMacro.cr#L193" target="_blank">View source</a>]
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.2.1/src/MrbMacro.cr#L193" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -590,7 +590,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/Anyolite/anyolite/blob/v0.2.0/src/MrbMacro.cr#L75" target="_blank">View source</a>]
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.2.1/src/MrbMacro.cr#L75" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -606,7 +606,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/Anyolite/anyolite/blob/v0.2.0/src/MrbMacro.cr#L47" target="_blank">View source</a>]
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.2.1/src/MrbMacro.cr#L47" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -622,71 +622,71 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/Anyolite/anyolite/blob/v0.2.0/src/MrbMacro.cr#L31" target="_blank">View source</a>]
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.2.1/src/MrbMacro.cr#L31" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="wrap_class_method_with_args(mrb_state,crystal_class,name,proc,proc_args=[]ofClass)-macro">
+    <div class="entry-detail" id="wrap_class_method_with_args(mrb_state,crystal_class,name,proc,proc_args=[]ofClass,operator=&amp;quot;&amp;quot;)-macro">
       <div class="signature">
         
-        macro <strong>wrap_class_method_with_args</strong>(mrb_state, crystal_class, name, proc, proc_args = <span class="o">[]</span> <span class="k">of</span> <span class="t">Class</span>)
+        macro <strong>wrap_class_method_with_args</strong>(mrb_state, crystal_class, name, proc, proc_args = <span class="o">[]</span> <span class="k">of</span> <span class="t">Class</span>, operator = <span class="s">&quot;&quot;</span>)
 
-        <a class="method-permalink" href="#wrap_class_method_with_args(mrb_state,crystal_class,name,proc,proc_args=[]ofClass)-macro">#</a>
+        <a class="method-permalink" href="#wrap_class_method_with_args(mrb_state,crystal_class,name,proc,proc_args=[]ofClass,operator=&quot;&quot;)-macro">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/Anyolite/anyolite/blob/v0.2.0/src/MrbMacro.cr#L264" target="_blank">View source</a>]
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.2.1/src/MrbMacro.cr#L264" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="wrap_class_method_with_keyword_args(mrb_state,crystal_class,name,proc,keyword_args,regular_args=[]ofClass)-macro">
+    <div class="entry-detail" id="wrap_class_method_with_keyword_args(mrb_state,crystal_class,name,proc,keyword_args,regular_args=[]ofClass,operator=&amp;quot;&amp;quot;)-macro">
       <div class="signature">
         
-        macro <strong>wrap_class_method_with_keyword_args</strong>(mrb_state, crystal_class, name, proc, keyword_args, regular_args = <span class="o">[]</span> <span class="k">of</span> <span class="t">Class</span>)
+        macro <strong>wrap_class_method_with_keyword_args</strong>(mrb_state, crystal_class, name, proc, keyword_args, regular_args = <span class="o">[]</span> <span class="k">of</span> <span class="t">Class</span>, operator = <span class="s">&quot;&quot;</span>)
 
-        <a class="method-permalink" href="#wrap_class_method_with_keyword_args(mrb_state,crystal_class,name,proc,keyword_args,regular_args=[]ofClass)-macro">#</a>
+        <a class="method-permalink" href="#wrap_class_method_with_keyword_args(mrb_state,crystal_class,name,proc,keyword_args,regular_args=[]ofClass,operator=&quot;&quot;)-macro">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/Anyolite/anyolite/blob/v0.2.0/src/MrbMacro.cr#L279" target="_blank">View source</a>]
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.2.1/src/MrbMacro.cr#L279" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="wrap_constructor_function_with_args(mrb_state,crystal_class,proc,proc_args=[]ofClass)-macro">
+    <div class="entry-detail" id="wrap_constructor_function_with_args(mrb_state,crystal_class,proc,proc_args=[]ofClass,operator=&amp;quot;&amp;quot;)-macro">
       <div class="signature">
         
-        macro <strong>wrap_constructor_function_with_args</strong>(mrb_state, crystal_class, proc, proc_args = <span class="o">[]</span> <span class="k">of</span> <span class="t">Class</span>)
+        macro <strong>wrap_constructor_function_with_args</strong>(mrb_state, crystal_class, proc, proc_args = <span class="o">[]</span> <span class="k">of</span> <span class="t">Class</span>, operator = <span class="s">&quot;&quot;</span>)
 
-        <a class="method-permalink" href="#wrap_constructor_function_with_args(mrb_state,crystal_class,proc,proc_args=[]ofClass)-macro">#</a>
+        <a class="method-permalink" href="#wrap_constructor_function_with_args(mrb_state,crystal_class,proc,proc_args=[]ofClass,operator=&quot;&quot;)-macro">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/Anyolite/anyolite/blob/v0.2.0/src/MrbMacro.cr#L348" target="_blank">View source</a>]
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.2.1/src/MrbMacro.cr#L348" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="wrap_constructor_function_with_keyword_args(mrb_state,crystal_class,proc,keyword_args,regular_args=[]ofClass)-macro">
+    <div class="entry-detail" id="wrap_constructor_function_with_keyword_args(mrb_state,crystal_class,proc,keyword_args,regular_args=[]ofClass,operator=&amp;quot;&amp;quot;)-macro">
       <div class="signature">
         
-        macro <strong>wrap_constructor_function_with_keyword_args</strong>(mrb_state, crystal_class, proc, keyword_args, regular_args = <span class="o">[]</span> <span class="k">of</span> <span class="t">Class</span>)
+        macro <strong>wrap_constructor_function_with_keyword_args</strong>(mrb_state, crystal_class, proc, keyword_args, regular_args = <span class="o">[]</span> <span class="k">of</span> <span class="t">Class</span>, operator = <span class="s">&quot;&quot;</span>)
 
-        <a class="method-permalink" href="#wrap_constructor_function_with_keyword_args(mrb_state,crystal_class,proc,keyword_args,regular_args=[]ofClass)-macro">#</a>
+        <a class="method-permalink" href="#wrap_constructor_function_with_keyword_args(mrb_state,crystal_class,proc,keyword_args,regular_args=[]ofClass,operator=&quot;&quot;)-macro">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/Anyolite/anyolite/blob/v0.2.0/src/MrbMacro.cr#L378" target="_blank">View source</a>]
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.2.1/src/MrbMacro.cr#L382" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -702,7 +702,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/Anyolite/anyolite/blob/v0.2.0/src/MrbMacro.cr#L305" target="_blank">View source</a>]
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.2.1/src/MrbMacro.cr#L305" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -718,7 +718,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/Anyolite/anyolite/blob/v0.2.0/src/MrbMacro.cr#L321" target="_blank">View source</a>]
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.2.1/src/MrbMacro.cr#L321" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -734,23 +734,23 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/Anyolite/anyolite/blob/v0.2.0/src/MrbMacro.cr#L221" target="_blank">View source</a>]
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.2.1/src/MrbMacro.cr#L221" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="wrap_module_function_with_keyword_args(mrb_state,under_module,name,proc,keyword_args,regular_args=[]ofClass)-macro">
+    <div class="entry-detail" id="wrap_module_function_with_keyword_args(mrb_state,under_module,name,proc,keyword_args,regular_args=[]ofClass,operator=&amp;quot;&amp;quot;)-macro">
       <div class="signature">
         
-        macro <strong>wrap_module_function_with_keyword_args</strong>(mrb_state, under_module, name, proc, keyword_args, regular_args = <span class="o">[]</span> <span class="k">of</span> <span class="t">Class</span>)
+        macro <strong>wrap_module_function_with_keyword_args</strong>(mrb_state, under_module, name, proc, keyword_args, regular_args = <span class="o">[]</span> <span class="k">of</span> <span class="t">Class</span>, operator = <span class="s">&quot;&quot;</span>)
 
-        <a class="method-permalink" href="#wrap_module_function_with_keyword_args(mrb_state,under_module,name,proc,keyword_args,regular_args=[]ofClass)-macro">#</a>
+        <a class="method-permalink" href="#wrap_module_function_with_keyword_args(mrb_state,under_module,name,proc,keyword_args,regular_args=[]ofClass,operator=&quot;&quot;)-macro">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/Anyolite/anyolite/blob/v0.2.0/src/MrbMacro.cr#L238" target="_blank">View source</a>]
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.2.1/src/MrbMacro.cr#L238" target="_blank">View source</a>]
         
       </div>
     </div>
