@@ -154,6 +154,8 @@ Furthermore, this is only possible as a module due to C closure limitations.</p>
 
 <p><span class="flag orange">TODO</span>  Add compilation option for ignoring entry checks</p>
 
+<p><span class="flag orange">TODO</span>  Replace class variables with one options hash</p>
+
 
 
 
@@ -177,7 +179,7 @@ Furthermore, this is only possible as a module due to C closure limitations.</p>
   </h2>
   
     
-      <a href="https://github.com/Anyolite/anyolite/blob/v0.2.3/src/MrbRefTable.cr#L7" target="_blank">
+      <a href="https://github.com/Anyolite/anyolite/blob/v0.2.3/src/MrbRefTable.cr#L8" target="_blank">
         MrbRefTable.cr
       </a>
     
@@ -241,7 +243,22 @@ Furthermore, this is only possible as a module due to C closure limitations.</p>
       </li>
     
       <li class="entry-summary">
+        <a href="#option_active?(symbol)-class-method" class="signature"><strong>.option_active?</strong>(symbol)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
         <a href="#reset-class-method" class="signature"><strong>.reset</strong></a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#set_option(symbol)-class-method" class="signature"><strong>.set_option</strong>(symbol)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#unset_option(symbol)-class-method" class="signature"><strong>.unset_option</strong>(symbol)</a>
         
       </li>
     
@@ -290,7 +307,7 @@ Furthermore, this is only possible as a module due to C closure limitations.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/Anyolite/anyolite/blob/v0.2.3/src/MrbRefTable.cr#L16" target="_blank">View source</a>]
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.2.3/src/MrbRefTable.cr#L18" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -306,7 +323,7 @@ Furthermore, this is only possible as a module due to C closure limitations.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/Anyolite/anyolite/blob/v0.2.3/src/MrbRefTable.cr#L27" target="_blank">View source</a>]
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.2.3/src/MrbRefTable.cr#L32" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -322,7 +339,7 @@ Furthermore, this is only possible as a module due to C closure limitations.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/Anyolite/anyolite/blob/v0.2.3/src/MrbRefTable.cr#L12" target="_blank">View source</a>]
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.2.3/src/MrbRefTable.cr#L14" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -338,7 +355,7 @@ Furthermore, this is only possible as a module due to C closure limitations.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/Anyolite/anyolite/blob/v0.2.3/src/MrbRefTable.cr#L68" target="_blank">View source</a>]
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.2.3/src/MrbRefTable.cr#L73" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -354,7 +371,7 @@ Furthermore, this is only possible as a module due to C closure limitations.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/Anyolite/anyolite/blob/v0.2.3/src/MrbRefTable.cr#L44" target="_blank">View source</a>]
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.2.3/src/MrbRefTable.cr#L49" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -370,7 +387,7 @@ Furthermore, this is only possible as a module due to C closure limitations.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/Anyolite/anyolite/blob/v0.2.3/src/MrbRefTable.cr#L40" target="_blank">View source</a>]
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.2.3/src/MrbRefTable.cr#L45" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -386,7 +403,7 @@ Furthermore, this is only possible as a module due to C closure limitations.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/Anyolite/anyolite/blob/v0.2.3/src/MrbRefTable.cr#L48" target="_blank">View source</a>]
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.2.3/src/MrbRefTable.cr#L53" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -402,7 +419,23 @@ Furthermore, this is only possible as a module due to C closure limitations.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/Anyolite/anyolite/blob/v0.2.3/src/MrbRefTable.cr#L56" target="_blank">View source</a>]
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.2.3/src/MrbRefTable.cr#L61" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="option_active?(symbol)-class-method">
+      <div class="signature">
+        
+        def self.<strong>option_active?</strong>(symbol)
+
+        <a class="method-permalink" href="#option_active?(symbol)-class-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.2.3/src/MrbRefTable.cr#L83" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -418,7 +451,39 @@ Furthermore, this is only possible as a module due to C closure limitations.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/Anyolite/anyolite/blob/v0.2.3/src/MrbRefTable.cr#L64" target="_blank">View source</a>]
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.2.3/src/MrbRefTable.cr#L69" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="set_option(symbol)-class-method">
+      <div class="signature">
+        
+        def self.<strong>set_option</strong>(symbol)
+
+        <a class="method-permalink" href="#set_option(symbol)-class-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.2.3/src/MrbRefTable.cr#L91" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="unset_option(symbol)-class-method">
+      <div class="signature">
+        
+        def self.<strong>unset_option</strong>(symbol)
+
+        <a class="method-permalink" href="#unset_option(symbol)-class-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.2.3/src/MrbRefTable.cr#L95" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -434,7 +499,7 @@ Furthermore, this is only possible as a module due to C closure limitations.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/Anyolite/anyolite/blob/v0.2.3/src/MrbRefTable.cr#L52" target="_blank">View source</a>]
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.2.3/src/MrbRefTable.cr#L57" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -450,7 +515,7 @@ Furthermore, this is only possible as a module due to C closure limitations.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/Anyolite/anyolite/blob/v0.2.3/src/MrbRefTable.cr#L60" target="_blank">View source</a>]
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.2.3/src/MrbRefTable.cr#L65" target="_blank">View source</a>]
         
       </div>
     </div>
