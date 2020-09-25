@@ -62,11 +62,9 @@ module MrbCast
     new_ruby_object = MrbInternal.new_empty_object(mrb, ruby_class, ptr.as(Void*), MrbTypeCache.register(typeof(value), destructor))
     MrbMacro.convert_from_ruby_object(mrb, new_ruby_object, typeof(value)).value = value
 
-    if typeof(value) <= Reference
-      MrbRefTable.add(value.object_id, ptr.as(Void*))
-    elsif typeof(value) <= Struct
-      MrbRefTable.add(value.hash, ptr.as(Void*))
-    end
+    MrbRefTable.add(MrbRefTable.get_object_id(value), ptr.as(Void*))
+
+    puts "> #{value.class}: #{value}" if MrbRefTable.logging
 
     return new_ruby_object
   end

@@ -6,6 +6,17 @@ module SomeModule
   end
 end
 
+struct TestStruct
+
+  property value : Int32 = -1
+  property test : Test = Test.new(-2)
+
+  def mruby_ref_id
+    return 12
+  end
+
+end
+
 class Test
   property x : Int32 = 0
 
@@ -61,6 +72,8 @@ class Test
   end
 end
 
+MrbRefTable.logging = true
+
 MrbState.create do |mrb|
   MrbWrap.wrap_module(mrb, SomeModule, "TestModule")
   MrbWrap.wrap_module_function_with_keywords(mrb, MrbModuleCache.get(SomeModule), "test_method", SomeModule.test_method, {:int => Int32, :str => String})
@@ -68,6 +81,10 @@ MrbState.create do |mrb|
 
   MrbWrap.wrap_class(mrb, Bla, "Bla", under: MrbModuleCache.get(SomeModule))
   MrbWrap.wrap_constructor(mrb, Bla)
+
+  MrbWrap.wrap_class(mrb, TestStruct, "TestStruct", under: MrbModuleCache.get(SomeModule))
+  MrbWrap.wrap_constructor(mrb, TestStruct)
+  MrbWrap.wrap_property(mrb, TestStruct, "value", value, [Int32])
 
   MrbWrap.wrap_class(mrb, Test, "Test", under: MrbModuleCache.get(SomeModule))
   MrbWrap.wrap_class_method(mrb, Test, "counter", Test.counter)

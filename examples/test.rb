@@ -13,6 +13,9 @@ puts "Adding..."
 a.x = 123
 puts "Value getter returns #{a.x}"
 
+ts = TestModule::TestStruct.new
+puts "Struct value: #{ts.value}"
+
 puts "Values of Test: #{TestModule::Test.counter}"
 
 puts "Test constant is: #{TestModule::SOME_CONSTANT}"

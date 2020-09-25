@@ -153,6 +153,17 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 
 ## Releases
 
+### Version 0.2.2
+
+#### Usability
+
+* Added more debugging methods
+* Allowed for custom object IDs by defining `mruby_object_id` for a class
+
+#### Bugfixes
+
+* Fixed problems with struct wrapping
+
 ### Version 0.2.1
 
 #### Usability
@@ -234,7 +245,11 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 
 ## Upcoming releases
 
-None planned yet
+### Version 0.3.0
+
+### Features
+
+* [ ] Copy constructor wrapping
 
 ### Future updates
 

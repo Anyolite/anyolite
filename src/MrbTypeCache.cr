@@ -20,7 +20,7 @@ module MrbTypeCache
       end
 
       # Delete the Crystal reference to this object
-      MrbRefTable.delete(crystal_ptr.value.object_id)
+      MrbRefTable.delete(MrbRefTable.get_object_id(crystal_ptr.value))
     }
   end
 end
