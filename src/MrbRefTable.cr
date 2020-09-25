@@ -4,10 +4,12 @@
 # Furthermore, this is only possible as a module due to C closure limitations.
 # 
 # TODO: Add compilation option for ignoring entry checks
+# TODO: Replace class variables with one options hash
 module MrbRefTable
   @@content = {} of UInt64 => Tuple(Void*, Int64)
   @@logging = false
   @@warnings = true
+  @@options = {} of Symbol => Bool
 
   def self.get(identification)
     return @@content[identification][0]
@@ -18,10 +20,13 @@ module MrbRefTable
     if @@content[identification]?
       if value != @@content[identification][0]
         puts "WARNING: Value #{identification} replaced pointers." if @@warnings
+        @@content[identification] = {value, @@content[identification][1] + 1} if self.option_active?(:replace_conflicting_pointers)
+      else
+        @@content[identification] = {value, @@content[identification][1] + 1}
       end
-      @@content[identification] = {value, @@content[identification][1] + 1}
+    else
+      @@content[identification] = {value, 1i64}
     end
-    @@content[identification] = {value, 1i64}
   end
 
   def self.delete(identification)
@@ -73,5 +78,21 @@ module MrbRefTable
     else
       value.hash.to_u64
     end
+  end
+
+  def self.option_active?(symbol)
+    if @@options[symbol]?
+      @@options[symbol]
+    else
+      false
+    end
+  end
+
+  def self.set_option(symbol)
+    @@options[symbol] = true
+  end
+
+  def self.unset_option(symbol)
+    @@options[symbol] = false
   end
 end

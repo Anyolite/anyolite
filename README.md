@@ -153,6 +153,16 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 
 ## Releases
 
+### Version 0.2.3
+
+#### Usability
+
+* More options for adjusting reference table
+
+#### Bugfixes
+
+* Fixed reference counter not increasing
+
 ### Version 0.2.2
 
 #### Usability
@@ -247,9 +257,13 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 
 ### Version 0.3.0
 
-### Features
+#### Features
 
 * [ ] Copy constructor wrapping
+
+#### Breaking changes
+
+* [ ] Option hash for reference table instead of flags
 
 ### Future updates
 
