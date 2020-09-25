@@ -9,7 +9,7 @@ module MrbRefTable
   @@content = {} of UInt64 => Tuple(Void*, Int64)
   @@logging = false
   @@warnings = true
-  @@options = {} of Symbol => Bool
+  @@options = {:replace_conflicting_pointers => false}
 
   def self.get(identification)
     return @@content[identification][0]
@@ -20,7 +20,11 @@ module MrbRefTable
     if @@content[identification]?
       if value != @@content[identification][0]
         puts "WARNING: Value #{identification} replaced pointers." if @@warnings
-        @@content[identification] = {value, @@content[identification][1] + 1} if self.option_active?(:replace_conflicting_pointers)
+        if self.option_active?(:replace_conflicting_pointers)
+          @@content[identification] = {value, @@content[identification][1] + 1}
+        else
+          @@content[identification] = {@@content[identification][0] , @@content[identification][1] + 1}
+        end
       else
         @@content[identification] = {value, @@content[identification][1] + 1}
       end
