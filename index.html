@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="generator" content="Crystal Docs 0.35.1">
-<meta name="crystal_docs.project_version" content="0.2.3">
+<meta name="crystal_docs.project_version" content="0.3.0">
 <meta name="crystal_docs.project_name" content="anyolite">
 
 
@@ -18,7 +18,7 @@
 </svg>
 
   <meta id="repository-name" content="anyolite">
-  <title>anyolite 0.2.3</title>
+  <title>anyolite 0.3.0</title>
   <script type="text/javascript">
   CrystalDocs.base_path = "";
   </script>
@@ -39,7 +39,7 @@
       </h1>
 
       <span class="project-version">
-        0.2.3
+        0.3.0
       </span>
     </div>
   </div>
@@ -108,6 +108,11 @@
   
   <li class=" " data-id="anyolite/MrbWrap/Interpreted" data-name="mrbwrap::interpreted">
       <a href="MrbWrap/Interpreted.html">Interpreted</a>
+      
+    </li>
+  
+  <li class=" " data-id="anyolite/MrbWrap/StructWrapper" data-name="mrbwrap::structwrapper(t)">
+      <a href="MrbWrap/StructWrapper.html">StructWrapper</a>
       
     </li>
   
@@ -299,6 +304,44 @@ More features will be added in the future.</p>
   </svg>
 </a>Releases</h2>
 
+<h3><a id="version-0.3.0" class="anchor" href="#version-0.3.0">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Version 0.3.0</h3>
+
+<h4><a id="features" class="anchor" href="#features">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Features</h4>
+
+<ul><li>[X] Crystal structs are wrapped using wrapper objects</li></ul>
+
+<h4><a id="breaking-changes" class="anchor" href="#breaking-changes">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Breaking changes</h4>
+
+<ul><li>[X] Struct hash values as object ID replacements are obsolete</li><li>[X] Option hash for reference table instead of flags</li><li>[X] Consistent naming for mruby hooks</li></ul>
+
+<h4><a id="safety" class="anchor" href="#safety">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Safety</h4>
+
+<ul><li>[X] Structs with equal hash values do not interfere anymore</li></ul>
+
+<h4><a id="usability" class="anchor" href="#usability">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Usability</h4>
+
+<ul><li>[X] MrbModule instances and Crystal modules can both be used in wrapper methods</li></ul>
+
 <h3><a id="version-0.2.3" class="anchor" href="#version-0.2.3">
   <svg class="octicon-link" aria-hidden="true">
     <use href="#octicon-link"/>
@@ -461,11 +504,11 @@ More features will be added in the future.</p>
   </svg>
 </a>Upcoming releases</h2>
 
-<h3><a id="version-0.3.0" class="anchor" href="#version-0.3.0">
+<h3><a id="version-0.3.1" class="anchor" href="#version-0.3.1">
   <svg class="octicon-link" aria-hidden="true">
     <use href="#octicon-link"/>
   </svg>
-</a>Version 0.3.0</h3>
+</a>Version 0.3.1</h3>
 
 <h4><a id="features" class="anchor" href="#features">
   <svg class="octicon-link" aria-hidden="true">
@@ -475,13 +518,13 @@ More features will be added in the future.</p>
 
 <ul><li>[ ] Copy constructor wrapping</li></ul>
 
-<h4><a id="breaking-changes" class="anchor" href="#breaking-changes">
+<h4><a id="safety" class="anchor" href="#safety">
   <svg class="octicon-link" aria-hidden="true">
     <use href="#octicon-link"/>
   </svg>
-</a>Breaking changes</h4>
+</a>Safety</h4>
 
-<ul><li>[ ] Option hash for reference table instead of flags</li></ul>
+<ul><li>[ ] More stable type casting</li></ul>
 
 <h3><a id="future-updates" class="anchor" href="#future-updates">
   <svg class="octicon-link" aria-hidden="true">
@@ -489,7 +532,7 @@ More features will be added in the future.</p>
   </svg>
 </a>Future updates</h3>
 
-<ul><li>[ ] Windows support (currently not supported due to problems with Crystal)</li><li>[ ] Mac support (might be possible, not tested yet)</li><li>[ ] Compiletime errors for macros</li><li>[ ] Support for more flexible mruby configuration options</li><li>[ ] Arrays as arguments and return values</li><li>[ ] MrbClass/MrbModule and Class can be both used as arguments</li><li>[ ] More stable type casting</li><li>[ ] More stable struct reference table management</li><li>[ ] Logging options for reference table</li><li>[ ] Crystal specs for testing</li></ul>
+<ul><li>[ ] Windows support (currently not supported due to problems with Crystal)</li><li>[ ] Mac support (might be possible, not tested yet)</li><li>[ ] Compiletime errors for macros</li><li>[ ] Support for more flexible mruby configuration options</li><li>[ ] Arrays as arguments and return values</li><li>[ ] Crystal specs for testing</li></ul>
 
 <h3><a id="possible-future-updates" class="anchor" href="#possible-future-updates">
   <svg class="octicon-link" aria-hidden="true">

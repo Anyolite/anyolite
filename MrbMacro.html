@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="generator" content="Crystal Docs 0.35.1">
-<meta name="crystal_docs.project_version" content="0.2.3">
+<meta name="crystal_docs.project_version" content="0.3.0">
 <meta name="crystal_docs.project_name" content="anyolite">
 
 
@@ -18,7 +18,7 @@
 </svg>
 
   <meta id="repository-name" content="anyolite">
-  <title>MrbMacro - anyolite 0.2.3</title>
+  <title>MrbMacro - anyolite 0.3.0</title>
   <script type="text/javascript">
     CrystalDocs.base_path = "";
   </script>
@@ -39,7 +39,7 @@
       </h1>
 
       <span class="project-version">
-        0.2.3
+        0.3.0
       </span>
     </div>
   </div>
@@ -111,6 +111,11 @@
       
     </li>
   
+  <li class=" " data-id="anyolite/MrbWrap/StructWrapper" data-name="mrbwrap::structwrapper(t)">
+      <a href="MrbWrap/StructWrapper.html">StructWrapper</a>
+      
+    </li>
+  
   <li class=" " data-id="anyolite/MrbWrap/Undefined" data-name="mrbwrap::undefined">
       <a href="MrbWrap/Undefined.html">Undefined</a>
       
@@ -172,7 +177,7 @@
   </h2>
   
     
-      <a href="https://github.com/Anyolite/anyolite/blob/v0.2.3/src/MrbMacro.cr#L2" target="_blank">
+      <a href="https://github.com/Anyolite/anyolite/blob/v0.3.0/src/MrbMacro.cr#L2" target="_blank">
         MrbMacro.cr
       </a>
     
@@ -198,6 +203,11 @@
     Macro Summary
   </h2>
   <ul class="list-summary">
+    
+      <li class="entry-summary">
+        <a href="#allocate_constructed_object(crystal_class,obj,new_obj)-macro" class="signature"><strong>allocate_constructed_object</strong>(crystal_class, obj, new_obj)</a>
+        
+      </li>
     
       <li class="entry-summary">
         <a href="#call_and_return(mrb,proc,proc_args,converted_args,operator=&quot;&quot;)-macro" class="signature"><strong>call_and_return</strong>(mrb, proc, proc_args, converted_args, operator = <span class="s">&quot;&quot;</span>)</a>
@@ -233,6 +243,11 @@
     
       <li class="entry-summary">
         <a href="#convert_from_ruby_object(mrb,obj,crystal_type)-macro" class="signature"><strong>convert_from_ruby_object</strong>(mrb, obj, crystal_type)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#convert_from_ruby_struct(mrb,obj,crystal_type)-macro" class="signature"><strong>convert_from_ruby_struct</strong>(mrb, obj, crystal_type)</a>
         
       </li>
     
@@ -350,6 +365,22 @@
     Macro Detail
   </h2>
   
+    <div class="entry-detail" id="allocate_constructed_object(crystal_class,obj,new_obj)-macro">
+      <div class="signature">
+        
+        macro <strong>allocate_constructed_object</strong>(crystal_class, obj, new_obj)
+
+        <a class="method-permalink" href="#allocate_constructed_object(crystal_class,obj,new_obj)-macro">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.3.0/src/MrbMacro.cr#L239" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
     <div class="entry-detail" id="call_and_return(mrb,proc,proc_args,converted_args,operator=&amp;quot;&amp;quot;)-macro">
       <div class="signature">
         
@@ -361,7 +392,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/Anyolite/anyolite/blob/v0.2.3/src/MrbMacro.cr#L129" target="_blank">View source</a>]
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.3.0/src/MrbMacro.cr#L145" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -377,7 +408,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/Anyolite/anyolite/blob/v0.2.3/src/MrbMacro.cr#L156" target="_blank">View source</a>]
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.3.0/src/MrbMacro.cr#L171" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -393,7 +424,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/Anyolite/anyolite/blob/v0.2.3/src/MrbMacro.cr#L161" target="_blank">View source</a>]
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.3.0/src/MrbMacro.cr#L180" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -409,7 +440,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/Anyolite/anyolite/blob/v0.2.3/src/MrbMacro.cr#L134" target="_blank">View source</a>]
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.3.0/src/MrbMacro.cr#L150" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -430,7 +461,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/Anyolite/anyolite/blob/v0.2.3/src/MrbMacro.cr#L83" target="_blank">View source</a>]
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.3.0/src/MrbMacro.cr#L83" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -446,7 +477,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/Anyolite/anyolite/blob/v0.2.3/src/MrbMacro.cr#L183" target="_blank">View source</a>]
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.3.0/src/MrbMacro.cr#L220" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -462,7 +493,23 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/Anyolite/anyolite/blob/v0.2.3/src/MrbMacro.cr#L119" target="_blank">View source</a>]
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.3.0/src/MrbMacro.cr#L123" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="convert_from_ruby_struct(mrb,obj,crystal_type)-macro">
+      <div class="signature">
+        
+        macro <strong>convert_from_ruby_struct</strong>(mrb, obj, crystal_type)
+
+        <a class="method-permalink" href="#convert_from_ruby_struct(mrb,obj,crystal_type)-macro">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.3.0/src/MrbMacro.cr#L134" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -478,7 +525,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/Anyolite/anyolite/blob/v0.2.3/src/MrbMacro.cr#L99" target="_blank">View source</a>]
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.3.0/src/MrbMacro.cr#L101" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -494,7 +541,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/Anyolite/anyolite/blob/v0.2.3/src/MrbMacro.cr#L11" target="_blank">View source</a>]
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.3.0/src/MrbMacro.cr#L11" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -510,7 +557,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/Anyolite/anyolite/blob/v0.2.3/src/MrbMacro.cr#L3" target="_blank">View source</a>]
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.3.0/src/MrbMacro.cr#L3" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -526,7 +573,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/Anyolite/anyolite/blob/v0.2.3/src/MrbMacro.cr#L63" target="_blank">View source</a>]
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.3.0/src/MrbMacro.cr#L63" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -542,7 +589,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/Anyolite/anyolite/blob/v0.2.3/src/MrbMacro.cr#L202" target="_blank">View source</a>]
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.3.0/src/MrbMacro.cr#L266" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -558,7 +605,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/Anyolite/anyolite/blob/v0.2.3/src/MrbMacro.cr#L213" target="_blank">View source</a>]
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.3.0/src/MrbMacro.cr#L277" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -574,7 +621,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/Anyolite/anyolite/blob/v0.2.3/src/MrbMacro.cr#L193" target="_blank">View source</a>]
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.3.0/src/MrbMacro.cr#L230" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -590,7 +637,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/Anyolite/anyolite/blob/v0.2.3/src/MrbMacro.cr#L75" target="_blank">View source</a>]
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.3.0/src/MrbMacro.cr#L75" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -606,7 +653,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/Anyolite/anyolite/blob/v0.2.3/src/MrbMacro.cr#L47" target="_blank">View source</a>]
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.3.0/src/MrbMacro.cr#L47" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -622,7 +669,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/Anyolite/anyolite/blob/v0.2.3/src/MrbMacro.cr#L31" target="_blank">View source</a>]
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.3.0/src/MrbMacro.cr#L31" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -638,7 +685,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/Anyolite/anyolite/blob/v0.2.3/src/MrbMacro.cr#L264" target="_blank">View source</a>]
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.3.0/src/MrbMacro.cr#L328" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -654,7 +701,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/Anyolite/anyolite/blob/v0.2.3/src/MrbMacro.cr#L279" target="_blank">View source</a>]
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.3.0/src/MrbMacro.cr#L343" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -670,7 +717,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/Anyolite/anyolite/blob/v0.2.3/src/MrbMacro.cr#L348" target="_blank">View source</a>]
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.3.0/src/MrbMacro.cr#L423" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -686,7 +733,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/Anyolite/anyolite/blob/v0.2.3/src/MrbMacro.cr#L380" target="_blank">View source</a>]
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.3.0/src/MrbMacro.cr#L441" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -702,7 +749,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/Anyolite/anyolite/blob/v0.2.3/src/MrbMacro.cr#L305" target="_blank">View source</a>]
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.3.0/src/MrbMacro.cr#L369" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -718,7 +765,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/Anyolite/anyolite/blob/v0.2.3/src/MrbMacro.cr#L321" target="_blank">View source</a>]
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.3.0/src/MrbMacro.cr#L391" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -734,7 +781,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/Anyolite/anyolite/blob/v0.2.3/src/MrbMacro.cr#L221" target="_blank">View source</a>]
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.3.0/src/MrbMacro.cr#L285" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -750,7 +797,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/Anyolite/anyolite/blob/v0.2.3/src/MrbMacro.cr#L238" target="_blank">View source</a>]
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.3.0/src/MrbMacro.cr#L302" target="_blank">View source</a>]
         
       </div>
     </div>
