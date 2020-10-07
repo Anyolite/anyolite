@@ -52,6 +52,23 @@ module MrbCast
     self.return_string(mrb, value)
   end
 
+  def self.return_value(mrb : MrbInternal::MrbState*, value : Struct)
+    ruby_class = MrbClassCache.get(typeof(value))
+
+    destructor = MrbTypeCache.destructor_method(typeof(value))
+
+    ptr = Pointer(typeof(value)).malloc(size: 1, value: value)
+
+    new_ruby_object = MrbInternal.new_empty_object(mrb, ruby_class, ptr.as(Void*), MrbTypeCache.register(typeof(value), destructor))
+
+    # TODO: This might need fixing for structs
+    MrbMacro.convert_from_ruby_struct(mrb, new_ruby_object, typeof(value)).value.content = value
+    
+    MrbRefTable.add(MrbRefTable.get_object_id(value), ptr.as(Void*))
+
+    return new_ruby_object
+  end
+
   def self.return_value(mrb : MrbInternal::MrbState*, value : Object)
     ruby_class = MrbClassCache.get(typeof(value))
 
@@ -61,15 +78,7 @@ module MrbCast
 
     new_ruby_object = MrbInternal.new_empty_object(mrb, ruby_class, ptr.as(Void*), MrbTypeCache.register(typeof(value), destructor))
 
-    # TODO: Process structs
-
-    if value.is_a?(MrbWrap::StructWrapper)
-      puts "TODO: STRUCT"
-    end
-    
     MrbMacro.convert_from_ruby_object(mrb, new_ruby_object, typeof(value)).value = value
-
-    puts ">>> Adding return value"
     
     MrbRefTable.add(MrbRefTable.get_object_id(value), ptr.as(Void*))
 
