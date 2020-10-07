@@ -88,18 +88,18 @@ MrbRefTable.set_option(:logging)
 
 MrbState.create do |mrb|
   MrbWrap.wrap_module(mrb, SomeModule, "TestModule")
-  MrbWrap.wrap_module_function_with_keywords(mrb, MrbModuleCache.get(SomeModule), "test_method", SomeModule.test_method, {:int => Int32, :str => String})
-  MrbWrap.wrap_constant(mrb, MrbModuleCache.get(SomeModule), "SOME_CONSTANT", "Smile! 😊")
+  MrbWrap.wrap_module_function_with_keywords(mrb, SomeModule, "test_method", SomeModule.test_method, {:int => Int32, :str => String})
+  MrbWrap.wrap_constant(mrb, SomeModule, "SOME_CONSTANT", "Smile! 😊")
 
-  MrbWrap.wrap_class(mrb, Bla, "Bla", under: MrbModuleCache.get(SomeModule))
+  MrbWrap.wrap_class(mrb, Bla, "Bla", under: SomeModule)
   MrbWrap.wrap_constructor(mrb, Bla)
 
-  MrbWrap.wrap_class(mrb, TestStruct, "TestStruct", under: MrbModuleCache.get(SomeModule))
+  MrbWrap.wrap_class(mrb, TestStruct, "TestStruct", under: SomeModule)
   MrbWrap.wrap_constructor(mrb, TestStruct)
   MrbWrap.wrap_property(mrb, TestStruct, "value", value, [Int32])
   MrbWrap.wrap_property(mrb, TestStruct, "test", test, [Test])
 
-  MrbWrap.wrap_class(mrb, Test, "Test", under: MrbModuleCache.get(SomeModule))
+  MrbWrap.wrap_class(mrb, Test, "Test", under: SomeModule)
   MrbWrap.wrap_class_method(mrb, Test, "counter", Test.counter)
   MrbWrap.wrap_constructor_with_keywords(mrb, Test, {:x => {Int32, 0}})
   MrbWrap.wrap_instance_method_with_keywords(mrb, Test, "bar", test_instance_method, {:int => Int32, :bool => Bool, :str => String, :float => {Float32, Float32.new(0.4)}})
@@ -154,6 +154,9 @@ puts "Reference table: #{MrbRefTable.inspect}"
 MrbRefTable.reset
 
 puts "------------------------------"
+
+module TestModule
+end
 
 MrbState.create do |mrb|
   test_module = MrbModule.new(mrb, "TestModule")

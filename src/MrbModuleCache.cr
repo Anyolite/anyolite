@@ -6,6 +6,14 @@ module MrbModuleCache
     @@cache[crystal_module.name] = mrb_module
   end
 
+  def self.get(n : Nil)
+    nil
+  end
+
+  def self.get(ruby_module : MrbModule)
+    ruby_module
+  end
+
   def self.get(crystal_module : Class)
     if @@cache[crystal_module.name]?
       return @@cache[crystal_module.name]

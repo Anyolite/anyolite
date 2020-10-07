@@ -296,7 +296,7 @@ module MrbMacro
       MrbMacro.call_and_return(mrb, {{proc}}, {{proc_arg_array}}, converted_args)
     end
 
-    {{mrb_state}}.define_module_function({{name}}, {{under_module}}, wrapped_method)
+    {{mrb_state}}.define_module_function({{name}}, MrbModuleCache.get({{under_module}}), wrapped_method)
   end
 
   macro wrap_module_function_with_keyword_args(mrb_state, under_module, name, proc, keyword_args, regular_args = [] of Class, operator = "")
@@ -322,7 +322,7 @@ module MrbMacro
       {% end %}
     end
 
-    {{mrb_state}}.define_module_function({{name}}, {{under_module}}, wrapped_method)
+    {{mrb_state}}.define_module_function({{name}}, MrbModuleCache.get({{under_module}}), wrapped_method)
   end
 
   macro wrap_class_method_with_args(mrb_state, crystal_class, name, proc, proc_args = [] of Class, operator = "")

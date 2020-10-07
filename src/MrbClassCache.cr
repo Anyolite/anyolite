@@ -6,6 +6,10 @@ module MrbClassCache
     @@cache[crystal_class.name] = mrb_class
   end
 
+  def self.get(n : Nil)
+    nil
+  end
+
   def self.get(crystal_class : Class)
     if @@cache[crystal_class.name]?
       return @@cache[crystal_class.name]
