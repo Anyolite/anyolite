@@ -363,7 +363,7 @@ module MrbMacro
       new_obj_ptr = Pointer({{crystal_class}}).malloc(size: 1, value: new_obj)
       MrbRefTable.add(MrbRefTable.get_object_id(new_obj_ptr.value), new_obj_ptr.as(Void*))
 
-      puts "> {{crystal_class}}: #{new_obj_ptr.value.inspect}" if MrbRefTable.logging
+      puts "> {{crystal_class}}: #{new_obj_ptr.value.inspect}" if MrbRefTable.option_active?(:logging)
 
       destructor = MrbTypeCache.destructor_method({{crystal_class}})
       MrbInternal.set_data_ptr_and_type(obj, new_obj_ptr, MrbTypeCache.register({{crystal_class}}, destructor))
@@ -417,7 +417,7 @@ module MrbMacro
       new_obj_ptr = Pointer({{crystal_class}}).malloc(size: 1, value: new_obj)
       MrbRefTable.add(MrbRefTable.get_object_id(new_obj_ptr.value), new_obj_ptr.as(Void*))
 
-      puts "> {{crystal_class}}: #{new_obj_ptr.value.inspect}" if MrbRefTable.logging
+      puts "> {{crystal_class}}: #{new_obj_ptr.value.inspect}" if MrbRefTable.option_active?(:logging)
 
       destructor = MrbTypeCache.destructor_method({{crystal_class}})
       MrbInternal.set_data_ptr_and_type(obj, new_obj_ptr, MrbTypeCache.register({{crystal_class}}, destructor))

@@ -4,23 +4,25 @@
 # Furthermore, this is only possible as a module due to C closure limitations.
 # 
 # TODO: Add compilation option for ignoring entry checks
-# TODO: Replace class variables with one options hash
 module MrbRefTable
   @@content = {} of UInt64 => Tuple(Void*, Int64)
-  @@logging = false
-  @@warnings = true
-  @@options = {:replace_conflicting_pointers => false}
+
+  @@options = {
+    :logging => false,
+    :warnings => true,
+    :replace_conflicting_pointers => false
+  }
 
   def self.get(identification)
     return @@content[identification][0]
   end
 
   def self.add(identification, value)
-    puts "> Added reference #{identification} -> #{value}" if @@logging
+    puts "> Added reference #{identification} -> #{value}" if option_active?(:logging)
     if @@content[identification]?
       if value != @@content[identification][0]
-        puts "WARNING: Value #{identification} replaced pointers." if @@warnings
-        if self.option_active?(:replace_conflicting_pointers)
+        puts "WARNING: Value #{identification} replaced pointers." if option_active?(:warnings)
+        if option_active?(:replace_conflicting_pointers)
           @@content[identification] = {value, @@content[identification][1] + 1}
         else
           @@content[identification] = {@@content[identification][0] , @@content[identification][1] + 1}
@@ -34,14 +36,14 @@ module MrbRefTable
   end
 
   def self.delete(identification)
-    puts "> Removed reference #{identification}" if @@logging
+    puts "> Removed reference #{identification}" if option_active?(:logging)
     if @@content[identification]?
       @@content[identification] = {@@content[identification][0], @@content[identification][1] - 1}
       if @@content[identification][1] <= 0
         @@content.delete(identification)
       end
     else
-      puts "WARNING: Tried to remove unregistered object #{identification} from reference table." if @@warnings
+      puts "WARNING: Tried to remove unregistered object #{identification} from reference table." if option_active?(:warnings)
     end
     nil
   end
@@ -54,26 +56,11 @@ module MrbRefTable
     @@content.inspect
   end
 
-  def self.logging
-    @@logging
-  end
-
-  def self.warnings
-    @@warnings
-  end
-
-  def self.logging=(value)
-    @@logging = value
-  end
-
-  def self.warnings=(value)
-    @@warnings = value
-  end
-
   def self.reset
     @@content.clear
   end
 
+  # TODO: If a struct wrapper is given here, call the struct methods instead of the wrapper methods
   def self.get_object_id(value)
     if value.responds_to?(:mruby_ref_id)
       value.mruby_ref_id.to_u64

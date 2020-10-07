@@ -64,7 +64,7 @@ module MrbCast
 
     MrbRefTable.add(MrbRefTable.get_object_id(value), ptr.as(Void*))
 
-    puts "> #{value.class}: #{value}" if MrbRefTable.logging
+    puts "> #{value.class}: #{value}" if MrbRefTable.option_active?(:logging)
 
     return new_ruby_object
   end

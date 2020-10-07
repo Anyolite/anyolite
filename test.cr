@@ -72,7 +72,7 @@ class Test
   end
 end
 
-MrbRefTable.logging = true
+MrbRefTable.set_option(:logging)
 
 MrbState.create do |mrb|
   MrbWrap.wrap_module(mrb, SomeModule, "TestModule")

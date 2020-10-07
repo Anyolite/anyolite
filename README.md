@@ -264,7 +264,16 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 
 #### Breaking changes
 
-* [ ] Option hash for reference table instead of flags
+* [ ] Struct hashes are now ignored for referencing
+* [X] Option hash for reference table instead of flags
+
+#### Safety
+
+* [ ] More stable type casting
+
+#### Usability
+
+* [ ] MrbClass/MrbModule and Class can be both used as arguments
 
 ### Future updates
 
@@ -273,10 +282,6 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 * [ ] Compiletime errors for macros
 * [ ] Support for more flexible mruby configuration options
 * [ ] Arrays as arguments and return values
-* [ ] MrbClass/MrbModule and Class can be both used as arguments
-* [ ] More stable type casting
-* [ ] More stable struct reference table management
-* [ ] Logging options for reference table
 * [ ] Crystal specs for testing
 
 ### Possible future updates
