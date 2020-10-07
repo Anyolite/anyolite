@@ -157,21 +157,21 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 
 #### Features
 
-* [X] Crystal structs are wrapped using wrapper objects
+* Crystal structs are wrapped using wrapper objects
 
 #### Breaking changes
 
-* [X] Struct hash values as object ID replacements are obsolete
-* [X] Option hash for reference table instead of flags
-* [X] Consistent naming for mruby hooks
+* Struct hash values as object ID replacements are obsolete
+* Option hash for reference table instead of flags
+* Consistent naming for mruby hooks
 
 #### Safety
 
-* [X] Structs with equal hash values do not interfere anymore
+* Structs with equal hash values do not interfere anymore
 
 #### Usability
 
-* [X] MrbModule instances and Crystal modules can both be used in wrapper methods
+* MrbModule instances and Crystal modules can both be used in wrapper methods
 
 ### Version 0.2.3
 
