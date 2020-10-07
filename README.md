@@ -259,6 +259,7 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 
 #### Features
 
+* [ ] Crystal structs getting wrapped into full objects
 * [ ] Copy constructor wrapping
 
 #### Breaking changes

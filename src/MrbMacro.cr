@@ -132,23 +132,22 @@ module MrbMacro
   end
 
   macro call_and_return_keyword_method(mrb, proc, converted_regular_args, keyword_args, kw_args, operator = "", empty_regular = false)
-    {% if empty_regular %}
-      return_value = {{proc}}{{operator.id}}(
+    return_value = {{proc}}{{operator.id}}(
+      {% if empty_regular %}
         {% c = 0 %}
         {% for keyword in keyword_args.keys %}
           {{keyword.id}}: MrbMacro.convert_keyword_arg({{mrb}}, {{kw_args}}.values[{{c}}], {{keyword_args[keyword]}}),
           {% c += 1 %}
         {% end %}
-      )
-    {% else %}
-      return_value = {{proc}}{{operator.id}}(*{{converted_regular_args}},
+      {% else %}
+        *{{converted_regular_args}},
         {% c = 0 %}
         {% for keyword in keyword_args.keys %}
           {{keyword.id}}: MrbMacro.convert_keyword_arg({{mrb}}, {{kw_args}}.values[{{c}}], {{keyword_args[keyword]}}),
           {% c += 1 %}
         {% end %}
-      )
-    {% end %}
+      {% end %}
+    )
 
     MrbCast.return_value({{mrb}}, return_value)
   end
@@ -159,23 +158,22 @@ module MrbMacro
   end
 
   macro call_and_return_keyword_instance_method(mrb, proc, converted_obj, converted_regular_args, keyword_args, kw_args, operator = "", empty_regular = false)
-    {% if empty_regular %}
-      return_value = {{converted_obj}}.{{proc}}{{operator.id}}(
+    return_value = {{converted_obj}}.{{proc}}{{operator.id}}(
+      {% if empty_regular %}
         {% c = 0 %}
         {% for keyword in keyword_args.keys %}
           {{keyword.id}}: MrbMacro.convert_keyword_arg({{mrb}}, {{kw_args}}.values[{{c}}], {{keyword_args[keyword]}}),
           {% c += 1 %}
         {% end %}
-      )
-    {% else %}
-      return_value = {{converted_obj}}.{{proc}}{{operator.id}}(*{{converted_regular_args}},
+      {% else %}
+        *{{converted_regular_args}},
         {% c = 0 %}
         {% for keyword in keyword_args.keys %}
           {{keyword.id}}: MrbMacro.convert_keyword_arg({{mrb}}, {{kw_args}}.values[{{c}}], {{keyword_args[keyword]}}),
           {% c += 1 %}
         {% end %}
-      )
-    {% end %}
+      {% end %}
+    )
 
     MrbCast.return_value({{mrb}}, return_value)
   end
