@@ -30,6 +30,13 @@ class Test
     return @@counter
   end
 
+  def self.give_me_a_struct
+    s = TestStruct.new
+    s.value = 777
+    s.test = Test.new(999)
+    s
+  end
+
   def test_instance_method(int : Int32, bool : Bool, str : String, float : Float32)
     puts "Old value is #{@x}"
     a = "Args given for instance method: #{int}, #{bool}, #{str}, #{float}"
@@ -60,6 +67,11 @@ class Test
 
   def add(other)
     ret = self + other
+  end
+
+  def output_this_and_struct(str : TestStruct)
+    puts str
+    "#{@x} #{str.value} #{str.test.x}"
   end
 
   def keyword_test(strvar : String, intvar : Int32, floatvar = 0.123, strvarkw : String = "nothing", boolvar : Bool = true, othervar : Test = Test.new(17))
@@ -94,6 +106,8 @@ MrbState.create do |mrb|
   MrbWrap.wrap_instance_method(mrb, Test, "add", add, [Test])
   MrbWrap.wrap_instance_method(mrb, Test, "+", add, [Test])
   MrbWrap.wrap_property(mrb, Test, "x", x, [Int32])
+  MrbWrap.wrap_class_method(mrb, Test, "give_me_a_struct", Test.give_me_a_struct)
+  MrbWrap.wrap_instance_method(mrb, Test, "output_this_and_struct", output_this_and_struct, [TestStruct])
 
   MrbWrap.wrap_instance_method_with_keywords(mrb, Test, "keyword_test", keyword_test, {
     :floatvar => {Float32, 0.123}, 

@@ -91,7 +91,7 @@ module MrbMacro
       {{arg_type}}.new({{arg}})
     {% elsif arg_type.resolve <= String %}
       {{arg_type}}.new({{arg}})
-    {% elsif arg_type.resolve <= MrbWrap::StructWrapper %}
+    {% elsif arg_type.resolve <= Struct %}
       MrbMacro.convert_from_ruby_struct({{mrb}}, {{arg}}, {{arg_type}}).value.content
     {% else %}
       MrbMacro.convert_from_ruby_object({{mrb}}, {{arg}}, {{arg_type}}).value
@@ -113,7 +113,7 @@ module MrbMacro
      {{arg_type}}.new( MrbCast.cast_to_float({{mrb}}, {{arg}}))
     {% elsif arg_type.resolve <= String %}
       MrbCast.cast_to_string({{mrb}}, {{arg}})
-    {% elsif arg_type.resolve <= MrbWrap::StructWrapper %}
+    {% elsif arg_type.resolve <= Struct %}
       MrbMacro.convert_from_ruby_struct({{mrb}}, {{arg}}, {{arg_type}}).value.content
     {% else %}
       MrbMacro.convert_from_ruby_object({{mrb}}, {{arg}}, {{arg_type}}).value
