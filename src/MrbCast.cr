@@ -60,11 +60,18 @@ module MrbCast
     ptr = Pointer(typeof(value)).malloc(size: 1, value: value)
 
     new_ruby_object = MrbInternal.new_empty_object(mrb, ruby_class, ptr.as(Void*), MrbTypeCache.register(typeof(value), destructor))
+
+    # TODO: Process structs
+
+    if value.is_a?(MrbWrap::StructWrapper)
+      puts "TODO: STRUCT"
+    end
+    
     MrbMacro.convert_from_ruby_object(mrb, new_ruby_object, typeof(value)).value = value
 
+    puts ">>> Adding return value"
+    
     MrbRefTable.add(MrbRefTable.get_object_id(value), ptr.as(Void*))
-
-    puts "> #{value.class}: #{value}" if MrbRefTable.option_active?(:logging)
 
     return new_ruby_object
   end

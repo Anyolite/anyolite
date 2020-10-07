@@ -8,11 +8,11 @@ end
 
 struct TestStruct
 
-  property value : Int32 = -1
-  property test : Test = Test.new(-2)
+  property value : Int32 = -123
+  property test : Test = Test.new(-234)
 
-  def mruby_ref_id
-    return 12
+  def mrb_initialize(mrb)
+    puts "Struct initialized!"
   end
 
 end
@@ -85,6 +85,7 @@ MrbState.create do |mrb|
   MrbWrap.wrap_class(mrb, TestStruct, "TestStruct", under: MrbModuleCache.get(SomeModule))
   MrbWrap.wrap_constructor(mrb, TestStruct)
   MrbWrap.wrap_property(mrb, TestStruct, "value", value, [Int32])
+  MrbWrap.wrap_property(mrb, TestStruct, "test", test, [Test])
 
   MrbWrap.wrap_class(mrb, Test, "Test", under: MrbModuleCache.get(SomeModule))
   MrbWrap.wrap_class_method(mrb, Test, "counter", Test.counter)

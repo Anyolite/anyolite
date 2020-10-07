@@ -91,6 +91,8 @@ module MrbMacro
       {{arg_type}}.new({{arg}})
     {% elsif arg_type.resolve <= String %}
       {{arg_type}}.new({{arg}})
+    {% elsif arg_type.resolve <= MrbWrap::StructWrapper %}
+      MrbMacro.convert_from_ruby_struct({{mrb}}, {{arg}}, {{arg_type}}).value.content
     {% else %}
       MrbMacro.convert_from_ruby_object({{mrb}}, {{arg}}, {{arg_type}}).value
     {% end %}
@@ -111,6 +113,8 @@ module MrbMacro
      {{arg_type}}.new( MrbCast.cast_to_float({{mrb}}, {{arg}}))
     {% elsif arg_type.resolve <= String %}
       MrbCast.cast_to_string({{mrb}}, {{arg}})
+    {% elsif arg_type.resolve <= MrbWrap::StructWrapper %}
+      MrbMacro.convert_from_ruby_struct({{mrb}}, {{arg}}, {{arg_type}}).value.content
     {% else %}
       MrbMacro.convert_from_ruby_object({{mrb}}, {{arg}}, {{arg_type}}).value
     {% end %}
@@ -122,8 +126,20 @@ module MrbMacro
       # TODO: Raise argument error in mruby instead
       raise("ERROR: Invalid data type #{obj_class} for object #{{{obj}}}:\n Should be #{{{crystal_type}}} -> MrbClassCache.get({{crystal_type}}) instead.")
     end
+
     ptr = MrbInternal.get_data_ptr({{obj}})
     ptr.as({{crystal_type}}*)
+  end
+
+  macro convert_from_ruby_struct(mrb, obj, crystal_type)
+    if MrbInternal.mrb_obj_is_kind_of({{mrb}}, {{obj}}, MrbClassCache.get({{crystal_type}})) == 0
+      obj_class = MrbInternal.get_class_of_obj({{mrb}}, {{obj}})
+      # TODO: Raise argument error in mruby instead
+      raise("ERROR: Invalid data type #{obj_class} for object #{{{obj}}}:\n Should be #{{{crystal_type}}} -> MrbClassCache.get({{crystal_type}}) instead.")
+    end
+    
+    ptr = MrbInternal.get_data_ptr({{obj}})
+    ptr.as(MrbWrap::StructWrapper({{crystal_type}})*)
   end
 
   macro call_and_return(mrb, proc, proc_args, converted_args, operator = "")
@@ -153,27 +169,50 @@ module MrbMacro
   end
 
   macro call_and_return_instance_method(mrb, proc, converted_obj, converted_args, operator = "")
-    return_value = {{converted_obj}}.{{proc}}{{operator.id}}(*{{converted_args}})
+    if {{converted_obj}}.is_a?(MrbWrap::StructWrapper)
+      return_value = {{converted_obj}}.content.{{proc}}{{operator.id}}(*{{converted_args}})
+    else
+      return_value = {{converted_obj}}.{{proc}}{{operator.id}}(*{{converted_args}})
+    end
     MrbCast.return_value({{mrb}}, return_value)
   end
 
   macro call_and_return_keyword_instance_method(mrb, proc, converted_obj, converted_regular_args, keyword_args, kw_args, operator = "", empty_regular = false)
-    return_value = {{converted_obj}}.{{proc}}{{operator.id}}(
-      {% if empty_regular %}
-        {% c = 0 %}
-        {% for keyword in keyword_args.keys %}
-          {{keyword.id}}: MrbMacro.convert_keyword_arg({{mrb}}, {{kw_args}}.values[{{c}}], {{keyword_args[keyword]}}),
-          {% c += 1 %}
+    if {{converted_obj}}.is_a?(MrbWrap::StructWrapper)
+      return_value = {{converted_obj}}.content.{{proc}}{{operator.id}}(
+        {% if empty_regular %}
+          {% c = 0 %}
+          {% for keyword in keyword_args.keys %}
+            {{keyword.id}}: MrbMacro.convert_keyword_arg({{mrb}}, {{kw_args}}.values[{{c}}], {{keyword_args[keyword]}}),
+            {% c += 1 %}
+          {% end %}
+        {% else %}
+          *{{converted_regular_args}},
+          {% c = 0 %}
+          {% for keyword in keyword_args.keys %}
+            {{keyword.id}}: MrbMacro.convert_keyword_arg({{mrb}}, {{kw_args}}.values[{{c}}], {{keyword_args[keyword]}}),
+            {% c += 1 %}
+          {% end %}
         {% end %}
-      {% else %}
-        *{{converted_regular_args}},
-        {% c = 0 %}
-        {% for keyword in keyword_args.keys %}
-          {{keyword.id}}: MrbMacro.convert_keyword_arg({{mrb}}, {{kw_args}}.values[{{c}}], {{keyword_args[keyword]}}),
-          {% c += 1 %}
+      )
+    else
+      return_value = {{converted_obj}}.{{proc}}{{operator.id}}(
+        {% if empty_regular %}
+          {% c = 0 %}
+          {% for keyword in keyword_args.keys %}
+            {{keyword.id}}: MrbMacro.convert_keyword_arg({{mrb}}, {{kw_args}}.values[{{c}}], {{keyword_args[keyword]}}),
+            {% c += 1 %}
+          {% end %}
+        {% else %}
+          *{{converted_regular_args}},
+          {% c = 0 %}
+          {% for keyword in keyword_args.keys %}
+            {{keyword.id}}: MrbMacro.convert_keyword_arg({{mrb}}, {{kw_args}}.values[{{c}}], {{keyword_args[keyword]}}),
+            {% c += 1 %}
+          {% end %}
         {% end %}
-      {% end %}
-    )
+      )
+    end
 
     MrbCast.return_value({{mrb}}, return_value)
   end
@@ -195,6 +234,33 @@ module MrbMacro
     MrbInternal.mrb_get_args({{mrb}}, format_string, *args)
 
     MrbMacro.convert_args({{mrb}}, args, {{proc_args}})
+  end
+
+  macro allocate_constructed_object(crystal_class, obj, new_obj)
+    # Call initializer method if available
+    if new_obj.responds_to?(:mrb_initialize)
+      new_obj.mrb_initialize(mrb)
+    end
+
+    # Allocate memory so we do not lose this object
+    if {{crystal_class}} <= Struct
+      struct_wrapper = MrbWrap::StructWrapper({{crystal_class}}).new({{new_obj}})
+      new_obj_ptr = Pointer(MrbWrap::StructWrapper({{crystal_class}})).malloc(size: 1, value: struct_wrapper)
+      MrbRefTable.add(MrbRefTable.get_object_id(new_obj_ptr.value), new_obj_ptr.as(Void*))
+
+      puts "> S: {{crystal_class}}: #{new_obj_ptr.value.inspect}" if MrbRefTable.option_active?(:logging)
+
+      destructor = MrbTypeCache.destructor_method({{crystal_class}})
+      MrbInternal.set_data_ptr_and_type({{obj}}, new_obj_ptr, MrbTypeCache.register({{crystal_class}}, destructor))
+    else
+      new_obj_ptr = Pointer({{crystal_class}}).malloc(size: 1, value: {{new_obj}})
+      MrbRefTable.add(MrbRefTable.get_object_id(new_obj_ptr.value), new_obj_ptr.as(Void*))
+
+      puts "> C: {{crystal_class}}: #{new_obj_ptr.value.inspect}" if MrbRefTable.option_active?(:logging)
+
+      destructor = MrbTypeCache.destructor_method({{crystal_class}})
+      MrbInternal.set_data_ptr_and_type({{obj}}, new_obj_ptr, MrbTypeCache.register({{crystal_class}}, destructor))
+    end
   end
 
   macro generate_keyword_argument_struct(keyword_args)
@@ -309,7 +375,13 @@ module MrbMacro
 
     wrapped_method = MrbFunc.new do |mrb, obj|
       converted_args = MrbMacro.get_converted_args(mrb, {{proc_arg_array}})
-      converted_obj = MrbMacro.convert_from_ruby_object(mrb, obj, {{crystal_class}}).value
+
+      if {{crystal_class}} <= Struct
+        converted_obj = MrbMacro.convert_from_ruby_struct(mrb, obj, {{crystal_class}}).value.content
+      else
+        converted_obj = MrbMacro.convert_from_ruby_object(mrb, obj, {{crystal_class}}).value
+      end
+
       MrbMacro.call_and_return_instance_method(mrb, {{proc}}, converted_obj, converted_args, operator: {{operator}})
     end
 
@@ -331,7 +403,12 @@ module MrbMacro
       MrbInternal.mrb_get_args(mrb, format_string, *regular_arg_tuple, pointerof(kw_args))
 
       converted_regular_args = MrbMacro.convert_args(mrb, regular_arg_tuple, {{regular_arg_array}})
-      converted_obj = MrbMacro.convert_from_ruby_object(mrb, obj, {{crystal_class}}).value
+
+      if {{crystal_class}} <= Struct
+        converted_obj = MrbMacro.convert_from_ruby_struct(mrb, obj, {{crystal_class}}).value.content
+      else
+        converted_obj = MrbMacro.convert_from_ruby_object(mrb, obj, {{crystal_class}}).value
+      end
 
       {% if regular_arg_array.size == 0 %}
         MrbMacro.call_and_return_keyword_instance_method(mrb, {{proc}}, converted_obj, converted_regular_args, {{keyword_args}}, kw_args, operator: {{operator}}, empty_regular: true)
@@ -351,24 +428,10 @@ module MrbMacro
     {% end %}
 
     wrapped_method = MrbFunc.new do |mrb, obj|
-      # Create local object
       converted_args = MrbMacro.get_converted_args(mrb, {{proc_arg_array}})
       new_obj = {{proc}}{{operator.id}}(*converted_args)
 
-      if new_obj.responds_to?(:mrb_initialize)
-        new_obj.mrb_initialize(mrb)
-      end
-
-      # Allocate memory so we do not lose this object
-      new_obj_ptr = Pointer({{crystal_class}}).malloc(size: 1, value: new_obj)
-      MrbRefTable.add(MrbRefTable.get_object_id(new_obj_ptr.value), new_obj_ptr.as(Void*))
-
-      puts "> {{crystal_class}}: #{new_obj_ptr.value.inspect}" if MrbRefTable.option_active?(:logging)
-
-      destructor = MrbTypeCache.destructor_method({{crystal_class}})
-      MrbInternal.set_data_ptr_and_type(obj, new_obj_ptr, MrbTypeCache.register({{crystal_class}}, destructor))
-
-      # Return object
+      MrbMacro.allocate_constructed_object({{crystal_class}}, obj, new_obj)
       obj
     end
 
@@ -409,19 +472,7 @@ module MrbMacro
         )
       {% end %}
 
-      if new_obj.responds_to?(:mrb_initialize)
-        new_obj.mrb_initialize(mrb)
-      end
-
-      # Allocate memory so we do not lose this object
-      new_obj_ptr = Pointer({{crystal_class}}).malloc(size: 1, value: new_obj)
-      MrbRefTable.add(MrbRefTable.get_object_id(new_obj_ptr.value), new_obj_ptr.as(Void*))
-
-      puts "> {{crystal_class}}: #{new_obj_ptr.value.inspect}" if MrbRefTable.option_active?(:logging)
-
-      destructor = MrbTypeCache.destructor_method({{crystal_class}})
-      MrbInternal.set_data_ptr_and_type(obj, new_obj_ptr, MrbTypeCache.register({{crystal_class}}, destructor))
-
+      MrbMacro.allocate_constructed_object({{crystal_class}}, obj, new_obj)
       obj
     end
 

@@ -26,6 +26,26 @@ module MrbWrap
     end
   end
 
+  class StructWrapper(T)
+    @content : T | Nil = nil
+
+    def initialize(value)
+      @content = value
+    end
+
+    def content : T
+      if c = @content 
+        c
+      else
+        raise("Content undefined!")
+      end
+    end
+
+    def content=(value)
+      @content = value
+    end
+  end
+
   # Undefined mruby value
   Undef = Undefined.new
 

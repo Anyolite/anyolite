@@ -266,10 +266,12 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 
 * [ ] Struct hashes are now ignored for referencing
 * [X] Option hash for reference table instead of flags
+* [X] Consistent naming for mruby hooks
 
 #### Safety
 
 * [ ] More stable type casting
+* [ ] Structs with equal hash values do not interfere anymore
 
 #### Usability
 
