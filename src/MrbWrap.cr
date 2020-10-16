@@ -205,6 +205,15 @@ module MrbWrap
   macro wrap_class_with_methods(mrb_state, crystal_class, under = nil)
     MrbWrap.wrap_class({{mrb_state}}, {{crystal_class.resolve}}, "{{crystal_class}}", under: {{under}})
 
+    # Things left to do:
+    # - Handle setters, getters and attributes seperately and correctly
+    # - Handle constructors seperately
+    # - Allow for passing of information (via annotations?) to specify or exclude functions
+    # - Wrap class methods (using crystal_class.resolve.class.methods)
+    # - Exclude allocate and self.new from wrapping by default
+    # - Wrap constants
+    # - Wrap stuff from inherited classes if wanted
+
     {% for method in crystal_class.resolve.methods %}
       {% if method.name[-1..-1] == "=" %}
         # TODO: Wrap setters
@@ -213,7 +222,7 @@ module MrbWrap
         {% if method.args.empty? %}
           MrbWrap.wrap_instance_method({{mrb_state}}, {{crystal_class}}, "{{method.name}}", {{method.name}})
         {% elsif method.args.stringify.includes?(":") %}
-          {% keyword_hash = {} of Symbol => Class | Tuple %}
+          {% keyword_hash = {} of Symbol => Crystal::Macros::ASTNode %}
           {% for arg in method.args %}
             {% if arg.default_value.stringify != "" %}
               {% keyword_hash[arg.name.symbolize] = {arg.restriction, arg.default_value} %}
@@ -228,8 +237,5 @@ module MrbWrap
       {% end %}
     {% end %}
 
-    # TODO: Wrap class methods and constructor
-    # TODO: Use annotations or similar to provide specialized informations
-    # TODO: Wrap attributes if possible
   end
 end
