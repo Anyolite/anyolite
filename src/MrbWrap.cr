@@ -201,4 +201,35 @@ module MrbWrap
   macro wrap_constant_under_class(mrb_state, under_class, name, crystal_value)
     MrbInternal.mrb_define_const({{mrb_state}}, MrbClassCache.get({{under_class}}), {{name}}, MrbCast.return_value({{mrb_state}}.to_unsafe, {{crystal_value}}))
   end
+
+  macro wrap_class_with_methods(mrb_state, crystal_class, under = nil)
+    MrbWrap.wrap_class({{mrb_state}}, {{crystal_class.resolve}}, "{{crystal_class}}", under: {{under}})
+
+    {% for method in crystal_class.resolve.methods %}
+      {% if method.name[-1..-1] == "=" %}
+        # TODO: Wrap setters
+        {% puts "INFO: Could not wrap function #{method.name} with args #{method.args}." %}
+      {% else %}
+        {% if method.args.empty? %}
+          MrbWrap.wrap_instance_method({{mrb_state}}, {{crystal_class}}, "{{method.name}}", {{method.name}})
+        {% elsif method.args.stringify.includes?(":") %}
+          {% keyword_hash = {} of Symbol => Class | Tuple %}
+          {% for arg in method.args %}
+            {% if arg.default_value.stringify != "" %}
+              {% keyword_hash[arg.name.symbolize] = {arg.restriction, arg.default_value} %}
+            {% else %}
+              {% keyword_hash[arg.name.symbolize] = arg.restriction %}
+            {% end %}
+          {% end %}
+          MrbWrap.wrap_instance_method_with_keywords({{mrb_state}}, {{crystal_class}}, "{{method.name}}", {{method.name}}, {{keyword_hash}})
+        {% else %}
+          {% puts "INFO: Could not wrap function #{method.name} with args #{method.args}." %}
+        {% end %}
+      {% end %}
+    {% end %}
+
+    # TODO: Wrap class methods and constructor
+    # TODO: Use annotations or similar to provide specialized informations
+    # TODO: Wrap attributes if possible
+  end
 end

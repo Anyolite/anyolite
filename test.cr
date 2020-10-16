@@ -161,17 +161,19 @@ end
 MrbState.create do |mrb|
   test_module = MrbModule.new(mrb, "TestModule")
 
-  MrbWrap.wrap_class(mrb, Entity, "Entity", under: test_module)
+  MrbWrap.wrap_class_with_methods(mrb, Entity, under: test_module)
+
+  #MrbWrap.wrap_class(mrb, Entity, "Entity", under: test_module)
 
   MrbWrap.wrap_constructor_with_keywords(mrb, Entity, {:hp => {Int32, 0}})
 
   MrbWrap.wrap_property(mrb, Entity, "hp", hp, Int32)
 
-  MrbWrap.wrap_instance_method_with_keywords(mrb, Entity, "damage", damage, {:diff => Int32})
+  #MrbWrap.wrap_instance_method_with_keywords(mrb, Entity, "damage", damage, {:diff => Int32})
 
-  MrbWrap.wrap_instance_method_with_keywords(mrb, Entity, "yell", yell, {:sound => String, :loud => {Bool, false}})
+  #MrbWrap.wrap_instance_method_with_keywords(mrb, Entity, "yell", yell, {:sound => String, :loud => {Bool, false}})
 
-  MrbWrap.wrap_instance_method_with_keywords(mrb, Entity, "absorb_hp_from", absorb_hp_from, {:other => Entity})
+  #MrbWrap.wrap_instance_method_with_keywords(mrb, Entity, "absorb_hp_from", absorb_hp_from, {:other => Entity})
 
   mrb.load_script_from_file("examples/hp_example.rb")
 end
