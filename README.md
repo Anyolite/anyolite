@@ -281,6 +281,7 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 
 * [ ] Easier wrapping of classes and all of their methods
 * [ ] Copy constructor wrapping
+* [ ] Include wrapping of nilable classes (if possible)
 
 #### Safety
 
