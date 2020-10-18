@@ -22,6 +22,8 @@ class Test
 
   @@counter : Int32 = 0
 
+  CONSTANT = "Hello"
+
   def self.increase_counter
     @@counter += 1
   end
@@ -37,7 +39,8 @@ class Test
     s
   end
 
-  def test_instance_method(int : Int32, bool : Bool, str : String, float : Float32)
+  @[MrbWrap::Rename("test")]
+  def test_instance_method(int : Int32, bool : Bool, str : String, float : Float32 = 0.4f32)
     puts "Old value is #{@x}"
     a = "Args given for instance method: #{int}, #{bool}, #{str}, #{float}"
     @x += int
@@ -65,6 +68,10 @@ class Test
     Test.new(@x + other.x)
   end
 
+  @[MrbWrap::Exclude]
+  def do_not_wrap_this
+  end
+
   def add(other)
     ret = self + other
   end
@@ -74,8 +81,13 @@ class Test
     "#{@x} #{str.value} #{str.test.x}"
   end
 
-  def keyword_test(strvar : String, intvar : Int32, floatvar = 0.123, strvarkw : String = "nothing", boolvar : Bool = true, othervar : Test = Test.new(17))
+  @[MrbWrap::Specialize]
+  def keyword_test(strvar : String, intvar : Int32, floatvar : Float64 = 0.123, strvarkw : String = "nothing", boolvar : Bool = true, othervar : Test = Test.new(17))
     puts "str = #{strvar}, int = #{intvar}, float = #{floatvar}, stringkw = #{strvarkw}, bool = #{boolvar}, other.x = #{othervar.x}"
+  end
+
+  def keyword_test(whatever)
+    puts "This should not be wrapped"
   end
 
   # Gets called in mruby unless program crashes
@@ -84,37 +96,25 @@ class Test
   end
 end
 
-MrbRefTable.set_option(:logging)
+class Bla
+  def initialize
+  end
+end
+
+#MrbRefTable.set_option(:logging)
 
 MrbState.create do |mrb|
   MrbWrap.wrap_module(mrb, SomeModule, "TestModule")
   MrbWrap.wrap_module_function_with_keywords(mrb, SomeModule, "test_method", SomeModule.test_method, {:int => Int32, :str => String})
   MrbWrap.wrap_constant(mrb, SomeModule, "SOME_CONSTANT", "Smile! 😊")
 
-  MrbWrap.wrap_class(mrb, Bla, "Bla", under: SomeModule)
-  MrbWrap.wrap_constructor(mrb, Bla)
+  MrbWrap.wrap_class_with_methods(mrb, Bla, under: SomeModule)
 
-  MrbWrap.wrap_class(mrb, TestStruct, "TestStruct", under: SomeModule)
-  MrbWrap.wrap_constructor(mrb, TestStruct)
-  MrbWrap.wrap_property(mrb, TestStruct, "value", value, [Int32])
-  MrbWrap.wrap_property(mrb, TestStruct, "test", test, [Test])
+  MrbWrap.wrap_class_with_methods(mrb, TestStruct, under: SomeModule)
 
-  MrbWrap.wrap_class(mrb, Test, "Test", under: SomeModule)
-  MrbWrap.wrap_class_method(mrb, Test, "counter", Test.counter)
-  MrbWrap.wrap_constructor_with_keywords(mrb, Test, {:x => {Int32, 0}})
-  MrbWrap.wrap_instance_method_with_keywords(mrb, Test, "bar", test_instance_method, {:int => Int32, :bool => Bool, :str => String, :float => {Float32, Float32.new(0.4)}})
-  MrbWrap.wrap_instance_method(mrb, Test, "add", add, [Test])
+  MrbWrap.wrap_class_with_methods(mrb, Test, under: SomeModule, exclusions: [:add, :+], verbose: true)
   MrbWrap.wrap_instance_method(mrb, Test, "+", add, [Test])
-  MrbWrap.wrap_property(mrb, Test, "x", x, [Int32])
-  MrbWrap.wrap_class_method(mrb, Test, "give_me_a_struct", Test.give_me_a_struct)
-  MrbWrap.wrap_instance_method(mrb, Test, "output_this_and_struct", output_this_and_struct, [TestStruct])
-
-  MrbWrap.wrap_instance_method_with_keywords(mrb, Test, "keyword_test", keyword_test, {
-    :floatvar => {Float32, 0.123}, 
-    :strvarkw => {String, "nothing"}, 
-    :boolvar => {Bool, true}, 
-    :othervar => {Test, Test.new(17)}
-  }, [String, Int32])
+  MrbWrap.wrap_instance_method(mrb, Test, "add", add, [Test])
 
   mrb.load_script_from_file("examples/test.rb")
 end
@@ -122,7 +122,7 @@ end
 class Entity
   property hp : Int32 = 0
 
-  def initialize(@hp)
+  def initialize(@hp : Int32)
   end
 
   def damage(diff : Int32)
@@ -143,13 +143,6 @@ class Entity
   end
 end
 
-class Bla
-  def initialize
-  end
-end
-
-# TODO: Accept MrbClass and Class
-
 puts "Reference table: #{MrbRefTable.inspect}"
 MrbRefTable.reset
 
@@ -162,18 +155,6 @@ MrbState.create do |mrb|
   test_module = MrbModule.new(mrb, "TestModule")
 
   MrbWrap.wrap_class_with_methods(mrb, Entity, under: test_module)
-
-  #MrbWrap.wrap_class(mrb, Entity, "Entity", under: test_module)
-
-  MrbWrap.wrap_constructor_with_keywords(mrb, Entity, {:hp => {Int32, 0}})
-
-  MrbWrap.wrap_property(mrb, Entity, "hp", hp, Int32)
-
-  #MrbWrap.wrap_instance_method_with_keywords(mrb, Entity, "damage", damage, {:diff => Int32})
-
-  #MrbWrap.wrap_instance_method_with_keywords(mrb, Entity, "yell", yell, {:sound => String, :loud => {Bool, false}})
-
-  #MrbWrap.wrap_instance_method_with_keywords(mrb, Entity, "absorb_hp_from", absorb_hp_from, {:other => Entity})
 
   mrb.load_script_from_file("examples/hp_example.rb")
 end

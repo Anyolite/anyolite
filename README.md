@@ -96,17 +96,7 @@ require "anyolite"
 MrbState.create do |mrb|
   test_module = MrbModule.new(mrb, "TestModule")
 
-  MrbWrap.wrap_class(mrb, Entity, "Entity", under: test_module)
-
-  MrbWrap.wrap_constructor_with_keywords(mrb, Entity, {:hp => {Int32, 0}})
-
-  MrbWrap.wrap_property(mrb, Entity, "hp", hp, Int32)
-
-  MrbWrap.wrap_instance_method_with_keywords(mrb, Entity, "damage", damage, {:diff => Int32})
-
-  MrbWrap.wrap_instance_method_with_keywords(mrb, Entity, "yell", yell, {:sound => String, :loud => {Bool, false}})
-
-  MrbWrap.wrap_instance_method_with_keywords(mrb, Entity, "absorb_hp_from", absorb_hp_from, {:other => Entity})
+  MrbWrap.wrap_class_with_methods(mrb, Entity, under: test_module)
 
   mrb.load_script_from_file("examples/hp_example.rb")
 end
@@ -279,13 +269,15 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 
 #### Features
 
-* [ ] Easier wrapping of classes and all of their methods
+* [X] Easier wrapping of classes and all of their methods and constants
+* [X] Annotation to exclude functions from wrapping
+* [X] Annotation to specialize functions for wrapping
+* [X] Annotation to rename wrapped functions
 * [ ] Copy constructor wrapping
-* [ ] Include wrapping of nilable classes (if possible)
 
-#### Safety
+#### Usability
 
-* [ ] More stable type casting
+* [ ] Documentation on how to wrap nontrivial functions
 
 ### Future updates
 
@@ -295,6 +287,7 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 * [ ] Support for more flexible mruby configuration options
 * [ ] Arrays as arguments and return values
 * [ ] Crystal specs for testing
+* [ ] More stable type casting
 
 ### Possible future updates
 
@@ -303,3 +296,4 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 * [ ] Support for arbitrary keyword arguments as hashes
 * [ ] More variety for default parameters for unnamed options
 * [ ] Method in mruby to determine owner of object (if possible)
+* [ ] Include wrapping of nilable classes (if possible)

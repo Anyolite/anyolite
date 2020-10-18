@@ -202,25 +202,124 @@ module MrbWrap
     MrbInternal.mrb_define_const({{mrb_state}}, MrbClassCache.get({{under_class}}), {{name}}, MrbCast.return_value({{mrb_state}}.to_unsafe, {{crystal_value}}))
   end
 
-  macro wrap_class_with_methods(mrb_state, crystal_class, under = nil)
+  annotation Exclude
+  end
+
+  annotation Specialize
+  end
+
+  annotation Rename
+  end
+
+  macro wrap_class_with_methods(mrb_state, crystal_class, under = nil, exclusions = [] of String | Symbol, verbose = false)
     MrbWrap.wrap_class({{mrb_state}}, {{crystal_class.resolve}}, "{{crystal_class}}", under: {{under}})
 
     # Things left to do:
-    # - Handle setters, getters and attributes seperately and correctly
-    # - Handle constructors seperately
+    # - Simplify the whole function with more macros
+    # - Introduce macro for how_many_times_wrapped checks
+    # - Handle operators correctly
     # - Allow for passing of information (via annotations?) to specify or exclude functions
-    # - Wrap class methods (using crystal_class.resolve.class.methods)
-    # - Exclude allocate and self.new from wrapping by default
-    # - Wrap constants
+    # - Update class method and constant wrapping to behave like the instance method wrappers
+    # - Wrap modules similarly to classes
     # - Wrap stuff from inherited classes if wanted
+    # - Display warning if a function gets wrapped more than once
+    # - Display function args for repeated wrapping (replaced ones and new ones?)
+    # - Allow flag for setting all required function arguments as non-keyword-based
+    # - Maybe pass functions as symbols to fix operators?
+    # - Flag to include finalize
+
+    {% has_specialized_method = {} of String => Bool %}
 
     {% for method in crystal_class.resolve.methods %}
-      {% if method.name[-1..-1] == "=" %}
-        # TODO: Wrap setters
-        {% puts "INFO: Could not wrap function #{method.name} with args #{method.args}." %}
+      {% if method.annotation(MrbWrap::Specialize) %}
+        {% has_specialized_method[method.name.stringify] = true %}
+      {% end %}
+    {% end %}
+
+    {% how_many_times_wrapped = {} of String => UInt32 %}
+
+    {% for method in crystal_class.resolve.methods %}
+      {% if method.annotation(MrbWrap::Rename) %}
+        {% ruby_name = method.annotation(MrbWrap::Rename)[0].id %}
+      {% else %}
+        {% ruby_name = method.name %}
+      {% end %}
+      {% puts "> Processing #{crystal_class}::#{method.name} to #{ruby_name}" if verbose %}
+      # Ignore mrb hooks
+      {% if method.name.starts_with?("mrb_") || method.name == "finalize" %}
+      # Exclude methods if given as arguments
+      {% elsif exclusions.includes?(method.name.symbolize) || exclusions.includes?(method.name) %}
+        {% puts "--> Excluding #{crystal_class}::#{method.name} due to exclusion argument" if verbose %}
+      # Exclude methods which were annotated to be excluded
+      {% elsif method.annotation(MrbWrap::Exclude) %}
+        {% puts "--> Excluding #{crystal_class}::#{method.name} due to annotation" if verbose %}
+      # Exclude methods which are not the specialized methods
+      {% elsif has_specialized_method[method.name.stringify] && !method.annotation(MrbWrap::Specialize) %}
+        {% puts "--> Excluding #{crystal_class}::#{method.name} due to specialization" if verbose %}
+      # Handle setters
+      {% elsif ruby_name[-1..-1] == "=" %}
+        # The '=' will be added later on (to the name and the method), so we can cut it here
+        MrbWrap.wrap_setter({{mrb_state}}, {{crystal_class}}, "{{ruby_name[0..-2]}}", {{method.name[0..-2]}}, {{method.args[0].restriction}})
+        {% how_many_times_wrapped[ruby_name.stringify] = how_many_times_wrapped[ruby_name.stringify] ? how_many_times_wrapped[ruby_name.stringify] + 1 : 1 %}
+      # Handle constructors
+      {% elsif method.name == "initialize" %}
+        {% if method.args.empty? %}
+          MrbWrap.wrap_constructor({{mrb_state}}, {{crystal_class}})
+          {% how_many_times_wrapped[ruby_name.stringify] = how_many_times_wrapped[ruby_name.stringify] ? how_many_times_wrapped[ruby_name.stringify] + 1 : 1 %}
+        {% elsif method.args.stringify.includes?(":") %}
+          # TODO: Put this in MrbMacro or some other module
+          {% keyword_hash = {} of Symbol => Crystal::Macros::ASTNode %}
+          {% for arg in method.args %}
+            {% if arg.default_value.stringify != "" %}
+              {% keyword_hash[arg.name.symbolize] = {arg.restriction, arg.default_value} %}
+            {% else %}
+              {% keyword_hash[arg.name.symbolize] = arg.restriction %}
+            {% end %}
+          {% end %}
+          MrbWrap.wrap_constructor_with_keywords({{mrb_state}}, {{crystal_class}}, {{keyword_hash}})
+          {% how_many_times_wrapped[ruby_name.stringify] = how_many_times_wrapped[ruby_name.stringify] ? how_many_times_wrapped[ruby_name.stringify] + 1 : 1 %}
+        {% else %}
+          {% puts "INFO: Could not wrap function '#{method.name}' with args #{method.args}." %}
+        {% end %}
+      # Handle other instance methods
       {% else %}
         {% if method.args.empty? %}
-          MrbWrap.wrap_instance_method({{mrb_state}}, {{crystal_class}}, "{{method.name}}", {{method.name}})
+          MrbWrap.wrap_instance_method({{mrb_state}}, {{crystal_class}}, "{{ruby_name}}", {{method.name}})
+          {% how_many_times_wrapped[ruby_name.stringify] = how_many_times_wrapped[ruby_name.stringify] ? how_many_times_wrapped[ruby_name.stringify] + 1 : 1 %}
+        {% elsif method.args.stringify.includes?(":") %}
+          {% keyword_hash = {} of Symbol => Crystal::Macros::ASTNode %}
+          {% for arg in method.args %}
+            {% if arg.default_value.stringify != "" %}
+              {% if !arg.restriction %}
+                {% puts "INFO: Could not wrap function '#{method.name}' with args #{method.args}." %}
+                {% next %}
+              {% else %}
+                {% keyword_hash[arg.name.symbolize] = {arg.restriction, arg.default_value} %}
+              {% end %}
+            {% else %}
+              {% keyword_hash[arg.name.symbolize] = arg.restriction %}
+            {% end %}
+          {% end %}
+          MrbWrap.wrap_instance_method_with_keywords({{mrb_state}}, {{crystal_class}}, "{{ruby_name}}", {{method.name}}, {{keyword_hash}})
+          {% how_many_times_wrapped[ruby_name.stringify] = how_many_times_wrapped[ruby_name.stringify] ? how_many_times_wrapped[ruby_name.stringify] + 1 : 1 %}
+        {% else %}
+          {% puts "INFO: Could not wrap function '#{method.name}' with args #{method.args}." %}
+        {% end %}
+      {% end %}
+    {% end %}
+
+    {% if !how_many_times_wrapped["initialize"] %}
+      {% puts "> Adding constructor for #{crystal_class}" if verbose %}
+      MrbWrap.wrap_constructor({{mrb_state}}, {{crystal_class}})
+    {% end %}
+
+    {% for method in crystal_class.resolve.class.methods %}
+      # We already wrapped 'initialize', so we don't need to wrap these
+      {% if method.name == "allocate" || method.name == "new" %}
+      # Handle other class methods
+      {% else %}
+        {% if method.args.empty? %}
+          MrbWrap.wrap_class_method({{mrb_state}}, {{crystal_class}}, "{{method.name}}", {{crystal_class}}.{{method.name}})
         {% elsif method.args.stringify.includes?(":") %}
           {% keyword_hash = {} of Symbol => Crystal::Macros::ASTNode %}
           {% for arg in method.args %}
@@ -230,11 +329,15 @@ module MrbWrap
               {% keyword_hash[arg.name.symbolize] = arg.restriction %}
             {% end %}
           {% end %}
-          MrbWrap.wrap_instance_method_with_keywords({{mrb_state}}, {{crystal_class}}, "{{method.name}}", {{method.name}}, {{keyword_hash}})
+          MrbWrap.wrap_class_method_with_args({{mrb_state}}, {{crystal_class}}, "{{method.name}}", {{crystal_class}}.{{method.name}}, {{keyword_hash}})
         {% else %}
-          {% puts "INFO: Could not wrap function #{method.name} with args #{method.args}." %}
+          {% puts "INFO: Could not wrap function '#{crystal_class}.#{method.name}' with args #{method.args}." %}
         {% end %}
       {% end %}
+    {% end %}
+
+    {% for constant in crystal_class.resolve.constants %}
+      MrbWrap.wrap_constant_under_class({{mrb_state}}, {{crystal_class}}, "{{constant}}", {{crystal_class}}::{{constant}})
     {% end %}
 
   end
