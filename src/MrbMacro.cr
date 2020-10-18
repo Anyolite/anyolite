@@ -478,4 +478,42 @@ module MrbMacro
 
     {{mrb_state}}.define_method("initialize", MrbClassCache.get({{crystal_class}}), wrapped_method)
   end
+
+  macro get_specialized_methods(crystal_class)
+    specialized_methods = {} of String => Bool
+
+    {% for method in crystal_class.resolve.methods %}
+      {% all_annotations_specialize_im = crystal_class.resolve.annotations(MrbWrap::SpecializeInstanceMethod) %}
+      {% annotation_specialize_im = all_annotations_specialize_im.find {|element| element[0].stringify == method.name.stringify} %}
+
+      {% if method.annotation(MrbWrap::Specialize) %}
+        specialized_methods[{{method.name.stringify}}] = true
+      {% elsif annotation_specialize_im %}
+        specialized_methods[{{method.name.stringify}}] = true
+      {% end %}
+    {% end %}
+
+    specialized_methods
+  end
+
+  macro is_forbidden_method?(method)
+    {% if method.name.starts_with?("mrb_") || method.name == "finalize" %}
+      true
+    {% else %}
+      false
+    {% end %}
+  end
+
+  macro get_ruby_name(crystal_class, method)
+    {% all_annotations_rename_im = crystal_class.resolve.annotations(MrbWrap::RenameInstanceMethod) %}
+    {% annotation_rename_im = all_annotations_rename_im.find {|element| element[0].stringify == method.name.stringify} %}
+
+    {% if method.annotation(MrbWrap::Rename) %}
+      {{method.annotation(MrbWrap::Rename)[0].id.stringify}}
+    {% elsif annotation_rename_im && method.name.stringify == annotation_rename_im[0].stringify %}
+      {{annotation_rename_im[1].id.stringify}}
+    {% else %}
+      {{method.name.stringify}}
+    {% end %}
+  end
 end

@@ -260,6 +260,9 @@ module MrbWrap
       {% end %}
     {% end %}
 
+    # TODO: Replace the above when ready
+    specialized_methods = MrbMacro.get_specialized_methods({{crystal_class}})
+
     {% how_many_times_wrapped = {} of String => UInt32 %}
 
     {% for method in crystal_class.resolve.methods %}
@@ -279,6 +282,11 @@ module MrbWrap
       {% else %}
         {% ruby_name = method.name %}
       {% end %}
+
+      # TODO: Why is the annotation for the function def not included in the passed method parameter?!?
+      # TODO: Might be worth an issue
+      puts "Ruby name of {{method.name}} is: #{MrbMacro.get_ruby_name({{crystal_class}}, {{method}})}"
+
       {% puts "> Processing #{crystal_class}::#{method.name} to #{ruby_name}" if verbose %}
       # Ignore mrb hooks
       {% if method.name.starts_with?("mrb_") || method.name == "finalize" %}
@@ -289,8 +297,8 @@ module MrbWrap
       {% elsif method.annotation(MrbWrap::Exclude) || (annotation_exclude_im) %}
         {% puts "--> Excluding #{crystal_class}::#{method.name} (Exclusion annotation)" if verbose %}
       # Exclude methods which are not the specialized methods
-      {% elsif has_specialized_method[method.name.stringify] && !method.annotation(MrbWrap::Specialize) && (annotation_specialize_im && method.args.stringify != annotation_specialize_im[1].stringify) %}
-        {% puts "--> Excluding #{crystal_class}::#{method.name} (Specialization)" if verbose %}
+      {% elsif has_specialized_method[method.name.stringify] && !(method.annotation(MrbWrap::Specialize) || (annotation_specialize_im && method.args.stringify == annotation_specialize_im[1].stringify)) %}
+        {% puts "--> Excluding #{crystal_class}::#{method.name} (Specialization 1)" if verbose %}
       # Handle setters
       {% elsif method.name[-1..-1] == "=" %}
         # The '=' will be added later on (to the name and the method), so we can cut it here
