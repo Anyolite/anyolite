@@ -17,6 +17,9 @@ struct TestStruct
 
 end
 
+@[MrbWrap::SpecializeInstanceMethod(output_this_and_struct, [str : TestStruct])]
+@[MrbWrap::RenameInstanceMethod(output_this_and_struct, "output_together_with")]
+@[MrbWrap::ExcludeInstanceMethod(do_not_wrap_this_either)]
 class Test
   property x : Int32 = 0
 
@@ -72,6 +75,9 @@ class Test
   def do_not_wrap_this
   end
 
+  def do_not_wrap_this_either
+  end
+
   def add(other)
     ret = self + other
   end
@@ -79,6 +85,10 @@ class Test
   def output_this_and_struct(str : TestStruct)
     puts str
     "#{@x} #{str.value} #{str.test.x}"
+  end
+
+  def output_this_and_struct(i : Int32)
+    puts "This should not be wrapped"
   end
 
   @[MrbWrap::Specialize]

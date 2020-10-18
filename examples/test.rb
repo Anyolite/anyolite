@@ -21,8 +21,8 @@ some_struct = TestModule::Test.give_me_a_struct
 puts "Some struct value: #{some_struct.value}"
 puts "Some struct test: #{some_struct.test.x}"
 
-puts "Output: #{a.output_this_and_struct(str: ts)}"
-puts "Output: #{a.output_this_and_struct(str: some_struct)}"
+puts "Output: #{a.output_together_with(str: ts)}"
+puts "Output: #{a.output_together_with(str: some_struct)}"
 
 puts "Values of Test: #{TestModule::Test.counter}"
 
