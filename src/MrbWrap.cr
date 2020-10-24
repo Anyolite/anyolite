@@ -238,6 +238,7 @@ module MrbWrap
     # - Display function args for repeated wrapping (replaced ones and new ones?)
     # - Allow flag for setting all required function arguments as non-keyword-based via annotations
     # - Flag or annotation to include finalize
+    # - Put annotation checks into a sophisticated macro of the annotation name, crystal_class, method_index, is_class_method etc.
 
     {% has_specialized_method = {} of String => Bool %}
 
