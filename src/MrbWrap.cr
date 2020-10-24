@@ -26,6 +26,10 @@ module MrbWrap
     end
   end
 
+  # Use this special constant in case of a function to wrap, which has only an operator as a name
+  struct Empty
+  end
+
   class StructWrapper(T)
     @content : T | Nil = nil
 
@@ -227,16 +231,13 @@ module MrbWrap
     # - Simplify the whole function with more macros
     # - Allow passing normal and keyword argument arrays to specialization annotations as optional arguments
     # - Introduce macro for how_many_times_wrapped checks
-    # - Handle operators correctly
     # - Update class method and constant wrapping to fully behave like the instance method wrappers
     # - Wrap modules similarly to classes
     # - Wrap stuff from inherited classes if wanted
     # - Display warning if a function gets wrapped more than once
     # - Display function args for repeated wrapping (replaced ones and new ones?)
-    # - Allow flag for setting all required function arguments as non-keyword-based
-    # - Maybe pass functions as symbols to fix operators?
-    # - Fix transformations of methods to ruby setters (and vice versa), which will currently not work
-    # - Flag to include finalize
+    # - Allow flag for setting all required function arguments as non-keyword-based via annotations
+    # - Flag or annotation to include finalize
 
     {% has_specialized_method = {} of String => Bool %}
 
@@ -296,18 +297,23 @@ module MrbWrap
       # Exclude methods which are not the specialized methods
       {% elsif has_specialized_method[method.name.stringify] && !(method.annotation(MrbWrap::Specialize) || (annotation_specialize_im && method.args.stringify == annotation_specialize_im[1].stringify)) %}
         {% puts "--> Excluding #{crystal_class}::#{method.name} (Specialization 1)" if verbose %}
-      # Handle setters
-      {% elsif method.name[-1..-1] == "=" %}
-        # The '=' will be added later on (to the name and the method), so we can cut it here
-        MrbWrap.wrap_setter({{mrb_state}}, {{crystal_class}}, "{{ruby_name[0..-2]}}", {{method.name[0..-2]}}, {{method.args[0].restriction}})
-        {% how_many_times_wrapped[ruby_name.stringify] = how_many_times_wrapped[ruby_name.stringify] ? how_many_times_wrapped[ruby_name.stringify] + 1 : 1 %}
+      # Handle operator methods (including setters)
+      {% elsif method.name =~ /\W/ %}
+        {% without_operator = method.name.gsub(/\W/, "") %}
+        {% operator = method.name.tr(without_operator.stringify, "") %}
+
+        {% if without_operator.empty? %}
+          MrbMacro.wrap_method_index({{mrb_state}}, {{crystal_class}}, {{index}}, "{{ruby_name}}", operator: "{{operator}}", without_keywords: true)
+        {% else %}
+          MrbMacro.wrap_method_index({{mrb_state}}, {{crystal_class}}, {{index}}, "{{ruby_name}}", operator: "{{operator}}", cut_name: {{without_operator}}, without_keywords: true)
+        {% end %}
       # Handle constructors
       {% elsif method.name == "initialize" %}
-        MrbMacro.wrap_method_index({{mrb_state}}, {{crystal_class}}, {{index}}, {{ruby_name}}, is_constructor: true)
+        MrbMacro.wrap_method_index({{mrb_state}}, {{crystal_class}}, {{index}}, "{{ruby_name}}", is_constructor: true)
         {% how_many_times_wrapped[ruby_name.stringify] = how_many_times_wrapped[ruby_name.stringify] ? how_many_times_wrapped[ruby_name.stringify] + 1 : 1 %}
       # Handle other instance methods
       {% else %}
-        MrbMacro.wrap_method_index({{mrb_state}}, {{crystal_class}}, {{index}}, {{ruby_name}})
+        MrbMacro.wrap_method_index({{mrb_state}}, {{crystal_class}}, {{index}}, "{{ruby_name}}")
         {% how_many_times_wrapped[ruby_name.stringify] = how_many_times_wrapped[ruby_name.stringify] ? how_many_times_wrapped[ruby_name.stringify] + 1 : 1 %}
       {% end %}
     {% end %}
@@ -333,7 +339,7 @@ module MrbWrap
       {% if method.name == "allocate" || method.name == "new" %}
       # Handle other class methods
       {% else %}
-        MrbMacro.wrap_method_index({{mrb_state}}, {{crystal_class}}, {{index}}, {{ruby_name}}, is_class_method: true)
+        MrbMacro.wrap_method_index({{mrb_state}}, {{crystal_class}}, {{index}}, "{{ruby_name}}", is_class_method: true)
       {% end %}
     {% end %}
 

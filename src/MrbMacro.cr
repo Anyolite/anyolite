@@ -143,12 +143,20 @@ module MrbMacro
   end
 
   macro call_and_return(mrb, proc, proc_args, converted_args, operator = "")
-    return_value = {{proc}}{{operator.id}}(*{{converted_args}})
+    {% if proc.stringify == "MrbWrap::Empty" %}
+      return_value = {{operator.id}}(*{{converted_args}})
+    {% else %}
+      return_value = {{proc}}{{operator.id}}(*{{converted_args}})
+    {% end %}
     MrbCast.return_value({{mrb}}, return_value)
   end
 
   macro call_and_return_keyword_method(mrb, proc, converted_regular_args, keyword_args, kw_args, operator = "", empty_regular = false)
-    return_value = {{proc}}{{operator.id}}(
+    {% if proc.stringify == "MrbWrap::Empty" %}
+      return_value = {{operator.id}}(
+    {% else %}
+      return_value = {{proc}}{{operator.id}}(
+    {% end %}
       {% if empty_regular %}
         {% c = 0 %}
         {% for keyword in keyword_args.keys %}
@@ -170,16 +178,28 @@ module MrbMacro
 
   macro call_and_return_instance_method(mrb, proc, converted_obj, converted_args, operator = "")
     if {{converted_obj}}.is_a?(MrbWrap::StructWrapper)
-      return_value = {{converted_obj}}.content.{{proc}}{{operator.id}}(*{{converted_args}})
+      {% if proc.stringify == "MrbWrap::Empty" %}
+        return_value = {{converted_obj}}.content.{{operator.id}}(*{{converted_args}})
+      {% else %}
+        return_value = {{converted_obj}}.content.{{proc}}{{operator.id}}(*{{converted_args}})
+      {% end %}
     else
-      return_value = {{converted_obj}}.{{proc}}{{operator.id}}(*{{converted_args}})
+      {% if proc.stringify == "MrbWrap::Empty" %}
+        return_value = {{converted_obj}}.{{operator.id}}(*{{converted_args}})
+      {% else %}
+        return_value = {{converted_obj}}.{{proc}}{{operator.id}}(*{{converted_args}})
+      {% end %}
     end
     MrbCast.return_value({{mrb}}, return_value)
   end
 
   macro call_and_return_keyword_instance_method(mrb, proc, converted_obj, converted_regular_args, keyword_args, kw_args, operator = "", empty_regular = false)
     if {{converted_obj}}.is_a?(MrbWrap::StructWrapper)
-      return_value = {{converted_obj}}.content.{{proc}}{{operator.id}}(
+      {% if proc.stringify == "MrbWrap::Empty" %}
+        return_value = {{converted_obj}}.content.{{operator.id}}(
+      {% else %}
+        return_value = {{converted_obj}}.content.{{proc}}{{operator.id}}(
+      {% end %}
         {% if empty_regular %}
           {% c = 0 %}
           {% for keyword in keyword_args.keys %}
@@ -196,7 +216,11 @@ module MrbMacro
         {% end %}
       )
     else
-      return_value = {{converted_obj}}.{{proc}}{{operator.id}}(
+      {% if proc.stringify == "MrbWrap::Empty" %}
+        return_value = {{converted_obj}}.{{operator.id}}(
+      {% else %}
+        return_value = {{converted_obj}}.{{proc}}{{operator.id}}(
+      {% end %}
         {% if empty_regular %}
           {% c = 0 %}
           {% for keyword in keyword_args.keys %}
@@ -385,7 +409,7 @@ module MrbMacro
       MrbMacro.call_and_return_instance_method(mrb, {{proc}}, converted_obj, converted_args, operator: {{operator}})
     end
 
-    {{mrb_state}}.define_method({{name + operator}}, MrbClassCache.get({{crystal_class}}), wrapped_method)
+    {{mrb_state}}.define_method({{name}}, MrbClassCache.get({{crystal_class}}), wrapped_method)
   end
 
   macro wrap_instance_function_with_keyword_args(mrb_state, crystal_class, name, proc, keyword_args, regular_args = [] of Class, operator = "")
@@ -417,7 +441,7 @@ module MrbMacro
       {% end %}
     end
 
-    {{mrb_state}}.define_method({{name + operator}}, MrbClassCache.get({{crystal_class}}), wrapped_method)
+    {{mrb_state}}.define_method({{name}}, MrbClassCache.get({{crystal_class}}), wrapped_method)
   end
 
   macro wrap_constructor_function_with_args(mrb_state, crystal_class, proc, proc_args = [] of Class, operator = "")
@@ -522,44 +546,70 @@ module MrbMacro
     {% end %}
   end
 
-  macro wrap_method_index(mrb_state, crystal_class, method_index, ruby_name, is_constructor = false, is_class_method = false)
+  macro wrap_method_index(mrb_state, crystal_class, method_index, ruby_name, is_constructor = false, is_class_method = false, operator = "", cut_name = nil, without_keywords = false)
     {% if is_class_method %}
       {% method = crystal_class.resolve.class.methods[method_index] %}
     {% else %}
       {% method = crystal_class.resolve.methods[method_index] %}
     {% end %}
 
+    {% if !operator.empty? %}
+      {% if cut_name %}
+        {% final_method_name = cut_name %}
+      {% else %}
+        {% final_method_name = MrbWrap::Empty %}
+      {% end %}
+    {% else %}
+      {% final_method_name = method.name %}
+    {% end %}
+
     {% if method.args.empty? %}
       {% if is_class_method %}
-        MrbWrap.wrap_class_method({{mrb_state}}, {{crystal_class}}, "{{method.name}}", {{crystal_class}}.{{method.name}})
+        MrbWrap.wrap_class_method({{mrb_state}}, {{crystal_class}}, {{ruby_name}}, {{crystal_class}}.{{final_method_name}}, operator: {{operator}})
       {% elsif is_constructor %}
         MrbWrap.wrap_constructor({{mrb_state}}, {{crystal_class}})
       {% else %}
-        MrbWrap.wrap_instance_method({{mrb_state}}, {{crystal_class}}, "{{ruby_name}}", {{method.name}})
+        MrbWrap.wrap_instance_method({{mrb_state}}, {{crystal_class}}, {{ruby_name}}, {{final_method_name}}, operator: {{operator}})
       {% end %}
 
     {% elsif method.args.stringify.includes?(":") %}
-      {% keyword_hash = {} of Symbol => Crystal::Macros::ASTNode %}
-      
-      {% for arg in method.args %}
-        {% if arg.default_value.stringify != "" %}
-          {% if !arg.restriction %}
-            {% puts "INFO: Could not wrap function '#{method.name}' with args #{method.args}." %}
-            {% next %}
-          {% else %}
-            {% keyword_hash[arg.name.symbolize] = {arg.restriction, arg.default_value} %}
-          {% end %}
-        {% else %}
-          {% keyword_hash[arg.name.symbolize] = arg.restriction %}
-        {% end %}
-      {% end %}
+      {% if without_keywords %}
+        {% type_array = [] of Class %}
 
-      {% if is_class_method %}
-        MrbWrap.wrap_class_method_with_args({{mrb_state}}, {{crystal_class}}, "{{method.name}}", {{crystal_class}}.{{method.name}}, {{keyword_hash}})
-      {% elsif is_constructor %}
-        MrbWrap.wrap_constructor_with_keywords({{mrb_state}}, {{crystal_class}}, {{keyword_hash}})
+        {% for arg in method.args %}
+          {% type_array.push(arg.restriction) %}
+        {% end %}
+
+        {% if is_class_method %}
+          MrbWrap.wrap_class_method({{mrb_state}}, {{crystal_class}}, {{ruby_name}}, {{crystal_class}}.{{final_method_name}}, {{type_array}}, operator: {{operator}})
+        {% elsif is_constructor %}
+          MrbWrap.wrap_constructor({{mrb_state}}, {{crystal_class}}, {{type_array}}, operator: {{operator}})
+        {% else %}
+          MrbWrap.wrap_instance_method({{mrb_state}}, {{crystal_class}}, {{ruby_name}}, {{final_method_name}}, {{type_array}}, operator: {{operator}})
+        {% end %}
       {% else %}
-        MrbWrap.wrap_instance_method_with_keywords({{mrb_state}}, {{crystal_class}}, "{{ruby_name}}", {{method.name}}, {{keyword_hash}})
+        {% keyword_hash = {} of Symbol => Crystal::Macros::ASTNode %}
+        
+        {% for arg in method.args %}
+          {% if arg.default_value.stringify != "" %}
+            {% if !arg.restriction %}
+              {% puts "INFO: Could not wrap function '#{final_method_name}' with args #{method.args}." %}
+              {% next %}
+            {% else %}
+              {% keyword_hash[arg.name.symbolize] = {arg.restriction, arg.default_value} %}
+            {% end %}
+          {% else %}
+            {% keyword_hash[arg.name.symbolize] = arg.restriction %}
+          {% end %}
+        {% end %}
+
+        {% if is_class_method %}
+          MrbWrap.wrap_class_method_with_keywords({{mrb_state}}, {{crystal_class}}, {{ruby_name}}, {{crystal_class}}.{{final_method_name}}, {{keyword_hash}}, operator: {{operator}})
+        {% elsif is_constructor %}
+          MrbWrap.wrap_constructor_with_keywords({{mrb_state}}, {{crystal_class}}, {{keyword_hash}}, operator: {{operator}})
+        {% else %}
+          MrbWrap.wrap_instance_method_with_keywords({{mrb_state}}, {{crystal_class}}, {{ruby_name}}, {{final_method_name}}, {{keyword_hash}}, operator: {{operator}})
+        {% end %}
       {% end %}
 
     {% else %}

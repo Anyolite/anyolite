@@ -67,7 +67,7 @@ class Test
     puts "Finalized with value #{@x}"
   end
 
-  def +(other)
+  def +(other : Test)
     Test.new(@x + other.x)
   end
 
@@ -78,7 +78,7 @@ class Test
   def do_not_wrap_this_either
   end
 
-  def add(other)
+  def add(other : Test)
     ret = self + other
   end
 
@@ -122,8 +122,7 @@ MrbState.create do |mrb|
 
   MrbWrap.wrap_class_with_methods(mrb, TestStruct, under: SomeModule)
 
-  MrbWrap.wrap_class_with_methods(mrb, Test, under: SomeModule, exclusions: [:add, :+], verbose: true)
-  MrbWrap.wrap_instance_method(mrb, Test, "+", add, [Test])
+  MrbWrap.wrap_class_with_methods(mrb, Test, under: SomeModule, exclusions: [:add], verbose: true)
   MrbWrap.wrap_instance_method(mrb, Test, "add", add, [Test])
 
   mrb.load_script_from_file("examples/test.rb")
