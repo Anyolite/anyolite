@@ -503,39 +503,6 @@ module MrbMacro
     {{mrb_state}}.define_method("initialize", MrbClassCache.get({{crystal_class}}), wrapped_method)
   end
 
-  macro get_ruby_name(crystal_class, method_index)
-    {% method = crystal_class.resolve.methods[method_index] %}
-    {% annotation_rename = method.annotation(MrbWrap::Rename) %}
-
-    {% all_annotations_rename_im = crystal_class.resolve.annotations(MrbWrap::RenameInstanceMethod) %}
-    {% annotation_rename_im = all_annotations_rename_im.find {|element| element[0].stringify == method.name.stringify} %}
-
-    {% if annotation_rename %}
-      {{annotation_rename[0].id.stringify}}
-    {% elsif annotation_rename_im && method.name.stringify == annotation_rename_im[0].stringify %}
-      {{annotation_rename_im[1].id.stringify}}
-    {% else %}
-      {{method.name.stringify}}
-    {% end %}
-  end
-
-  # TODO: Finish this and check whether it is possible to use the result as a macro argument
-  macro get_annotation_group(crystal_class, method_index, method_annotation_name, class_annotation_name)
-    {% method = crystal_class.resolve.methods[method_index] %}
-    
-    {% method_annotation = method.annotation(method_annotation_name) %}
-    {% class_annotation = crystal_class.resolve.annotation(class_annotation_name) %}
-    {% class_annotation_specific = class_annotation.find {|element| element[0].stringify == method.name.stringify} %}
-
-    {% if method_annotation %}
-      {{method_annotation[0] ? method_annotation[0] : true}}
-    {% elsif class_annotation_specific && method.name.stringify == class_annotation_specific[0].stringify %}
-      {{class_annotation_specific[1] ? class_annotation_specific[1] : true}}
-    {% else %}
-      nil
-    {% end %}
-  end
-
   macro wrap_method_index(mrb_state, crystal_class, method_index, ruby_name, is_constructor = false, is_class_method = false, operator = "", cut_name = nil, without_keywords = false)
     {% if is_class_method %}
       {% method = crystal_class.resolve.class.methods[method_index] %}
