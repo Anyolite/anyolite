@@ -206,147 +206,41 @@ module MrbWrap
     MrbInternal.mrb_define_const({{mrb_state}}, MrbClassCache.get({{under_class}}), {{name}}, MrbCast.return_value({{mrb_state}}.to_unsafe, {{crystal_value}}))
   end
 
-  annotation Exclude
-  end
+  # NOTE: Annotations like SpecializeConstant are not defined for obvious reasons
 
-  annotation Specialize
-  end
+  annotation Exclude; end
+  annotation ExcludeInstanceMethod; end
+  annotation ExcludeClassMethod; end
+  annotation ExcludeConstant; end
 
-  annotation Rename
-  end
+  annotation Specialize; end
+  annotation SpecializeInstanceMethod; end
+  annotation SpecializeClassMethod; end
 
-  annotation ExcludeInstanceMethod
-  end
+  annotation Rename; end
+  annotation RenameInstanceMethod; end
+  annotation RenameClassMethod; end
+  annotation RenameConstant; end
 
-  annotation SpecializeInstanceMethod
-  end
+  # TODO: Implement
+  annotation WrapWithoutKeywords; end
+  annotation WrapWithoutKeywordsInstanceMethod; end
+  annotation WrapWithoutKeywordsClassMethod; end
 
-  annotation RenameInstanceMethod
-  end
-
-  macro wrap_class_with_methods(mrb_state, crystal_class, under = nil, exclusions = [] of String | Symbol, verbose = false)
-    MrbWrap.wrap_class({{mrb_state}}, {{crystal_class.resolve}}, "{{crystal_class}}", under: {{under}})
-
+  macro wrap_class_with_methods(mrb_state, crystal_class, under = nil, exclusions = [] of String | Symbol, class_method_exclusions = [] of String | Symbol, verbose = false)
     # Things left to do:
-    # - Simplify the whole function with more macros
     # - Allow passing normal and keyword argument arrays to specialization annotations as optional arguments
-    # - Introduce macro for how_many_times_wrapped checks
-    # - Update class method and constant wrapping to fully behave like the instance method wrappers
+    # - Update constant wrapping to fully behave like the instance method wrappers
     # - Wrap modules similarly to classes
     # - Wrap stuff from inherited classes if wanted
     # - Display warning if a function gets wrapped more than once
     # - Display function args for repeated wrapping (replaced ones and new ones?)
     # - Allow flag for setting all required function arguments as non-keyword-based via annotations
-    # - Flag or annotation to include finalize
-    # - Put annotation checks into a sophisticated macro of the annotation name, crystal_class, method_index, is_class_method etc.
 
-    {% has_specialized_method = {} of String => Bool %}
+    MrbWrap.wrap_class({{mrb_state}}, {{crystal_class.resolve}}, "{{crystal_class}}", under: {{under}})
 
-    {% for method in crystal_class.resolve.methods %}
-      {% all_annotations_exclude_im = crystal_class.resolve.annotations(MrbWrap::ExcludeInstanceMethod) %}
-      {% annotation_exclude_im = all_annotations_exclude_im.find {|element| element[0].stringify == method.name.stringify} %}
-
-      {% all_annotations_specialize_im = crystal_class.resolve.annotations(MrbWrap::SpecializeInstanceMethod) %}
-      {% annotation_specialize_im = all_annotations_specialize_im.find {|element| element[0].stringify == method.name.stringify} %}
-
-      {% all_annotations_rename_im = crystal_class.resolve.annotations(MrbWrap::RenameInstanceMethod) %}
-      {% annotation_rename_im = all_annotations_rename_im.find {|element| element[0].stringify == method.name.stringify} %}
-
-      {% if method.annotation(MrbWrap::Specialize) %}
-        {% has_specialized_method[method.name.stringify] = true %}
-      {% end %}
-
-      {% if annotation_specialize_im %}
-        {% has_specialized_method[annotation_specialize_im[0].stringify] = true %}
-      {% end %}
-    {% end %}
-
-    # TODO: Replace the above when ready
-    specialized_methods = MrbMacro.get_specialized_methods({{crystal_class}})
-
-    {% how_many_times_wrapped = {} of String => UInt32 %}
-
-    {% for method, index in crystal_class.resolve.methods %}
-      {% all_annotations_exclude_im = crystal_class.resolve.annotations(MrbWrap::ExcludeInstanceMethod) %}
-      {% annotation_exclude_im = all_annotations_exclude_im.find {|element| element[0].stringify == method.name.stringify} %}
-
-      {% all_annotations_specialize_im = crystal_class.resolve.annotations(MrbWrap::SpecializeInstanceMethod) %}
-      {% annotation_specialize_im = all_annotations_specialize_im.find {|element| element[0].stringify == method.name.stringify} %}
-
-      {% all_annotations_rename_im = crystal_class.resolve.annotations(MrbWrap::RenameInstanceMethod) %}
-      {% annotation_rename_im = all_annotations_rename_im.find {|element| element[0].stringify == method.name.stringify} %}
-
-      {% if method.annotation(MrbWrap::Rename) %}
-        {% ruby_name = method.annotation(MrbWrap::Rename)[0].id %}
-      {% elsif annotation_rename_im && method.name.stringify == annotation_rename_im[0].stringify %}
-        {% ruby_name = annotation_rename_im[1].id %}
-      {% else %}
-        {% ruby_name = method.name %}
-      {% end %}
-
-      # TODO: Put the checks in an MrbWrap macro
-
-      {% puts "> Processing #{crystal_class}::#{method.name} to #{ruby_name}" if verbose %}
-      # Ignore mrb hooks
-      {% if method.name.starts_with?("mrb_") || method.name == "finalize" %}
-      # Exclude methods if given as arguments
-      {% elsif exclusions.includes?(method.name.symbolize) || exclusions.includes?(method.name) %}
-        {% puts "--> Excluding #{crystal_class}::#{method.name} (Exclusion argument)" if verbose %}
-      # Exclude methods which were annotated to be excluded
-      {% elsif method.annotation(MrbWrap::Exclude) || (annotation_exclude_im) %}
-        {% puts "--> Excluding #{crystal_class}::#{method.name} (Exclusion annotation)" if verbose %}
-      # Exclude methods which are not the specialized methods
-      {% elsif has_specialized_method[method.name.stringify] && !(method.annotation(MrbWrap::Specialize) || (annotation_specialize_im && method.args.stringify == annotation_specialize_im[1].stringify)) %}
-        {% puts "--> Excluding #{crystal_class}::#{method.name} (Specialization 1)" if verbose %}
-      # Handle operator methods (including setters)
-      {% elsif method.name =~ /\W/ %}
-        {% without_operator = method.name.gsub(/\W/, "") %}
-        {% operator = method.name.tr(without_operator.stringify, "") %}
-
-        {% if without_operator.empty? %}
-          MrbMacro.wrap_method_index({{mrb_state}}, {{crystal_class}}, {{index}}, "{{ruby_name}}", operator: "{{operator}}", without_keywords: true)
-        {% else %}
-          MrbMacro.wrap_method_index({{mrb_state}}, {{crystal_class}}, {{index}}, "{{ruby_name}}", operator: "{{operator}}", cut_name: {{without_operator}}, without_keywords: true)
-        {% end %}
-      # Handle constructors
-      {% elsif method.name == "initialize" %}
-        MrbMacro.wrap_method_index({{mrb_state}}, {{crystal_class}}, {{index}}, "{{ruby_name}}", is_constructor: true)
-        {% how_many_times_wrapped[ruby_name.stringify] = how_many_times_wrapped[ruby_name.stringify] ? how_many_times_wrapped[ruby_name.stringify] + 1 : 1 %}
-      # Handle other instance methods
-      {% else %}
-        MrbMacro.wrap_method_index({{mrb_state}}, {{crystal_class}}, {{index}}, "{{ruby_name}}")
-        {% how_many_times_wrapped[ruby_name.stringify] = how_many_times_wrapped[ruby_name.stringify] ? how_many_times_wrapped[ruby_name.stringify] + 1 : 1 %}
-      {% end %}
-    {% end %}
-
-    {% if !how_many_times_wrapped["initialize"] %}
-      {% puts "> Adding constructor for #{crystal_class}" if verbose %}
-      MrbWrap.wrap_constructor({{mrb_state}}, {{crystal_class}})
-    {% end %}
-
-    {% for method, index in crystal_class.resolve.class.methods %}
-      {% all_annotations_rename_im = crystal_class.resolve.annotations(MrbWrap::RenameInstanceMethod) %}
-      {% annotation_rename_im = all_annotations_rename_im.find {|element| element[0].stringify == method.name.stringify} %}
-
-      {% if method.annotation(MrbWrap::Rename) %}
-        {% ruby_name = method.annotation(MrbWrap::Rename)[0].id %}
-      {% elsif annotation_rename_im && method.name.stringify == annotation_rename_im[0].stringify %}
-        {% ruby_name = annotation_rename_im[1].id %}
-      {% else %}
-        {% ruby_name = method.name %}
-      {% end %}
-
-      # We already wrapped 'initialize', so we don't need to wrap these
-      {% if method.name == "allocate" || method.name == "new" %}
-      # Handle other class methods
-      {% else %}
-        MrbMacro.wrap_method_index({{mrb_state}}, {{crystal_class}}, {{index}}, "{{ruby_name}}", is_class_method: true)
-      {% end %}
-    {% end %}
-
-    {% for constant in crystal_class.resolve.constants %}
-      MrbWrap.wrap_constant_under_class({{mrb_state}}, {{crystal_class}}, "{{constant}}", {{crystal_class}}::{{constant}})
-    {% end %}
-
+    MrbMacro.wrap_all_instance_methods({{mrb_state}}, {{crystal_class}}, {{exclusions}}, {{verbose}})
+    MrbMacro.wrap_all_class_methods({{mrb_state}}, {{crystal_class}}, {{class_method_exclusions}}, {{verbose}})
+    MrbMacro.wrap_all_constants({{mrb_state}}, {{crystal_class}}, {{verbose}})
   end
 end

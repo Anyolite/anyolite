@@ -78,6 +78,10 @@ class Test
   def do_not_wrap_this_either
   end
 
+  @[MrbWrap::Exclude]
+  def self.do_not_wrap_this_class_method
+  end
+
   def add(other : Test)
     ret = self + other
   end
