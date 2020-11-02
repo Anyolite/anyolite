@@ -582,14 +582,8 @@ module MrbMacro
     {% has_specialized_method = {} of String => Bool %}
 
     {% for method in crystal_class.resolve.methods %}
-      {% all_annotations_exclude_im = crystal_class.resolve.annotations(MrbWrap::ExcludeInstanceMethod) %}
-      {% annotation_exclude_im = all_annotations_exclude_im.find {|element| element[0].stringify == method.name.stringify} %}
-
       {% all_annotations_specialize_im = crystal_class.resolve.annotations(MrbWrap::SpecializeInstanceMethod) %}
       {% annotation_specialize_im = all_annotations_specialize_im.find {|element| element[0].stringify == method.name.stringify} %}
-
-      {% all_annotations_rename_im = crystal_class.resolve.annotations(MrbWrap::RenameInstanceMethod) %}
-      {% annotation_rename_im = all_annotations_rename_im.find {|element| element[0].stringify == method.name.stringify} %}
 
       {% if method.annotation(MrbWrap::Specialize) %}
         {% has_specialized_method[method.name.stringify] = true %}
@@ -669,14 +663,8 @@ module MrbMacro
     {% has_specialized_method = {} of String => Bool %}
 
     {% for method in crystal_class.resolve.class.methods %}
-      {% all_annotations_exclude_im = crystal_class.resolve.annotations(MrbWrap::ExcludeClassMethod) %}
-      {% annotation_exclude_im = all_annotations_exclude_im.find {|element| element[0].stringify == method.name.stringify} %}
-
       {% all_annotations_specialize_im = crystal_class.resolve.annotations(MrbWrap::SpecializeClassMethod) %}
       {% annotation_specialize_im = all_annotations_specialize_im.find {|element| element[0].stringify == method.name.stringify} %}
-
-      {% all_annotations_rename_im = crystal_class.resolve.annotations(MrbWrap::RenameClassMethod) %}
-      {% annotation_rename_im = all_annotations_rename_im.find {|element| element[0].stringify == method.name.stringify} %}
 
       {% if method.annotation(MrbWrap::Specialize) %}
         {% has_specialized_method[method.name.stringify] = true %}
@@ -690,7 +678,13 @@ module MrbMacro
     {% how_many_times_wrapped = {} of String => UInt32 %}
 
     {% for method, index in crystal_class.resolve.class.methods %}
-      {% all_annotations_rename_im = crystal_class.resolve.annotations(MrbWrap::RenameInstanceMethod) %}
+      {% all_annotations_exclude_im = crystal_class.resolve.annotations(MrbWrap::ExcludeClassMethod) %}
+      {% annotation_exclude_im = all_annotations_exclude_im.find {|element| element[0].stringify == method.name.stringify} %}
+
+      {% all_annotations_specialize_im = crystal_class.resolve.annotations(MrbWrap::SpecializeClassMethod) %}
+      {% annotation_specialize_im = all_annotations_specialize_im.find {|element| element[0].stringify == method.name.stringify} %}
+
+      {% all_annotations_rename_im = crystal_class.resolve.annotations(MrbWrap::RenameClassMethod) %}
       {% annotation_rename_im = all_annotations_rename_im.find {|element| element[0].stringify == method.name.stringify} %}
 
       {% if method.annotation(MrbWrap::Rename) %}
@@ -720,9 +714,28 @@ module MrbMacro
     {% end %}
   end
 
-  macro wrap_all_constants(mrb_state, crystal_class, verbose)
+  macro wrap_all_constants(mrb_state, crystal_class, exclusions, verbose)
     {% for constant in crystal_class.resolve.constants %}
-      MrbWrap.wrap_constant_under_class({{mrb_state}}, {{crystal_class}}, "{{constant}}", {{crystal_class}}::{{constant}})
+      {% all_annotations_exclude_im = crystal_class.resolve.annotations(MrbWrap::ExcludeConstant) %}
+      {% annotation_exclude_im = all_annotations_exclude_im.find {|element| element[0].stringify == constant.stringify} %}
+
+      {% all_annotations_rename_im = crystal_class.resolve.annotations(MrbWrap::RenameConstant) %}
+      {% annotation_rename_im = all_annotations_rename_im.find {|element| element[0].stringify == constant.stringify} %}
+
+      {% if annotation_rename_im && constant.stringify == annotation_rename_im[0].stringify %}
+        {% ruby_name = annotation_rename_im[1].id %}
+      {% else %}
+        {% ruby_name = constant %}
+      {% end %}
+
+      # Exclude methods which were annotated to be excluded
+      {% if exclusions.includes?(constant.symbolize) || exclusions.includes?(constant) %}
+        {% puts "--> Excluding #{crystal_class}::#{constant} (Exclusion argument)" if verbose %}
+      {% elsif annotation_exclude_im %}
+        {% puts "--> Excluding #{crystal_class}::#{constant} (Exclusion annotation)" if verbose %}
+      {% else %}
+        MrbWrap.wrap_constant_under_class({{mrb_state}}, {{crystal_class}}, "{{ruby_name}}", {{crystal_class}}::{{constant}})
+      {% end %}
     {% end %}
   end
 

@@ -20,12 +20,16 @@ end
 @[MrbWrap::SpecializeInstanceMethod(output_this_and_struct, [str : TestStruct])]
 @[MrbWrap::RenameInstanceMethod(output_this_and_struct, "output_together_with")]
 @[MrbWrap::ExcludeInstanceMethod(do_not_wrap_this_either)]
+@[MrbWrap::ExcludeConstant(CONSTANT_NOT_TO_WRAP)]
+@[MrbWrap::RenameConstant(CONSTANT, RUBY_CONSTANT)]
 class Test
   property x : Int32 = 0
 
   @@counter : Int32 = 0
 
   CONSTANT = "Hello"
+
+  CONSTANT_NOT_TO_WRAP = 123
 
   def self.increase_counter
     @@counter += 1
@@ -126,7 +130,7 @@ MrbState.create do |mrb|
 
   MrbWrap.wrap_class_with_methods(mrb, TestStruct, under: SomeModule)
 
-  MrbWrap.wrap_class_with_methods(mrb, Test, under: SomeModule, exclusions: [:add], verbose: true)
+  MrbWrap.wrap_class_with_methods(mrb, Test, under: SomeModule, instance_method_exclusions: [:add], verbose: true)
   MrbWrap.wrap_instance_method(mrb, Test, "add", add, [Test])
 
   mrb.load_script_from_file("examples/test.rb")

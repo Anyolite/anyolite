@@ -207,6 +207,7 @@ module MrbWrap
   end
 
   # NOTE: Annotations like SpecializeConstant are not defined for obvious reasons
+  # TODO: Annotations for constants are currently not obtainable with macros (?)
 
   annotation Exclude; end
   annotation ExcludeInstanceMethod; end
@@ -227,20 +228,26 @@ module MrbWrap
   annotation WrapWithoutKeywordsInstanceMethod; end
   annotation WrapWithoutKeywordsClassMethod; end
 
-  macro wrap_class_with_methods(mrb_state, crystal_class, under = nil, exclusions = [] of String | Symbol, class_method_exclusions = [] of String | Symbol, verbose = false)
+  macro wrap_class_with_methods(mrb_state, crystal_class, under = nil, 
+    instance_method_exclusions = [] of String | Symbol, 
+    class_method_exclusions = [] of String | Symbol, 
+    constant_exclusions = [] of String | Symbol,
+    verbose = false)
+    
     # Things left to do:
     # - Allow passing normal and keyword argument arrays to specialization annotations as optional arguments
-    # - Update constant wrapping to fully behave like the instance method wrappers
     # - Wrap modules similarly to classes
+    # - Wrap modules and all their classes and constants
     # - Wrap stuff from inherited classes if wanted
     # - Display warning if a function gets wrapped more than once
     # - Display function args for repeated wrapping (replaced ones and new ones?)
     # - Allow flag for setting all required function arguments as non-keyword-based via annotations
+    # - Use exclude annotations for classes as well (or ExcludeClass?)
 
     MrbWrap.wrap_class({{mrb_state}}, {{crystal_class.resolve}}, "{{crystal_class}}", under: {{under}})
 
-    MrbMacro.wrap_all_instance_methods({{mrb_state}}, {{crystal_class}}, {{exclusions}}, {{verbose}})
+    MrbMacro.wrap_all_instance_methods({{mrb_state}}, {{crystal_class}}, {{instance_method_exclusions}}, {{verbose}})
     MrbMacro.wrap_all_class_methods({{mrb_state}}, {{crystal_class}}, {{class_method_exclusions}}, {{verbose}})
-    MrbMacro.wrap_all_constants({{mrb_state}}, {{crystal_class}}, {{verbose}})
+    MrbMacro.wrap_all_constants({{mrb_state}}, {{crystal_class}}, {{constant_exclusions}}, {{verbose}})
   end
 end
