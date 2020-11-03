@@ -296,6 +296,7 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 * [ ] Arrays as arguments and return values
 * [ ] Crystal specs for testing
 * [ ] More stable type casting
+* [ ] Use Array(TypeDeclaration) instead of Hash for keywords in internal methods
 
 ### Possible future updates
 

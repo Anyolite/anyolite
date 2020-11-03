@@ -22,7 +22,9 @@ end
 @[MrbWrap::ExcludeInstanceMethod(do_not_wrap_this_either)]
 @[MrbWrap::ExcludeConstant(CONSTANT_NOT_TO_WRAP)]
 @[MrbWrap::RenameConstant(CONSTANT, RUBY_CONSTANT)]
+@[MrbWrap::SpecializeInstanceMethod(method_without_keywords, [arg], [arg : String])]
 class Test
+
   property x : Int32 = 0
 
   @@counter : Int32 = 0
@@ -44,6 +46,11 @@ class Test
     s.value = 777
     s.test = Test.new(999)
     s
+  end
+
+  @[MrbWrap::WrapWithoutKeywords]
+  def self.without_keywords(int : Int32)
+    int * 10
   end
 
   @[MrbWrap::Rename("test")]
@@ -88,6 +95,10 @@ class Test
 
   def add(other : Test)
     ret = self + other
+  end
+
+  def method_without_keywords(arg)
+    puts "Argument is #{arg}"
   end
 
   def output_this_and_struct(str : TestStruct)

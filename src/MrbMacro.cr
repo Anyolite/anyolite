@@ -503,7 +503,11 @@ module MrbMacro
     {{mrb_state}}.define_method("initialize", MrbClassCache.get({{crystal_class}}), wrapped_method)
   end
 
-  macro wrap_method_index(mrb_state, crystal_class, method_index, ruby_name, is_constructor = false, is_class_method = false, operator = "", cut_name = nil, without_keywords = false)
+  macro wrap_method_index(mrb_state, crystal_class, method_index, ruby_name, 
+    is_constructor = false, is_class_method = false, 
+    operator = "", cut_name = nil, 
+    without_keywords = false, added_keyword_args = nil)
+
     {% if is_class_method %}
       {% method = crystal_class.resolve.class.methods[method_index] %}
     {% else %}
@@ -529,7 +533,7 @@ module MrbMacro
         MrbWrap.wrap_instance_method({{mrb_state}}, {{crystal_class}}, {{ruby_name}}, {{final_method_name}}, operator: {{operator}})
       {% end %}
 
-    {% elsif method.args.stringify.includes?(":") %}
+    {% elsif method.args.stringify.includes?(":") || (added_keyword_args && added_keyword_args.stringify.includes?(":")) %}
       {% if without_keywords %}
         {% type_array = [] of Class %}
 
@@ -546,26 +550,47 @@ module MrbMacro
         {% end %}
       {% else %}
         {% keyword_hash = {} of Symbol => Crystal::Macros::ASTNode %}
-        
-        {% for arg in method.args %}
-          {% if arg.default_value.stringify != "" %}
-            {% if !arg.restriction %}
-              {% puts "INFO: Could not wrap function '#{final_method_name}' with args #{method.args}." %}
-              {% next %}
+
+        {% invalid = false %}
+
+        {% if added_keyword_args %}
+          {% for element in added_keyword_args %}
+            {% next if invalid %}
+            {% if element.value %}
+              {% if !element.type %}
+                {% puts "INFO: Could not wrap function '#{final_method_name}' with args #{added_keyword_args}." %}
+                {% invalid = true %}
+              {% else %}
+                {% keyword_hash[element.var.symbolize] = {element.type, element.value} %}
+              {% end %}
             {% else %}
-              {% keyword_hash[arg.name.symbolize] = {arg.restriction, arg.default_value} %}
+              {% keyword_hash[element.var.symbolize] = element.type %}
             {% end %}
-          {% else %}
-            {% keyword_hash[arg.name.symbolize] = arg.restriction %}
+          {% end %}
+        {% else %}
+          {% for arg in method.args %}
+            {% next if invalid %}
+            {% if arg.default_value.stringify != "" %}
+              {% if !arg.restriction %}
+                {% puts "INFO: Could not wrap function '#{final_method_name}' with args #{method.args}." %}
+                {% invalid = true %}
+              {% else %}
+                {% keyword_hash[arg.name.symbolize] = {arg.restriction, arg.default_value} %}
+              {% end %}
+            {% else %}
+              {% keyword_hash[arg.name.symbolize] = arg.restriction %}
+            {% end %}
           {% end %}
         {% end %}
-
-        {% if is_class_method %}
-          MrbWrap.wrap_class_method_with_keywords({{mrb_state}}, {{crystal_class}}, {{ruby_name}}, {{crystal_class}}.{{final_method_name}}, {{keyword_hash}}, operator: {{operator}})
-        {% elsif is_constructor %}
-          MrbWrap.wrap_constructor_with_keywords({{mrb_state}}, {{crystal_class}}, {{keyword_hash}}, operator: {{operator}})
-        {% else %}
-          MrbWrap.wrap_instance_method_with_keywords({{mrb_state}}, {{crystal_class}}, {{ruby_name}}, {{final_method_name}}, {{keyword_hash}}, operator: {{operator}})
+        
+        {% if !invalid %}
+          {% if is_class_method %}
+            MrbWrap.wrap_class_method_with_keywords({{mrb_state}}, {{crystal_class}}, {{ruby_name}}, {{crystal_class}}.{{final_method_name}}, {{keyword_hash}}, operator: {{operator}})
+          {% elsif is_constructor %}
+            MrbWrap.wrap_constructor_with_keywords({{mrb_state}}, {{crystal_class}}, {{keyword_hash}}, operator: {{operator}})
+          {% else %}
+            MrbWrap.wrap_instance_method_with_keywords({{mrb_state}}, {{crystal_class}}, {{ruby_name}}, {{final_method_name}}, {{keyword_hash}}, operator: {{operator}})
+          {% end %}
         {% end %}
       {% end %}
 
@@ -606,12 +631,31 @@ module MrbMacro
       {% all_annotations_rename_im = crystal_class.resolve.annotations(MrbWrap::RenameInstanceMethod) %}
       {% annotation_rename_im = all_annotations_rename_im.find {|element| element[0].stringify == method.name.stringify} %}
 
+      {% all_annotations_without_keywords_im = crystal_class.resolve.annotations(MrbWrap::WrapWithoutKeywordsInstanceMethod) %}
+      {% annotation_without_keyword_im = all_annotations_without_keywords_im.find {|element| element[0].stringify == method.name.stringify} %}
+
       {% if method.annotation(MrbWrap::Rename) %}
         {% ruby_name = method.annotation(MrbWrap::Rename)[0].id %}
       {% elsif annotation_rename_im && method.name.stringify == annotation_rename_im[0].stringify %}
         {% ruby_name = annotation_rename_im[1].id %}
       {% else %}
         {% ruby_name = method.name %}
+      {% end %}
+
+      {% added_keyword_args = nil %}
+
+      {% if method.annotation(MrbWrap::Specialize) && method.annotation(MrbWrap::Specialize)[1] %}
+        {% added_keyword_args = method.annotation(MrbWrap::Specialize)[1] %}
+      {% end %}
+
+      {% if annotation_specialize_im && method.args.stringify == annotation_specialize_im[1].stringify %}
+        {% added_keyword_args = annotation_specialize_im[2] %}
+      {% end %}
+
+      {% without_keywords = false %}
+
+      {% if method.annotation(MrbWrap::WrapWithoutKeywords) || annotation_without_keyword_im %}
+        {% without_keywords = true %}
       {% end %}
 
       {% puts "> Processing #{crystal_class}::#{method.name} to #{ruby_name}" if verbose %}
@@ -625,7 +669,7 @@ module MrbMacro
         {% puts "--> Excluding #{crystal_class}::#{method.name} (Exclusion annotation)" if verbose %}
       # Exclude methods which are not the specialized methods
       {% elsif has_specialized_method[method.name.stringify] && !(method.annotation(MrbWrap::Specialize) || (annotation_specialize_im && method.args.stringify == annotation_specialize_im[1].stringify)) %}
-        {% puts "--> Excluding #{crystal_class}::#{method.name} (Specialization 1)" if verbose %}
+        {% puts "--> Excluding #{crystal_class}::#{method.name} #{method.args} (Specialization 1)" if verbose %}
       # Handle operator methods (including setters)
       {% elsif method.name =~ /\W/ %}
         {% without_operator = method.name.gsub(/\W/, "") %}
@@ -638,11 +682,11 @@ module MrbMacro
         {% end %}
       # Handle constructors
       {% elsif method.name == "initialize" %}
-        MrbMacro.wrap_method_index({{mrb_state}}, {{crystal_class}}, {{index}}, "{{ruby_name}}", is_constructor: true)
+        MrbMacro.wrap_method_index({{mrb_state}}, {{crystal_class}}, {{index}}, "{{ruby_name}}", is_constructor: true, without_keywords: {{without_keywords}}, added_keyword_args: {{added_keyword_args}})
         {% how_many_times_wrapped[ruby_name.stringify] = how_many_times_wrapped[ruby_name.stringify] ? how_many_times_wrapped[ruby_name.stringify] + 1 : 1 %}
       # Handle other instance methods
       {% else %}
-        MrbMacro.wrap_method_index({{mrb_state}}, {{crystal_class}}, {{index}}, "{{ruby_name}}")
+        MrbMacro.wrap_method_index({{mrb_state}}, {{crystal_class}}, {{index}}, "{{ruby_name}}", without_keywords: {{without_keywords}}, added_keyword_args: {{added_keyword_args}})
         {% how_many_times_wrapped[ruby_name.stringify] = how_many_times_wrapped[ruby_name.stringify] ? how_many_times_wrapped[ruby_name.stringify] + 1 : 1 %}
       {% end %}
     {% end %}
@@ -677,6 +721,7 @@ module MrbMacro
 
     {% how_many_times_wrapped = {} of String => UInt32 %}
 
+    # TODO: Replace all im here with cm
     {% for method, index in crystal_class.resolve.class.methods %}
       {% all_annotations_exclude_im = crystal_class.resolve.annotations(MrbWrap::ExcludeClassMethod) %}
       {% annotation_exclude_im = all_annotations_exclude_im.find {|element| element[0].stringify == method.name.stringify} %}
@@ -687,12 +732,31 @@ module MrbMacro
       {% all_annotations_rename_im = crystal_class.resolve.annotations(MrbWrap::RenameClassMethod) %}
       {% annotation_rename_im = all_annotations_rename_im.find {|element| element[0].stringify == method.name.stringify} %}
 
+      {% all_annotations_without_keywords_im = crystal_class.resolve.annotations(MrbWrap::WrapWithoutKeywordsClassMethod) %}
+      {% annotation_without_keyword_im = all_annotations_without_keywords_im.find {|element| element[0].stringify == method.name.stringify} %}
+
       {% if method.annotation(MrbWrap::Rename) %}
         {% ruby_name = method.annotation(MrbWrap::Rename)[0].id %}
       {% elsif annotation_rename_im && method.name.stringify == annotation_rename_im[0].stringify %}
         {% ruby_name = annotation_rename_im[1].id %}
       {% else %}
         {% ruby_name = method.name %}
+      {% end %}
+
+      {% added_keyword_args = nil %}
+
+      {% if method.annotation(MrbWrap::Specialize) && method.annotation(MrbWrap::Specialize)[1] %}
+        {% added_keyword_args = method.annotation(MrbWrap::Specialize)[1] %}
+      {% end %}
+
+      {% if annotation_specialize_im && method.args.stringify == annotation_specialize_im[1].stringify %}
+        {% added_keyword_args = annotation_specialize_im[2] %}
+      {% end %}
+
+      {% without_keywords = false %}
+
+      {% if method.annotation(MrbWrap::WrapWithoutKeywords) || annotation_without_keyword_im %}
+        {% without_keywords = true %}
       {% end %}
 
       # We already wrapped 'initialize', so we don't need to wrap these
@@ -708,14 +772,14 @@ module MrbMacro
         {% puts "--> Excluding #{crystal_class}::#{method.name} (Specialization 1)" if verbose %}
       # Handle other class methods
       {% else %}
-        MrbMacro.wrap_method_index({{mrb_state}}, {{crystal_class}}, {{index}}, "{{ruby_name}}", is_class_method: true)
+        MrbMacro.wrap_method_index({{mrb_state}}, {{crystal_class}}, {{index}}, "{{ruby_name}}", is_class_method: true, without_keywords: {{without_keywords}}, added_keyword_args: {{added_keyword_args}})
         {% how_many_times_wrapped[ruby_name.stringify] = how_many_times_wrapped[ruby_name.stringify] ? how_many_times_wrapped[ruby_name.stringify] + 1 : 1 %}
       {% end %}
     {% end %}
   end
 
   macro wrap_all_constants(mrb_state, crystal_class, exclusions, verbose)
-    {% for constant in crystal_class.resolve.constants %}
+    {% for constant, index in crystal_class.resolve.constants %}
       {% all_annotations_exclude_im = crystal_class.resolve.annotations(MrbWrap::ExcludeConstant) %}
       {% annotation_exclude_im = all_annotations_exclude_im.find {|element| element[0].stringify == constant.stringify} %}
 

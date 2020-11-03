@@ -223,7 +223,6 @@ module MrbWrap
   annotation RenameClassMethod; end
   annotation RenameConstant; end
 
-  # TODO: Implement
   annotation WrapWithoutKeywords; end
   annotation WrapWithoutKeywordsInstanceMethod; end
   annotation WrapWithoutKeywordsClassMethod; end
@@ -235,13 +234,11 @@ module MrbWrap
     verbose = false)
     
     # Things left to do:
-    # - Allow passing normal and keyword argument arrays to specialization annotations as optional arguments
     # - Wrap modules similarly to classes
     # - Wrap modules and all their classes and constants
     # - Wrap stuff from inherited classes if wanted
     # - Display warning if a function gets wrapped more than once
     # - Display function args for repeated wrapping (replaced ones and new ones?)
-    # - Allow flag for setting all required function arguments as non-keyword-based via annotations
     # - Use exclude annotations for classes as well (or ExcludeClass?)
 
     MrbWrap.wrap_class({{mrb_state}}, {{crystal_class.resolve}}, "{{crystal_class}}", under: {{under}})

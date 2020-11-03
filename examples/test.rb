@@ -33,3 +33,5 @@ puts "Sum is #{(a + b).x}"
 a.keyword_test(strvar: "Hi there", intvar: -121212, floatvar: -0.313, strvarkw: "💎", othervar: b)
 
 puts "Test constant: #{TestModule::Test::RUBY_CONSTANT}"
+
+puts TestModule::Test.without_keywords(12)
