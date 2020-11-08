@@ -798,8 +798,17 @@ module MrbMacro
       {% elsif annotation_exclude_im %}
         {% puts "--> Excluding #{crystal_class}::#{constant} (Exclusion annotation)" if verbose %}
       {% else %}
-        MrbWrap.wrap_constant_under_class({{mrb_state}}, {{crystal_class}}, "{{ruby_name}}", {{crystal_class}}::{{constant}})
+        MrbMacro.wrap_constant_or_class({{mrb_state}}, {{crystal_class}}, "{{ruby_name}}", {{constant}})
       {% end %}
+    {% end %}
+  end
+
+  macro wrap_constant_or_class(mrb_state, under_class_or_module, ruby_name, value)
+    {% actual_constant = under_class_or_module.resolve.constant(value.id) %}
+    {% if actual_constant.class_name == "TypeNode" %}
+      {% puts "--> NOTE: #{actual_constant} is a class or module and has to be included manually for now." %}
+    {% else %}
+      MrbWrap.wrap_constant_under_class({{mrb_state}}, {{under_class_or_module}}, {{ruby_name}}, {{under_class_or_module}}::{{value}})
     {% end %}
   end
 

@@ -25,6 +25,16 @@ end
 @[MrbWrap::SpecializeInstanceMethod(method_without_keywords, [arg], [arg : String])]
 class Test
 
+  class UnderTest
+    module DeepUnderTest
+      class VeryDeepUnderTest
+        def nested_test
+          puts "This is a nested test"
+        end
+      end
+    end
+  end
+
   property x : Int32 = 0
 
   @@counter : Int32 = 0
@@ -180,9 +190,8 @@ module TestModule
 end
 
 MrbState.create do |mrb|
-  test_module = MrbModule.new(mrb, "TestModule")
-
-  MrbWrap.wrap_class_with_methods(mrb, Entity, under: test_module)
+  MrbWrap.wrap_module_with_methods(mrb, TestModule)
+  MrbWrap.wrap_class_with_methods(mrb, Entity, under: TestModule)
 
   mrb.load_script_from_file("examples/hp_example.rb")
 end

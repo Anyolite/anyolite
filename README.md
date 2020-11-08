@@ -94,9 +94,8 @@ Now, you want to wrap this class in Ruby. All you need to do is to execute the f
 require "anyolite"
 
 MrbState.create do |mrb|
-  test_module = MrbModule.new(mrb, "TestModule")
-
-  MrbWrap.wrap_class_with_methods(mrb, Entity, under: test_module)
+  MrbWrap.wrap_module_with_methods(mrb, TestModule)
+  MrbWrap.wrap_class_with_methods(mrb, Entity, under: TestModule)
 
   mrb.load_script_from_file("examples/hp_example.rb")
 end
@@ -273,10 +272,7 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 * [X] Annotation to exclude functions from wrapping
 * [X] Annotation to specialize functions for wrapping
 * [X] Annotation to rename wrapped functions
-
-#### Minor features
-
-* [ ] Copy constructor wrapping
+* [ ] Full wrapping of module and class hierarchies
 
 #### Breaking changes
 

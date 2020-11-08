@@ -239,12 +239,21 @@ module MrbWrap
     # - Wrap stuff from inherited classes if wanted
     # - Display warning if a function gets wrapped more than once
     # - Display function args for repeated wrapping (replaced ones and new ones?)
-    # - Use exclude annotations for classes as well (or ExcludeClass?)
 
     MrbWrap.wrap_class({{mrb_state}}, {{crystal_class.resolve}}, "{{crystal_class}}", under: {{under}})
 
     MrbMacro.wrap_all_instance_methods({{mrb_state}}, {{crystal_class}}, {{instance_method_exclusions}}, {{verbose}})
     MrbMacro.wrap_all_class_methods({{mrb_state}}, {{crystal_class}}, {{class_method_exclusions}}, {{verbose}})
     MrbMacro.wrap_all_constants({{mrb_state}}, {{crystal_class}}, {{constant_exclusions}}, {{verbose}})
+  end
+
+  macro wrap_module_with_methods(mrb_state, crystal_module, under = nil,
+    class_method_exclusions = [] of String | Symbol,
+    constant_exclusions = [] of String | Symbol,
+    verbose = false)
+
+    MrbWrap.wrap_module({{mrb_state}}, {{crystal_module.resolve}}, "{{crystal_module}}", under: {{under}})
+    MrbMacro.wrap_all_class_methods({{mrb_state}}, {{crystal_module}}, {{class_method_exclusions}}, {{verbose}})
+    MrbMacro.wrap_all_constants({{mrb_state}}, {{crystal_module}}, {{constant_exclusions}}, {{verbose}})
   end
 end
