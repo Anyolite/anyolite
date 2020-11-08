@@ -88,7 +88,7 @@ module TestModule
 end
 ```
 
-Now, you want to wrap this class in Ruby. All you need to do is to execute the following code in Crystal:
+Now, you want to wrap this class in Ruby. All you need to do is to execute the following code in Crystal (current commit; see documentation page for the version of the latest release):
 
 ```crystal
 require "anyolite"
