@@ -239,6 +239,9 @@ module MrbWrap
     # - Wrap stuff from inherited classes if wanted
     # - Display warning if a function gets wrapped more than once
     # - Display function args for repeated wrapping (replaced ones and new ones?)
+    # - Use only final part of path for wrapping name (and rest for module above)
+    # - Allow for caching of module paths
+    # - Major problem: How to resolve class specifications relative to an upper module?
 
     MrbWrap.wrap_class({{mrb_state}}, {{crystal_class.resolve}}, "{{crystal_class}}", under: {{under}})
 

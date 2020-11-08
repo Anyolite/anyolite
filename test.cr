@@ -197,3 +197,33 @@ MrbState.create do |mrb|
 end
 
 puts "Reference table: #{MrbRefTable.inspect}"
+
+module A
+  class B
+    def initialize(b : B)
+      puts b
+    end
+
+    def initialize
+      puts 0
+    end
+  end
+end
+
+# NOTE: The following code is a proof of concept for solving relative type references using a context if necessary
+# TODO: Add another check if the absolute path resolves, else throw an error?
+#
+# macro ctestbla(arg, context))
+#   {% c = arg.resolve.methods[0].args[0].restriction %}
+#   n = check({{c}}, {{context}}).new
+# end
+
+# macro check(p, context)
+#   {% if p.resolve? %}
+#     {{p}}
+#   {% else %}
+#     {{context}}::{{p}}
+#   {% end %}
+# end
+
+# puts ctestbla(A::B, A)
