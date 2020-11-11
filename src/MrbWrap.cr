@@ -156,8 +156,8 @@ module MrbWrap
   # Alternatively, a `Tuple` with the `Class` and a default value for the `Class` can be used instead of the `Class`.
   # 
   # Its new name will be *name*.
-  macro wrap_instance_method_with_keywords(mrb_state, crystal_class, name, proc, keyword_args, regular_args = [] of Class, operator = "")
-    MrbMacro.wrap_instance_function_with_keyword_args({{mrb_state}}, {{crystal_class}}, {{name}}, {{proc}}, {{keyword_args}}, {{regular_args}}, operator: {{operator}})
+  macro wrap_instance_method_with_keywords(mrb_state, crystal_class, name, proc, keyword_args, regular_args = [] of Class, operator = "", context = nil)
+    MrbMacro.wrap_instance_function_with_keyword_args({{mrb_state}}, {{crystal_class}}, {{name}}, {{proc}}, {{keyword_args}}, {{regular_args}}, operator: {{operator}}, context: {{context}})
   end
 
   # Wraps a setter into mruby.  
@@ -243,9 +243,9 @@ module MrbWrap
     # - Allow for caching of module paths
     # - Major problem: How to resolve class specifications relative to an upper module?
 
-    MrbWrap.wrap_class({{mrb_state}}, {{crystal_class.resolve}}, "{{crystal_class}}", under: {{under}})
+    MrbWrap.wrap_class({{mrb_state}}, {{crystal_class.resolve}}, "{{crystal_class.names.last}}", under: {{under}})
 
-    MrbMacro.wrap_all_instance_methods({{mrb_state}}, {{crystal_class}}, {{instance_method_exclusions}}, {{verbose}})
+    MrbMacro.wrap_all_instance_methods({{mrb_state}}, {{crystal_class}}, {{instance_method_exclusions}}, {{verbose}}, context: {{under}})
     MrbMacro.wrap_all_class_methods({{mrb_state}}, {{crystal_class}}, {{class_method_exclusions}}, {{verbose}})
     MrbMacro.wrap_all_constants({{mrb_state}}, {{crystal_class}}, {{constant_exclusions}}, {{verbose}})
   end

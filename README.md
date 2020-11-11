@@ -95,7 +95,7 @@ require "anyolite"
 
 MrbState.create do |mrb|
   MrbWrap.wrap_module_with_methods(mrb, TestModule)
-  MrbWrap.wrap_class_with_methods(mrb, Entity, under: TestModule)
+  MrbWrap.wrap_class_with_methods(mrb, TestModule::Entity, under: TestModule)
 
   mrb.load_script_from_file("examples/hp_example.rb")
 end

@@ -151,33 +151,35 @@ MrbState.create do |mrb|
 
   MrbWrap.wrap_class_with_methods(mrb, TestStruct, under: SomeModule)
 
-  MrbWrap.wrap_class_with_methods(mrb, Test, under: SomeModule, instance_method_exclusions: [:add], verbose: true)
+  MrbWrap.wrap_class_with_methods(mrb, Test, under: SomeModule, instance_method_exclusions: [:add])
   MrbWrap.wrap_instance_method(mrb, Test, "add", add, [Test])
 
   mrb.load_script_from_file("examples/test.rb")
 end
 
-class Entity
-  property hp : Int32 = 0
+module TestModule
+  class Entity
+    property hp : Int32 = 0
 
-  def initialize(@hp : Int32)
-  end
-
-  def damage(diff : Int32)
-    @hp -= diff
-  end
-
-  def yell(sound : String, loud : Bool = false)
-    if loud
-      puts "Entity yelled: #{sound.upcase}"
-    else
-      puts "Entity yelled: #{sound}"
+    def initialize(@hp : Int32)
     end
-  end
 
-  def absorb_hp_from(other : Entity)
-    @hp += other.hp
-    other.hp = 0
+    def damage(diff : Int32)
+      @hp -= diff
+    end
+
+    def yell(sound : String, loud : Bool = false)
+      if loud
+        puts "Entity yelled: #{sound.upcase}"
+      else
+        puts "Entity yelled: #{sound}"
+      end
+    end
+
+    def absorb_hp_from(other : Entity)
+      @hp += other.hp
+      other.hp = 0
+    end
   end
 end
 
@@ -186,44 +188,11 @@ MrbRefTable.reset
 
 puts "------------------------------"
 
-module TestModule
-end
-
 MrbState.create do |mrb|
   MrbWrap.wrap_module_with_methods(mrb, TestModule)
-  MrbWrap.wrap_class_with_methods(mrb, Entity, under: TestModule)
+  MrbWrap.wrap_class_with_methods(mrb, TestModule::Entity, under: TestModule, verbose: true)
 
   mrb.load_script_from_file("examples/hp_example.rb")
 end
 
 puts "Reference table: #{MrbRefTable.inspect}"
-
-module A
-  class B
-    def initialize(b : B)
-      puts b
-    end
-
-    def initialize
-      puts 0
-    end
-  end
-end
-
-# NOTE: The following code is a proof of concept for solving relative type references using a context if necessary
-# TODO: Add another check if the absolute path resolves, else throw an error?
-#
-# macro ctestbla(arg, context))
-#   {% c = arg.resolve.methods[0].args[0].restriction %}
-#   n = check({{c}}, {{context}}).new
-# end
-
-# macro check(p, context)
-#   {% if p.resolve? %}
-#     {{p}}
-#   {% else %}
-#     {{context}}::{{p}}
-#   {% end %}
-# end
-
-# puts ctestbla(A::B, A)
