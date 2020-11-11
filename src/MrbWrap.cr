@@ -84,8 +84,8 @@ module MrbWrap
   # 
   # The constructor for the Crystal `Class` *crystal_class* will be integrated into the `MrbState` *mrb_state*,
   # with the arguments *proc_args* as an `Array of Class`.
-  macro wrap_constructor(mrb_state, crystal_class, proc_args = [] of Class, operator = "")
-    MrbMacro.wrap_constructor_function_with_args({{mrb_state}}, {{crystal_class}}, {{crystal_class}}.new, {{proc_args}}, operator: {{operator}})
+  macro wrap_constructor(mrb_state, crystal_class, proc_args = [] of Class, operator = "", context = nil)
+    MrbMacro.wrap_constructor_function_with_args({{mrb_state}}, {{crystal_class}}, {{crystal_class}}.new, {{proc_args}}, operator: {{operator}}, context: {{context}})
   end
 
   # Wraps the constructor of a Crystal class into mruby, using keyword arguments.
@@ -93,8 +93,8 @@ module MrbWrap
   # The constructor for the Crystal `Class` *crystal_class* will be integrated into the `MrbState` *mrb_state*,
   # with the arguments *regular_args* as an `Array of Class` and *keyword_args* as a `Hash of Symbol => Class`.
   # Alternatively, a `Tuple` with the `Class` and a default value for the `Class` can be used instead of the `Class`.
-  macro wrap_constructor_with_keywords(mrb_state, crystal_class, keyword_args, regular_args = [] of Class, operator = "")
-    MrbMacro.wrap_constructor_function_with_keyword_args({{mrb_state}}, {{crystal_class}}, {{crystal_class}}.new, {{keyword_args}}, {{regular_args}}, operator: {{operator}})
+  macro wrap_constructor_with_keywords(mrb_state, crystal_class, keyword_args, regular_args = [] of Class, operator = "", context = nil)
+    MrbMacro.wrap_constructor_function_with_keyword_args({{mrb_state}}, {{crystal_class}}, {{crystal_class}}.new, {{keyword_args}}, {{regular_args}}, operator: {{operator}}, context: {{context}})
   end
 
   # Wraps a module function into mruby.
@@ -103,8 +103,8 @@ module MrbWrap
   # with the arguments *proc_args* as an `Array of Class`.
   # 
   # Its new name will be *name*.
-  macro wrap_module_function(mrb_state, under_module, name, proc, proc_args = [] of Class, operator = "")
-    MrbMacro.wrap_module_function_with_args({{mrb_state}}, {{under_module}}, {{name}}, {{proc}}, {{proc_args}}, operator: {{operator}})
+  macro wrap_module_function(mrb_state, under_module, name, proc, proc_args = [] of Class, operator = "", context = nil)
+    MrbMacro.wrap_module_function_with_args({{mrb_state}}, {{under_module}}, {{name}}, {{proc}}, {{proc_args}}, operator: {{operator}}, context: {{context}})
   end
 
   # Wraps a module function into mruby, using keyword arguments.
@@ -114,8 +114,8 @@ module MrbWrap
   # Alternatively, a `Tuple` with the `Class` and a default value for the `Class` can be used instead of the `Class`.
   # 
   # Its new name will be *name*.
-  macro wrap_module_function_with_keywords(mrb_state, under_module, name, proc, keyword_args, regular_args = [] of Class, operator = "")
-    MrbMacro.wrap_module_function_with_keyword_args({{mrb_state}}, {{under_module}}, {{name}}, {{proc}}, {{keyword_args}}, {{regular_args}}, operator: {{operator}})
+  macro wrap_module_function_with_keywords(mrb_state, under_module, name, proc, keyword_args, regular_args = [] of Class, operator = "", context = nil)
+    MrbMacro.wrap_module_function_with_keyword_args({{mrb_state}}, {{under_module}}, {{name}}, {{proc}}, {{keyword_args}}, {{regular_args}}, operator: {{operator}}, context: {{context}})
   end
 
   # Wraps a class method into mruby.
@@ -124,8 +124,8 @@ module MrbWrap
   # with the arguments *proc_args* as an `Array of Class`.
   # 
   # Its new name will be *name*.
-  macro wrap_class_method(mrb_state, crystal_class, name, proc, proc_args = [] of Class, operator = "")
-    MrbMacro.wrap_class_method_with_args({{mrb_state}}, {{crystal_class}}, {{name}}, {{proc}}, {{proc_args}}, operator: {{operator}})
+  macro wrap_class_method(mrb_state, crystal_class, name, proc, proc_args = [] of Class, operator = "", context = nil)
+    MrbMacro.wrap_class_method_with_args({{mrb_state}}, {{crystal_class}}, {{name}}, {{proc}}, {{proc_args}}, operator: {{operator}}, context: {{context}})
   end
 
   # Wraps a class method into mruby, using keyword arguments.
@@ -135,8 +135,8 @@ module MrbWrap
   # Alternatively, a `Tuple` with the `Class` and a default value for the `Class` can be used instead of the `Class`.
   # 
   # Its new name will be *name*.
-  macro wrap_class_method_with_keywords(mrb_state, crystal_class, name, proc, keyword_args, regular_args = [] of Class, operator = "")
-    MrbMacro.wrap_class_method_with_keyword_args({{mrb_state}}, {{crystal_class}}, {{name}}, {{proc}}, {{keyword_args}}, {{regular_args}}, operator: {{operator}})
+  macro wrap_class_method_with_keywords(mrb_state, crystal_class, name, proc, keyword_args, regular_args = [] of Class, operator = "", context = nil)
+    MrbMacro.wrap_class_method_with_keyword_args({{mrb_state}}, {{crystal_class}}, {{name}}, {{proc}}, {{keyword_args}}, {{regular_args}}, operator: {{operator}}, context: {{context}})
   end
 
   # Wraps an instance method into mruby.
@@ -145,8 +145,8 @@ module MrbWrap
   # with the arguments *proc_args* as an `Array of Class`.
   # 
   # Its new name will be *name*.
-  macro wrap_instance_method(mrb_state, crystal_class, name, proc, proc_args = [] of Class, operator = "")
-    MrbMacro.wrap_instance_function_with_args({{mrb_state}}, {{crystal_class}}, {{name}}, {{proc}}, {{proc_args}}, operator: {{operator}})
+  macro wrap_instance_method(mrb_state, crystal_class, name, proc, proc_args = [] of Class, operator = "", context = nil)
+    MrbMacro.wrap_instance_function_with_args({{mrb_state}}, {{crystal_class}}, {{name}}, {{proc}}, {{proc_args}}, operator: {{operator}}, context: {{context}})
   end
   
   # Wraps an instance method into mruby, using keyword arguments.
@@ -166,8 +166,8 @@ module MrbWrap
   # with the argument *proc_arg* as its respective `Class`.
   # 
   # Its new name will be *name*.
-  macro wrap_setter(mrb_state, crystal_class, name, proc, proc_arg, operator = "=")
-    MrbMacro.wrap_instance_function_with_args({{mrb_state}}, {{crystal_class}}, {{name}}, {{proc}}, {{proc_arg}}, operator: {{operator}})
+  macro wrap_setter(mrb_state, crystal_class, name, proc, proc_arg, operator = "=", context = nil)
+    MrbMacro.wrap_instance_function_with_args({{mrb_state}}, {{crystal_class}}, {{name}}, {{proc}}, {{proc_arg}}, operator: {{operator}}, context: {{context}})
   end
 
   # Wraps a getter into mruby.  
@@ -175,8 +175,8 @@ module MrbWrap
   # The getter *proc* of the Crystal `Class` *crystal_class* will be integrated into the `MrbState` *mrb_state*.
   # 
   # Its new name will be *name*.
-  macro wrap_getter(mrb_state, crystal_class, name, proc, operator = "")
-    MrbMacro.wrap_instance_function_with_args({{mrb_state}}, {{crystal_class}}, {{name}}, {{proc}}, operator: {{operator}})
+  macro wrap_getter(mrb_state, crystal_class, name, proc, operator = "", context = nil)
+    MrbMacro.wrap_instance_function_with_args({{mrb_state}}, {{crystal_class}}, {{name}}, {{proc}}, operator: {{operator}}, context: {{context}})
   end
 
   # Wraps a property into mruby.  
@@ -185,9 +185,9 @@ module MrbWrap
   # with the argument *proc_arg* as its respective `Class`.
   # 
   # Its new name will be *name*.
-  macro wrap_property(mrb_state, crystal_class, name, proc, proc_arg, operator_getter = "", operator_setter = "=")
-    MrbWrap.wrap_getter({{mrb_state}}, {{crystal_class}}, {{name}}, {{proc}}, operator: {{operator_getter}})
-    MrbWrap.wrap_setter({{mrb_state}}, {{crystal_class}}, {{name}}, {{proc}}, {{proc_arg}}, operator: {{operator_setter}})
+  macro wrap_property(mrb_state, crystal_class, name, proc, proc_arg, operator_getter = "", operator_setter = "=", context = nil)
+    MrbWrap.wrap_getter({{mrb_state}}, {{crystal_class}}, {{name}}, {{proc}}, operator: {{operator_getter}}, context: {{context}})
+    MrbWrap.wrap_setter({{mrb_state}}, {{crystal_class}}, {{name}}, {{proc}}, {{proc_arg}}, operator: {{operator_setter}}, context: {{context}})
   end
 
   # Wraps a constant value under a module into mruby.
@@ -239,14 +239,13 @@ module MrbWrap
     # - Wrap stuff from inherited classes if wanted
     # - Display warning if a function gets wrapped more than once
     # - Display function args for repeated wrapping (replaced ones and new ones?)
-    # - Use only final part of path for wrapping name (and rest for module above)
-    # - Allow for caching of module paths
-    # - Major problem: How to resolve class specifications relative to an upper module?
+    # - Maybe improve context::class resolution by splitting context into its components?
+    # - Test, test and test
 
     MrbWrap.wrap_class({{mrb_state}}, {{crystal_class.resolve}}, "{{crystal_class.names.last}}", under: {{under}})
 
     MrbMacro.wrap_all_instance_methods({{mrb_state}}, {{crystal_class}}, {{instance_method_exclusions}}, {{verbose}}, context: {{under}})
-    MrbMacro.wrap_all_class_methods({{mrb_state}}, {{crystal_class}}, {{class_method_exclusions}}, {{verbose}})
+    MrbMacro.wrap_all_class_methods({{mrb_state}}, {{crystal_class}}, {{class_method_exclusions}}, {{verbose}}, context: {{under}})
     MrbMacro.wrap_all_constants({{mrb_state}}, {{crystal_class}}, {{constant_exclusions}}, {{verbose}})
   end
 
@@ -256,7 +255,7 @@ module MrbWrap
     verbose = false)
 
     MrbWrap.wrap_module({{mrb_state}}, {{crystal_module.resolve}}, "{{crystal_module}}", under: {{under}})
-    MrbMacro.wrap_all_class_methods({{mrb_state}}, {{crystal_module}}, {{class_method_exclusions}}, {{verbose}})
+    MrbMacro.wrap_all_class_methods({{mrb_state}}, {{crystal_module}}, {{class_method_exclusions}}, {{verbose}}, context: {{under}})
     MrbMacro.wrap_all_constants({{mrb_state}}, {{crystal_module}}, {{constant_exclusions}}, {{verbose}})
   end
 end

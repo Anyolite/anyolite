@@ -245,23 +245,23 @@ module MrbMacro
     MrbCast.return_value({{mrb}}, return_value)
   end
 
-  macro convert_args(mrb, args, proc_args)
+  macro convert_args(mrb, args, proc_args, context)
     Tuple.new(
       {% c = 0 %}
       {% for arg in proc_args %}
-        MrbMacro.convert_arg({{mrb}}, {{args}}[{{c}}].value, {{arg}}),
+        MrbMacro.convert_arg({{mrb}}, {{args}}[{{c}}].value, {{arg}}, {{context}}),
         {% c += 1 %}
       {% end %}
     )
   end
 
-  macro get_converted_args(mrb, proc_args)
+  macro get_converted_args(mrb, proc_args, context)
     args = MrbMacro.generate_arg_tuple({{proc_args}})
     format_string = MrbMacro.format_string({{proc_args}})
     
     MrbInternal.mrb_get_args({{mrb}}, format_string, *args)
 
-    MrbMacro.convert_args({{mrb}}, args, {{proc_args}})
+    MrbMacro.convert_args({{mrb}}, args, {{proc_args}}, {{context}})
   end
 
   macro allocate_constructed_object(crystal_class, obj, new_obj)
@@ -310,7 +310,7 @@ module MrbMacro
     ]
   end
 
-  macro wrap_module_function_with_args(mrb_state, under_module, name, proc, proc_args = [] of Class)
+  macro wrap_module_function_with_args(mrb_state, under_module, name, proc, proc_args = [] of Class, context = nil)
     {% if proc_args.class_name == "ArrayLiteral" %}
       {% proc_arg_array = proc_args %}
     {% else %}
@@ -320,14 +320,14 @@ module MrbMacro
     {% proc_arg_array = MrbMacro.put_args_in_array(proc_args) %}
 
     wrapped_method = MrbFunc.new do |mrb, obj|
-      converted_args = MrbMacro.get_converted_args(mrb, {{proc_arg_array}})
+      converted_args = MrbMacro.get_converted_args(mrb, {{proc_arg_array}}, context: {{context}})
       MrbMacro.call_and_return(mrb, {{proc}}, {{proc_arg_array}}, converted_args)
     end
 
     {{mrb_state}}.define_module_function({{name}}, MrbModuleCache.get({{under_module}}), wrapped_method)
   end
 
-  macro wrap_module_function_with_keyword_args(mrb_state, under_module, name, proc, keyword_args, regular_args = [] of Class, operator = "")
+  macro wrap_module_function_with_keyword_args(mrb_state, under_module, name, proc, keyword_args, regular_args = [] of Class, operator = "", context = nil)
     {% if regular_args.class_name == "ArrayLiteral" %}
       {% regular_arg_array = regular_args %}
     {% else %}
@@ -341,7 +341,7 @@ module MrbMacro
       kw_args = MrbMacro.generate_keyword_argument_struct({{keyword_args}})
       MrbInternal.mrb_get_args(mrb, format_string, *regular_arg_tuple, pointerof(kw_args))
 
-      converted_regular_args = MrbMacro.convert_args(mrb, regular_arg_tuple, {{regular_arg_array}})
+      converted_regular_args = MrbMacro.convert_args(mrb, regular_arg_tuple, {{regular_arg_array}}, context: {{context}})
 
       {% if regular_arg_array.size == 0 %}
         MrbMacro.call_and_return_keyword_method(mrb, {{proc}}, converted_regular_args, {{keyword_args}}, kw_args, operator: {{operator}}, empty_regular: true)
@@ -353,7 +353,7 @@ module MrbMacro
     {{mrb_state}}.define_module_function({{name}}, MrbModuleCache.get({{under_module}}), wrapped_method)
   end
 
-  macro wrap_class_method_with_args(mrb_state, crystal_class, name, proc, proc_args = [] of Class, operator = "")
+  macro wrap_class_method_with_args(mrb_state, crystal_class, name, proc, proc_args = [] of Class, operator = "", context = nil)
     {% if proc_args.class_name == "ArrayLiteral" %}
       {% proc_arg_array = proc_args %}
     {% else %}
@@ -361,14 +361,14 @@ module MrbMacro
     {% end %}
 
     wrapped_method = MrbFunc.new do |mrb, obj|
-      converted_args = MrbMacro.get_converted_args(mrb, {{proc_arg_array}})
+      converted_args = MrbMacro.get_converted_args(mrb, {{proc_arg_array}}, context: {{context}})
       MrbMacro.call_and_return(mrb, {{proc}}, {{proc_arg_array}}, converted_args, operator: {{operator}})
     end
     
     {{mrb_state}}.define_class_method({{name}}, MrbClassCache.get({{crystal_class}}), wrapped_method)
   end
 
-  macro wrap_class_method_with_keyword_args(mrb_state, crystal_class, name, proc, keyword_args, regular_args = [] of Class, operator = "")
+  macro wrap_class_method_with_keyword_args(mrb_state, crystal_class, name, proc, keyword_args, regular_args = [] of Class, operator = "", context = nil)
     {% if regular_args.class_name == "ArrayLiteral" %}
       {% regular_arg_array = regular_args %}
     {% else %}
@@ -382,7 +382,7 @@ module MrbMacro
       kw_args = MrbMacro.generate_keyword_argument_struct({{keyword_args}})
       MrbInternal.mrb_get_args(mrb, format_string, *regular_arg_tuple, pointerof(kw_args))
 
-      converted_regular_args = MrbMacro.convert_args(mrb, regular_arg_tuple, {{regular_arg_array}})
+      converted_regular_args = MrbMacro.convert_args(mrb, regular_arg_tuple, {{regular_arg_array}}, context: {{context}})
 
       {% if regular_arg_array.size == 0 %}
         MrbMacro.call_and_return_keyword_method(mrb, {{proc}}, converted_regular_args, {{keyword_args}}, kw_args, operator: {{operator}}, empty_regular: true)
@@ -394,7 +394,7 @@ module MrbMacro
     {{mrb_state}}.define_class_method({{name}}, MrbClassCache.get({{crystal_class}}), wrapped_method)
   end
 
-  macro wrap_instance_function_with_args(mrb_state, crystal_class, name, proc, proc_args = [] of Class, operator = "")
+  macro wrap_instance_function_with_args(mrb_state, crystal_class, name, proc, proc_args = [] of Class, operator = "", context = nil)
     {% if proc_args.class_name == "ArrayLiteral" %}
       {% proc_arg_array = proc_args %}
     {% else %}
@@ -402,7 +402,7 @@ module MrbMacro
     {% end %}
 
     wrapped_method = MrbFunc.new do |mrb, obj|
-      converted_args = MrbMacro.get_converted_args(mrb, {{proc_arg_array}})
+      converted_args = MrbMacro.get_converted_args(mrb, {{proc_arg_array}}, context: {{context}})
 
       if {{crystal_class}} <= Struct
         converted_obj = MrbMacro.convert_from_ruby_struct(mrb, obj, {{crystal_class}}).value.content
@@ -430,7 +430,7 @@ module MrbMacro
       kw_args = MrbMacro.generate_keyword_argument_struct({{keyword_args}})
       MrbInternal.mrb_get_args(mrb, format_string, *regular_arg_tuple, pointerof(kw_args))
 
-      converted_regular_args = MrbMacro.convert_args(mrb, regular_arg_tuple, {{regular_arg_array}})
+      converted_regular_args = MrbMacro.convert_args(mrb, regular_arg_tuple, {{regular_arg_array}}, context: {{context}})
 
       if {{crystal_class}} <= Struct
         converted_obj = MrbMacro.convert_from_ruby_struct(mrb, obj, {{crystal_class}}).value.content
@@ -448,7 +448,7 @@ module MrbMacro
     {{mrb_state}}.define_method({{name}}, MrbClassCache.get({{crystal_class}}), wrapped_method)
   end
 
-  macro wrap_constructor_function_with_args(mrb_state, crystal_class, proc, proc_args = [] of Class, operator = "")
+  macro wrap_constructor_function_with_args(mrb_state, crystal_class, proc, proc_args = [] of Class, operator = "", context = nil)
     {% if proc_args.class_name == "ArrayLiteral" %}
       {% proc_arg_array = proc_args %}
     {% else %}
@@ -456,7 +456,7 @@ module MrbMacro
     {% end %}
 
     wrapped_method = MrbFunc.new do |mrb, obj|
-      converted_args = MrbMacro.get_converted_args(mrb, {{proc_arg_array}})
+      converted_args = MrbMacro.get_converted_args(mrb, {{proc_arg_array}}, context: {{context}})
       new_obj = {{proc}}{{operator.id}}(*converted_args)
 
       MrbMacro.allocate_constructed_object({{crystal_class}}, obj, new_obj)
@@ -466,7 +466,7 @@ module MrbMacro
     {{mrb_state}}.define_method("initialize", MrbClassCache.get({{crystal_class}}), wrapped_method)
   end
 
-  macro wrap_constructor_function_with_keyword_args(mrb_state, crystal_class, proc, keyword_args, regular_args = [] of Class, operator = "")
+  macro wrap_constructor_function_with_keyword_args(mrb_state, crystal_class, proc, keyword_args, regular_args = [] of Class, operator = "", context = nil)
     {% if regular_args.class_name == "ArrayLiteral" %}
       {% regular_arg_array = regular_args %}
     {% else %}
@@ -480,13 +480,13 @@ module MrbMacro
       kw_args = MrbMacro.generate_keyword_argument_struct({{keyword_args}})
       MrbInternal.mrb_get_args(mrb, format_string, *regular_arg_tuple, pointerof(kw_args))
 
-      converted_regular_args = MrbMacro.convert_args(mrb, regular_arg_tuple, {{regular_arg_array}})
+      converted_regular_args = MrbMacro.convert_args(mrb, regular_arg_tuple, {{regular_arg_array}}, context: {{context}})
 
       {% if regular_arg_array.size == 0 %}
         new_obj = {{proc}}{{operator.id}}(
           {% c = 0 %}
           {% for keyword in keyword_args.keys %}
-            {{keyword.id}}: MrbMacro.convert_keyword_arg(mrb, kw_args.values[{{c}}], {{keyword_args[keyword]}}),
+            {{keyword.id}}: MrbMacro.convert_keyword_arg(mrb, kw_args.values[{{c}}], {{keyword_args[keyword]}}, context: {{context}}),
             {% c += 1 %}
           {% end %}
         )
@@ -494,7 +494,7 @@ module MrbMacro
         new_obj = {{proc}}{{operator.id}}(*converted_regular_args,
           {% c = 0 %}
           {% for keyword in keyword_args.keys %}
-            {{keyword.id}}: MrbMacro.convert_keyword_arg(mrb, kw_args.values[{{c}}], {{keyword_args[keyword]}}),
+            {{keyword.id}}: MrbMacro.convert_keyword_arg(mrb, kw_args.values[{{c}}], {{keyword_args[keyword]}}, context: {{context}}),
             {% c += 1 %}
           {% end %}
         )
@@ -547,11 +547,11 @@ module MrbMacro
         {% end %}
 
         {% if is_class_method %}
-          MrbWrap.wrap_class_method({{mrb_state}}, {{crystal_class}}, {{ruby_name}}, {{crystal_class}}.{{final_method_name}}, {{type_array}}, operator: {{operator}})
+          MrbWrap.wrap_class_method({{mrb_state}}, {{crystal_class}}, {{ruby_name}}, {{crystal_class}}.{{final_method_name}}, {{type_array}}, operator: {{operator}}, context: {{context}})
         {% elsif is_constructor %}
-          MrbWrap.wrap_constructor({{mrb_state}}, {{crystal_class}}, {{type_array}}, operator: {{operator}})
+          MrbWrap.wrap_constructor({{mrb_state}}, {{crystal_class}}, {{type_array}}, operator: {{operator}}, context: {{context}})
         {% else %}
-          MrbWrap.wrap_instance_method({{mrb_state}}, {{crystal_class}}, {{ruby_name}}, {{final_method_name}}, {{type_array}}, operator: {{operator}})
+          MrbWrap.wrap_instance_method({{mrb_state}}, {{crystal_class}}, {{ruby_name}}, {{final_method_name}}, {{type_array}}, operator: {{operator}}, context: {{context}})
         {% end %}
       {% else %}
         {% keyword_hash = {} of Symbol => Crystal::Macros::ASTNode %}
@@ -590,9 +590,9 @@ module MrbMacro
         
         {% if !invalid %}
           {% if is_class_method %}
-            MrbWrap.wrap_class_method_with_keywords({{mrb_state}}, {{crystal_class}}, {{ruby_name}}, {{crystal_class}}.{{final_method_name}}, {{keyword_hash}}, operator: {{operator}})
+            MrbWrap.wrap_class_method_with_keywords({{mrb_state}}, {{crystal_class}}, {{ruby_name}}, {{crystal_class}}.{{final_method_name}}, {{keyword_hash}}, operator: {{operator}}, context: {{context}})
           {% elsif is_constructor %}
-            MrbWrap.wrap_constructor_with_keywords({{mrb_state}}, {{crystal_class}}, {{keyword_hash}}, operator: {{operator}})
+            MrbWrap.wrap_constructor_with_keywords({{mrb_state}}, {{crystal_class}}, {{keyword_hash}}, operator: {{operator}}, context: {{context}})
           {% else %}
             MrbWrap.wrap_instance_method_with_keywords({{mrb_state}}, {{crystal_class}}, {{ruby_name}}, {{final_method_name}}, {{keyword_hash}}, operator: {{operator}}, context: {{context}})
           {% end %}
@@ -687,7 +687,7 @@ module MrbMacro
         {% end %}
       # Handle constructors
       {% elsif method.name == "initialize" %}
-        MrbMacro.wrap_method_index({{mrb_state}}, {{crystal_class}}, {{index}}, "{{ruby_name}}", is_constructor: true, without_keywords: {{without_keywords}}, added_keyword_args: {{added_keyword_args}})
+        MrbMacro.wrap_method_index({{mrb_state}}, {{crystal_class}}, {{index}}, "{{ruby_name}}", is_constructor: true, without_keywords: {{without_keywords}}, added_keyword_args: {{added_keyword_args}}, context: {{context}})
         {% how_many_times_wrapped[ruby_name.stringify] = how_many_times_wrapped[ruby_name.stringify] ? how_many_times_wrapped[ruby_name.stringify] + 1 : 1 %}
       # Handle other instance methods
       {% else %}
@@ -708,7 +708,7 @@ module MrbMacro
     MrbWrap.wrap_constructor({{mrb_state}}, {{crystal_class}})
   end
 
-  macro wrap_all_class_methods(mrb_state, crystal_class, exclusions, verbose)
+  macro wrap_all_class_methods(mrb_state, crystal_class, exclusions, verbose, context = nil)
     {% has_specialized_method = {} of String => Bool %}
 
     {% for method in crystal_class.resolve.class.methods %}
@@ -777,7 +777,7 @@ module MrbMacro
         {% puts "--> Excluding #{crystal_class}::#{method.name} (Specialization 1)" if verbose %}
       # Handle other class methods
       {% else %}
-        MrbMacro.wrap_method_index({{mrb_state}}, {{crystal_class}}, {{index}}, "{{ruby_name}}", is_class_method: true, without_keywords: {{without_keywords}}, added_keyword_args: {{added_keyword_args}})
+        MrbMacro.wrap_method_index({{mrb_state}}, {{crystal_class}}, {{index}}, "{{ruby_name}}", is_class_method: true, without_keywords: {{without_keywords}}, added_keyword_args: {{added_keyword_args}}, context: {{context}})
         {% how_many_times_wrapped[ruby_name.stringify] = how_many_times_wrapped[ruby_name.stringify] ? how_many_times_wrapped[ruby_name.stringify] + 1 : 1 %}
       {% end %}
     {% end %}

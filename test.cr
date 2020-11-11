@@ -151,7 +151,7 @@ MrbState.create do |mrb|
 
   MrbWrap.wrap_class_with_methods(mrb, TestStruct, under: SomeModule)
 
-  MrbWrap.wrap_class_with_methods(mrb, Test, under: SomeModule, instance_method_exclusions: [:add])
+  MrbWrap.wrap_class_with_methods(mrb, Test, under: SomeModule, instance_method_exclusions: [:add], verbose: true)
   MrbWrap.wrap_instance_method(mrb, Test, "add", add, [Test])
 
   mrb.load_script_from_file("examples/test.rb")
