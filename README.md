@@ -94,7 +94,7 @@ Now, you want to wrap this class in Ruby. All you need to do is to execute the f
 require "anyolite"
 
 MrbState.create do |mrb|
-  MrbWrap.wrap_module_with_methods(mrb, TestModule)
+  MrbWrap.wrap(mrb, TestModule)
 
   mrb.load_script_from_file("examples/hp_example.rb")
 end
