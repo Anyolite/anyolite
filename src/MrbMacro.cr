@@ -1,20 +1,22 @@
 # Helper methods which should not be used for trivial cases in the final version
 module MrbMacro
-  macro format_string(args)
+  macro format_string(args, context = nil)
     "" +
     {% for arg in args %}
-      MrbMacro.format_char({{arg}}) +
+      MrbMacro.format_char({{arg}}, context: {{context}}) +
     {% end %}
     ""
   end
 
-  macro format_char(arg, optional_values = false)
+  macro format_char(arg, optional_values = false, context = nil)
     {% if arg.class_name == "TupleLiteral" %}
       {% if optional_values != true %}
-        "|" + MrbMacro.format_char({{arg[0]}}, optional_values: true)
+        "|" + MrbMacro.format_char({{arg[0]}}, optional_values: true, context: {{context}})
       {% else %}
-        MrbMacro.format_char({{arg[0]}}, optional_values: true)
+        MrbMacro.format_char({{arg[0]}}, optional_values: true, context: {{context}})
       {% end %}
+    {% elsif !arg.resolve? && context %}
+      MrbMacro.format_char({{context}}::{{arg}}, optional_values: {{optional_values}})
     {% elsif arg.resolve <= Bool %}
       "b"
     {% elsif arg.resolve <= Int %}
@@ -28,9 +30,11 @@ module MrbMacro
     {% end %}
   end
 
-  macro type_in_ruby(type)
+  macro type_in_ruby(type, context = nil)
     {% if type.class_name == "TupleLiteral" %}
       MrbMacro.type_in_ruby({{type[0]}})  # TODO: Allow nil for regular arguments as default
+    {% elsif !type.resolve? && context %}
+      MrbMacro.type_in_ruby({{context}}::{{type}})
     {% elsif type.resolve <= Bool %}
       MrbInternal::MrbBool
     {% elsif type.resolve <= Int %}
@@ -44,9 +48,11 @@ module MrbMacro
     {% end %}
   end
 
-  macro pointer_type(type)
+  macro pointer_type(type, context = nil)
     {% if type.class_name == "TupleLiteral" %}
-      MrbMacro.pointer_type({{type[0]}})
+      MrbMacro.pointer_type({{type[0]}}, context: {{context}})
+    {% elsif !type.resolve? && context %}
+      MrbMacro.pointer_type({{context}}::{{type}})
     {% elsif type.resolve <= Bool %}
       Pointer(MrbInternal::MrbBool)
     {% elsif type.resolve <= Int %}
@@ -60,21 +66,21 @@ module MrbMacro
     {% end %}
   end
 
-  macro generate_arg_tuple(args)
+  macro generate_arg_tuple(args, context = nil)
     Tuple.new(
       {% for arg in args %}
         {% if arg.class_name == "TupleLiteral" %}
-          MrbMacro.pointer_type({{arg}}).malloc(size: 1, value: MrbMacro.type_in_ruby({{arg}}).new({{arg[1]}})),
+          MrbMacro.pointer_type({{arg}}, context: {{context}}).malloc(size: 1, value: MrbMacro.type_in_ruby({{arg}}, context: {{context}}).new({{arg[1]}})),
         {% else %}
-          MrbMacro.pointer_type({{arg}}).malloc(size: 1),
+          MrbMacro.pointer_type({{arg}}, context: {{context}}).malloc(size: 1),
         {% end %}
       {% end %}
     )
   end
 
-  macro get_raw_args(mrb, proc_args)
-    args = MrbMacro.generate_arg_tuple({{proc_args}})
-    format_string = MrbMacro.format_string({{proc_args}})
+  macro get_raw_args(mrb, proc_args, context = nil)
+    args = MrbMacro.generate_arg_tuple({{proc_args}}, context: {{context}})
+    format_string = MrbMacro.format_string({{proc_args}}, context: {{context}})
     MrbInternal.mrb_get_args({{mrb}}, format_string, *args)
     args
   end
@@ -82,7 +88,7 @@ module MrbMacro
   # Converts Ruby values to Crystal values
   macro convert_arg(mrb, arg, arg_type, context = nil)
     {% if arg_type.class_name == "TupleLiteral" %}
-      MrbMacro.convert_arg({{mrb}}, {{arg}}, {{arg_type[0]}}, {{context}})
+      MrbMacro.convert_arg({{mrb}}, {{arg}}, {{arg_type[0]}}, context: {{context}})
     {% elsif !arg_type.resolve? && context %}
       MrbMacro.convert_arg({{mrb}}, {{arg}}, {{context}}::{{arg_type}})
     {% elsif arg_type.resolve <= Bool %}
@@ -105,7 +111,7 @@ module MrbMacro
       if MrbCast.is_undef?({{arg}})
         {{arg_type[1]}}
       else
-        MrbMacro.convert_keyword_arg({{mrb}}, {{arg}}, {{arg_type[0]}}, {{context}})
+        MrbMacro.convert_keyword_arg({{mrb}}, {{arg}}, {{arg_type[0]}}, context: {{context}})
       end
     {% elsif !arg_type.resolve? && context %}
       MrbMacro.convert_keyword_arg({{mrb}}, {{arg}}, {{context}}::{{arg_type}})
@@ -207,14 +213,14 @@ module MrbMacro
         {% if empty_regular %}
           {% c = 0 %}
           {% for keyword in keyword_args.keys %}
-            {{keyword.id}}: MrbMacro.convert_keyword_arg({{mrb}}, {{kw_args}}.values[{{c}}], {{keyword_args[keyword]}}, {{context}}),
+            {{keyword.id}}: MrbMacro.convert_keyword_arg({{mrb}}, {{kw_args}}.values[{{c}}], {{keyword_args[keyword]}}, context: {{context}}),
             {% c += 1 %}
           {% end %}
         {% else %}
           *{{converted_regular_args}},
           {% c = 0 %}
           {% for keyword in keyword_args.keys %}
-            {{keyword.id}}: MrbMacro.convert_keyword_arg({{mrb}}, {{kw_args}}.values[{{c}}], {{keyword_args[keyword]}}, {{context}}),
+            {{keyword.id}}: MrbMacro.convert_keyword_arg({{mrb}}, {{kw_args}}.values[{{c}}], {{keyword_args[keyword]}}, context: {{context}}),
             {% c += 1 %}
           {% end %}
         {% end %}
@@ -228,14 +234,14 @@ module MrbMacro
         {% if empty_regular %}
           {% c = 0 %}
           {% for keyword in keyword_args.keys %}
-            {{keyword.id}}: MrbMacro.convert_keyword_arg({{mrb}}, {{kw_args}}.values[{{c}}], {{keyword_args[keyword]}}, {{context}}),
+            {{keyword.id}}: MrbMacro.convert_keyword_arg({{mrb}}, {{kw_args}}.values[{{c}}], {{keyword_args[keyword]}}, context: {{context}}),
             {% c += 1 %}
           {% end %}
         {% else %}
           *{{converted_regular_args}},
           {% c = 0 %}
           {% for keyword in keyword_args.keys %}
-            {{keyword.id}}: MrbMacro.convert_keyword_arg({{mrb}}, {{kw_args}}.values[{{c}}], {{keyword_args[keyword]}}, {{context}}),
+            {{keyword.id}}: MrbMacro.convert_keyword_arg({{mrb}}, {{kw_args}}.values[{{c}}], {{keyword_args[keyword]}}, context: {{context}}),
             {% c += 1 %}
           {% end %}
         {% end %}
@@ -249,19 +255,19 @@ module MrbMacro
     Tuple.new(
       {% c = 0 %}
       {% for arg in proc_args %}
-        MrbMacro.convert_arg({{mrb}}, {{args}}[{{c}}].value, {{arg}}, {{context}}),
+        MrbMacro.convert_arg({{mrb}}, {{args}}[{{c}}].value, {{arg}}, context: {{context}}),
         {% c += 1 %}
       {% end %}
     )
   end
 
   macro get_converted_args(mrb, proc_args, context)
-    args = MrbMacro.generate_arg_tuple({{proc_args}})
-    format_string = MrbMacro.format_string({{proc_args}})
+    args = MrbMacro.generate_arg_tuple({{proc_args}}, context: {{context}})
+    format_string = MrbMacro.format_string({{proc_args}}, context: {{context}})
     
     MrbInternal.mrb_get_args({{mrb}}, format_string, *args)
 
-    MrbMacro.convert_args({{mrb}}, args, {{proc_args}}, {{context}})
+    MrbMacro.convert_args({{mrb}}, args, {{proc_args}}, context: {{context}})
   end
 
   macro allocate_constructed_object(crystal_class, obj, new_obj)
@@ -335,8 +341,8 @@ module MrbMacro
     {% end %}
 
     wrapped_method = MrbFunc.new do |mrb, obj|
-      regular_arg_tuple = MrbMacro.generate_arg_tuple({{regular_arg_array}})
-      format_string = MrbMacro.format_string({{regular_arg_array}}) + ":"
+      regular_arg_tuple = MrbMacro.generate_arg_tuple({{regular_arg_array}}, context: {{context}})
+      format_string = MrbMacro.format_string({{regular_arg_array}}, context: {{context}}) + ":"
 
       kw_args = MrbMacro.generate_keyword_argument_struct({{keyword_args}})
       MrbInternal.mrb_get_args(mrb, format_string, *regular_arg_tuple, pointerof(kw_args))
@@ -376,8 +382,8 @@ module MrbMacro
     {% end %}
 
     wrapped_method = MrbFunc.new do |mrb, obj|
-      regular_arg_tuple = MrbMacro.generate_arg_tuple({{regular_arg_array}})
-      format_string = MrbMacro.format_string({{regular_arg_array}}) + ":"
+      regular_arg_tuple = MrbMacro.generate_arg_tuple({{regular_arg_array}}, context: {{context}})
+      format_string = MrbMacro.format_string({{regular_arg_array}}, context: {{context}}) + ":"
 
       kw_args = MrbMacro.generate_keyword_argument_struct({{keyword_args}})
       MrbInternal.mrb_get_args(mrb, format_string, *regular_arg_tuple, pointerof(kw_args))
@@ -424,8 +430,8 @@ module MrbMacro
     {% end %}
 
     wrapped_method = MrbFunc.new do |mrb, obj|
-      regular_arg_tuple = MrbMacro.generate_arg_tuple({{regular_arg_array}})
-      format_string = MrbMacro.format_string({{regular_arg_array}}) + ":"
+      regular_arg_tuple = MrbMacro.generate_arg_tuple({{regular_arg_array}}, context: {{context}})
+      format_string = MrbMacro.format_string({{regular_arg_array}}, context: {{context}}) + ":"
 
       kw_args = MrbMacro.generate_keyword_argument_struct({{keyword_args}})
       MrbInternal.mrb_get_args(mrb, format_string, *regular_arg_tuple, pointerof(kw_args))
@@ -474,8 +480,8 @@ module MrbMacro
     {% end %}
 
     wrapped_method = MrbFunc.new do |mrb, obj|
-      regular_arg_tuple = MrbMacro.generate_arg_tuple({{regular_arg_array}})
-      format_string = MrbMacro.format_string({{regular_arg_array}}) + ":"
+      regular_arg_tuple = MrbMacro.generate_arg_tuple({{regular_arg_array}}, context: {{context}})
+      format_string = MrbMacro.format_string({{regular_arg_array}}, context: {{context}}) + ":"
 
       kw_args = MrbMacro.generate_keyword_argument_struct({{keyword_args}})
       MrbInternal.mrb_get_args(mrb, format_string, *regular_arg_tuple, pointerof(kw_args))
@@ -531,11 +537,11 @@ module MrbMacro
 
     {% if method.args.empty? %}
       {% if is_class_method %}
-        MrbWrap.wrap_class_method({{mrb_state}}, {{crystal_class}}, {{ruby_name}}, {{crystal_class}}.{{final_method_name}}, operator: {{operator}})
+        MrbWrap.wrap_class_method({{mrb_state}}, {{crystal_class}}, {{ruby_name}}, {{crystal_class}}.{{final_method_name}}, operator: {{operator}}, context: {{context}})
       {% elsif is_constructor %}
-        MrbWrap.wrap_constructor({{mrb_state}}, {{crystal_class}})
+        MrbWrap.wrap_constructor({{mrb_state}}, {{crystal_class}}, context: {{context}})
       {% else %}
-        MrbWrap.wrap_instance_method({{mrb_state}}, {{crystal_class}}, {{ruby_name}}, {{final_method_name}}, operator: {{operator}})
+        MrbWrap.wrap_instance_method({{mrb_state}}, {{crystal_class}}, {{ruby_name}}, {{final_method_name}}, operator: {{operator}}, context: {{context}})
       {% end %}
 
     {% elsif method.args.stringify.includes?(":") || (added_keyword_args && added_keyword_args.stringify.includes?(":")) %}
@@ -649,8 +655,8 @@ module MrbMacro
 
       {% added_keyword_args = nil %}
 
-      {% if method.annotation(MrbWrap::Specialize) && method.annotation(MrbWrap::Specialize)[1] %}
-        {% added_keyword_args = method.annotation(MrbWrap::Specialize)[1] %}
+      {% if method.annotation(MrbWrap::Specialize) && method.annotation(MrbWrap::Specialize)[0] %}
+        {% added_keyword_args = method.annotation(MrbWrap::Specialize)[0] %}
       {% end %}
 
       {% if annotation_specialize_im && method.args.stringify == annotation_specialize_im[1].stringify %}
@@ -681,9 +687,9 @@ module MrbMacro
         {% operator = method.name.tr(without_operator.stringify, "") %}
 
         {% if without_operator.empty? %}
-          MrbMacro.wrap_method_index({{mrb_state}}, {{crystal_class}}, {{index}}, "{{ruby_name}}", operator: "{{operator}}", without_keywords: true)
+          MrbMacro.wrap_method_index({{mrb_state}}, {{crystal_class}}, {{index}}, "{{ruby_name}}", operator: "{{operator}}", without_keywords: true, context: {{context}})
         {% else %}
-          MrbMacro.wrap_method_index({{mrb_state}}, {{crystal_class}}, {{index}}, "{{ruby_name}}", operator: "{{operator}}", cut_name: {{without_operator}}, without_keywords: true)
+          MrbMacro.wrap_method_index({{mrb_state}}, {{crystal_class}}, {{index}}, "{{ruby_name}}", operator: "{{operator}}", cut_name: {{without_operator}}, without_keywords: true, context: {{context}})
         {% end %}
       # Handle constructors
       {% elsif method.name == "initialize" %}
