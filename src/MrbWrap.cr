@@ -5,7 +5,6 @@ require "./MrbClass.cr"
 require "./MrbCast.cr"
 require "./MrbMacro.cr"
 require "./MrbClassCache.cr"
-require "./MrbModuleCache.cr"
 require "./MrbTypeCache.cr"
 require "./MrbModule.cr"
 require "./MrbRefTable.cr"
@@ -62,7 +61,7 @@ module MrbWrap
   #
   # Each class can be defined in a specifiy module by setting *under* to a `MrbModule`.
   macro wrap_class(mrb_state, crystal_class, name, under = nil, superclass = nil)
-    new_class = MrbClass.new({{mrb_state}}, {{name}}, under: MrbModuleCache.get({{under}}), superclass: MrbClassCache.get({{superclass}}))
+    new_class = MrbClass.new({{mrb_state}}, {{name}}, under: MrbClassCache.get({{under}}), superclass: MrbClassCache.get({{superclass}}))
     MrbInternal.set_instance_tt_as_data(new_class)
     MrbClassCache.register({{crystal_class}}, new_class)
     MrbClassCache.get({{crystal_class}})
@@ -75,9 +74,9 @@ module MrbWrap
   # 
   # The parent module can be specified with the module argument *under*.
   macro wrap_module(mrb_state, crystal_module, name, under = nil)
-    new_module = MrbModule.new({{mrb_state}}, {{name}}, under: MrbModuleCache.get({{under}}))
-    MrbModuleCache.register({{crystal_module}}, new_module)
-    MrbModuleCache.get({{crystal_module}})
+    new_module = MrbModule.new({{mrb_state}}, {{name}}, under: MrbClassCache.get({{under}}))
+    MrbClassCache.register({{crystal_module}}, new_module)
+    MrbClassCache.get({{crystal_module}})
   end
 
   # Wraps the constructor of a Crystal class into mruby.
@@ -195,7 +194,7 @@ module MrbWrap
   # The value *crystal_value* will be integrated into the `MrbState` *mrb_state*,
   # with the name *name* and the parent module *under_module*.
   macro wrap_constant(mrb_state, under_module, name, crystal_value)
-    MrbInternal.mrb_define_const({{mrb_state}}, MrbModuleCache.get({{under_module}}), {{name}}, MrbCast.return_value({{mrb_state}}.to_unsafe, {{crystal_value}}))
+    MrbInternal.mrb_define_const({{mrb_state}}, MrbClassCache.get({{under_module}}), {{name}}, MrbCast.return_value({{mrb_state}}.to_unsafe, {{crystal_value}}))
   end
 
   # Wraps a constant value under a class into mruby.
@@ -232,6 +231,10 @@ module MrbWrap
     class_method_exclusions = [] of String | Symbol, 
     constant_exclusions = [] of String | Symbol,
     verbose = false)
+
+    {% if verbose %}
+      {% puts "> Going into class #{crystal_class} under #{under}" %}
+    {% end %}
     
     # Things left to do:
     # - Wrap modules similarly to classes
@@ -254,7 +257,11 @@ module MrbWrap
     constant_exclusions = [] of String | Symbol,
     verbose = false)
 
-    MrbWrap.wrap_module({{mrb_state}}, {{crystal_module.resolve}}, "{{crystal_module}}", under: {{under}})
+    {% if verbose %}
+      {% puts "> Going into module #{crystal_module} under #{under}" %}
+    {% end %}
+
+    MrbWrap.wrap_module({{mrb_state}}, {{crystal_module.resolve}}, "{{crystal_module.names.last}}", under: {{under}})
     MrbMacro.wrap_all_class_methods({{mrb_state}}, {{crystal_module}}, {{class_method_exclusions}}, {{verbose}}, context: {{under}})
     MrbMacro.wrap_all_constants({{mrb_state}}, {{crystal_module}}, {{constant_exclusions}}, {{verbose}})
   end

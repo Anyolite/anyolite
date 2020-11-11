@@ -330,7 +330,7 @@ module MrbMacro
       MrbMacro.call_and_return(mrb, {{proc}}, {{proc_arg_array}}, converted_args)
     end
 
-    {{mrb_state}}.define_module_function({{name}}, MrbModuleCache.get({{under_module}}), wrapped_method)
+    {{mrb_state}}.define_module_function({{name}}, MrbClassCache.get({{under_module}}), wrapped_method)
   end
 
   macro wrap_module_function_with_keyword_args(mrb_state, under_module, name, proc, keyword_args, regular_args = [] of Class, operator = "", context = nil)
@@ -356,7 +356,7 @@ module MrbMacro
       {% end %}
     end
 
-    {{mrb_state}}.define_module_function({{name}}, MrbModuleCache.get({{under_module}}), wrapped_method)
+    {{mrb_state}}.define_module_function({{name}}, MrbClassCache.get({{under_module}}), wrapped_method)
   end
 
   macro wrap_class_method_with_args(mrb_state, crystal_class, name, proc, proc_args = [] of Class, operator = "", context = nil)
@@ -809,15 +809,19 @@ module MrbMacro
       {% elsif annotation_exclude_im %}
         {% puts "--> Excluding #{crystal_class}::#{constant} (Exclusion annotation)" if verbose %}
       {% else %}
-        MrbMacro.wrap_constant_or_class({{mrb_state}}, {{crystal_class}}, "{{ruby_name}}", {{constant}})
+        MrbMacro.wrap_constant_or_class({{mrb_state}}, {{crystal_class}}, "{{ruby_name}}", {{constant}}, {{verbose}})
       {% end %}
     {% end %}
   end
 
-  macro wrap_constant_or_class(mrb_state, under_class_or_module, ruby_name, value)
+  macro wrap_constant_or_class(mrb_state, under_class_or_module, ruby_name, value, verbose = false)
     {% actual_constant = under_class_or_module.resolve.constant(value.id) %}
     {% if actual_constant.class_name == "TypeNode" %}
-      {% puts "--> NOTE: #{actual_constant} is a class or module and has to be included manually for now." %}
+      {% if actual_constant.module? %}
+        MrbWrap.wrap_module_with_methods({{mrb_state}}, {{actual_constant}}, under: {{under_class_or_module}}, verbose: {{verbose}})
+      {% else %}
+        MrbWrap.wrap_class_with_methods({{mrb_state}}, {{actual_constant}}, under: {{under_class_or_module}}, verbose: {{verbose}})
+      {% end %}
     {% else %}
       MrbWrap.wrap_constant_under_class({{mrb_state}}, {{under_class_or_module}}, {{ruby_name}}, {{under_class_or_module}}::{{value}})
     {% end %}

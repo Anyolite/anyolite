@@ -272,16 +272,21 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 * [X] Annotation to exclude functions from wrapping
 * [X] Annotation to specialize functions for wrapping
 * [X] Annotation to rename wrapped functions
-* [ ] Full wrapping of module and class hierarchies
+* [X] Full wrapping of module and class hierarchies
 
 #### Breaking changes
 
 * [X] Function names with operators do not include the operator into the ruby name anymore
+* [X] Unified module and class cache
 
 #### Usability
 
 * [ ] Documentation on how to wrap nontrivial functions
 * [X] Functions with only an operator in their name can now be wrapped using `MrbWrap::Empty`
+
+#### Bugfixes
+
+* [X] Nested classes and modules can now be wrapped reliably
 
 ### Future updates
 

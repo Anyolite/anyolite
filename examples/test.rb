@@ -35,3 +35,6 @@ a.keyword_test(strvar: "Hi there", intvar: -121212, floatvar: -0.313, strvarkw: 
 puts "Test constant: #{TestModule::Test::RUBY_CONSTANT}"
 
 puts TestModule::Test.without_keywords(12)
+
+# The absolute, ultimate and ridiculously complicated nesting test
+TestModule::Test::UnderTest::DeepUnderTest::VeryDeepUnderTest.new.nested_test

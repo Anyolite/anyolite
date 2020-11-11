@@ -2,7 +2,7 @@
 class MrbModule
   @module_ptr : MrbInternal::RClass*
 
-  def initialize(@mrb : MrbState, @name : String, @under : MrbModule | Nil = nil)
+  def initialize(@mrb : MrbState, @name : String, @under : MrbModule | MrbClass | Nil = nil)
     if mod = @under
       @module_ptr = MrbInternal.mrb_define_module_under(@mrb, mod, @name)
     else

@@ -29,15 +29,27 @@ class MrbState
   end
 
   # TODO: Use internal mruby arg count in future versions
-  def define_method(name : String, c : MrbClass, proc : MrbFunc)
-    MrbInternal.mrb_define_method(@mrb_ptr, c, name, proc, 1)
+  def define_method(name : String, c : MrbClass | MrbModule, proc : MrbFunc)
+    if c.is_a?(MrbModule)
+      raise "Tried to define method #{name} for MrbModule #{c}"
+    else
+      MrbInternal.mrb_define_method(@mrb_ptr, c, name, proc, 1)
+    end
   end
 
-  def define_module_function(name : String, mod : MrbModule, proc : MrbFunc)
-    MrbInternal.mrb_define_module_function(@mrb_ptr, mod, name, proc, 1)
+  def define_module_function(name : String, mod : MrbModule | MrbClass, proc : MrbFunc)
+    if mod.is_a?(MrbModule)
+      MrbInternal.mrb_define_module_function(@mrb_ptr, mod, name, proc, 1)
+    else
+      MrbInternal.mrb_define_class_method(@mrb_ptr, mod, name, proc, 1)
+    end
   end
 
-  def define_class_method(name : String, c : MrbClass, proc : MrbFunc)
-    MrbInternal.mrb_define_class_method(@mrb_ptr, c, name, proc, 1)
+  def define_class_method(name : String, c : MrbClass | MrbModule, proc : MrbFunc)
+    if c.is_a?(MrbModule)
+      MrbInternal.mrb_define_module_function(@mrb_ptr, c, name, proc, 1)
+    else
+      MrbInternal.mrb_define_class_method(@mrb_ptr, c, name, proc, 1)
+    end
   end
 end
