@@ -298,6 +298,7 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 * [ ] Crystal specs for testing
 * [ ] More stable type casting
 * [ ] Use Array(TypeDeclaration) instead of Hash for keywords in internal methods
+* [ ] Options for inherited and/or inheriting classes
 
 ### Possible future updates
 
@@ -307,3 +308,4 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 * [ ] More variety for default parameters for unnamed options
 * [ ] Method in mruby to determine owner of object (if possible)
 * [ ] Include wrapping of nilable classes (if possible)
+* [ ] Better context resolution if necessary

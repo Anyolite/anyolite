@@ -237,13 +237,10 @@ module MrbWrap
     {% end %}
     
     # Things left to do:
-    # - Wrap modules similarly to classes
-    # - Wrap modules and all their classes and constants
-    # - Wrap stuff from inherited classes if wanted
     # - Display warning if a function gets wrapped more than once
     # - Display function args for repeated wrapping (replaced ones and new ones?)
-    # - Maybe improve context::class resolution by splitting context into its components?
     # - Test, test and test
+    # - Documentation
 
     MrbWrap.wrap_class({{mrb_state}}, {{crystal_class.resolve}}, "{{crystal_class.names.last}}", under: {{under}})
 
@@ -264,5 +261,27 @@ module MrbWrap
     MrbWrap.wrap_module({{mrb_state}}, {{crystal_module.resolve}}, "{{crystal_module.names.last}}", under: {{under}})
     MrbMacro.wrap_all_class_methods({{mrb_state}}, {{crystal_module}}, {{class_method_exclusions}}, {{verbose}}, context: {{under}})
     MrbMacro.wrap_all_constants({{mrb_state}}, {{crystal_module}}, {{constant_exclusions}}, {{verbose}})
+  end
+
+  macro wrap(mrb_state, crystal_module_or_class, under = nil,
+    instance_method_exclusions = [] of String | Symbol, 
+    class_method_exclusions = [] of String | Symbol, 
+    constant_exclusions = [] of String | Symbol,
+    verbose = false)
+    
+    {% if crystal_module_or_class.resolve.module? %}
+      MrbWrap.wrap_module_with_methods({{mrb_state}}, {{crystal_module_or_class}}, under: {{under}},
+        class_method_exclusions: {{class_method_exclusions}},
+        constant_exclusions: {{constant_exclusions}},
+        verbose: {{verbose}}
+      )
+    {% else %}
+      MrbWrap.wrap_class_with_methods({{mrb_state}}, {{crystal_module_or_class}}, under: {{under}},
+        instance_method_exclusions: {{instance_method_exclusions}},
+        class_method_exclusions: {{class_method_exclusions}},
+        constant_exclusions: {{constant_exclusions}},
+        verbose: {{verbose}}
+      )
+    {% end %}
   end
 end

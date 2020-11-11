@@ -145,11 +145,11 @@ MrbState.create do |mrb|
   MrbWrap.wrap_module_function_with_keywords(mrb, SomeModule, "test_method", SomeModule.test_method, {:int => Int32, :str => String})
   MrbWrap.wrap_constant(mrb, SomeModule, "SOME_CONSTANT", "Smile! 😊")
 
-  MrbWrap.wrap_class_with_methods(mrb, SomeModule::Bla, under: SomeModule, verbose: true)
+  MrbWrap.wrap(mrb, SomeModule::Bla, under: SomeModule, verbose: true)
 
-  MrbWrap.wrap_class_with_methods(mrb, SomeModule::TestStruct, under: SomeModule, verbose: true)
+  MrbWrap.wrap(mrb, SomeModule::TestStruct, under: SomeModule, verbose: true)
 
-  MrbWrap.wrap_class_with_methods(mrb, SomeModule::Test, under: SomeModule, instance_method_exclusions: [:add], verbose: true)
+  MrbWrap.wrap(mrb, SomeModule::Test, under: SomeModule, instance_method_exclusions: [:add], verbose: true)
   MrbWrap.wrap_instance_method(mrb, SomeModule::Test, "add", add, [SomeModule::Test])
 
   mrb.load_script_from_file("examples/test.rb")
@@ -187,7 +187,7 @@ MrbRefTable.reset
 puts "------------------------------"
 
 MrbState.create do |mrb|
-  MrbWrap.wrap_module_with_methods(mrb, TestModule)
+  MrbWrap.wrap(mrb, TestModule)
 
   mrb.load_script_from_file("examples/hp_example.rb")
 end
