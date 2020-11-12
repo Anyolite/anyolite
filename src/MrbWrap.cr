@@ -237,8 +237,6 @@ module MrbWrap
     {% end %}
     
     # Things left to do:
-    # - Display warning if a function gets wrapped more than once
-    # - Display function args for repeated wrapping (replaced ones and new ones?)
     # - Test, test and test
     # - Documentation
 

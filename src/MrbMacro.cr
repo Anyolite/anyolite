@@ -569,7 +569,7 @@ module MrbMacro
             {% next if invalid %}
             {% if element.value %}
               {% if !element.type %}
-                {% puts "INFO: Could not wrap function '#{final_method_name}' with args #{added_keyword_args}." %}
+                {% puts "\e[33m> INFO: Could not wrap function '#{final_method_name}' with args #{added_keyword_args}.\e[0m" %}
                 {% invalid = true %}
               {% else %}
                 {% keyword_hash[element.var.symbolize] = {element.type, element.value} %}
@@ -583,7 +583,7 @@ module MrbMacro
             {% next if invalid %}
             {% if arg.default_value.stringify != "" %}
               {% if !arg.restriction %}
-                {% puts "INFO: Could not wrap function '#{final_method_name}' with args #{method.args}." %}
+                {% puts "\e[33m> INFO: Could not wrap function '#{final_method_name}' with args #{method.args}.\e[0m" %}
                 {% invalid = true %}
               {% else %}
                 {% keyword_hash[arg.name.symbolize] = {arg.restriction, arg.default_value} %}
@@ -607,9 +607,9 @@ module MrbMacro
 
     {% else %}
       {% if is_class_method %}
-        {% puts "INFO: Could not wrap function '#{crystal_class}.#{method.name}' with args #{method.args}." %}
+        {% puts "\e[33m> INFO: Could not wrap function '#{crystal_class}.#{method.name}' with args #{method.args}.\e[0m" %}
       {% else %}
-        {% puts "INFO: Could not wrap function '#{method.name}' with args #{method.args}." %}
+        {% puts "\e[33m> INFO: Could not wrap function '#{method.name}' with args #{method.args}.\e[0m" %}
       {% end %}
     {% end %}
   end
@@ -691,6 +691,7 @@ module MrbMacro
         {% else %}
           MrbMacro.wrap_method_index({{mrb_state}}, {{crystal_class}}, {{index}}, "{{ruby_name}}", operator: "{{operator}}", cut_name: {{without_operator}}, without_keywords: true, context: {{context}})
         {% end %}
+        {% how_many_times_wrapped[ruby_name.stringify] = how_many_times_wrapped[ruby_name.stringify] ? how_many_times_wrapped[ruby_name.stringify] + 1 : 1 %}
       # Handle constructors
       {% elsif method.name == "initialize" %}
         MrbMacro.wrap_method_index({{mrb_state}}, {{crystal_class}}, {{index}}, "{{ruby_name}}", is_constructor: true, without_keywords: {{without_keywords}}, added_keyword_args: {{added_keyword_args}}, context: {{context}})
@@ -699,6 +700,10 @@ module MrbMacro
       {% else %}
         MrbMacro.wrap_method_index({{mrb_state}}, {{crystal_class}}, {{index}}, "{{ruby_name}}", without_keywords: {{without_keywords}}, added_keyword_args: {{added_keyword_args}}, context: {{context}})
         {% how_many_times_wrapped[ruby_name.stringify] = how_many_times_wrapped[ruby_name.stringify] ? how_many_times_wrapped[ruby_name.stringify] + 1 : 1 %}
+      {% end %}
+
+      {% if how_many_times_wrapped[ruby_name.stringify] && how_many_times_wrapped[ruby_name.stringify] > 1 %}
+        {% puts "\e[31m> WARNING: Method #{crystal_class}::#{ruby_name}\n--> New arguments: #{method.args}\n--> Wrapped more than once (#{how_many_times_wrapped[ruby_name.stringify]}).\e[0m" %}
       {% end %}
     {% end %}
     
@@ -785,6 +790,10 @@ module MrbMacro
       {% else %}
         MrbMacro.wrap_method_index({{mrb_state}}, {{crystal_class}}, {{index}}, "{{ruby_name}}", is_class_method: true, without_keywords: {{without_keywords}}, added_keyword_args: {{added_keyword_args}}, context: {{context}})
         {% how_many_times_wrapped[ruby_name.stringify] = how_many_times_wrapped[ruby_name.stringify] ? how_many_times_wrapped[ruby_name.stringify] + 1 : 1 %}
+      {% end %}
+
+      {% if how_many_times_wrapped[ruby_name.stringify] && how_many_times_wrapped[ruby_name.stringify] > 1 %}
+        {% puts "\e[31m> WARNING: Method #{crystal_class}::#{ruby_name}\n--> New arguments: #{method.args}\n--> Wrapped more than once (#{how_many_times_wrapped[ruby_name.stringify]}).\e[0m" %}
       {% end %}
     {% end %}
   end
