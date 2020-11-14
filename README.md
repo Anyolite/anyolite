@@ -281,7 +281,7 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 
 #### Usability
 
-* [ ] Documentation on how to wrap nontrivial functions
+* [X] Documentation updates for the new wrapping routines
 * [X] Functions with only an operator in their name can now be wrapped using `MrbWrap::Empty`
 
 #### Bugfixes

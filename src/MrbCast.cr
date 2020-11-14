@@ -63,7 +63,7 @@ module MrbCast
 
     struct_wrapper = MrbMacro.convert_from_ruby_struct(mrb, new_ruby_object, typeof(value))
     struct_wrapper.value = MrbWrap::StructWrapper(typeof(value)).new(value)
-    
+
     MrbRefTable.add(MrbRefTable.get_object_id(struct_wrapper.value), ptr.as(Void*))
 
     return new_ruby_object
@@ -79,7 +79,7 @@ module MrbCast
     new_ruby_object = MrbInternal.new_empty_object(mrb, ruby_class, ptr.as(Void*), MrbTypeCache.register(typeof(value), destructor))
 
     MrbMacro.convert_from_ruby_object(mrb, new_ruby_object, typeof(value)).value = value
-    
+
     MrbRefTable.add(MrbRefTable.get_object_id(value), ptr.as(Void*))
 
     return new_ruby_object
@@ -129,13 +129,13 @@ module MrbCast
 
   def self.interpret_ruby_value(mrb : MrbInternal::MrbState*, value : MrbInternal::MrbValue)
     case value.tt
-      when MrbInternal::MrbVType::MRB_TT_UNDEF then MrbWrap::Undef
-      when MrbInternal::MrbVType::MRB_TT_TRUE then true
-      when MrbInternal::MrbVType::MRB_TT_FALSE then (value.value.value_int != 0 ? false : nil)  # TODO: Use proper mruby methods
-      when MrbInternal::MrbVType::MRB_TT_FIXNUM then MrbCast.cast_to_int(mrb, value)
-      when MrbInternal::MrbVType::MRB_TT_FLOAT then MrbCast.cast_to_float(mrb, value)
-      when MrbInternal::MrbVType::MRB_TT_STRING then MrbCast.cast_to_string(mrb, value)
-      else raise("MrbValue #{value} with #{value.tt} is not supported")
+    when MrbInternal::MrbVType::MRB_TT_UNDEF  then MrbWrap::Undef
+    when MrbInternal::MrbVType::MRB_TT_TRUE   then true
+    when MrbInternal::MrbVType::MRB_TT_FALSE  then (value.value.value_int != 0 ? false : nil) # TODO: Use proper mruby methods
+    when MrbInternal::MrbVType::MRB_TT_FIXNUM then MrbCast.cast_to_int(mrb, value)
+    when MrbInternal::MrbVType::MRB_TT_FLOAT  then MrbCast.cast_to_float(mrb, value)
+    when MrbInternal::MrbVType::MRB_TT_STRING then MrbCast.cast_to_string(mrb, value)
+    else                                           raise("MrbValue #{value} with #{value.tt} is not supported")
     end
   end
 

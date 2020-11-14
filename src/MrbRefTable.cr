@@ -2,15 +2,15 @@
 # Therefore, the GC won't delete the wrapped objects until necessary.
 # Note that this is currently one-directional, so mruby might still delete Crystal objects generated from Crystal itself.
 # Furthermore, this is only possible as a module due to C closure limitations.
-# 
+#
 # TODO: Add compilation option for ignoring entry checks
 module MrbRefTable
   @@content = {} of UInt64 => Tuple(Void*, Int64)
 
   @@options = {
-    :logging => false,
-    :warnings => true,
-    :replace_conflicting_pointers => false
+    :logging                      => false,
+    :warnings                     => true,
+    :replace_conflicting_pointers => false,
   }
 
   def self.get(identification)
@@ -25,7 +25,7 @@ module MrbRefTable
         if option_active?(:replace_conflicting_pointers)
           @@content[identification] = {value, @@content[identification][1] + 1}
         else
-          @@content[identification] = {@@content[identification][0] , @@content[identification][1] + 1}
+          @@content[identification] = {@@content[identification][0], @@content[identification][1] + 1}
         end
       else
         @@content[identification] = {value, @@content[identification][1] + 1}
