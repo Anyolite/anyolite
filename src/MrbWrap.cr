@@ -26,6 +26,9 @@ module MrbWrap
 
   # Use this special constant in case of a function to wrap, which has only an operator as a name.
   struct Empty
+    # :nodoc:
+    def initialize
+    end
   end
 
   # Internal class to hide the `Struct` *T* in a special class
