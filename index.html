@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="generator" content="Crystal Docs 0.35.1">
-<meta name="crystal_docs.project_version" content="0.3.0">
+<meta name="crystal_docs.project_version" content="0.4.0-pre">
 <meta name="crystal_docs.project_name" content="anyolite">
 
 
@@ -18,7 +18,7 @@
 </svg>
 
   <meta id="repository-name" content="anyolite">
-  <title>anyolite 0.3.0</title>
+  <title>anyolite 0.4.0-pre</title>
   <script type="text/javascript">
   CrystalDocs.base_path = "";
   </script>
@@ -39,7 +39,7 @@
       </h1>
 
       <span class="project-version">
-        0.3.0
+        0.4.0-pre
       </span>
     </div>
   </div>
@@ -81,11 +81,6 @@
       
     </li>
   
-  <li class=" " data-id="anyolite/MrbModuleCache" data-name="mrbmodulecache">
-      <a href="MrbModuleCache.html">MrbModuleCache</a>
-      
-    </li>
-  
   <li class=" " data-id="anyolite/MrbRefTable" data-name="mrbreftable">
       <a href="MrbRefTable.html">MrbRefTable</a>
       
@@ -106,8 +101,68 @@
       
         <ul>
   
+  <li class=" " data-id="anyolite/MrbWrap/Empty" data-name="mrbwrap::empty">
+      <a href="MrbWrap/Empty.html">Empty</a>
+      
+    </li>
+  
+  <li class=" " data-id="anyolite/MrbWrap/Exclude" data-name="mrbwrap::exclude">
+      <a href="MrbWrap/Exclude.html">Exclude</a>
+      
+    </li>
+  
+  <li class=" " data-id="anyolite/MrbWrap/ExcludeClassMethod" data-name="mrbwrap::excludeclassmethod">
+      <a href="MrbWrap/ExcludeClassMethod.html">ExcludeClassMethod</a>
+      
+    </li>
+  
+  <li class=" " data-id="anyolite/MrbWrap/ExcludeConstant" data-name="mrbwrap::excludeconstant">
+      <a href="MrbWrap/ExcludeConstant.html">ExcludeConstant</a>
+      
+    </li>
+  
+  <li class=" " data-id="anyolite/MrbWrap/ExcludeInstanceMethod" data-name="mrbwrap::excludeinstancemethod">
+      <a href="MrbWrap/ExcludeInstanceMethod.html">ExcludeInstanceMethod</a>
+      
+    </li>
+  
   <li class=" " data-id="anyolite/MrbWrap/Interpreted" data-name="mrbwrap::interpreted">
       <a href="MrbWrap/Interpreted.html">Interpreted</a>
+      
+    </li>
+  
+  <li class=" " data-id="anyolite/MrbWrap/Rename" data-name="mrbwrap::rename">
+      <a href="MrbWrap/Rename.html">Rename</a>
+      
+    </li>
+  
+  <li class=" " data-id="anyolite/MrbWrap/RenameClassMethod" data-name="mrbwrap::renameclassmethod">
+      <a href="MrbWrap/RenameClassMethod.html">RenameClassMethod</a>
+      
+    </li>
+  
+  <li class=" " data-id="anyolite/MrbWrap/RenameConstant" data-name="mrbwrap::renameconstant">
+      <a href="MrbWrap/RenameConstant.html">RenameConstant</a>
+      
+    </li>
+  
+  <li class=" " data-id="anyolite/MrbWrap/RenameInstanceMethod" data-name="mrbwrap::renameinstancemethod">
+      <a href="MrbWrap/RenameInstanceMethod.html">RenameInstanceMethod</a>
+      
+    </li>
+  
+  <li class=" " data-id="anyolite/MrbWrap/Specialize" data-name="mrbwrap::specialize">
+      <a href="MrbWrap/Specialize.html">Specialize</a>
+      
+    </li>
+  
+  <li class=" " data-id="anyolite/MrbWrap/SpecializeClassMethod" data-name="mrbwrap::specializeclassmethod">
+      <a href="MrbWrap/SpecializeClassMethod.html">SpecializeClassMethod</a>
+      
+    </li>
+  
+  <li class=" " data-id="anyolite/MrbWrap/SpecializeInstanceMethod" data-name="mrbwrap::specializeinstancemethod">
+      <a href="MrbWrap/SpecializeInstanceMethod.html">SpecializeInstanceMethod</a>
       
     </li>
   
@@ -118,6 +173,21 @@
   
   <li class=" " data-id="anyolite/MrbWrap/Undefined" data-name="mrbwrap::undefined">
       <a href="MrbWrap/Undefined.html">Undefined</a>
+      
+    </li>
+  
+  <li class=" " data-id="anyolite/MrbWrap/WrapWithoutKeywords" data-name="mrbwrap::wrapwithoutkeywords">
+      <a href="MrbWrap/WrapWithoutKeywords.html">WrapWithoutKeywords</a>
+      
+    </li>
+  
+  <li class=" " data-id="anyolite/MrbWrap/WrapWithoutKeywordsClassMethod" data-name="mrbwrap::wrapwithoutkeywordsclassmethod">
+      <a href="MrbWrap/WrapWithoutKeywordsClassMethod.html">WrapWithoutKeywordsClassMethod</a>
+      
+    </li>
+  
+  <li class=" " data-id="anyolite/MrbWrap/WrapWithoutKeywordsInstanceMethod" data-name="mrbwrap::wrapwithoutkeywordsinstancemethod">
+      <a href="MrbWrap/WrapWithoutKeywordsInstanceMethod.html">WrapWithoutKeywordsInstanceMethod</a>
       
     </li>
   
@@ -234,29 +304,18 @@ which allows for changing multiple options when installing the shard. Possible o
   <span class="k">end</span>
 <span class="k">end</span></code></pre>
 
-<p>Now, you want to wrap this class in Ruby. All you need to do is to execute the following code in Crystal:</p>
+<p>Now, you want to wrap this class in Ruby. All you need to do is to execute the following code in Crystal (current commit; see documentation page for the version of the latest release):</p>
 
 <pre><code class="language-crystal"><span class="k">require</span> <span class="s">&quot;anyolite&quot;</span>
 
 <span class="t">MrbState</span>.create <span class="k">do</span> <span class="o">|</span>mrb<span class="o">|</span>
-  test_module <span class="o">=</span> <span class="t">MrbModule</span>.<span class="k">new</span>(mrb, <span class="s">&quot;TestModule&quot;</span>)
-
-  <span class="t">MrbWrap</span>.wrap_class(mrb, <span class="t">Entity</span>, <span class="s">&quot;Entity&quot;</span>, under: test_module)
-
-  <span class="t">MrbWrap</span>.wrap_constructor_with_keywords(mrb, <span class="t">Entity</span>, {<span class="n">:hp</span> => {<span class="t">Int32</span>, <span class="n">0</span>}})
-
-  <span class="t">MrbWrap</span>.wrap_property(mrb, <span class="t">Entity</span>, <span class="s">&quot;hp&quot;</span>, hp, <span class="t">Int32</span>)
-
-  <span class="t">MrbWrap</span>.wrap_instance_method_with_keywords(mrb, <span class="t">Entity</span>, <span class="s">&quot;damage&quot;</span>, damage, {<span class="n">:diff</span> => <span class="t">Int32</span>})
-
-  <span class="t">MrbWrap</span>.wrap_instance_method_with_keywords(mrb, <span class="t">Entity</span>, <span class="s">&quot;yell&quot;</span>, yell, {<span class="n">:sound</span> => <span class="t">String</span>, <span class="n">:loud</span> => {<span class="t">Bool</span>, <span class="n">false</span>}})
-
-  <span class="t">MrbWrap</span>.wrap_instance_method_with_keywords(mrb, <span class="t">Entity</span>, <span class="s">&quot;absorb_hp_from&quot;</span>, absorb_hp_from, {<span class="n">:other</span> => <span class="t">Entity</span>})
+  <span class="t">MrbWrap</span>.wrap(mrb, <span class="t">TestModule</span>)
 
   mrb.load_script_from_file(<span class="s">&quot;examples/hp_example.rb&quot;</span>)
 <span class="k">end</span></code></pre>
 
-<p>The last line in the block calls the following example script:</p>
+<p>Well, that's it already. 
+The last line in the block calls the following example script:</p>
 
 <pre><code class="language-ruby">a = TestModule::Entity.new(hp: 20)
 a.damage(diff: 13)
@@ -504,27 +563,43 @@ More features will be added in the future.</p>
   </svg>
 </a>Upcoming releases</h2>
 
-<h3><a id="version-0.3.1" class="anchor" href="#version-0.3.1">
+<h3><a id="version-0.4.0" class="anchor" href="#version-0.4.0">
   <svg class="octicon-link" aria-hidden="true">
     <use href="#octicon-link"/>
   </svg>
-</a>Version 0.3.1</h3>
+</a>Version 0.4.0</h3>
 
-<h4><a id="features" class="anchor" href="#features">
+<h4><a id="major-features" class="anchor" href="#major-features">
   <svg class="octicon-link" aria-hidden="true">
     <use href="#octicon-link"/>
   </svg>
-</a>Features</h4>
+</a>Major features</h4>
 
-<ul><li>[ ] Copy constructor wrapping</li></ul>
+<ul><li>[X] Easier wrapping of classes and all of their methods and constants</li><li>[X] Annotation to exclude functions from wrapping</li><li>[X] Annotation to specialize functions for wrapping</li><li>[X] Annotation to rename wrapped functions</li><li>[X] Full wrapping of module and class hierarchies</li></ul>
 
-<h4><a id="safety" class="anchor" href="#safety">
+<h4><a id="breaking-changes" class="anchor" href="#breaking-changes">
   <svg class="octicon-link" aria-hidden="true">
     <use href="#octicon-link"/>
   </svg>
-</a>Safety</h4>
+</a>Breaking changes</h4>
 
-<ul><li>[ ] More stable type casting</li></ul>
+<ul><li>[X] Function names with operators do not include the operator into the ruby name anymore</li><li>[X] Unified module and class cache</li></ul>
+
+<h4><a id="usability" class="anchor" href="#usability">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Usability</h4>
+
+<ul><li>[X] Documentation updates for the new wrapping routines</li><li>[X] Functions with only an operator in their name can now be wrapped using <code><a href="MrbWrap/Empty.html">MrbWrap::Empty</a></code></li></ul>
+
+<h4><a id="bugfixes" class="anchor" href="#bugfixes">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Bugfixes</h4>
+
+<ul><li>[X] Nested classes and modules can now be wrapped reliably</li></ul>
 
 <h3><a id="future-updates" class="anchor" href="#future-updates">
   <svg class="octicon-link" aria-hidden="true">
@@ -532,7 +607,7 @@ More features will be added in the future.</p>
   </svg>
 </a>Future updates</h3>
 
-<ul><li>[ ] Windows support (currently not supported due to problems with Crystal)</li><li>[ ] Mac support (might be possible, not tested yet)</li><li>[ ] Compiletime errors for macros</li><li>[ ] Support for more flexible mruby configuration options</li><li>[ ] Arrays as arguments and return values</li><li>[ ] Crystal specs for testing</li></ul>
+<ul><li>[ ] Windows support (currently not supported due to problems with Crystal)</li><li>[ ] Mac support (might be possible, not tested yet)</li><li>[ ] Compiletime errors for macros</li><li>[ ] Support for more flexible mruby configuration options</li><li>[ ] Arrays as arguments and return values</li><li>[ ] Crystal specs for testing</li><li>[ ] More stable type casting</li><li>[ ] Use Array(TypeDeclaration) instead of Hash for keywords in internal methods</li><li>[ ] Options for inherited and/or inheriting classes</li></ul>
 
 <h3><a id="possible-future-updates" class="anchor" href="#possible-future-updates">
   <svg class="octicon-link" aria-hidden="true">
@@ -540,7 +615,7 @@ More features will be added in the future.</p>
   </svg>
 </a>Possible future updates</h3>
 
-<ul><li>[ ] Other types (Hashes, ...) as arguments and return values</li><li>[ ] Option for passing mruby splat arguments as an array</li><li>[ ] Support for arbitrary keyword arguments as hashes</li><li>[ ] More variety for default parameters for unnamed options</li><li>[ ] Method in mruby to determine owner of object (if possible)</li></ul>
+<ul><li>[ ] Other types (Hashes, ...) as arguments and return values</li><li>[ ] Option for passing mruby splat arguments as an array</li><li>[ ] Support for arbitrary keyword arguments as hashes</li><li>[ ] More variety for default parameters for unnamed options</li><li>[ ] Method in mruby to determine owner of object (if possible)</li><li>[ ] Include wrapping of nilable classes (if possible)</li><li>[ ] Better context resolution if necessary</li></ul>
 </div>
 </body>
 </html>

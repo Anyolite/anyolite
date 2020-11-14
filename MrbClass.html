@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="generator" content="Crystal Docs 0.35.1">
-<meta name="crystal_docs.project_version" content="0.3.0">
+<meta name="crystal_docs.project_version" content="0.4.0-pre">
 <meta name="crystal_docs.project_name" content="anyolite">
 
 
@@ -18,7 +18,7 @@
 </svg>
 
   <meta id="repository-name" content="anyolite">
-  <title>MrbClass - anyolite 0.3.0</title>
+  <title>MrbClass - anyolite 0.4.0-pre</title>
   <script type="text/javascript">
     CrystalDocs.base_path = "";
   </script>
@@ -39,7 +39,7 @@
       </h1>
 
       <span class="project-version">
-        0.3.0
+        0.4.0-pre
       </span>
     </div>
   </div>
@@ -81,11 +81,6 @@
       
     </li>
   
-  <li class=" " data-id="anyolite/MrbModuleCache" data-name="mrbmodulecache">
-      <a href="MrbModuleCache.html">MrbModuleCache</a>
-      
-    </li>
-  
   <li class=" " data-id="anyolite/MrbRefTable" data-name="mrbreftable">
       <a href="MrbRefTable.html">MrbRefTable</a>
       
@@ -106,8 +101,68 @@
       
         <ul>
   
+  <li class=" " data-id="anyolite/MrbWrap/Empty" data-name="mrbwrap::empty">
+      <a href="MrbWrap/Empty.html">Empty</a>
+      
+    </li>
+  
+  <li class=" " data-id="anyolite/MrbWrap/Exclude" data-name="mrbwrap::exclude">
+      <a href="MrbWrap/Exclude.html">Exclude</a>
+      
+    </li>
+  
+  <li class=" " data-id="anyolite/MrbWrap/ExcludeClassMethod" data-name="mrbwrap::excludeclassmethod">
+      <a href="MrbWrap/ExcludeClassMethod.html">ExcludeClassMethod</a>
+      
+    </li>
+  
+  <li class=" " data-id="anyolite/MrbWrap/ExcludeConstant" data-name="mrbwrap::excludeconstant">
+      <a href="MrbWrap/ExcludeConstant.html">ExcludeConstant</a>
+      
+    </li>
+  
+  <li class=" " data-id="anyolite/MrbWrap/ExcludeInstanceMethod" data-name="mrbwrap::excludeinstancemethod">
+      <a href="MrbWrap/ExcludeInstanceMethod.html">ExcludeInstanceMethod</a>
+      
+    </li>
+  
   <li class=" " data-id="anyolite/MrbWrap/Interpreted" data-name="mrbwrap::interpreted">
       <a href="MrbWrap/Interpreted.html">Interpreted</a>
+      
+    </li>
+  
+  <li class=" " data-id="anyolite/MrbWrap/Rename" data-name="mrbwrap::rename">
+      <a href="MrbWrap/Rename.html">Rename</a>
+      
+    </li>
+  
+  <li class=" " data-id="anyolite/MrbWrap/RenameClassMethod" data-name="mrbwrap::renameclassmethod">
+      <a href="MrbWrap/RenameClassMethod.html">RenameClassMethod</a>
+      
+    </li>
+  
+  <li class=" " data-id="anyolite/MrbWrap/RenameConstant" data-name="mrbwrap::renameconstant">
+      <a href="MrbWrap/RenameConstant.html">RenameConstant</a>
+      
+    </li>
+  
+  <li class=" " data-id="anyolite/MrbWrap/RenameInstanceMethod" data-name="mrbwrap::renameinstancemethod">
+      <a href="MrbWrap/RenameInstanceMethod.html">RenameInstanceMethod</a>
+      
+    </li>
+  
+  <li class=" " data-id="anyolite/MrbWrap/Specialize" data-name="mrbwrap::specialize">
+      <a href="MrbWrap/Specialize.html">Specialize</a>
+      
+    </li>
+  
+  <li class=" " data-id="anyolite/MrbWrap/SpecializeClassMethod" data-name="mrbwrap::specializeclassmethod">
+      <a href="MrbWrap/SpecializeClassMethod.html">SpecializeClassMethod</a>
+      
+    </li>
+  
+  <li class=" " data-id="anyolite/MrbWrap/SpecializeInstanceMethod" data-name="mrbwrap::specializeinstancemethod">
+      <a href="MrbWrap/SpecializeInstanceMethod.html">SpecializeInstanceMethod</a>
       
     </li>
   
@@ -118,6 +173,21 @@
   
   <li class=" " data-id="anyolite/MrbWrap/Undefined" data-name="mrbwrap::undefined">
       <a href="MrbWrap/Undefined.html">Undefined</a>
+      
+    </li>
+  
+  <li class=" " data-id="anyolite/MrbWrap/WrapWithoutKeywords" data-name="mrbwrap::wrapwithoutkeywords">
+      <a href="MrbWrap/WrapWithoutKeywords.html">WrapWithoutKeywords</a>
+      
+    </li>
+  
+  <li class=" " data-id="anyolite/MrbWrap/WrapWithoutKeywordsClassMethod" data-name="mrbwrap::wrapwithoutkeywordsclassmethod">
+      <a href="MrbWrap/WrapWithoutKeywordsClassMethod.html">WrapWithoutKeywordsClassMethod</a>
+      
+    </li>
+  
+  <li class=" " data-id="anyolite/MrbWrap/WrapWithoutKeywordsInstanceMethod" data-name="mrbwrap::wrapwithoutkeywordsinstancemethod">
+      <a href="MrbWrap/WrapWithoutKeywordsInstanceMethod.html">WrapWithoutKeywordsInstanceMethod</a>
       
     </li>
   
@@ -179,7 +249,7 @@
   </h2>
   
     
-      <a href="https://github.com/Anyolite/anyolite/blob/v0.3.0/src/MrbClass.cr#L2" target="_blank">
+      <a href="https://github.com/Anyolite/anyolite/blob/v0.4.0-pre/src/MrbClass.cr#L2" target="_blank">
         MrbClass.cr
       </a>
     
@@ -201,7 +271,7 @@
   <ul class="list-summary">
     
       <li class="entry-summary">
-        <a href="#new(mrb:MrbState,name:String,superclass:MrbClass?=nil,under:MrbModule?=nil)-class-method" class="signature"><strong>.new</strong>(mrb : MrbState, name : String, superclass : MrbClass? = <span class="n">nil</span>, under : MrbModule? = <span class="n">nil</span>)</a>
+        <a href="#new(mrb:MrbState,name:String,superclass:MrbClass?=nil,under:MrbModule%7CMrbClass%7CNil=nil)-class-method" class="signature"><strong>.new</strong>(mrb : MrbState, name : String, superclass : MrbClass? = <span class="n">nil</span>, under : MrbModule | MrbClass | Nil = <span class="n">nil</span>)</a>
         
       </li>
     
@@ -266,18 +336,18 @@
     Constructor Detail
   </h2>
   
-    <div class="entry-detail" id="new(mrb:MrbState,name:String,superclass:MrbClass?=nil,under:MrbModule?=nil)-class-method">
+    <div class="entry-detail" id="new(mrb:MrbState,name:String,superclass:MrbClass?=nil,under:MrbModule|MrbClass|Nil=nil)-class-method">
       <div class="signature">
         
-        def self.<strong>new</strong>(mrb : <a href="MrbState.html">MrbState</a>, name : String, superclass : <a href="MrbClass.html">MrbClass</a>? = <span class="n">nil</span>, under : <a href="MrbModule.html">MrbModule</a>? = <span class="n">nil</span>)
+        def self.<strong>new</strong>(mrb : <a href="MrbState.html">MrbState</a>, name : String, superclass : <a href="MrbClass.html">MrbClass</a>? = <span class="n">nil</span>, under : <a href="MrbModule.html">MrbModule</a> | <a href="MrbClass.html">MrbClass</a> | Nil = <span class="n">nil</span>)
 
-        <a class="method-permalink" href="#new(mrb:MrbState,name:String,superclass:MrbClass?=nil,under:MrbModule?=nil)-class-method">#</a>
+        <a class="method-permalink" href="#new(mrb:MrbState,name:String,superclass:MrbClass?=nil,under:MrbModule%7CMrbClass%7CNil=nil)-class-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/Anyolite/anyolite/blob/v0.3.0/src/MrbClass.cr#L5" target="_blank">View source</a>]
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.4.0-pre/src/MrbClass.cr#L5" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -307,7 +377,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/Anyolite/anyolite/blob/v0.3.0/src/MrbClass.cr#L14" target="_blank">View source</a>]
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.4.0-pre/src/MrbClass.cr#L14" target="_blank">View source</a>]
         
       </div>
     </div>
