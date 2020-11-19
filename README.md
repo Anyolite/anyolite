@@ -142,6 +142,17 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 
 ## Releases
 
+### Version 0.4.1
+
+#### Usability
+
+* Method names in annotations can be given as strings
+
+#### Bugfixes
+
+* Setters can be excluded correctly
+* Correct handling of generic function arguments like Int, Number or Float
+
 ### Version 0.4.0
 
 #### Major features
@@ -288,12 +299,7 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 
 ## Upcoming releases
 
-### Version 0.4.1
-
-#### Bugfixes
-
-* [ ] Setters can be excluded correctly
-* [ ] Correct handling of generic function arguments like Int or Number
+None yet
 
 ### Future updates
 

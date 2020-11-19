@@ -57,7 +57,7 @@ module MrbMacro
       Pointer(MrbInternal::MrbBool)
     {% elsif type.resolve <= Int %}
       Pointer(MrbInternal::MrbInt)
-    {% elsif type.resolve <= Float %}
+    {% elsif type.resolve <= Float || type.resolve == Number %}
       Pointer(MrbInternal::MrbFloat)
     {% elsif type.resolve <= String %}
       Pointer(LibC::Char*)
@@ -93,8 +93,14 @@ module MrbMacro
       MrbMacro.convert_arg({{mrb}}, {{arg}}, {{context}}::{{arg_type}})
     {% elsif arg_type.resolve <= Bool %}
       ({{arg}} != 0)
+    {% elsif arg_type.resolve == Number %}
+      Float64.new({{arg}})
+    {% elsif arg_type.resolve == Int %}
+      Int64.new({{arg}})
     {% elsif arg_type.resolve <= Int %}
       {{arg_type}}.new({{arg}})
+    {% elsif arg_type.resolve == Float %}
+      Float64.new({{arg}})
     {% elsif arg_type.resolve <= Float %}
       {{arg_type}}.new({{arg}})
     {% elsif arg_type.resolve <= String %}
@@ -117,8 +123,14 @@ module MrbMacro
       MrbMacro.convert_keyword_arg({{mrb}}, {{arg}}, {{context}}::{{arg_type}})
     {% elsif arg_type.resolve <= Bool %}
       MrbCast.cast_to_bool({{mrb}}, {{arg}})
+    {% elsif arg_type.resolve == Number %}
+      Float64.new(MrbCast.cast_to_float({{mrb}}, {{arg}}))
+    {% elsif arg_type.resolve == Int %}
+      Int64.new(MrbCast.cast_to_int({{mrb}}, {{arg}}))
     {% elsif arg_type.resolve <= Int %}
       {{arg_type}}.new(MrbCast.cast_to_int({{mrb}}, {{arg}}))
+    {% elsif arg_type.resolve == Float %}
+      Float64.new( MrbCast.cast_to_float({{mrb}}, {{arg}}))
     {% elsif arg_type.resolve <= Float %}
      {{arg_type}}.new( MrbCast.cast_to_float({{mrb}}, {{arg}}))
     {% elsif arg_type.resolve <= String %}
@@ -619,14 +631,14 @@ module MrbMacro
 
     {% for method in crystal_class.resolve.methods %}
       {% all_annotations_specialize_im = crystal_class.resolve.annotations(MrbWrap::SpecializeInstanceMethod) %}
-      {% annotation_specialize_im = all_annotations_specialize_im.find { |element| element[0].stringify == method.name.stringify } %}
+      {% annotation_specialize_im = all_annotations_specialize_im.find { |element| element[0].stringify == method.name.stringify || element[0] == method.name.stringify } %}
 
       {% if method.annotation(MrbWrap::Specialize) %}
         {% has_specialized_method[method.name.stringify] = true %}
       {% end %}
 
       {% if annotation_specialize_im %}
-        {% has_specialized_method[annotation_specialize_im[0].stringify] = true %}
+        {% has_specialized_method[annotation_specialize_im[0].id.stringify] = true %}
       {% end %}
     {% end %}
 
@@ -634,16 +646,16 @@ module MrbMacro
 
     {% for method, index in crystal_class.resolve.methods %}
       {% all_annotations_exclude_im = crystal_class.resolve.annotations(MrbWrap::ExcludeInstanceMethod) %}
-      {% annotation_exclude_im = all_annotations_exclude_im.find { |element| element[0].stringify == method.name.stringify } %}
+      {% annotation_exclude_im = all_annotations_exclude_im.find { |element| element[0].id.stringify == method.name.stringify } %}
 
       {% all_annotations_specialize_im = crystal_class.resolve.annotations(MrbWrap::SpecializeInstanceMethod) %}
-      {% annotation_specialize_im = all_annotations_specialize_im.find { |element| element[0].stringify == method.name.stringify } %}
+      {% annotation_specialize_im = all_annotations_specialize_im.find { |element| element[0].id.stringify == method.name.stringify } %}
 
       {% all_annotations_rename_im = crystal_class.resolve.annotations(MrbWrap::RenameInstanceMethod) %}
-      {% annotation_rename_im = all_annotations_rename_im.find { |element| element[0].stringify == method.name.stringify } %}
+      {% annotation_rename_im = all_annotations_rename_im.find { |element| element[0].id.stringify == method.name.stringify } %}
 
       {% all_annotations_without_keywords_im = crystal_class.resolve.annotations(MrbWrap::WrapWithoutKeywordsInstanceMethod) %}
-      {% annotation_without_keyword_im = all_annotations_without_keywords_im.find { |element| element[0].stringify == method.name.stringify } %}
+      {% annotation_without_keyword_im = all_annotations_without_keywords_im.find { |element| element[0].id.stringify == method.name.stringify } %}
 
       {% if method.annotation(MrbWrap::Rename) %}
         {% ruby_name = method.annotation(MrbWrap::Rename)[0].id %}
@@ -673,7 +685,7 @@ module MrbMacro
       # Ignore mrb hooks and finalize (unless specialized, but this is not recommended)
       {% if (method.name.starts_with?("mrb_") || method.name == "finalize") && !has_specialized_method[method.name.stringify] %}
       # Exclude methods if given as arguments
-      {% elsif exclusions.includes?(method.name.symbolize) || exclusions.includes?(method.name) %}
+      {% elsif exclusions.includes?(method.name.symbolize) || exclusions.includes?(method.name.stringify) %}
         {% puts "--> Excluding #{crystal_class}::#{method.name} (Exclusion argument)" if verbose %}
       # Exclude methods which were annotated to be excluded
       {% elsif method.annotation(MrbWrap::Exclude) || (annotation_exclude_im) %}
@@ -724,14 +736,14 @@ module MrbMacro
 
     {% for method in crystal_class.resolve.class.methods %}
       {% all_annotations_specialize_im = crystal_class.resolve.annotations(MrbWrap::SpecializeClassMethod) %}
-      {% annotation_specialize_im = all_annotations_specialize_im.find { |element| element[0].stringify == method.name.stringify } %}
+      {% annotation_specialize_im = all_annotations_specialize_im.find { |element| element[0].stringify == method.name.stringify || element[0] == method.name.stringify } %}
 
       {% if method.annotation(MrbWrap::Specialize) %}
         {% has_specialized_method[method.name.stringify] = true %}
       {% end %}
 
       {% if annotation_specialize_im %}
-        {% has_specialized_method[annotation_specialize_im[0].stringify] = true %}
+        {% has_specialized_method[annotation_specialize_im[0].id.stringify] = true %}
       {% end %}
     {% end %}
 
@@ -740,16 +752,16 @@ module MrbMacro
     # TODO: Replace all im here with cm
     {% for method, index in crystal_class.resolve.class.methods %}
       {% all_annotations_exclude_im = crystal_class.resolve.annotations(MrbWrap::ExcludeClassMethod) %}
-      {% annotation_exclude_im = all_annotations_exclude_im.find { |element| element[0].stringify == method.name.stringify } %}
+      {% annotation_exclude_im = all_annotations_exclude_im.find { |element| element[0].id.stringify == method.name.stringify } %}
 
       {% all_annotations_specialize_im = crystal_class.resolve.annotations(MrbWrap::SpecializeClassMethod) %}
-      {% annotation_specialize_im = all_annotations_specialize_im.find { |element| element[0].stringify == method.name.stringify } %}
+      {% annotation_specialize_im = all_annotations_specialize_im.find { |element| element[0].id.stringify == method.name.stringify } %}
 
       {% all_annotations_rename_im = crystal_class.resolve.annotations(MrbWrap::RenameClassMethod) %}
-      {% annotation_rename_im = all_annotations_rename_im.find { |element| element[0].stringify == method.name.stringify } %}
+      {% annotation_rename_im = all_annotations_rename_im.find { |element| element[0].id.stringify == method.name.stringify } %}
 
       {% all_annotations_without_keywords_im = crystal_class.resolve.annotations(MrbWrap::WrapWithoutKeywordsClassMethod) %}
-      {% annotation_without_keyword_im = all_annotations_without_keywords_im.find { |element| element[0].stringify == method.name.stringify } %}
+      {% annotation_without_keyword_im = all_annotations_without_keywords_im.find { |element| element[0].id.stringify == method.name.stringify } %}
 
       {% if method.annotation(MrbWrap::Rename) %}
         {% ruby_name = method.annotation(MrbWrap::Rename)[0].id %}
@@ -801,10 +813,10 @@ module MrbMacro
   macro wrap_all_constants(mrb_state, crystal_class, exclusions, verbose)
     {% for constant, index in crystal_class.resolve.constants %}
       {% all_annotations_exclude_im = crystal_class.resolve.annotations(MrbWrap::ExcludeConstant) %}
-      {% annotation_exclude_im = all_annotations_exclude_im.find { |element| element[0].stringify == constant.stringify } %}
+      {% annotation_exclude_im = all_annotations_exclude_im.find { |element| element[0].id.stringify == constant.stringify } %}
 
       {% all_annotations_rename_im = crystal_class.resolve.annotations(MrbWrap::RenameConstant) %}
-      {% annotation_rename_im = all_annotations_rename_im.find { |element| element[0].stringify == constant.stringify } %}
+      {% annotation_rename_im = all_annotations_rename_im.find { |element| element[0].id.stringify == constant.stringify } %}
 
       {% if annotation_rename_im && constant.stringify == annotation_rename_im[0].stringify %}
         {% ruby_name = annotation_rename_im[1].id %}
