@@ -299,7 +299,7 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 
 ## Upcoming releases
 
-None yet
+Currently none planned
 
 ### Future updates
 
@@ -312,6 +312,7 @@ None yet
 * [ ] More stable type casting
 * [ ] Use Array(TypeDeclaration) instead of Hash for keywords in internal methods
 * [ ] Options for inherited and/or inheriting classes
+* [ ] Ability to rename the parent module of module hierarchies
 
 ### Possible future updates
 
