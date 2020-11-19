@@ -281,7 +281,7 @@ module MrbWrap
                                 verbose = false)
 
     {% if verbose %}
-      {% puts "> Going into class #{crystal_class} under #{under}" %}
+      {% puts ">>> Going into class #{crystal_class} under #{under}\n\n" %}
     {% end %}
 
     MrbWrap.wrap_class({{mrb_state}}, {{crystal_class.resolve}}, "{{crystal_class.names.last}}", under: {{under}})
@@ -306,7 +306,7 @@ module MrbWrap
                                  verbose = false)
 
     {% if verbose %}
-      {% puts "> Going into module #{crystal_module} under #{under}" %}
+      {% puts ">>> Going into module #{crystal_module} under #{under}\n\n" %}
     {% end %}
 
     MrbWrap.wrap_module({{mrb_state}}, {{crystal_module.resolve}}, "{{crystal_module.names.last}}", under: {{under}})

@@ -681,7 +681,7 @@ module MrbMacro
         {% without_keywords = true %}
       {% end %}
 
-      {% puts "> Processing #{crystal_class}::#{method.name} to #{ruby_name}" if verbose %}
+      {% puts "> Processing instance method #{crystal_class}::#{method.name} to #{ruby_name}\n--> Args: #{method.args}" if verbose %}
       # Ignore mrb hooks and finalize (unless specialized, but this is not recommended)
       {% if (method.name.starts_with?("mrb_") || method.name == "finalize") && !has_specialized_method[method.name.stringify] %}
       # Exclude methods if given as arguments
@@ -717,6 +717,7 @@ module MrbMacro
       {% if how_many_times_wrapped[ruby_name.stringify] && how_many_times_wrapped[ruby_name.stringify] > 1 %}
         {% puts "\e[31m> WARNING: Method #{crystal_class}::#{ruby_name}\n--> New arguments: #{method.args}\n--> Wrapped more than once (#{how_many_times_wrapped[ruby_name.stringify]}).\e[0m" %}
       {% end %}
+      {% puts "" if verbose %}
     {% end %}
     
     # Make sure to add a default constructor if none was specified with Crystal
@@ -727,7 +728,7 @@ module MrbMacro
   end
 
   macro add_default_constructor(mrb_state, crystal_class, verbose)
-    {% puts "> Adding constructor for #{crystal_class}" if verbose %}
+    {% puts "> Adding constructor for #{crystal_class}\n\n" if verbose %}
     MrbWrap.wrap_constructor({{mrb_state}}, {{crystal_class}})
   end
 
@@ -787,6 +788,7 @@ module MrbMacro
         {% without_keywords = true %}
       {% end %}
 
+      {% puts "> Processing class method #{crystal_class}::#{method.name} to #{ruby_name}\n--> Args: #{method.args}" if verbose %}
       # We already wrapped 'initialize', so we don't need to wrap these
       {% if method.name == "allocate" || method.name == "new" %}
       # Exclude methods if given as arguments
@@ -807,6 +809,7 @@ module MrbMacro
       {% if how_many_times_wrapped[ruby_name.stringify] && how_many_times_wrapped[ruby_name.stringify] > 1 %}
         {% puts "\e[31m> WARNING: Method #{crystal_class}::#{ruby_name}\n--> New arguments: #{method.args}\n--> Wrapped more than once (#{how_many_times_wrapped[ruby_name.stringify]}).\e[0m" %}
       {% end %}
+      {% puts "" if verbose %}
     {% end %}
   end
 
@@ -824,6 +827,7 @@ module MrbMacro
         {% ruby_name = constant %}
       {% end %}
 
+      {% puts "> Processing constant #{crystal_class}::#{constant} to #{ruby_name}" if verbose %}
       # Exclude methods which were annotated to be excluded
       {% if exclusions.includes?(constant.symbolize) || exclusions.includes?(constant) %}
         {% puts "--> Excluding #{crystal_class}::#{constant} (Exclusion argument)" if verbose %}
@@ -832,6 +836,7 @@ module MrbMacro
       {% else %}
         MrbMacro.wrap_constant_or_class({{mrb_state}}, {{crystal_class}}, "{{ruby_name}}", {{constant}}, {{verbose}})
       {% end %}
+      {% puts "" if verbose %}
     {% end %}
   end
 

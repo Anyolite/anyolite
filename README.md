@@ -147,6 +147,7 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 #### Usability
 
 * Method names in annotations can be given as strings
+* More and better verbose information for wrapping
 
 #### Bugfixes
 
