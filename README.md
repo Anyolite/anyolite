@@ -152,6 +152,7 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 #### Bugfixes
 
 * Setters can be excluded correctly
+* Manually wrapped properties work correctly now
 * Correct handling of generic function arguments like Int, Number or Float
 
 ### Version 0.4.0

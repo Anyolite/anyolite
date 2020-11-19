@@ -190,7 +190,7 @@ module MrbWrap
   # Its new name will be *name*.
   macro wrap_property(mrb_state, crystal_class, name, proc, proc_arg, operator_getter = "", operator_setter = "=", context = nil)
     MrbWrap.wrap_getter({{mrb_state}}, {{crystal_class}}, {{name}}, {{proc}}, operator: {{operator_getter}}, context: {{context}})
-    MrbWrap.wrap_setter({{mrb_state}}, {{crystal_class}}, {{name}}, {{proc}}, {{proc_arg}}, operator: {{operator_setter}}, context: {{context}})
+    MrbWrap.wrap_setter({{mrb_state}}, {{crystal_class}}, {{name + "="}}, {{proc}}, {{proc_arg}}, operator: {{operator_setter}}, context: {{context}})
   end
 
   # Wraps a constant value under a module into mruby.
