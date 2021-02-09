@@ -791,6 +791,7 @@ module MrbMacro
       {% puts "> Processing class method #{crystal_class}::#{method.name} to #{ruby_name}\n--> Args: #{method.args}" if verbose %}
       # We already wrapped 'initialize', so we don't need to wrap these
       {% if method.name == "allocate" || method.name == "new" %}
+        {% puts "--> Excluding #{crystal_class}::#{method.name} (Allocation method)" if verbose %}
       # Exclude methods if given as arguments
       {% elsif exclusions.includes?(method.name.symbolize) || exclusions.includes?(method.name) %}
         {% puts "--> Excluding #{crystal_class}::#{method.name} (Exclusion argument)" if verbose %}
@@ -845,8 +846,11 @@ module MrbMacro
     {% if actual_constant.class_name == "TypeNode" %}
       {% if actual_constant.module? %}
         MrbWrap.wrap_module_with_methods({{mrb_state}}, {{actual_constant}}, under: {{under_class_or_module}}, verbose: {{verbose}})
-      {% else %}
+      {% elsif actual_constant.class? || actual_constant.struct? %}
         MrbWrap.wrap_class_with_methods({{mrb_state}}, {{actual_constant}}, under: {{under_class_or_module}}, verbose: {{verbose}})
+      {% else %}
+        # TODO: Enums and Unions
+        {% puts "\e[31m> WARNING: Wrapping of enums and unions not yet supported, thus skipping #{actual_constant}\e[0m" %}
       {% end %}
     {% else %}
       MrbWrap.wrap_constant_under_class({{mrb_state}}, {{under_class_or_module}}, {{ruby_name}}, {{under_class_or_module}}::{{value}})

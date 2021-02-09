@@ -32,6 +32,16 @@ module SomeModule
       end
     end
 
+    enum TestEnum
+      Three = 3
+      Four
+      Five
+      Seven = 7
+    end
+
+    struct DeepTestStruct
+    end
+
     property x : Int32 = 0
 
     @@counter : Int32 = 0

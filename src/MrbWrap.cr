@@ -336,13 +336,15 @@ module MrbWrap
         constant_exclusions: {{constant_exclusions}},
         verbose: {{verbose}}
       )
-    {% else %}
+    {% elsif crystal_module_or_class.resolve.class? || crystal_module_or_class.resolve.struct? %}
       MrbWrap.wrap_class_with_methods({{mrb_state}}, {{crystal_module_or_class}}, under: {{under}},
         instance_method_exclusions: {{instance_method_exclusions}},
         class_method_exclusions: {{class_method_exclusions}},
         constant_exclusions: {{constant_exclusions}},
         verbose: {{verbose}}
       )
+    {% else %}
+      # TODO: Unions, enums, non-TypeNode-objects
     {% end %}
   end
 end
