@@ -323,6 +323,7 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 * [ ] Use Array(TypeDeclaration) instead of Hash for keywords in internal methods
 * [ ] Options for inherited and/or inheriting classes
 * [ ] Ability to rename the parent module of module hierarchies
+* [ ] Support for Crystal 0.36.1
 
 ### Possible future updates
 
