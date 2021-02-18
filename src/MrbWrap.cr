@@ -273,6 +273,7 @@ module MrbWrap
   # *instance_method_exclusions* (for instance methods),
   # *class_method_exclusions* (for class methods) or 
   # *constant_exclusions* (for constants).
+  # Enum classes can be wrapped by setting *use_enum_constructor*.
   # If *verbose* is set, wrapping information will be displayed.
   macro wrap_class_with_methods(mrb_state, crystal_class, under = nil,
                                 instance_method_exclusions = [] of String | Symbol,

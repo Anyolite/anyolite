@@ -134,7 +134,7 @@ More features will be added in the future.
 
 https://en.wikipedia.org/wiki/Anyolite
 
-In short, it is a rare variant of the crystalline mineral called zoisite, with a ruby and crystal shards (of pargasite) embedded.
+In short, it is a rare variant of the crystalline mineral called zoisite, with ruby and other crystal shards (of pargasite) embedded.
 
 The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 
