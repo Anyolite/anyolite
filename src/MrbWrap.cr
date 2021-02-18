@@ -278,6 +278,7 @@ module MrbWrap
                                 instance_method_exclusions = [] of String | Symbol,
                                 class_method_exclusions = [] of String | Symbol,
                                 constant_exclusions = [] of String | Symbol,
+                                use_enum_constructor = false,
                                 verbose = false)
 
     {% if verbose %}
@@ -286,7 +287,7 @@ module MrbWrap
 
     MrbWrap.wrap_class({{mrb_state}}, {{crystal_class.resolve}}, "{{crystal_class.names.last}}", under: {{under}})
 
-    MrbMacro.wrap_all_instance_methods({{mrb_state}}, {{crystal_class}}, {{instance_method_exclusions}}, {{verbose}}, context: {{under}})
+    MrbMacro.wrap_all_instance_methods({{mrb_state}}, {{crystal_class}}, {{instance_method_exclusions}}, {{verbose}}, context: {{under}}, use_enum_constructor: {{use_enum_constructor}})
     MrbMacro.wrap_all_class_methods({{mrb_state}}, {{crystal_class}}, {{class_method_exclusions}}, {{verbose}}, context: {{under}})
     MrbMacro.wrap_all_constants({{mrb_state}}, {{crystal_class}}, {{constant_exclusions}}, {{verbose}})
   end
@@ -343,8 +344,19 @@ module MrbWrap
         constant_exclusions: {{constant_exclusions}},
         verbose: {{verbose}}
       )
+    {% elsif crystal_module_or_class.resolve.union? %}
+      {% puts "\e[31m> WARNING: Wrapping of unions not supported, thus skipping #{crystal_module_or_class}\e[0m" %}
+    {% elsif crystal_module_or_class.resolve.class_name == "TypeNode" %}
+      MrbWrap.wrap_class_with_methods({{mrb_state}}, {{crystal_module_or_class}}, under: {{under}},
+        instance_method_exclusions: {{instance_method_exclusions}},
+        class_method_exclusions: {{class_method_exclusions}},
+        constant_exclusions: {{constant_exclusions}},
+        use_enum_constructor: true,
+        verbose: {{verbose}}
+      )
     {% else %}
-      # TODO: Unions, enums, non-TypeNode-objects
+      {% puts "\e[31m> WARNING: Wrapping of regular objects not supported here, thus skipping #{crystal_module_or_class}\e[0m" %}
+      # TODO: Non-TypeNode-objects
     {% end %}
   end
 end

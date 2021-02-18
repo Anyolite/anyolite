@@ -626,7 +626,7 @@ module MrbMacro
     {% end %}
   end
 
-  macro wrap_all_instance_methods(mrb_state, crystal_class, exclusions, verbose, context = nil)
+  macro wrap_all_instance_methods(mrb_state, crystal_class, exclusions, verbose, context = nil, use_enum_constructor = false)
     {% has_specialized_method = {} of String => Bool %}
 
     {% for method in crystal_class.resolve.methods %}
@@ -705,7 +705,7 @@ module MrbMacro
         {% end %}
         {% how_many_times_wrapped[ruby_name.stringify] = how_many_times_wrapped[ruby_name.stringify] ? how_many_times_wrapped[ruby_name.stringify] + 1 : 1 %}
       # Handle constructors
-      {% elsif method.name == "initialize" %}
+      {% elsif method.name == "initialize" && use_enum_constructor == false %}
         MrbMacro.wrap_method_index({{mrb_state}}, {{crystal_class}}, {{index}}, "{{ruby_name}}", is_constructor: true, without_keywords: {{without_keywords}}, added_keyword_args: {{added_keyword_args}}, context: {{context}})
         {% how_many_times_wrapped[ruby_name.stringify] = how_many_times_wrapped[ruby_name.stringify] ? how_many_times_wrapped[ruby_name.stringify] + 1 : 1 %}
       # Handle other instance methods
@@ -722,14 +722,21 @@ module MrbMacro
     
     # Make sure to add a default constructor if none was specified with Crystal
 
-    {% if !how_many_times_wrapped["initialize"] %}
+    {% if !how_many_times_wrapped["initialize"] && !use_enum_constructor %}
       MrbMacro.add_default_constructor({{mrb_state}}, {{crystal_class}}, {{verbose}})
+    {% elsif !how_many_times_wrapped["initialize"] && use_enum_constructor %}
+      MrbMacro.add_enum_constructor({{mrb_state}}, {{crystal_class}}, {{verbose}})
     {% end %}
   end
 
   macro add_default_constructor(mrb_state, crystal_class, verbose)
     {% puts "> Adding constructor for #{crystal_class}\n\n" if verbose %}
     MrbWrap.wrap_constructor({{mrb_state}}, {{crystal_class}})
+  end
+
+  macro add_enum_constructor(mrb_state, crystal_class, verbose)
+    {% puts "> Adding enum constructor for #{crystal_class}\n\n" if verbose %}
+    MrbWrap.wrap_constructor({{mrb_state}}, {{crystal_class}}, [Int32])
   end
 
   macro wrap_all_class_methods(mrb_state, crystal_class, exclusions, verbose, context = nil)
@@ -848,9 +855,10 @@ module MrbMacro
         MrbWrap.wrap_module_with_methods({{mrb_state}}, {{actual_constant}}, under: {{under_class_or_module}}, verbose: {{verbose}})
       {% elsif actual_constant.class? || actual_constant.struct? %}
         MrbWrap.wrap_class_with_methods({{mrb_state}}, {{actual_constant}}, under: {{under_class_or_module}}, verbose: {{verbose}})
+      {% elsif actual_constant.union? %}
+        {% puts "\e[31m> WARNING: Wrapping of unions not supported, thus skipping #{actual_constant}\e[0m" %}
       {% else %}
-        # TODO: Enums and Unions
-        {% puts "\e[31m> WARNING: Wrapping of enums and unions not yet supported, thus skipping #{actual_constant}\e[0m" %}
+        MrbWrap.wrap_class_with_methods({{mrb_state}}, {{actual_constant}}, under: {{under_class_or_module}}, use_enum_constructor: true, verbose: {{verbose}})
       {% end %}
     {% else %}
       MrbWrap.wrap_constant_under_class({{mrb_state}}, {{under_class_or_module}}, {{ruby_name}}, {{under_class_or_module}}::{{value}})

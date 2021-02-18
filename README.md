@@ -305,7 +305,7 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 
 #### Features
 
-* Support for enums (if possible)
+* [X] Support for enums
 * Empty argument list as possible argument for specialization
 * Exclusion message for finalize method
 * Exclusion of private methods

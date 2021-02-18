@@ -38,3 +38,9 @@ puts TestModule::Test.without_keywords(12)
 
 # The absolute, ultimate and ridiculously complicated nesting test
 TestModule::Test::UnderTest::DeepUnderTest::VeryDeepUnderTest.new.nested_test
+
+struct_test_var = TestModule::Test::DeepTestStruct.new
+puts "Struct test var: #{struct_test_var}"
+
+enum_test_var = TestModule::Test::TestEnum::Seven
+puts "Enum test var: #{enum_test_var.value}"
