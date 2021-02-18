@@ -306,10 +306,10 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 #### Features
 
 * [X] Support for enums
-* Empty argument list as possible argument for specialization
-* Exclusion message for finalize method
-* Exclusion of private methods
-* Exclusion of to_unsafe
+* [ ] Empty argument list as possible argument for specialization
+* [ ] Exclusion message for finalize method
+* [ ] Exclusion of private methods
+* [ ] Exclusion of to_unsafe
 
 ### Future updates
 
