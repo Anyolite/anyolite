@@ -306,10 +306,18 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 #### Features
 
 * [X] Support for enums
+
+#### Usability
+
 * [ ] Empty argument list as possible argument for specialization
 * [ ] Exclusion message for finalize method
 * [ ] Exclusion of private methods
 * [ ] Exclusion of to_unsafe
+* [ ] Non-fatal runtime errors are triggered in mruby only
+
+#### Bugfixes
+
+* [ ] Proper resolution of class and module hierarchies
 
 ### Future updates
 

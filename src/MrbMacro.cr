@@ -9,6 +9,11 @@ module MrbMacro
   end
 
   macro format_char(arg, optional_values = false, context = nil)
+    # TODO: Use this for iterational context hierarchy resolution in functions like this
+    # {% if context %}
+    #   {% new_context = context.names[0..-2].size > 0 ? context.names[0..-2].join("::") : nil %}
+    # {% end %}
+
     {% if arg.class_name == "TupleLiteral" %}
       {% if optional_values != true %}
         "|" + MrbMacro.format_char({{arg[0]}}, optional_values: true, context: {{context}})
