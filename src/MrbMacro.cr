@@ -9,47 +9,78 @@ module MrbMacro
   end
 
   macro format_char(arg, optional_values = false, context = nil)
-    # TODO: Use this for iterational context hierarchy resolution in functions like this
-    # {% if context %}
-    #   {% new_context = context.names[0..-2].size > 0 ? context.names[0..-2].join("::") : nil %}
-    # {% end %}
-
     {% if arg.class_name == "TupleLiteral" %}
       {% if optional_values != true %}
         "|" + MrbMacro.format_char({{arg[0]}}, optional_values: true, context: {{context}})
       {% else %}
         MrbMacro.format_char({{arg[0]}}, optional_values: true, context: {{context}})
       {% end %}
-    {% elsif !arg.resolve? && context %}
-      MrbMacro.format_char({{context}}::{{arg}}, optional_values: {{optional_values}})
-    {% elsif arg.resolve <= Bool %}
-      "b"
-    {% elsif arg.resolve <= Int %}
-      "i"
-    {% elsif arg.resolve <= Float %}
-      "f"
-    {% elsif arg.resolve <= String %}
-      "z"
+    {% elsif context %}
+      MrbMacro.resolve_format_char({{context}}::{{arg}}, {{arg}}, {{context}})
     {% else %}
-      "o"
+      MrbMacro.resolve_format_char({{arg}}, {{arg}})
+    {% end %}
+  end
+
+  macro resolve_format_char(arg, raw_arg, context = nil)
+    {% if arg.resolve? %}
+      {% if arg.resolve <= Bool %}
+        "b"
+      {% elsif arg.resolve <= Int %}
+        "i"
+      {% elsif arg.resolve <= Float %}
+        "f"
+      {% elsif arg.resolve <= String %}
+        "z"
+      {% else %}
+        "o"
+      {% end %}
+    {% elsif context %}
+      {% if context.names[0..-2].size > 0 %}
+        {% new_context = context.names[0..-2].join("::") %}
+        MrbMacro.resolve_format_char({{new_context}}::{{raw_arg}}, {{raw_arg}}, {{new_context}})
+      {% else %}
+        MrbMacro.resolve_format_char({{raw_arg}}, {{raw_arg}})
+      {% end %}
+    {% else %}
+      # TODO: Maybe add full original context?
+      {% raise "Could not resolve #{arg} in any meaningful way." %}
     {% end %}
   end
 
   macro type_in_ruby(type, context = nil)
     {% if type.class_name == "TupleLiteral" %}
       MrbMacro.type_in_ruby({{type[0]}})  # TODO: Allow nil for regular arguments as default
-    {% elsif !type.resolve? && context %}
-      MrbMacro.type_in_ruby({{context}}::{{type}})
-    {% elsif type.resolve <= Bool %}
-      MrbInternal::MrbBool
-    {% elsif type.resolve <= Int %}
-      MrbInternal::MrbInt
-    {% elsif type.resolve <= Float %}
-      MrbInternal::MrbFloat
-    {% elsif type.resolve <= String %}  # TODO: Default string arguments do not work here yet, can this be fixed?
-      LibC::Char*
+    {% elsif context %}
+      MrbMacro.resolve_type_in_ruby({{context}}::{{type}}, {{type}}, {{context}})
     {% else %}
-      MrbInternal::MrbValue
+      MrbMacro.resolve_type_in_ruby({{type}}, {{type}})
+    {% end %}
+  end
+
+  macro resolve_type_in_ruby(type, raw_type, context = nil)
+    {% if type.resolve? %}
+      {% if type.resolve <= Bool %}
+        MrbInternal::MrbBool
+      {% elsif type.resolve <= Int %}
+        MrbInternal::MrbInt
+      {% elsif type.resolve <= Float %}
+        MrbInternal::MrbFloat
+      {% elsif type.resolve <= String %}  # TODO: Default string arguments do not work here yet, can this be fixed?
+        LibC::Char*
+      {% else %}
+        MrbInternal::MrbValue
+      {% end %}
+    {% elsif context %}
+      {% if context.names[0..-2].size > 0 %}
+        {% new_context = context.names[0..-2].join("::") %}
+        MrbMacro.resolve_type_in_ruby({{new_context}}::{{raw_type}}, {{raw_type}}, {{new_context}})
+      {% else %}
+        MrbMacro.resolve_type_in_ruby({{raw_type}}, {{raw_type}})
+      {% end %}
+    {% else %}
+      # TODO: Maybe add full original context?
+      {% raise "Could not resolve #{arg} in any meaningful way." %}
     {% end %}
   end
 
@@ -70,6 +101,8 @@ module MrbMacro
       Pointer(MrbInternal::MrbValue)
     {% end %}
   end
+
+  # TODO: Extend proper resolution to all necessary functions (5?)
 
   macro generate_arg_tuple(args, context = nil)
     Tuple.new(
