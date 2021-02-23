@@ -80,29 +80,45 @@ module MrbMacro
       {% end %}
     {% else %}
       # TODO: Maybe add full original context?
-      {% raise "Could not resolve #{arg} in any meaningful way." %}
+      {% raise "Could not resolve #{type} in any meaningful way." %}
     {% end %}
   end
 
   macro pointer_type(type, context = nil)
     {% if type.class_name == "TupleLiteral" %}
       MrbMacro.pointer_type({{type[0]}}, context: {{context}})
-    {% elsif !type.resolve? && context %}
-      MrbMacro.pointer_type({{context}}::{{type}})
-    {% elsif type.resolve <= Bool %}
-      Pointer(MrbInternal::MrbBool)
-    {% elsif type.resolve <= Int %}
-      Pointer(MrbInternal::MrbInt)
-    {% elsif type.resolve <= Float || type.resolve == Number %}
-      Pointer(MrbInternal::MrbFloat)
-    {% elsif type.resolve <= String %}
-      Pointer(LibC::Char*)
+    {% elsif context %}
+      MrbMacro.resolve_pointer_type({{context}}::{{type}}, {{type}}, {{context}})
     {% else %}
-      Pointer(MrbInternal::MrbValue)
+      MrbMacro.resolve_pointer_type({{type}}, {{type}})
     {% end %}
   end
 
-  # TODO: Extend proper resolution to all necessary functions (5?)
+  macro resolve_pointer_type(type, raw_type, context = nil)
+    {% if type.resolve? %}
+      {% if type.resolve <= Bool %}
+        Pointer(MrbInternal::MrbBool)
+      {% elsif type.resolve <= Int %}
+        Pointer(MrbInternal::MrbInt)
+      {% elsif type.resolve <= Float || type.resolve == Number %}
+        Pointer(MrbInternal::MrbFloat)
+      {% elsif type.resolve <= String %}
+        Pointer(LibC::Char*)
+      {% else %}
+        Pointer(MrbInternal::MrbValue)
+      {% end %}
+    {% elsif context %}
+      {% if context.names[0..-2].size > 0 %}
+        {% new_context = context.names[0..-2].join("::") %}
+        MrbMacro.resolve_pointer_type({{new_context}}::{{raw_type}}, {{raw_type}}, {{new_context}})
+      {% else %}
+        MrbMacro.resolve_pointer_type({{raw_type}}, {{raw_type}})
+      {% end %}
+    {% else %}
+      # TODO: Maybe add full original context?
+      {% raise "Could not resolve #{type} in any meaningful way." %}
+    {% end %}
+  end
 
   macro generate_arg_tuple(args, context = nil)
     Tuple.new(
@@ -127,26 +143,44 @@ module MrbMacro
   macro convert_arg(mrb, arg, arg_type, context = nil)
     {% if arg_type.class_name == "TupleLiteral" %}
       MrbMacro.convert_arg({{mrb}}, {{arg}}, {{arg_type[0]}}, context: {{context}})
-    {% elsif !arg_type.resolve? && context %}
-      MrbMacro.convert_arg({{mrb}}, {{arg}}, {{context}}::{{arg_type}})
-    {% elsif arg_type.resolve <= Bool %}
-      ({{arg}} != 0)
-    {% elsif arg_type.resolve == Number %}
-      Float64.new({{arg}})
-    {% elsif arg_type.resolve == Int %}
-      Int64.new({{arg}})
-    {% elsif arg_type.resolve <= Int %}
-      {{arg_type}}.new({{arg}})
-    {% elsif arg_type.resolve == Float %}
-      Float64.new({{arg}})
-    {% elsif arg_type.resolve <= Float %}
-      {{arg_type}}.new({{arg}})
-    {% elsif arg_type.resolve <= String %}
-      {{arg_type}}.new({{arg}})
-    {% elsif arg_type.resolve <= Struct %}
-      MrbMacro.convert_from_ruby_struct({{mrb}}, {{arg}}, {{arg_type}}).value.content
+    {% elsif context %}
+      MrbMacro.convert_resolved_arg({{mrb}}, {{arg}}, {{context}}::{{arg_type}}, {{arg_type}}, {{context}})
     {% else %}
-      MrbMacro.convert_from_ruby_object({{mrb}}, {{arg}}, {{arg_type}}).value
+      MrbMacro.convert_resolved_arg({{mrb}}, {{arg}}, {{arg_type}}, {{arg_type}})
+    {% end %}
+  end
+
+  macro convert_resolved_arg(mrb, arg, arg_type, raw_arg_type, context = nil)
+    {% if arg_type.resolve? %}
+      {% if arg_type.resolve <= Bool %}
+        ({{arg}} != 0)
+      {% elsif arg_type.resolve == Number %}
+        Float64.new({{arg}})
+      {% elsif arg_type.resolve == Int %}
+        Int64.new({{arg}})
+      {% elsif arg_type.resolve <= Int %}
+        {{arg_type}}.new({{arg}})
+      {% elsif arg_type.resolve == Float %}
+        Float64.new({{arg}})
+      {% elsif arg_type.resolve <= Float %}
+        {{arg_type}}.new({{arg}})
+      {% elsif arg_type.resolve <= String %}
+        {{arg_type}}.new({{arg}})
+      {% elsif arg_type.resolve <= Struct %}
+        MrbMacro.convert_from_ruby_struct({{mrb}}, {{arg}}, {{arg_type}}).value.content
+      {% else %}
+        MrbMacro.convert_from_ruby_object({{mrb}}, {{arg}}, {{arg_type}}).value
+      {% end %}
+    {% elsif context %}
+      {% if context.names[0..-2].size > 0 %}
+        {% new_context = context.names[0..-2].join("::") %}
+        MrbMacro.convert_resolved_arg({{mrb}}, {{arg}}, {{new_context}}::{{raw_arg_type}}, {{raw_arg_type}}, {{new_context}})
+      {% else %}
+        MrbMacro.convert_resolved_arg({{mrb}}, {{arg}}, {{raw_arg_type}}, {{raw_arg_type}})
+      {% end %}
+    {% else %}
+      # TODO: Maybe add full original context?
+      {% raise "Could not resolve #{arg_type} in any meaningful way." %}
     {% end %}
   end
 
@@ -157,26 +191,44 @@ module MrbMacro
       else
         MrbMacro.convert_keyword_arg({{mrb}}, {{arg}}, {{arg_type[0]}}, context: {{context}})
       end
-    {% elsif !arg_type.resolve? && context %}
-      MrbMacro.convert_keyword_arg({{mrb}}, {{arg}}, {{context}}::{{arg_type}})
-    {% elsif arg_type.resolve <= Bool %}
-      MrbCast.cast_to_bool({{mrb}}, {{arg}})
-    {% elsif arg_type.resolve == Number %}
-      Float64.new(MrbCast.cast_to_float({{mrb}}, {{arg}}))
-    {% elsif arg_type.resolve == Int %}
-      Int64.new(MrbCast.cast_to_int({{mrb}}, {{arg}}))
-    {% elsif arg_type.resolve <= Int %}
-      {{arg_type}}.new(MrbCast.cast_to_int({{mrb}}, {{arg}}))
-    {% elsif arg_type.resolve == Float %}
-      Float64.new( MrbCast.cast_to_float({{mrb}}, {{arg}}))
-    {% elsif arg_type.resolve <= Float %}
-     {{arg_type}}.new( MrbCast.cast_to_float({{mrb}}, {{arg}}))
-    {% elsif arg_type.resolve <= String %}
-      MrbCast.cast_to_string({{mrb}}, {{arg}})
-    {% elsif arg_type.resolve <= Struct %}
-      MrbMacro.convert_from_ruby_struct({{mrb}}, {{arg}}, {{arg_type}}).value.content
+    {% elsif context %}
+      MrbMacro.convert_resolved_keyword_arg({{mrb}}, {{arg}}, {{context}}::{{arg_type}}, {{arg_type}}, {{context}})
     {% else %}
-      MrbMacro.convert_from_ruby_object({{mrb}}, {{arg}}, {{arg_type}}).value
+      MrbMacro.convert_resolved_keyword_arg({{mrb}}, {{arg}}, {{arg_type}}, {{arg_type}})
+    {% end %}
+  end
+
+  macro convert_resolved_keyword_arg(mrb, arg, arg_type, raw_arg_type, context = nil)
+    {% if arg_type.resolve? %}
+      {% if arg_type.resolve <= Bool %}
+        MrbCast.cast_to_bool({{mrb}}, {{arg}})
+      {% elsif arg_type.resolve == Number %}
+        Float64.new(MrbCast.cast_to_float({{mrb}}, {{arg}}))
+      {% elsif arg_type.resolve == Int %}
+        Int64.new(MrbCast.cast_to_int({{mrb}}, {{arg}}))
+      {% elsif arg_type.resolve <= Int %}
+        {{arg_type}}.new(MrbCast.cast_to_int({{mrb}}, {{arg}}))
+      {% elsif arg_type.resolve == Float %}
+        Float64.new( MrbCast.cast_to_float({{mrb}}, {{arg}}))
+      {% elsif arg_type.resolve <= Float %}
+      {{arg_type}}.new( MrbCast.cast_to_float({{mrb}}, {{arg}}))
+      {% elsif arg_type.resolve <= String %}
+        MrbCast.cast_to_string({{mrb}}, {{arg}})
+      {% elsif arg_type.resolve <= Struct %}
+        MrbMacro.convert_from_ruby_struct({{mrb}}, {{arg}}, {{arg_type}}).value.content
+      {% else %}
+        MrbMacro.convert_from_ruby_object({{mrb}}, {{arg}}, {{arg_type}}).value
+      {% end %}
+    {% elsif context %}
+      {% if context.names[0..-2].size > 0 %}
+        {% new_context = context.names[0..-2].join("::") %}
+        MrbMacro.convert_resolved_keyword_arg({{mrb}}, {{arg}}, {{new_context}}::{{raw_arg_type}}, {{raw_arg_type}}, {{new_context}})
+      {% else %}
+        MrbMacro.convert_resolved_keyword_arg({{mrb}}, {{arg}}, {{raw_arg_type}}, {{raw_arg_type}})
+      {% end %}
+    {% else %}
+      # TODO: Maybe add full original context?
+      {% raise "Could not resolve #{arg_type} in any meaningful way." %}
     {% end %}
   end
 
