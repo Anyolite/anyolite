@@ -772,8 +772,9 @@ module MrbMacro
       {% end %}
 
       {% puts "> Processing instance method #{crystal_class}::#{method.name} to #{ruby_name}\n--> Args: #{method.args}" if verbose %}
-      # Ignore mrb hooks and finalize (unless specialized, but this is not recommended)
-      {% if (method.name.starts_with?("mrb_") || method.name == "finalize") && !has_specialized_method[method.name.stringify] %}
+      # Ignore mrb hooks, to_unsafe and finalize (unless specialized, but this is not recommended)
+      {% if (method.name.starts_with?("mrb_") || method.name == "finalize" || method.name == "to_unsafe") && !has_specialized_method[method.name.stringify] %}
+        {% puts "--> Excluding #{crystal_class}::#{method.name} (Exclusion by default)" if verbose %}
       # Exclude methods if given as arguments
       {% elsif exclusions.includes?(method.name.symbolize) || exclusions.includes?(method.name.stringify) %}
         {% puts "--> Excluding #{crystal_class}::#{method.name} (Exclusion argument)" if verbose %}
