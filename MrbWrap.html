@@ -3,28 +3,28 @@
 <head>
   <meta charset="utf-8" />
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="generator" content="Crystal Docs 0.35.1">
-<meta name="crystal_docs.project_version" content="0.4.1">
+<meta name="generator" content="Crystal Docs 0.36.1">
+<meta name="crystal_docs.project_version" content="0.5.0">
 <meta name="crystal_docs.project_name" content="anyolite">
+
 
 
 <link href="css/style.css" rel="stylesheet" type="text/css" />
 <script type="text/javascript" src="js/doc.js"></script>
 
-<svg class="hidden">
-  <symbol id="octicon-link" viewBox="0 0 16 16">
-    <path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path>
-  </symbol>
-</svg>
-
-  <meta id="repository-name" content="anyolite">
-  <title>MrbWrap - anyolite 0.4.1</title>
+  <meta name="repository-name" content="anyolite">
+  <title>MrbWrap - anyolite 0.5.0</title>
   <script type="text/javascript">
     CrystalDocs.base_path = "";
   </script>
 </head>
 <body>
 
+<svg class="hidden">
+  <symbol id="octicon-link" viewBox="0 0 16 16">
+    <path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path>
+  </symbol>
+</svg>
 <div class="sidebar">
   <div class="sidebar-header">
     <div class="search-box">
@@ -39,12 +39,12 @@
       </h1>
 
       <span class="project-version">
-        0.4.1
+        0.5.0
       </span>
     </div>
   </div>
 
-  <div class="search-results" class="hidden">
+  <div class="search-results hidden">
     <ul class="search-list"></ul>
   </div>
 
@@ -136,6 +136,11 @@
       
     </li>
   
+  <li class=" " data-id="anyolite/MrbWrap/RenameClass" data-name="mrbwrap::renameclass">
+      <a href="MrbWrap/RenameClass.html">RenameClass</a>
+      
+    </li>
+  
   <li class=" " data-id="anyolite/MrbWrap/RenameClassMethod" data-name="mrbwrap::renameclassmethod">
       <a href="MrbWrap/RenameClassMethod.html">RenameClassMethod</a>
       
@@ -148,6 +153,11 @@
   
   <li class=" " data-id="anyolite/MrbWrap/RenameInstanceMethod" data-name="mrbwrap::renameinstancemethod">
       <a href="MrbWrap/RenameInstanceMethod.html">RenameInstanceMethod</a>
+      
+    </li>
+  
+  <li class=" " data-id="anyolite/MrbWrap/RenameModule" data-name="mrbwrap::renamemodule">
+      <a href="MrbWrap/RenameModule.html">RenameModule</a>
       
     </li>
   
@@ -247,7 +257,7 @@
   </h2>
   
     
-      <a href="https://github.com/Anyolite/anyolite/blob/v0.4.1/src/MrbWrap.cr#L16" target="_blank">
+      <a href="https://github.com/Anyolite/anyolite/blob/v0.5.0/src/MrbWrap.cr#L16" target="_blank">
         MrbWrap.cr
       </a>
     
@@ -326,7 +336,7 @@
       </li>
     
       <li class="entry-summary">
-        <a href="#wrap_class_with_methods(mrb_state,crystal_class,under=nil,instance_method_exclusions=[]ofString%7CSymbol,class_method_exclusions=[]ofString%7CSymbol,constant_exclusions=[]ofString%7CSymbol,verbose=false)-macro" class="signature"><strong>wrap_class_with_methods</strong>(mrb_state, crystal_class, under = <span class="n">nil</span>, instance_method_exclusions = <span class="o">[]</span> <span class="k">of</span> <span class="t">String</span> <span class="o">|</span> <span class="t">Symbol</span>, class_method_exclusions = <span class="o">[]</span> <span class="k">of</span> <span class="t">String</span> <span class="o">|</span> <span class="t">Symbol</span>, constant_exclusions = <span class="o">[]</span> <span class="k">of</span> <span class="t">String</span> <span class="o">|</span> <span class="t">Symbol</span>, verbose = <span class="n">false</span>)</a>
+        <a href="#wrap_class_with_methods(mrb_state,crystal_class,under=nil,instance_method_exclusions=[]ofString%7CSymbol,class_method_exclusions=[]ofString%7CSymbol,constant_exclusions=[]ofString%7CSymbol,use_enum_constructor=false,verbose=false)-macro" class="signature"><strong>wrap_class_with_methods</strong>(mrb_state, crystal_class, under = <span class="n">nil</span>, instance_method_exclusions = <span class="o">[]</span> <span class="k">of</span> <span class="t">String</span> <span class="o">|</span> <span class="t">Symbol</span>, class_method_exclusions = <span class="o">[]</span> <span class="k">of</span> <span class="t">String</span> <span class="o">|</span> <span class="t">Symbol</span>, constant_exclusions = <span class="o">[]</span> <span class="k">of</span> <span class="t">String</span> <span class="o">|</span> <span class="t">Symbol</span>, use_enum_constructor = <span class="n">false</span>, verbose = <span class="n">false</span>)</a>
         
           <div class="summary"><p>Wraps a whole class structure under a module into mruby.</p></div>
         
@@ -472,7 +482,7 @@ If <em>verbose</em> is set, wrapping information will be displayed. </p>
       <br/>
       <div>
         
-          [<a href="https://github.com/Anyolite/anyolite/blob/v0.4.1/src/MrbWrap.cr#L327" target="_blank">View source</a>]
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.5.0/src/MrbWrap.cr#L348" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -500,7 +510,7 @@ with <em>name</em> as its new designation, returning an <code><a href="MrbClass.
       <br/>
       <div>
         
-          [<a href="https://github.com/Anyolite/anyolite/blob/v0.4.1/src/MrbWrap.cr#L67" target="_blank">View source</a>]
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.5.0/src/MrbWrap.cr#L68" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -526,7 +536,7 @@ with the arguments <em>proc_args</em> as an <code>Array of Class</code>.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/Anyolite/anyolite/blob/v0.4.1/src/MrbWrap.cr#L130" target="_blank">View source</a>]
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.5.0/src/MrbWrap.cr#L131" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -553,17 +563,17 @@ Alternatively, a <code>Tuple</code> with the <code>Class</code> and a default va
       <br/>
       <div>
         
-          [<a href="https://github.com/Anyolite/anyolite/blob/v0.4.1/src/MrbWrap.cr#L141" target="_blank">View source</a>]
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.5.0/src/MrbWrap.cr#L142" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="wrap_class_with_methods(mrb_state,crystal_class,under=nil,instance_method_exclusions=[]ofString|Symbol,class_method_exclusions=[]ofString|Symbol,constant_exclusions=[]ofString|Symbol,verbose=false)-macro">
+    <div class="entry-detail" id="wrap_class_with_methods(mrb_state,crystal_class,under=nil,instance_method_exclusions=[]ofString|Symbol,class_method_exclusions=[]ofString|Symbol,constant_exclusions=[]ofString|Symbol,use_enum_constructor=false,verbose=false)-macro">
       <div class="signature">
         
-        macro <strong>wrap_class_with_methods</strong>(mrb_state, crystal_class, under = <span class="n">nil</span>, instance_method_exclusions = <span class="o">[]</span> <span class="k">of</span> <span class="t">String</span> <span class="o">|</span> <span class="t">Symbol</span>, class_method_exclusions = <span class="o">[]</span> <span class="k">of</span> <span class="t">String</span> <span class="o">|</span> <span class="t">Symbol</span>, constant_exclusions = <span class="o">[]</span> <span class="k">of</span> <span class="t">String</span> <span class="o">|</span> <span class="t">Symbol</span>, verbose = <span class="n">false</span>)
+        macro <strong>wrap_class_with_methods</strong>(mrb_state, crystal_class, under = <span class="n">nil</span>, instance_method_exclusions = <span class="o">[]</span> <span class="k">of</span> <span class="t">String</span> <span class="o">|</span> <span class="t">Symbol</span>, class_method_exclusions = <span class="o">[]</span> <span class="k">of</span> <span class="t">String</span> <span class="o">|</span> <span class="t">Symbol</span>, constant_exclusions = <span class="o">[]</span> <span class="k">of</span> <span class="t">String</span> <span class="o">|</span> <span class="t">Symbol</span>, use_enum_constructor = <span class="n">false</span>, verbose = <span class="n">false</span>)
 
-        <a class="method-permalink" href="#wrap_class_with_methods(mrb_state,crystal_class,under=nil,instance_method_exclusions=[]ofString%7CSymbol,class_method_exclusions=[]ofString%7CSymbol,constant_exclusions=[]ofString%7CSymbol,verbose=false)-macro">#</a>
+        <a class="method-permalink" href="#wrap_class_with_methods(mrb_state,crystal_class,under=nil,instance_method_exclusions=[]ofString%7CSymbol,class_method_exclusions=[]ofString%7CSymbol,constant_exclusions=[]ofString%7CSymbol,use_enum_constructor=false,verbose=false)-macro">#</a>
       </div>
       
         <div class="doc">
@@ -577,13 +587,14 @@ Methods or constants to be excluded can be specified as
 <em>instance_method_exclusions</em> (for instance methods),
 <em>class_method_exclusions</em> (for class methods) or 
 <em>constant_exclusions</em> (for constants).
+Enum classes can be wrapped by setting <em>use_enum_constructor</em>.
 If <em>verbose</em> is set, wrapping information will be displayed.</p>
         </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/Anyolite/anyolite/blob/v0.4.1/src/MrbWrap.cr#L277" target="_blank">View source</a>]
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.5.0/src/MrbWrap.cr#L285" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -607,7 +618,7 @@ with the name <em>name</em> and the parent module <em>under_module</em>.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/Anyolite/anyolite/blob/v0.4.1/src/MrbWrap.cr#L200" target="_blank">View source</a>]
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.5.0/src/MrbWrap.cr#L201" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -631,7 +642,7 @@ with the name <em>name</em> and the parent <code>Class</code> <em>under_class</e
       <br/>
       <div>
         
-          [<a href="https://github.com/Anyolite/anyolite/blob/v0.4.1/src/MrbWrap.cr#L208" target="_blank">View source</a>]
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.5.0/src/MrbWrap.cr#L209" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -655,7 +666,7 @@ with the arguments <em>proc_args</em> as an <code>Array of Class</code>.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/Anyolite/anyolite/blob/v0.4.1/src/MrbWrap.cr#L90" target="_blank">View source</a>]
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.5.0/src/MrbWrap.cr#L91" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -680,7 +691,7 @@ Alternatively, a <code>Tuple</code> with the <code>Class</code> and a default va
       <br/>
       <div>
         
-          [<a href="https://github.com/Anyolite/anyolite/blob/v0.4.1/src/MrbWrap.cr#L99" target="_blank">View source</a>]
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.5.0/src/MrbWrap.cr#L100" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -705,7 +716,7 @@ Alternatively, a <code>Tuple</code> with the <code>Class</code> and a default va
       <br/>
       <div>
         
-          [<a href="https://github.com/Anyolite/anyolite/blob/v0.4.1/src/MrbWrap.cr#L181" target="_blank">View source</a>]
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.5.0/src/MrbWrap.cr#L182" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -731,7 +742,7 @@ with the arguments <em>proc_args</em> as an <code>Array of Class</code>.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/Anyolite/anyolite/blob/v0.4.1/src/MrbWrap.cr#L151" target="_blank">View source</a>]
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.5.0/src/MrbWrap.cr#L152" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -758,7 +769,7 @@ Alternatively, a <code>Tuple</code> with the <code>Class</code> and a default va
       <br/>
       <div>
         
-          [<a href="https://github.com/Anyolite/anyolite/blob/v0.4.1/src/MrbWrap.cr#L162" target="_blank">View source</a>]
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.5.0/src/MrbWrap.cr#L163" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -784,7 +795,7 @@ with <em>name</em> as its new designation, returning an <code><a href="MrbModule
       <br/>
       <div>
         
-          [<a href="https://github.com/Anyolite/anyolite/blob/v0.4.1/src/MrbWrap.cr#L80" target="_blank">View source</a>]
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.5.0/src/MrbWrap.cr#L81" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -810,7 +821,7 @@ with the arguments <em>proc_args</em> as an <code>Array of Class</code>.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/Anyolite/anyolite/blob/v0.4.1/src/MrbWrap.cr#L109" target="_blank">View source</a>]
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.5.0/src/MrbWrap.cr#L110" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -837,7 +848,7 @@ Alternatively, a <code>Tuple</code> with the <code>Class</code> and a default va
       <br/>
       <div>
         
-          [<a href="https://github.com/Anyolite/anyolite/blob/v0.4.1/src/MrbWrap.cr#L120" target="_blank">View source</a>]
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.5.0/src/MrbWrap.cr#L121" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -866,7 +877,7 @@ If <em>verbose</em> is set, wrapping information will be displayed.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/Anyolite/anyolite/blob/v0.4.1/src/MrbWrap.cr#L303" target="_blank">View source</a>]
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.5.0/src/MrbWrap.cr#L318" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -892,7 +903,7 @@ with the argument <em>proc_arg</em> as its respective <code>Class</code>.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/Anyolite/anyolite/blob/v0.4.1/src/MrbWrap.cr#L191" target="_blank">View source</a>]
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.5.0/src/MrbWrap.cr#L192" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -918,7 +929,7 @@ with the argument <em>proc_arg</em> as its respective <code>Class</code>.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/Anyolite/anyolite/blob/v0.4.1/src/MrbWrap.cr#L172" target="_blank">View source</a>]
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.5.0/src/MrbWrap.cr#L173" target="_blank">View source</a>]
         
       </div>
     </div>
