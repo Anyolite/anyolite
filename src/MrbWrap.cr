@@ -254,6 +254,12 @@ module MrbWrap
   # to the second argument if wrapped.
   annotation RenameConstant; end
 
+  # Renames the class to the first argument if wrapped.
+  annotation RenameClass; end
+
+  # Renames the module to the first argument if wrapped.
+  annotation RenameModule; end
+
   # Wraps all arguments of the function to positional arguments.
   annotation WrapWithoutKeywords; end
 
@@ -287,7 +293,13 @@ module MrbWrap
       {% puts ">>> Going into class #{crystal_class} under #{under}\n\n" %}
     {% end %}
 
-    MrbWrap.wrap_class({{mrb_state}}, {{crystal_class.resolve}}, "{{crystal_class.names.last}}", under: {{under}})
+    {% if crystal_class.resolve.annotation(MrbWrap::RenameClass) %}
+      {% actual_name = crystal_class.resolve.annotation(MrbWrap::RenameClass)[0] %}
+    {% else %}
+      {% actual_name = crystal_class.names.last.stringify %}
+    {% end %}
+
+    MrbWrap.wrap_class({{mrb_state}}, {{crystal_class.resolve}}, {{actual_name}}, under: {{under}})
 
     MrbMacro.wrap_all_instance_methods({{mrb_state}}, {{crystal_class}}, {{instance_method_exclusions}}, {{verbose}}, context: {{under}}, use_enum_constructor: {{use_enum_constructor}})
     MrbMacro.wrap_all_class_methods({{mrb_state}}, {{crystal_class}}, {{class_method_exclusions}}, {{verbose}}, context: {{under}})
@@ -312,7 +324,13 @@ module MrbWrap
       {% puts ">>> Going into module #{crystal_module} under #{under}\n\n" %}
     {% end %}
 
-    MrbWrap.wrap_module({{mrb_state}}, {{crystal_module.resolve}}, "{{crystal_module.names.last}}", under: {{under}})
+    {% if crystal_module.resolve.annotation(MrbWrap::RenameModule) %}
+      {% actual_name = crystal_module.resolve.annotation(MrbWrap::RenameModule)[0] %}
+    {% else %}
+      {% actual_name = crystal_module.names.last.stringify %}
+    {% end %}
+
+    MrbWrap.wrap_module({{mrb_state}}, {{crystal_module.resolve}}, {{actual_name}}, under: {{under}})
     MrbMacro.wrap_all_class_methods({{mrb_state}}, {{crystal_module}}, {{class_method_exclusions}}, {{verbose}}, context: {{under}})
     MrbMacro.wrap_all_constants({{mrb_state}}, {{crystal_module}}, {{constant_exclusions}}, {{verbose}})
   end

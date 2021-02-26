@@ -306,7 +306,7 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 #### Features
 
 * [X] Support for enums
-* [ ] Ability to rename classes and modules
+* [X] Ability to rename classes and modules
 
 #### Usability
 

@@ -5,6 +5,7 @@ module SomeModule
     puts "#{str} and #{int}"
   end
 
+  @[MrbWrap::RenameClass("TestStructRenamed")]
   struct TestStruct
     property value : Int32 = -123
     property test : Test = Test.new(-234)
@@ -23,6 +24,7 @@ module SomeModule
   @[MrbWrap::SpecializeInstanceMethod(method_with_various_args, nil)]
   class Test
 
+    @[MrbWrap::RenameClass("UnderTestRenamed")]
     class UnderTest
       module DeepUnderTest
         class VeryDeepUnderTest

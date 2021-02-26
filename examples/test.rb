@@ -13,7 +13,7 @@ puts "Adding..."
 a.x = 123
 puts "Value getter returns #{a.x}"
 
-ts = TestModule::TestStruct.new
+ts = TestModule::TestStructRenamed.new
 puts "Struct value: #{ts.value}"
 puts "Struct test: #{ts.test.x}"
 
@@ -37,7 +37,7 @@ puts "Test constant: #{TestModule::Test::RUBY_CONSTANT}"
 puts TestModule::Test.without_keywords(12)
 
 # The absolute, ultimate and ridiculously complicated nesting test
-TestModule::Test::UnderTest::DeepUnderTest::VeryDeepUnderTest.new.nested_test
+TestModule::Test::UnderTestRenamed::DeepUnderTest::VeryDeepUnderTest.new.nested_test
 
 struct_test_var = TestModule::Test::DeepTestStruct.new
 puts "Struct test var: #{struct_test_var}"
