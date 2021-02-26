@@ -142,6 +142,25 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 
 ## Releases
 
+### Version 0.5.0
+
+#### Features
+
+* Support for enums
+* Ability to rename classes and modules
+
+#### Usability
+
+* Empty argument list for specialization can be specified with nil
+* Exclusion message for mruby methods, finalize and to_unsafe
+* Exclusion of non-public methods
+* Exclusion of to_unsafe
+* Non-fatal runtime errors are triggered in mruby instead of Crystal
+
+#### Bugfixes
+
+* Proper resolution of class and module hierarchies
+
 ### Version 0.4.1
 
 #### Usability
@@ -300,25 +319,6 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 * Basic documentation
 
 ## Upcoming releases
-
-### Version 0.5.0
-
-#### Features
-
-* [X] Support for enums
-* [X] Ability to rename classes and modules
-
-#### Usability
-
-* [X] Empty argument list for specialization can be specified with nil
-* [X] Exclusion message for mruby methods, finalize and to_unsafe
-* [X] Exclusion of non-public methods
-* [X] Exclusion of to_unsafe
-* [X] Non-fatal runtime errors are triggered in mruby instead of Crystal
-
-#### Bugfixes
-
-* [X] Proper resolution of class and module hierarchies
 
 ### Version 0.6.0+
 
