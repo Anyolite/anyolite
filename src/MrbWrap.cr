@@ -230,12 +230,12 @@ module MrbWrap
   annotation Specialize; end
 
   # Excludes all definitions of the instance method given as the first argument 
-  # besides the one with the arguments given in the second argument from wrapping.
+  # besides the one with the arguments given in the second argument (`nil` for none) from wrapping.
   # The optional third argument overwrites the original argument array.
   annotation SpecializeInstanceMethod; end
 
   # Excludes all definitions of the class method given as the first argument 
-  # besides the one with the arguments given in the second argument from wrapping.
+  # besides the one with the arguments given in the second argument (`nil` for none) from wrapping.
   # The optional third argument overwrites the original argument array.
   annotation SpecializeClassMethod; end
 

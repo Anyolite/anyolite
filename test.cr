@@ -20,6 +20,7 @@ module SomeModule
   @[MrbWrap::ExcludeConstant(CONSTANT_NOT_TO_WRAP)]
   @[MrbWrap::RenameConstant(CONSTANT, RUBY_CONSTANT)]
   @[MrbWrap::SpecializeInstanceMethod(method_without_keywords, [arg], [arg : String])]
+  @[MrbWrap::SpecializeInstanceMethod(method_with_various_args, nil)]
   class Test
 
     class UnderTest
@@ -137,6 +138,14 @@ module SomeModule
     end
 
     private def private_method
+    end
+
+    def method_with_various_args(int_arg : Int)
+      puts "Some args"
+    end
+
+    def method_with_various_args
+      puts "No args"
     end
 
     # Gets called in mruby unless program crashes

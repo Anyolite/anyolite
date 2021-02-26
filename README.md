@@ -309,7 +309,7 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 
 #### Usability
 
-* [ ] Empty argument list as possible argument for specialization
+* [X] Empty argument list for specialization can be specified with nil
 * [X] Exclusion message for mruby methods, finalize and to_unsafe
 * [X] Exclusion of non-public methods
 * [X] Exclusion of to_unsafe

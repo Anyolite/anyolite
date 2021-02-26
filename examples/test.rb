@@ -44,3 +44,5 @@ puts "Struct test var: #{struct_test_var}"
 
 enum_test_var = TestModule::Test::TestEnum::Seven
 puts "Enum test var: #{enum_test_var.value}"
+
+a.method_with_various_args

@@ -759,7 +759,7 @@ module MrbMacro
         {% added_keyword_args = method.annotation(MrbWrap::Specialize)[0] %}
       {% end %}
 
-      {% if annotation_specialize_im && method.args.stringify == annotation_specialize_im[1].stringify %}
+      {% if annotation_specialize_im && (method.args.stringify == annotation_specialize_im[1].stringify || (method.args.stringify == "[]" && annotation_specialize_im[1] == nil)) %}
         {% added_keyword_args = annotation_specialize_im[2] %}
       {% end %}
 
@@ -784,7 +784,7 @@ module MrbMacro
       {% elsif method.annotation(MrbWrap::Exclude) || (annotation_exclude_im) %}
         {% puts "--> Excluding #{crystal_class}::#{method.name} (Exclusion annotation)" if verbose %}
       # Exclude methods which are not the specialized methods
-      {% elsif has_specialized_method[method.name.stringify] && !(method.annotation(MrbWrap::Specialize) || (annotation_specialize_im && method.args.stringify == annotation_specialize_im[1].stringify)) %}
+      {% elsif has_specialized_method[method.name.stringify] && !(method.annotation(MrbWrap::Specialize) || (annotation_specialize_im && (method.args.stringify == annotation_specialize_im[1].stringify || (method.args.stringify == "[]" && annotation_specialize_im[1] == nil)))) %}
         {% puts "--> Excluding #{crystal_class}::#{method.name} #{method.args} (Specialization)" if verbose %}
       # Handle operator methods (including setters)
       {% elsif method.name =~ /\W/ %}
@@ -878,7 +878,7 @@ module MrbMacro
         {% added_keyword_args = method.annotation(MrbWrap::Specialize)[1] %}
       {% end %}
 
-      {% if annotation_specialize_im && method.args.stringify == annotation_specialize_im[1].stringify %}
+      {% if annotation_specialize_im && (method.args.stringify == annotation_specialize_im[1].stringify || (method.args.stringify == "[]" && annotation_specialize_im[1] == nil)) %}
         {% added_keyword_args = annotation_specialize_im[2] %}
       {% end %}
 
@@ -903,7 +903,7 @@ module MrbMacro
       {% elsif method.annotation(MrbWrap::Exclude) || (annotation_exclude_im) %}
         {% puts "--> Excluding #{crystal_class}::#{method.name} (Exclusion annotation)" if verbose %}
       # Exclude methods which are not the specialized methods
-      {% elsif has_specialized_method[method.name.stringify] && !(method.annotation(MrbWrap::Specialize) || (annotation_specialize_im && method.args.stringify == annotation_specialize_im[1].stringify)) %}
+      {% elsif has_specialized_method[method.name.stringify] && !(method.annotation(MrbWrap::Specialize) || (annotation_specialize_im && (method.args.stringify == annotation_specialize_im[1].stringify || (method.args.stringify == "[]" && annotation_specialize_im[1] == nil)))) %}
         {% puts "--> Excluding #{crystal_class}::#{method.name} (Specialization)" if verbose %}
       # Handle other class methods
       {% else %}
