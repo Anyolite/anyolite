@@ -235,8 +235,7 @@ module MrbMacro
   macro convert_from_ruby_object(mrb, obj, crystal_type)
     if MrbInternal.mrb_obj_is_kind_of({{mrb}}, {{obj}}, MrbClassCache.get({{crystal_type}})) == 0
       obj_class = MrbInternal.get_class_of_obj({{mrb}}, {{obj}})
-      # TODO: Raise argument error in mruby instead
-      raise("ERROR: Invalid data type #{obj_class} for object #{{{obj}}}:\n Should be #{{{crystal_type}}} -> MrbClassCache.get({{crystal_type}}) instead.")
+      MrbInternal.mrb_raise_argument_error({{mrb}}, "Invalid data type #{obj_class} for object #{{{obj}}}:\n Should be #{{{crystal_type}}} -> MrbClassCache.get({{crystal_type}}) instead.")
     end
 
     ptr = MrbInternal.get_data_ptr({{obj}})
@@ -246,8 +245,7 @@ module MrbMacro
   macro convert_from_ruby_struct(mrb, obj, crystal_type)
     if MrbInternal.mrb_obj_is_kind_of({{mrb}}, {{obj}}, MrbClassCache.get({{crystal_type}})) == 0
       obj_class = MrbInternal.get_class_of_obj({{mrb}}, {{obj}})
-      # TODO: Raise argument error in mruby instead
-      raise("ERROR: Invalid data type #{obj_class} for object #{{{obj}}}:\n Should be #{{{crystal_type}}} -> MrbClassCache.get({{crystal_type}}) instead.")
+      MrbInternal.mrb_raise_argument_error({{mrb}}, "ERROR: Invalid data type #{obj_class} for object #{{{obj}}}:\n Should be #{{{crystal_type}}} -> MrbClassCache.get({{crystal_type}}) instead.")
     end
     
     ptr = MrbInternal.get_data_ptr({{obj}})
@@ -772,8 +770,12 @@ module MrbMacro
       {% end %}
 
       {% puts "> Processing instance method #{crystal_class}::#{method.name} to #{ruby_name}\n--> Args: #{method.args}" if verbose %}
+      
+      # Ignore private and protected methods (can't be called from outside, they'd need to be wrapped for this to work)
+      {% if method.visibility != :public %}
+        {% puts "--> Excluding #{crystal_class}::#{method.name} (Exclusion due to visibility)" if verbose %}
       # Ignore mrb hooks, to_unsafe and finalize (unless specialized, but this is not recommended)
-      {% if (method.name.starts_with?("mrb_") || method.name == "finalize" || method.name == "to_unsafe") && !has_specialized_method[method.name.stringify] %}
+      {% elsif (method.name.starts_with?("mrb_") || method.name == "finalize" || method.name == "to_unsafe") && !has_specialized_method[method.name.stringify] %}
         {% puts "--> Excluding #{crystal_class}::#{method.name} (Exclusion by default)" if verbose %}
       # Exclude methods if given as arguments
       {% elsif exclusions.includes?(method.name.symbolize) || exclusions.includes?(method.name.stringify) %}
@@ -783,7 +785,7 @@ module MrbMacro
         {% puts "--> Excluding #{crystal_class}::#{method.name} (Exclusion annotation)" if verbose %}
       # Exclude methods which are not the specialized methods
       {% elsif has_specialized_method[method.name.stringify] && !(method.annotation(MrbWrap::Specialize) || (annotation_specialize_im && method.args.stringify == annotation_specialize_im[1].stringify)) %}
-        {% puts "--> Excluding #{crystal_class}::#{method.name} #{method.args} (Specialization 1)" if verbose %}
+        {% puts "--> Excluding #{crystal_class}::#{method.name} #{method.args} (Specialization)" if verbose %}
       # Handle operator methods (including setters)
       {% elsif method.name =~ /\W/ %}
         {% without_operator = method.name.gsub(/\W/, "") %}
@@ -887,8 +889,12 @@ module MrbMacro
       {% end %}
 
       {% puts "> Processing class method #{crystal_class}::#{method.name} to #{ruby_name}\n--> Args: #{method.args}" if verbose %}
+      
+      # Ignore private and protected methods (can't be called from outside, they'd need to be wrapped for this to work)
+      {% if method.visibility != :public %}
+        {% puts "--> Excluding #{crystal_class}::#{method.name} (Exclusion due to visibility)" if verbose %}
       # We already wrapped 'initialize', so we don't need to wrap these
-      {% if method.name == "allocate" || method.name == "new" %}
+      {% elsif method.name == "allocate" || method.name == "new" %}
         {% puts "--> Excluding #{crystal_class}::#{method.name} (Allocation method)" if verbose %}
       # Exclude methods if given as arguments
       {% elsif exclusions.includes?(method.name.symbolize) || exclusions.includes?(method.name) %}
@@ -898,7 +904,7 @@ module MrbMacro
         {% puts "--> Excluding #{crystal_class}::#{method.name} (Exclusion annotation)" if verbose %}
       # Exclude methods which are not the specialized methods
       {% elsif has_specialized_method[method.name.stringify] && !(method.annotation(MrbWrap::Specialize) || (annotation_specialize_im && method.args.stringify == annotation_specialize_im[1].stringify)) %}
-        {% puts "--> Excluding #{crystal_class}::#{method.name} (Specialization 1)" if verbose %}
+        {% puts "--> Excluding #{crystal_class}::#{method.name} (Specialization)" if verbose %}
       # Handle other class methods
       {% else %}
         MrbMacro.wrap_method_index({{mrb_state}}, {{crystal_class}}, {{index}}, "{{ruby_name}}", is_class_method: true, without_keywords: {{without_keywords}}, added_keyword_args: {{added_keyword_args}}, context: {{context}})

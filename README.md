@@ -311,9 +311,9 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 
 * [ ] Empty argument list as possible argument for specialization
 * [X] Exclusion message for mruby methods, finalize and to_unsafe
-* [ ] Exclusion of private methods
+* [X] Exclusion of non-public methods
 * [X] Exclusion of to_unsafe
-* [ ] Non-fatal runtime errors are triggered in mruby only
+* [X] Non-fatal runtime errors are triggered in mruby instead of Crystal
 
 #### Bugfixes
 

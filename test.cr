@@ -136,6 +136,9 @@ module SomeModule
       puts "This should not be wrapped"
     end
 
+    private def private_method
+    end
+
     # Gets called in mruby unless program crashes
     def mrb_finalize(mrb)
       puts "Mruby destructor called for value #{@x}"

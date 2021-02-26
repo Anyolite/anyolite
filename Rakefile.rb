@@ -15,7 +15,7 @@ end
 
 task :build_shard => [:load_config, :install_mruby, :build_mruby, :build_glue]
 
-GLUE_FILES = ["return_functions", "data_helper", "script_helper"]
+GLUE_FILES = ["return_functions", "data_helper", "script_helper", "error_helper"]
 
 ANYOLITE_COMPILER = determine_compiler
 

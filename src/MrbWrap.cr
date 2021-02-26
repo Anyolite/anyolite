@@ -44,7 +44,8 @@ module MrbWrap
       if c = @content
         c
       else
-        raise("Content undefined!")
+        # This should not be called theoretically
+        raise("Content of struct wrapper is undefined!")
       end
     end
 

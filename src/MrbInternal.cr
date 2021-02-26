@@ -3,11 +3,13 @@
   @[Link(ldflags: "#{__DIR__}/../build/glue/return_functions.obj -DMRB_INT64")]
   @[Link(ldflags: "#{__DIR__}/../build/glue/data_helper.obj -DMRB_INT64")]
   @[Link(ldflags: "#{__DIR__}/../build/glue/script_helper.obj -DMRB_INT64")]
+  @[Link(ldflags: "#{__DIR__}/../build/glue/error_helper.obj -DMRB_INT64")]
 {% else %}
   @[Link(ldflags: "#{__DIR__}/../build/mruby/lib/libmruby.a -DMRB_INT64")]
   @[Link(ldflags: "#{__DIR__}/../build/glue/return_functions.o -DMRB_INT64")]
   @[Link(ldflags: "#{__DIR__}/../build/glue/data_helper.o -DMRB_INT64")]
   @[Link(ldflags: "#{__DIR__}/../build/glue/script_helper.o -DMRB_INT64")]
+  @[Link(ldflags: "#{__DIR__}/../build/glue/error_helper.o -DMRB_INT64")]
 {% end %}
 
 lib MrbInternal
@@ -88,6 +90,9 @@ lib MrbInternal
   fun mrb_define_const(mrb : MrbState*, c : RClass*, name : LibC::Char*, val : MrbValue)
 
   fun mrb_print_error(mrb : MrbState*)
+
+  fun mrb_raise(mrb : MrbState*, c : RClass*, msg : LibC::Char*)
+  fun mrb_raise_argument_error(mrb : MrbState*, msg : LibC::Char*)
 
   fun mrb_get_args(mrb : MrbState*, format : LibC::Char*, ...) : MrbInt
 

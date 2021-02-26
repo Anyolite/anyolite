@@ -93,7 +93,8 @@ module MrbCast
     elsif value.tt == MrbInternal::MrbVType::MRB_TT_FALSE && value.value.value_int != 0
       false
     else
-      raise("ERROR: Wrong arg") # TODO: Proper mruby message
+      MrbInternal.mrb_raise_argument_error(mrb, "Could not cast #{value} to Bool.")
+      false
     end
   end
 
@@ -101,7 +102,8 @@ module MrbCast
     if value.tt == MrbInternal::MrbVType::MRB_TT_FIXNUM
       value.value.value_int
     else
-      raise("ERROR: Wrong arg") # TODO: Proper mruby message
+      MrbInternal.mrb_raise_argument_error(mrb, "Could not cast #{value} to Int.")
+      0
     end
   end
 
@@ -109,7 +111,8 @@ module MrbCast
     if value.tt == MrbInternal::MrbVType::MRB_TT_FLOAT
       value.value.value_float
     else
-      raise("ERROR: Wrong arg") # TODO: Proper mruby message
+      MrbInternal.mrb_raise_argument_error(mrb, "Could not cast #{value} to Float.")
+      0.0
     end
   end
 
@@ -117,7 +120,8 @@ module MrbCast
     if value.tt == MrbInternal::MrbVType::MRB_TT_STRING
       String.new(MrbInternal.mrb_str_to_cstr(mrb, value))
     else
-      raise("ERROR: Wrong arg") # TODO: Proper mruby message
+      MrbInternal.mrb_raise_argument_error(mrb, "Could not cast #{value} to String.")
+      ""
     end
   end
 
@@ -135,7 +139,7 @@ module MrbCast
     when MrbInternal::MrbVType::MRB_TT_FIXNUM then MrbCast.cast_to_int(mrb, value)
     when MrbInternal::MrbVType::MRB_TT_FLOAT  then MrbCast.cast_to_float(mrb, value)
     when MrbInternal::MrbVType::MRB_TT_STRING then MrbCast.cast_to_string(mrb, value)
-    else                                           raise("MrbValue #{value} with #{value.tt} is not supported")
+    else                                           MrbInternal.mrb_raise_argument_error(mrb, "MrbValue #{value} with #{value.tt} is not supported")
     end
   end
 
