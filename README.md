@@ -20,7 +20,7 @@ This project is currently in the early development phase, so please report any b
 
 * Bindings to an mruby interpreter
 * Wrapping of nearly arbitrary Crystal classes and methods to mruby
-* Easy syntax without unnecessary bolderplate code
+* Easy syntax without unnecessary boilerplate code
 * Support for keyword arguments and default values
 * Simple system to prevent garbage collector conflicts
 
@@ -306,6 +306,7 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 #### Features
 
 * [X] Support for enums
+* [ ] Ability to rename classes and modules
 
 #### Usability
 
@@ -319,26 +320,25 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 
 * [X] Proper resolution of class and module hierarchies
 
-### Future updates
+### Version 0.6.0+
 
-* [ ] Windows support (currently not supported due to problems with Crystal)
+* [ ] Support for Crystal 0.36.1 (should already work, not tested yet)
+* [ ] Crystal specs for testing
 * [ ] Mac support (might be possible, not tested yet)
 * [ ] Compiletime errors for macros
 * [ ] Support for more flexible mruby configuration options
-* [ ] Arrays as arguments and return values
-* [ ] Crystal specs for testing
 * [ ] More stable type casting
 * [ ] Use Array(TypeDeclaration) instead of Hash for keywords in internal methods
 * [ ] Options for inherited and/or inheriting classes
-* [ ] Ability to rename the parent module of module hierarchies
-* [ ] Support for Crystal 0.36.1
 
-### Possible future updates
+### Version 1.0.0
 
-* [ ] Other types (Hashes, ...) as arguments and return values
-* [ ] Option for passing mruby splat arguments as an array
-* [ ] Support for arbitrary keyword arguments as hashes
-* [ ] More variety for default parameters for unnamed options
-* [ ] Method in mruby to determine owner of object (if possible)
-* [ ] Include wrapping of nilable classes (if possible)
-* [ ] Better context resolution if necessary
+* [ ] Windows support (currently not supported due to problems with Crystal)
+
+### Future ideas (might not actually be possible to implement)
+
+* [ ] Arrays and/or hashes as argument and return values
+* [ ] Splat argument and/or arbitrary keyword passing
+* [ ] Method in mruby to determine owner of object
+* [ ] Wrappers for nilable objects
+* [ ] Wrappers for unions
