@@ -95,8 +95,7 @@ module MrbWrap
   # Wraps the constructor of a Crystal class into mruby, using keyword arguments.
   #
   # The constructor for the Crystal `Class` *crystal_class* will be integrated into the `MrbState` *mrb_state*,
-  # with the arguments *regular_args* as an `Array of Class` and *keyword_args* as a `Hash of Symbol => Class`.
-  # Alternatively, a `Tuple` with the `Class` and a default value for the `Class` can be used instead of the `Class`.
+  # with the arguments *regular_args* as an `Array of Class` and *keyword_args* as an `Array of TypeDeclaration`.
   macro wrap_constructor_with_keywords(mrb_state, crystal_class, keyword_args, regular_args = [] of Class, operator = "", context = nil)
     MrbMacro.wrap_constructor_function_with_keyword_args({{mrb_state}}, {{crystal_class}}, {{crystal_class}}.new, {{keyword_args}}, {{regular_args}}, operator: {{operator}}, context: {{context}})
   end
@@ -114,8 +113,7 @@ module MrbWrap
   # Wraps a module function into mruby, using keyword arguments.
   #
   # The function *proc* under the module *under_module* will be integrated into the `MrbState` *mrb_state*,
-  # with the arguments *regular_args* as an `Array of Class` and *keyword_args* as a `Hash of Symbol => Class`.
-  # Alternatively, a `Tuple` with the `Class` and a default value for the `Class` can be used instead of the `Class`.
+  # with the arguments *regular_args* as an `Array of Class` and *keyword_args* as an `Array of TypeDeclaration`.
   #
   # Its new name will be *name*.
   macro wrap_module_function_with_keywords(mrb_state, under_module, name, proc, keyword_args, regular_args = [] of Class, operator = "", context = nil)
@@ -135,8 +133,7 @@ module MrbWrap
   # Wraps a class method into mruby, using keyword arguments.
   #
   # The class method *proc* of the Crystal `Class` *crystal_class* will be integrated into the `MrbState` *mrb_state*,
-  # with the arguments *regular_args* as an `Array of Class` and *keyword_args* as a `Hash of Symbol => Class`.
-  # Alternatively, a `Tuple` with the `Class` and a default value for the `Class` can be used instead of the `Class`.
+  # with the arguments *regular_args* as an `Array of Class` and *keyword_args* as an `Array of TypeDeclaration`.
   #
   # Its new name will be *name*.
   macro wrap_class_method_with_keywords(mrb_state, crystal_class, name, proc, keyword_args, regular_args = [] of Class, operator = "", context = nil)
@@ -156,8 +153,7 @@ module MrbWrap
   # Wraps an instance method into mruby, using keyword arguments.
   #
   # The instance method *proc* of the Crystal `Class` *crystal_class* will be integrated into the `MrbState` *mrb_state*,
-  # with the arguments *regular_args* as an `Array of Class` and *keyword_args* as a `Hash of Symbol => Class`.
-  # Alternatively, a `Tuple` with the `Class` and a default value for the `Class` can be used instead of the `Class`.
+  # with the arguments *regular_args* as an `Array of Class` and *keyword_args* as an `Array of TypeDeclaration`.
   #
   # Its new name will be *name*.
   macro wrap_instance_method_with_keywords(mrb_state, crystal_class, name, proc, keyword_args, regular_args = [] of Class, operator = "", context = nil)

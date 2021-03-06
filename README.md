@@ -333,14 +333,14 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 
 #### Breaking changes
 
-* [ ] Wrapping of specific functions has a more consistent syntax using Arrays instead of Hashes
+* [X] Wrapping of specific functions has a more consistent syntax using Arrays instead of Hashes
 
 #### Safety
 
 * [ ] Support for Crystal 0.36.1 (should already work, not tested yet)
 * [ ] Compiletime errors for macros
 * [ ] More stable type casting
-* [ ] Use Array(TypeDeclaration) instead of Hash for keywords in internal methods
+* [X] Use Array(TypeDeclaration) instead of Hash for keywords in internal methods
 
 #### Usability
 
