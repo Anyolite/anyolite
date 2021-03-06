@@ -127,7 +127,7 @@ module SomeModule
     end
 
     def output_this_and_struct(i : Int32)
-      puts "This should not be wrapped"
+      raise "This should not be wrapped"
     end
 
     @[MrbWrap::Specialize([strvar : String, intvar : Int32, floatvar : Float64 = 0.123, strvarkw : String = "nothing", boolvar : Bool = true, othervar : SomeModule::Test = SomeModule::Test.new(17)])]
@@ -136,7 +136,7 @@ module SomeModule
     end
 
     def keyword_test(whatever)
-      puts "This should not be wrapped"
+      raise "This should not be wrapped"
     end
 
     private def private_method
