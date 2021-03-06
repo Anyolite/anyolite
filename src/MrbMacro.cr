@@ -211,10 +211,11 @@ module MrbMacro
       end
     {% elsif arg_type.is_a?(TypeDeclaration) %}
       if MrbCast.is_undef?({{arg}})
-        {% if arg_type.value %}
+        {% if arg_type.value || arg_type.value == false || arg_type.value == nil %}
           {{arg_type.value}}
         {% else %}
-          raise "Nope"
+          # Should only happen if no default value was given
+          raise("Undefined argument {{arg}} of {{arg_type}} in context {{context}}")
         {% end %}
       else
         MrbMacro.convert_keyword_arg({{mrb}}, {{arg}}, {{arg_type.type}}, context: {{context}})
@@ -671,17 +672,31 @@ module MrbMacro
       {% if regular_arg_array.size == 0 %}
         new_obj = {{proc}}{{operator.id}}(
           {% c = 0 %}
-          {% for keyword in keyword_args.keys %}
-            {{keyword.id}}: MrbMacro.convert_keyword_arg(mrb, kw_args.values[{{c}}], {{keyword_args[keyword]}}, context: {{context}}),
-            {% c += 1 %}
+          {% if keyword_args.is_a? ArrayLiteral %}
+            {% for keyword in keyword_args %}
+              {{keyword.var.id}}: MrbMacro.convert_keyword_arg(mrb, kw_args.values[{{c}}], {{keyword}}, context: {{context}}),
+              {% c += 1 %}
+            {% end %}
+          {% else %}
+            {% for keyword in keyword_args.keys %}
+              {{keyword.id}}: MrbMacro.convert_keyword_arg(mrb, kw_args.values[{{c}}], {{keyword_args[keyword]}}, context: {{context}}),
+              {% c += 1 %}
+            {% end %}
           {% end %}
         )
       {% else %}
         new_obj = {{proc}}{{operator.id}}(*converted_regular_args,
           {% c = 0 %}
-          {% for keyword in keyword_args.keys %}
-            {{keyword.id}}: MrbMacro.convert_keyword_arg(mrb, kw_args.values[{{c}}], {{keyword_args[keyword]}}, context: {{context}}),
-            {% c += 1 %}
+          {% if keyword_args.is_a? ArrayLiteral %}
+            {% for keyword in keyword_args %}
+              {{keyword.var.id}}: MrbMacro.convert_keyword_arg(mrb, kw_args.values[{{c}}], {{keyword}}, context: {{context}}),
+              {% c += 1 %}
+            {% end %}
+          {% else %}
+            {% for keyword in keyword_args.keys %}
+              {{keyword.id}}: MrbMacro.convert_keyword_arg(mrb, kw_args.values[{{c}}], {{keyword_args[keyword]}}, context: {{context}}),
+              {% c += 1 %}
+            {% end %}
           {% end %}
         )
       {% end %}
@@ -740,7 +755,7 @@ module MrbMacro
           MrbWrap.wrap_instance_method({{mrb_state}}, {{crystal_class}}, {{ruby_name}}, {{final_method_name}}, {{type_array}}, operator: {{operator}}, context: {{context}})
         {% end %}
       {% else %}
-        {% keyword_hash = {} of Symbol => Crystal::Macros::ASTNode %}
+        {% keyword_array = [] of Crystal::Macros::ASTNode %}
 
         {% invalid = false %}
 
@@ -752,10 +767,10 @@ module MrbMacro
                 {% puts "\e[33m> INFO: Could not wrap function '#{final_method_name}' with args #{added_keyword_args}.\e[0m" %}
                 {% invalid = true %}
               {% else %}
-                {% keyword_hash[element.var.symbolize] = {element.type, element.value} %}
+                {% keyword_array.push(element) %}
               {% end %}
             {% else %}
-              {% keyword_hash[element.var.symbolize] = element.type %}
+              {% keyword_array.push(element) %}
             {% end %}
           {% end %}
         {% else %}
@@ -766,21 +781,21 @@ module MrbMacro
                 {% puts "\e[33m> INFO: Could not wrap function '#{final_method_name}' with args #{method.args}.\e[0m" %}
                 {% invalid = true %}
               {% else %}
-                {% keyword_hash[arg.name.symbolize] = {arg.restriction, arg.default_value} %}
+                {% keyword_array.push(arg) %}
               {% end %}
             {% else %}
-              {% keyword_hash[arg.name.symbolize] = arg.restriction %}
+              {% keyword_array.push(arg) %}
             {% end %}
           {% end %}
         {% end %}
         
         {% if !invalid %}
           {% if is_class_method %}
-            MrbWrap.wrap_class_method_with_keywords({{mrb_state}}, {{crystal_class}}, {{ruby_name}}, {{crystal_class}}.{{final_method_name}}, {{keyword_hash}}, operator: {{operator}}, context: {{context}})
+            MrbWrap.wrap_class_method_with_keywords({{mrb_state}}, {{crystal_class}}, {{ruby_name}}, {{crystal_class}}.{{final_method_name}}, {{keyword_array}}, operator: {{operator}}, context: {{context}})
           {% elsif is_constructor %}
-            MrbWrap.wrap_constructor_with_keywords({{mrb_state}}, {{crystal_class}}, {{keyword_hash}}, operator: {{operator}}, context: {{context}})
+            MrbWrap.wrap_constructor_with_keywords({{mrb_state}}, {{crystal_class}}, {{keyword_array}}, operator: {{operator}}, context: {{context}})
           {% else %}
-            MrbWrap.wrap_instance_method_with_keywords({{mrb_state}}, {{crystal_class}}, {{ruby_name}}, {{final_method_name}}, {{keyword_hash}}, operator: {{operator}}, context: {{context}})
+            MrbWrap.wrap_instance_method_with_keywords({{mrb_state}}, {{crystal_class}}, {{ruby_name}}, {{final_method_name}}, {{keyword_array}}, operator: {{operator}}, context: {{context}})
           {% end %}
         {% end %}
       {% end %}
