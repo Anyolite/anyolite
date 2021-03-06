@@ -7,6 +7,7 @@ puts a.test(int: 19, bool: false, str: 'Example string')
 puts a.test(int: 19, bool: false, str: 'Example string', float: 0.5)
 
 TestModule.test_method(int: 3, str: "Hello")
+TestModule.test_method(str: "World")
 
 puts "Value getter returns #{a.x}"
 puts "Adding..."

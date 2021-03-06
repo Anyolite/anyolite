@@ -15,6 +15,12 @@ module MrbMacro
       {% else %}
         MrbMacro.format_char({{arg[0]}}, optional_values: true, context: {{context}})
       {% end %}
+    {% elsif arg.is_a?(TypeDeclaration) %}
+      {% if optional_values != true && arg.value %}
+        "|" + MrbMacro.format_char({{arg.type}}, optional_values: true, context: {{context}})
+      {% else %}
+        MrbMacro.format_char({{arg.type}}, optional_values: {{optional_values}}, context: {{context}})
+      {% end %}
     {% elsif context %}
       MrbMacro.resolve_format_char({{context}}::{{arg}}, {{arg}}, {{context}})
     {% else %}
@@ -51,6 +57,8 @@ module MrbMacro
   macro type_in_ruby(type, context = nil)
     {% if type.is_a?(TupleLiteral) %}
       MrbMacro.type_in_ruby({{type[0]}})  # TODO: Allow nil for regular arguments as default
+    {% elsif type.is_a?(TypeDeclaration) %}
+      MrbMacro.type_in_ruby({{type.type}})
     {% elsif context %}
       MrbMacro.resolve_type_in_ruby({{context}}::{{type}}, {{type}}, {{context}})
     {% else %}
@@ -87,6 +95,8 @@ module MrbMacro
   macro pointer_type(type, context = nil)
     {% if type.is_a?(TupleLiteral) %}
       MrbMacro.pointer_type({{type[0]}}, context: {{context}})
+    {% elsif type.is_a?(TypeDeclaration) %}
+      MrbMacro.pointer_type({{type.type}}, context: {{context}})
     {% elsif context %}
       MrbMacro.resolve_pointer_type({{context}}::{{type}}, {{type}}, {{context}})
     {% else %}
@@ -125,6 +135,12 @@ module MrbMacro
       {% for arg in args %}
         {% if arg.is_a?(TupleLiteral) %}
           MrbMacro.pointer_type({{arg}}, context: {{context}}).malloc(size: 1, value: MrbMacro.type_in_ruby({{arg}}, context: {{context}}).new({{arg[1]}})),
+        {% elsif arg.is_a?(TypeDeclaration) %}
+          {% if arg.value %}
+            MrbMacro.pointer_type({{arg}}, context: {{context}}).malloc(size: 1, value: MrbMacro.type_in_ruby({{arg}}, context: {{context}}).new({{arg.value}})),
+          {% else %}
+            MrbMacro.pointer_type({{arg}}, context: {{context}}).malloc(size: 1),
+          {% end %}
         {% else %}
           MrbMacro.pointer_type({{arg}}, context: {{context}}).malloc(size: 1),
         {% end %}
@@ -143,6 +159,8 @@ module MrbMacro
   macro convert_arg(mrb, arg, arg_type, context = nil)
     {% if arg_type.is_a?(TupleLiteral) %}
       MrbMacro.convert_arg({{mrb}}, {{arg}}, {{arg_type[0]}}, context: {{context}})
+    {% elsif arg_type.is_a?(TypeDeclaration) %}
+      MrbMacro.convert_arg({{mrb}}, {{arg}}, {{arg_type.type}}, context: {{context}})
     {% elsif context %}
       MrbMacro.convert_resolved_arg({{mrb}}, {{arg}}, {{context}}::{{arg_type}}, {{arg_type}}, {{context}})
     {% else %}
@@ -190,6 +208,16 @@ module MrbMacro
         {{arg_type[1]}}
       else
         MrbMacro.convert_keyword_arg({{mrb}}, {{arg}}, {{arg_type[0]}}, context: {{context}})
+      end
+    {% elsif arg_type.is_a?(TypeDeclaration) %}
+      if MrbCast.is_undef?({{arg}})
+        {% if arg_type.value %}
+          {{arg_type.value}}
+        {% else %}
+          raise "Nope"
+        {% end %}
+      else
+        MrbMacro.convert_keyword_arg({{mrb}}, {{arg}}, {{arg_type.type}}, context: {{context}})
       end
     {% elsif context %}
       MrbMacro.convert_resolved_keyword_arg({{mrb}}, {{arg}}, {{context}}::{{arg_type}}, {{arg_type}}, {{context}})
@@ -269,16 +297,30 @@ module MrbMacro
     {% end %}
       {% if empty_regular %}
         {% c = 0 %}
-        {% for keyword in keyword_args.keys %}
-          {{keyword.id}}: MrbMacro.convert_keyword_arg({{mrb}}, {{kw_args}}.values[{{c}}], {{keyword_args[keyword]}}),
-          {% c += 1 %}
+        {% if keyword_args.is_a?(ArrayLiteral) %}
+          {% for keyword in keyword_args %}
+            {{keyword.var.id}}: MrbMacro.convert_keyword_arg({{mrb}}, {{kw_args}}.values[{{c}}], {{keyword}}),
+            {% c += 1 %}
+          {% end %}
+        {% else %}
+          {% for keyword in keyword_args.keys %}
+            {{keyword.id}}: MrbMacro.convert_keyword_arg({{mrb}}, {{kw_args}}.values[{{c}}], {{keyword_args[keyword]}}),
+            {% c += 1 %}
+          {% end %}
         {% end %}
       {% else %}
         *{{converted_regular_args}},
         {% c = 0 %}
-        {% for keyword in keyword_args.keys %}
-          {{keyword.id}}: MrbMacro.convert_keyword_arg({{mrb}}, {{kw_args}}.values[{{c}}], {{keyword_args[keyword]}}),
-          {% c += 1 %}
+        {% if keyword_args.is_a?(ArrayLiteral) %}
+          {% for keyword in keyword_args %}
+            {{keyword.var.id}}: MrbMacro.convert_keyword_arg({{mrb}}, {{kw_args}}.values[{{c}}], {{keyword}}),
+            {% c += 1 %}
+          {% end %}
+        {% else %}
+          {% for keyword in keyword_args.keys %}
+            {{keyword.id}}: MrbMacro.convert_keyword_arg({{mrb}}, {{kw_args}}.values[{{c}}], {{keyword_args[keyword]}}),
+            {% c += 1 %}
+          {% end %}
         {% end %}
       {% end %}
     )
@@ -312,16 +354,30 @@ module MrbMacro
       {% end %}
         {% if empty_regular %}
           {% c = 0 %}
-          {% for keyword in keyword_args.keys %}
-            {{keyword.id}}: MrbMacro.convert_keyword_arg({{mrb}}, {{kw_args}}.values[{{c}}], {{keyword_args[keyword]}}, context: {{context}}),
-            {% c += 1 %}
+          {% if keyword_args.is_a?(ArrayLiteral) %}
+            {% for keyword in keyword_args %}
+              {{keyword.var.id}}: MrbMacro.convert_keyword_arg({{mrb}}, {{kw_args}}.values[{{c}}], {{keyword}}, context: {{context}}),
+              {% c += 1 %}
+            {% end %}
+          {% else %}
+            {% for keyword in keyword_args.keys %}
+              {{keyword.id}}: MrbMacro.convert_keyword_arg({{mrb}}, {{kw_args}}.values[{{c}}], {{keyword_args[keyword]}}, context: {{context}}),
+              {% c += 1 %}
+            {% end %}
           {% end %}
         {% else %}
           *{{converted_regular_args}},
           {% c = 0 %}
-          {% for keyword in keyword_args.keys %}
-            {{keyword.id}}: MrbMacro.convert_keyword_arg({{mrb}}, {{kw_args}}.values[{{c}}], {{keyword_args[keyword]}}, context: {{context}}),
-            {% c += 1 %}
+          {% if keyword_args.is_a?(ArrayLiteral) %}
+            {% for keyword in keyword_args %}
+              {{keyword.var.id}}: MrbMacro.convert_keyword_arg({{mrb}}, {{kw_args}}.values[{{c}}], {{keyword}}, context: {{context}}),
+              {% c += 1 %}
+            {% end %}
+          {% else %}
+            {% for keyword in keyword_args.keys %}
+              {{keyword.id}}: MrbMacro.convert_keyword_arg({{mrb}}, {{kw_args}}.values[{{c}}], {{keyword_args[keyword]}}, context: {{context}}),
+              {% c += 1 %}
+            {% end %}
           {% end %}
         {% end %}
       )
@@ -333,16 +389,30 @@ module MrbMacro
       {% end %}
         {% if empty_regular %}
           {% c = 0 %}
-          {% for keyword in keyword_args.keys %}
-            {{keyword.id}}: MrbMacro.convert_keyword_arg({{mrb}}, {{kw_args}}.values[{{c}}], {{keyword_args[keyword]}}, context: {{context}}),
-            {% c += 1 %}
+          {% if keyword_args.is_a?(ArrayLiteral) %}
+            {% for keyword in keyword_args %}
+              {{keyword.var.id}}: MrbMacro.convert_keyword_arg({{mrb}}, {{kw_args}}.values[{{c}}], {{keyword}}, context: {{context}}),
+              {% c += 1 %}
+            {% end %}
+          {% else %}
+            {% for keyword in keyword_args.keys %}
+              {{keyword.id}}: MrbMacro.convert_keyword_arg({{mrb}}, {{kw_args}}.values[{{c}}], {{keyword_args[keyword]}}, context: {{context}}),
+              {% c += 1 %}
+            {% end %}
           {% end %}
         {% else %}
           *{{converted_regular_args}},
           {% c = 0 %}
-          {% for keyword in keyword_args.keys %}
-            {{keyword.id}}: MrbMacro.convert_keyword_arg({{mrb}}, {{kw_args}}.values[{{c}}], {{keyword_args[keyword]}}, context: {{context}}),
-            {% c += 1 %}
+          {% if keyword_args.is_a?(ArrayLiteral) %}
+            {% for keyword in keyword_args %}
+              {{keyword.var.id}}: MrbMacro.convert_keyword_arg({{mrb}}, {{kw_args}}.values[{{c}}], {{keyword}}, context: {{context}}),
+              {% c += 1 %}
+            {% end %}
+          {% else %}
+            {% for keyword in keyword_args.keys %}
+              {{keyword.id}}: MrbMacro.convert_keyword_arg({{mrb}}, {{kw_args}}.values[{{c}}], {{keyword_args[keyword]}}, context: {{context}}),
+              {% c += 1 %}
+            {% end %}
           {% end %}
         {% end %}
       )
@@ -403,15 +473,25 @@ module MrbMacro
     kw_args.num = {{keyword_args.size}}
     kw_args.values = Pointer(MrbInternal::MrbValue).malloc(size: {{keyword_args.size}})
     kw_args.table = kw_names
-    kw_args.required = {{keyword_args.values.select { |i| !i.is_a?(TupleLiteral) }.size}}
+    {% if keyword_args.is_a?(ArrayLiteral) %}
+      kw_args.required = {{keyword_args.select { |i| !i.var }.size}}
+    {% else %}
+      kw_args.required = {{keyword_args.values.select { |i| !i.is_a?(TupleLiteral) }.size}}
+    {% end %}
     kw_args.rest = Pointer(MrbInternal::MrbValue).malloc(size: 1)
     kw_args
   end
 
   macro generate_keyword_names(keyword_args)
     [
-      {% for keyword in keyword_args.keys %}
-        {{keyword}}.to_s.to_unsafe,
+      {% if keyword_args.is_a?(ArrayLiteral) %}
+        {% for keyword in keyword_args %}
+          {{keyword.var.stringify}}.to_unsafe,
+        {% end %}
+      {% else %}
+        {% for keyword in keyword_args.keys %}
+          {{keyword}}.to_s.to_unsafe,
+        {% end %}
       {% end %}
     ]
   end

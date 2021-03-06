@@ -166,7 +166,7 @@ end
 
 MrbState.create do |mrb|
   MrbWrap.wrap_module(mrb, SomeModule, "TestModule")
-  MrbWrap.wrap_module_function_with_keywords(mrb, SomeModule, "test_method", SomeModule.test_method, {:int => Int32, :str => String})
+  MrbWrap.wrap_module_function_with_keywords(mrb, SomeModule, "test_method", SomeModule.test_method, [int : Int32 = 19, str : String])
   MrbWrap.wrap_constant(mrb, SomeModule, "SOME_CONSTANT", "Smile! 😊")
 
   MrbWrap.wrap(mrb, SomeModule::Bla, under: SomeModule, verbose: true)
