@@ -9,7 +9,7 @@ module MrbMacro
   end
 
   macro format_char(arg, optional_values = false, context = nil)
-    {% if arg.class_name == "TupleLiteral" %}
+    {% if arg.is_a?(TupleLiteral) %}
       {% if optional_values != true %}
         "|" + MrbMacro.format_char({{arg[0]}}, optional_values: true, context: {{context}})
       {% else %}
@@ -49,7 +49,7 @@ module MrbMacro
   end
 
   macro type_in_ruby(type, context = nil)
-    {% if type.class_name == "TupleLiteral" %}
+    {% if type.is_a?(TupleLiteral) %}
       MrbMacro.type_in_ruby({{type[0]}})  # TODO: Allow nil for regular arguments as default
     {% elsif context %}
       MrbMacro.resolve_type_in_ruby({{context}}::{{type}}, {{type}}, {{context}})
@@ -85,7 +85,7 @@ module MrbMacro
   end
 
   macro pointer_type(type, context = nil)
-    {% if type.class_name == "TupleLiteral" %}
+    {% if type.is_a?(TupleLiteral) %}
       MrbMacro.pointer_type({{type[0]}}, context: {{context}})
     {% elsif context %}
       MrbMacro.resolve_pointer_type({{context}}::{{type}}, {{type}}, {{context}})
@@ -123,7 +123,7 @@ module MrbMacro
   macro generate_arg_tuple(args, context = nil)
     Tuple.new(
       {% for arg in args %}
-        {% if arg.class_name == "TupleLiteral" %}
+        {% if arg.is_a?(TupleLiteral) %}
           MrbMacro.pointer_type({{arg}}, context: {{context}}).malloc(size: 1, value: MrbMacro.type_in_ruby({{arg}}, context: {{context}}).new({{arg[1]}})),
         {% else %}
           MrbMacro.pointer_type({{arg}}, context: {{context}}).malloc(size: 1),
@@ -141,7 +141,7 @@ module MrbMacro
 
   # Converts Ruby values to Crystal values
   macro convert_arg(mrb, arg, arg_type, context = nil)
-    {% if arg_type.class_name == "TupleLiteral" %}
+    {% if arg_type.is_a?(TupleLiteral) %}
       MrbMacro.convert_arg({{mrb}}, {{arg}}, {{arg_type[0]}}, context: {{context}})
     {% elsif context %}
       MrbMacro.convert_resolved_arg({{mrb}}, {{arg}}, {{context}}::{{arg_type}}, {{arg_type}}, {{context}})
@@ -185,7 +185,7 @@ module MrbMacro
   end
 
   macro convert_keyword_arg(mrb, arg, arg_type, context = nil)
-    {% if arg_type.class_name == "TupleLiteral" %}
+    {% if arg_type.is_a?(TupleLiteral) %}
       if MrbCast.is_undef?({{arg}})
         {{arg_type[1]}}
       else
@@ -403,7 +403,7 @@ module MrbMacro
     kw_args.num = {{keyword_args.size}}
     kw_args.values = Pointer(MrbInternal::MrbValue).malloc(size: {{keyword_args.size}})
     kw_args.table = kw_names
-    kw_args.required = {{keyword_args.values.select { |i| i.class_name != "TupleLiteral" }.size}}
+    kw_args.required = {{keyword_args.values.select { |i| !i.is_a?(TupleLiteral) }.size}}
     kw_args.rest = Pointer(MrbInternal::MrbValue).malloc(size: 1)
     kw_args
   end
@@ -417,7 +417,7 @@ module MrbMacro
   end
 
   macro wrap_module_function_with_args(mrb_state, under_module, name, proc, proc_args = [] of Class, context = nil)
-    {% if proc_args.class_name == "ArrayLiteral" %}
+    {% if proc_args.is_a?(ArrayLiteral) %}
       {% proc_arg_array = proc_args %}
     {% else %}
       {% proc_arg_array = [proc_args] %}
@@ -434,7 +434,7 @@ module MrbMacro
   end
 
   macro wrap_module_function_with_keyword_args(mrb_state, under_module, name, proc, keyword_args, regular_args = [] of Class, operator = "", context = nil)
-    {% if regular_args.class_name == "ArrayLiteral" %}
+    {% if regular_args.is_a?(ArrayLiteral) %}
       {% regular_arg_array = regular_args %}
     {% else %}
       {% regular_arg_array = [regular_args] %}
@@ -460,7 +460,7 @@ module MrbMacro
   end
 
   macro wrap_class_method_with_args(mrb_state, crystal_class, name, proc, proc_args = [] of Class, operator = "", context = nil)
-    {% if proc_args.class_name == "ArrayLiteral" %}
+    {% if proc_args.is_a?(ArrayLiteral) %}
       {% proc_arg_array = proc_args %}
     {% else %}
       {% proc_arg_array = [proc_args] %}
@@ -475,7 +475,7 @@ module MrbMacro
   end
 
   macro wrap_class_method_with_keyword_args(mrb_state, crystal_class, name, proc, keyword_args, regular_args = [] of Class, operator = "", context = nil)
-    {% if regular_args.class_name == "ArrayLiteral" %}
+    {% if regular_args.is_a?(ArrayLiteral) %}
       {% regular_arg_array = regular_args %}
     {% else %}
       {% regular_arg_array = [regular_args] %}
@@ -501,7 +501,7 @@ module MrbMacro
   end
 
   macro wrap_instance_function_with_args(mrb_state, crystal_class, name, proc, proc_args = [] of Class, operator = "", context = nil)
-    {% if proc_args.class_name == "ArrayLiteral" %}
+    {% if proc_args.is_a?(ArrayLiteral) %}
       {% proc_arg_array = proc_args %}
     {% else %}
       {% proc_arg_array = [proc_args] %}
@@ -523,7 +523,7 @@ module MrbMacro
   end
 
   macro wrap_instance_function_with_keyword_args(mrb_state, crystal_class, name, proc, keyword_args, regular_args = [] of Class, operator = "", context = nil)
-    {% if regular_args.class_name == "ArrayLiteral" %}
+    {% if regular_args.is_a?(ArrayLiteral) %}
       {% regular_arg_array = regular_args %}
     {% else %}
       {% regular_arg_array = [regular_args] %}
@@ -555,7 +555,7 @@ module MrbMacro
   end
 
   macro wrap_constructor_function_with_args(mrb_state, crystal_class, proc, proc_args = [] of Class, operator = "", context = nil)
-    {% if proc_args.class_name == "ArrayLiteral" %}
+    {% if proc_args.is_a?(ArrayLiteral) %}
       {% proc_arg_array = proc_args %}
     {% else %}
       {% proc_arg_array = [proc_args] %}
@@ -573,7 +573,7 @@ module MrbMacro
   end
 
   macro wrap_constructor_function_with_keyword_args(mrb_state, crystal_class, proc, keyword_args, regular_args = [] of Class, operator = "", context = nil)
-    {% if regular_args.class_name == "ArrayLiteral" %}
+    {% if regular_args.is_a?(ArrayLiteral) %}
       {% regular_arg_array = regular_args %}
     {% else %}
       {% regular_arg_array = [regular_args] %}
@@ -947,7 +947,7 @@ module MrbMacro
 
   macro wrap_constant_or_class(mrb_state, under_class_or_module, ruby_name, value, verbose = false)
     {% actual_constant = under_class_or_module.resolve.constant(value.id) %}
-    {% if actual_constant.class_name == "TypeNode" %}
+    {% if actual_constant.is_a?(TypeNode) %}
       {% if actual_constant.module? %}
         MrbWrap.wrap_module_with_methods({{mrb_state}}, {{actual_constant}}, under: {{under_class_or_module}}, verbose: {{verbose}})
       {% elsif actual_constant.class? || actual_constant.struct? %}

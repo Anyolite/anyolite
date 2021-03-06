@@ -366,7 +366,7 @@ module MrbWrap
       )
     {% elsif crystal_module_or_class.resolve.union? %}
       {% puts "\e[31m> WARNING: Wrapping of unions not supported, thus skipping #{crystal_module_or_class}\e[0m" %}
-    {% elsif crystal_module_or_class.resolve.class_name == "TypeNode" %}
+    {% elsif crystal_module_or_class.resolve.is_a?(TypeNode) %}
       MrbWrap.wrap_class_with_methods({{mrb_state}}, {{crystal_module_or_class}}, under: {{under}},
         instance_method_exclusions: {{instance_method_exclusions}},
         class_method_exclusions: {{class_method_exclusions}},

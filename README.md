@@ -322,14 +322,35 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 
 ### Version 0.6.0+
 
-* [ ] Support for Crystal 0.36.1 (should already work, not tested yet)
-* [ ] Crystal specs for testing
-* [ ] Mac support (might be possible, not tested yet)
-* [ ] Compiletime errors for macros
+#### Major features
+
+* [ ] Wrappers for unions
+* [ ] Wrappers for nilable objects
+
+#### Minor features
+
 * [ ] Support for more flexible mruby configuration options
+
+#### Breaking changes
+
+* [ ] Wrapping of specific functions has a more consistent syntax using Arrays instead of Hashes
+
+#### Safety
+
+* [ ] Support for Crystal 0.36.1 (should already work, not tested yet)
+* [ ] Compiletime errors for macros
 * [ ] More stable type casting
 * [ ] Use Array(TypeDeclaration) instead of Hash for keywords in internal methods
-* [ ] Options for inherited and/or inheriting classes
+
+#### Usability
+
+* [ ] Crystal specs for testing
+* [ ] Mac support (might be possible, not tested yet)
+* [X] Cleaned up some code fragments
+
+#### Bugfixes
+
+
 
 ### Version 1.0.0
 
@@ -340,5 +361,4 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 * [ ] Arrays and/or hashes as argument and return values
 * [ ] Splat argument and/or arbitrary keyword passing
 * [ ] Method in mruby to determine owner of object
-* [ ] Wrappers for nilable objects
-* [ ] Wrappers for unions
+* [ ] Options for inherited and/or inheriting classes
