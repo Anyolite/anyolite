@@ -47,3 +47,6 @@ enum_test_var = TestModule::Test::TestEnum::Seven
 puts "Enum test var: #{enum_test_var.value}"
 
 a.method_with_various_args
+
+a.test_two_classes(arg: "Test String")
+a.test_two_classes(arg: 12345)

@@ -189,7 +189,9 @@ module MrbMacro
   end
 
   macro convert_keyword_arg(mrb, arg, arg_type, context = nil)
-    {% if arg_type.is_a?(TypeDeclaration) %}
+    {% if arg_type.is_a?(Call) %}
+      {% raise "Received Call #{arg_type} instead of TypeDeclaration or TypeNode" %}
+    {% elsif arg_type.is_a?(TypeDeclaration) %}
       if MrbCast.is_undef?({{arg}})
         {% if arg_type.value || arg_type.value == false || arg_type.value == nil %}
           {{arg_type.value}}
@@ -198,7 +200,11 @@ module MrbMacro
           raise("Undefined argument {{arg}} of {{arg_type}} in context {{context}}")
         {% end %}
       else
-        MrbMacro.convert_keyword_arg({{mrb}}, {{arg}}, {{arg_type.type}}, context: {{context}})
+        {% if arg_type.type.resolve? && arg_type.type.resolve.union? %}
+          MrbMacro.convert_keyword_arg({{mrb}}, {{arg}}, Union({{arg_type.type}}), context: {{context}})
+        {% else %}
+          MrbMacro.convert_keyword_arg({{mrb}}, {{arg}}, {{arg_type.type}}, context: {{context}})
+        {% end %}
       end
     {% elsif context %}
       MrbMacro.convert_resolved_keyword_arg({{mrb}}, {{arg}}, {{context}}::{{arg_type}}, {{arg_type}}, {{context}})
@@ -209,7 +215,9 @@ module MrbMacro
 
   macro convert_resolved_keyword_arg(mrb, arg, arg_type, raw_arg_type, context = nil)
     {% if arg_type.resolve? %}
-      {% if arg_type.resolve <= Bool %}
+      {% if arg_type.resolve.union? %}
+        MrbMacro.cast_to_union_value({{mrb}}, {{arg}}, {{arg_type.resolve.union_types}})
+      {% elsif arg_type.resolve <= Bool %}
         MrbCast.cast_to_bool({{mrb}}, {{arg}})
       {% elsif arg_type.resolve == Number %}
         Float64.new(MrbCast.cast_to_float({{mrb}}, {{arg}}))
@@ -220,7 +228,7 @@ module MrbMacro
       {% elsif arg_type.resolve == Float %}
         Float64.new( MrbCast.cast_to_float({{mrb}}, {{arg}}))
       {% elsif arg_type.resolve <= Float %}
-      {{arg_type}}.new( MrbCast.cast_to_float({{mrb}}, {{arg}}))
+        {{arg_type}}.new( MrbCast.cast_to_float({{mrb}}, {{arg}}))
       {% elsif arg_type.resolve <= String %}
         MrbCast.cast_to_string({{mrb}}, {{arg}})
       {% elsif arg_type.resolve <= Struct %}
@@ -239,6 +247,26 @@ module MrbMacro
       # TODO: Maybe add full original context?
       {% raise "Could not resolve #{arg_type} in any meaningful way." %}
     {% end %}
+  end
+
+  macro cast_to_union_value(mrb, value, types)
+    if false
+      raise "This should obviously not happen and is just for a simpler code structure"
+    {% for type in types %}
+      {% if type.resolve <= Int %}
+        elsif {{value}}.tt == MrbInternal::MrbVType::MRB_TT_FIXNUM
+          {{type}}.new(MrbCast.cast_to_int({{mrb}}, {{value}}))
+      {% elsif type.resolve <= String %}
+        elsif {{value}}.tt == MrbInternal::MrbVType::MRB_TT_STRING
+          MrbCast.cast_to_string({{mrb}}, {{value}})
+      {% else %}
+        {% raise "Invalid type: #{type}" %}
+      {% end %}
+    {% end %}
+    else
+      MrbInternal.mrb_raise_argument_error({{mrb}}, "Could not resolve #{{{value}}} to any type in {{types}}")
+      raise "Crystal compiler will complain if this isn't here, albeit this will never be reached"
+    end
   end
 
   macro convert_from_ruby_object(mrb, obj, crystal_type)
@@ -655,7 +683,7 @@ module MrbMacro
 
     {% elsif method.args.stringify.includes?(":") || (added_keyword_args && added_keyword_args.stringify.includes?(":")) %}
       {% if without_keywords %}
-        {% type_array = [] of Class %}
+        {% type_array = [] of Crystal::Macros::ASTNode %}
 
         {% for arg in method.args %}
           {% type_array.push(arg.restriction) %}

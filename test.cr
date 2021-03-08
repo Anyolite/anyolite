@@ -117,6 +117,10 @@ module SomeModule
       ret = self + other
     end
 
+    def test_two_classes(arg : Int32 | String = "Default String")
+      puts "Test: #{arg}"
+    end
+
     def method_without_keywords(arg)
       puts "Argument is #{arg}"
     end
