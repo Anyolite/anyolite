@@ -86,6 +86,16 @@ module MrbCast
   end
 
   # TODO: Use proper casting methods from mruby
+  # TODO: Put checks in separate methods
+
+  def self.cast_to_nil(mrb : MrbInternal::MrbState*, value : MrbInternal::MrbValue)
+    if value.tt == MrbInternal::MrbVType::MRB_TT_FALSE && value.value.value_int == 0
+      nil
+    else
+      MrbInternal.mrb_raise_argument_error(mrb, "Could not cast #{value} to Nil.")
+      nil
+    end
+  end
 
   def self.cast_to_bool(mrb : MrbInternal::MrbState*, value : MrbInternal::MrbValue)
     if value.tt == MrbInternal::MrbVType::MRB_TT_TRUE

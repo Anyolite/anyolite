@@ -226,14 +226,14 @@ module MrbMacro
       {% elsif arg_type.resolve <= Int %}
         {{arg_type}}.new(MrbCast.cast_to_int({{mrb}}, {{arg}}))
       {% elsif arg_type.resolve == Float %}
-        Float64.new( MrbCast.cast_to_float({{mrb}}, {{arg}}))
+        Float64.new(MrbCast.cast_to_float({{mrb}}, {{arg}}))
       {% elsif arg_type.resolve <= Float %}
-        {{arg_type}}.new( MrbCast.cast_to_float({{mrb}}, {{arg}}))
+        {{arg_type}}.new(MrbCast.cast_to_float({{mrb}}, {{arg}}))
       {% elsif arg_type.resolve <= String %}
         MrbCast.cast_to_string({{mrb}}, {{arg}})
       {% elsif arg_type.resolve <= Struct %}
         MrbMacro.convert_from_ruby_struct({{mrb}}, {{arg}}, {{arg_type}}).value.content
-      {% else %}
+      {% else %}  # TODO: Structs, and objects
         MrbMacro.convert_from_ruby_object({{mrb}}, {{arg}}, {{arg_type}}).value
       {% end %}
     {% elsif context %}
@@ -253,9 +253,27 @@ module MrbMacro
     if false
       raise "This should obviously not happen and is just for a simpler code structure"
     {% for type in types %}
-      {% if type.resolve <= Int %}
+      {% if type.resolve <= Nil %}
+        elsif ({{value}}.tt == MrbInternal::MrbVType::MRB_TT_FALSE) && ({{value}}.value.value_int == 0)
+          MrbCast.cast_to_nil({{mrb}}, {{value}})
+      {% elsif type.resolve <= Bool %}
+        elsif ({{value}}.tt == MrbInternal::MrbVType::MRB_TT_TRUE) || ({{value}}.tt == MrbInternal::MrbVType::MRB_TT_FALSE && {{value}}.value.value_int != 0)
+          MrbCast.cast_to_bool({{mrb}}, {{value}})
+      {% elsif type.resolve == Number %}
+        elsif {{value}}.tt == MrbInternal::MrbVType::MRB_TT_FLOAT
+          Float64.new(MrbCast.cast_to_float({{mrb}}, {{value}}))
+      {% elsif type.resolve == Int %}
+        elsif {{value}}.tt == MrbInternal::MrbVType::MRB_TT_FIXNUM
+          Int64.new(MrbCast.cast_to_int({{mrb}}, {{value}}))
+      {% elsif type.resolve <= Int %}
         elsif {{value}}.tt == MrbInternal::MrbVType::MRB_TT_FIXNUM
           {{type}}.new(MrbCast.cast_to_int({{mrb}}, {{value}}))
+      {% elsif type.resolve == Float %}
+        elsif {{value}}.tt == MrbInternal::MrbVType::MRB_TT_FLOAT
+          Float64.new(MrbCast.cast_to_float({{mrb}}, {{value}}))
+      {% elsif type.resolve <= Float %}
+        elsif {{value}}.tt == MrbInternal::MrbVType::MRB_TT_FLOAT
+          {{type}}.new(MrbCast.cast_to_float({{mrb}}, {{value}}))
       {% elsif type.resolve <= String %}
         elsif {{value}}.tt == MrbInternal::MrbVType::MRB_TT_STRING
           MrbCast.cast_to_string({{mrb}}, {{value}})

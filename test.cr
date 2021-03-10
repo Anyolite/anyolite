@@ -117,8 +117,8 @@ module SomeModule
       ret = self + other
     end
 
-    def test_two_classes(arg : Int32 | String = "Default String")
-      puts "Test: #{arg}"
+    def overload_test(arg : Int32 | String | Bool | Nil | Float32 = "Default String")
+      puts "Test: #{arg.inspect}"
     end
 
     def method_without_keywords(arg)

@@ -48,5 +48,9 @@ puts "Enum test var: #{enum_test_var.value}"
 
 a.method_with_various_args
 
-a.test_two_classes(arg: "Test String")
-a.test_two_classes(arg: 12345)
+a.overload_test(arg: "Test String")
+a.overload_test(arg: 12345)
+a.overload_test(arg: true)
+a.overload_test(arg: nil)
+a.overload_test(arg: 3.0 / 5.0)
+a.overload_test
