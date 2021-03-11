@@ -117,8 +117,16 @@ module SomeModule
       ret = self + other
     end
 
-    def overload_test(arg : Int32 | String | Bool | Nil | Float32 = "Default String")
-      puts "Test: #{arg.inspect}"
+    def overload_test(arg : Int32 | String | Bool | Nil | Float32 | SomeModule::Test = "Default String")
+      if arg.is_a?(Test)
+        puts "Test: A test object with x = #{arg.x}"
+      else
+        puts "Test: #{arg.inspect}"
+      end
+    end
+
+    def nilable_test(arg : Int32?)
+      puts "Received argument #{arg.inspect}"
     end
 
     def method_without_keywords(arg)

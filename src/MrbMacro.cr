@@ -217,6 +217,8 @@ module MrbMacro
     {% if arg_type.resolve? %}
       {% if arg_type.resolve.union? %}
         MrbMacro.cast_to_union_value({{mrb}}, {{arg}}, {{arg_type.resolve.union_types}})
+      {% elsif arg_type.resolve <= Nil %}
+        MrbCast.cast_to_nil({{mrb}}, {{arg}})
       {% elsif arg_type.resolve <= Bool %}
         MrbCast.cast_to_bool({{mrb}}, {{arg}})
       {% elsif arg_type.resolve == Number %}
@@ -233,8 +235,10 @@ module MrbMacro
         MrbCast.cast_to_string({{mrb}}, {{arg}})
       {% elsif arg_type.resolve <= Struct %}
         MrbMacro.convert_from_ruby_struct({{mrb}}, {{arg}}, {{arg_type}}).value.content
-      {% else %}  # TODO: Structs, and objects
+      {% elsif arg_type.resolve? %}
         MrbMacro.convert_from_ruby_object({{mrb}}, {{arg}}, {{arg_type}}).value
+      {% else %}
+        {% raise "Could not resolve type #{arg_type}" %}
       {% end %}
     {% elsif context %}
       {% if context.names[0..-2].size > 0 %}
@@ -245,40 +249,49 @@ module MrbMacro
       {% end %}
     {% else %}
       # TODO: Maybe add full original context?
-      {% raise "Could not resolve #{arg_type} in any meaningful way." %}
+      {% raise "Could not resolve type #{arg_type}" %}
     {% end %}
   end
+
+  # TODO: Some double checks could be omitted 
+  # TODO: Proper resolution of type context trees (this is probably not trivial and might require further splitting of this method)
 
   macro cast_to_union_value(mrb, value, types)
     if false
       raise "This should obviously not happen and is just for a simpler code structure"
     {% for type in types %}
       {% if type.resolve <= Nil %}
-        elsif ({{value}}.tt == MrbInternal::MrbVType::MRB_TT_FALSE) && ({{value}}.value.value_int == 0)
+        elsif MrbCast.check_for_nil({{value}})
           MrbCast.cast_to_nil({{mrb}}, {{value}})
       {% elsif type.resolve <= Bool %}
-        elsif ({{value}}.tt == MrbInternal::MrbVType::MRB_TT_TRUE) || ({{value}}.tt == MrbInternal::MrbVType::MRB_TT_FALSE && {{value}}.value.value_int != 0)
+        elsif MrbCast.check_for_bool({{value}})
           MrbCast.cast_to_bool({{mrb}}, {{value}})
       {% elsif type.resolve == Number %}
-        elsif {{value}}.tt == MrbInternal::MrbVType::MRB_TT_FLOAT
+        elsif MrbCast.check_for_float({{value}})
           Float64.new(MrbCast.cast_to_float({{mrb}}, {{value}}))
       {% elsif type.resolve == Int %}
-        elsif {{value}}.tt == MrbInternal::MrbVType::MRB_TT_FIXNUM
+        elsif MrbCast.check_for_fixnum({{value}})
           Int64.new(MrbCast.cast_to_int({{mrb}}, {{value}}))
       {% elsif type.resolve <= Int %}
-        elsif {{value}}.tt == MrbInternal::MrbVType::MRB_TT_FIXNUM
+        elsif MrbCast.check_for_fixnum({{value}})
           {{type}}.new(MrbCast.cast_to_int({{mrb}}, {{value}}))
       {% elsif type.resolve == Float %}
-        elsif {{value}}.tt == MrbInternal::MrbVType::MRB_TT_FLOAT
+        elsif MrbCast.check_for_float({{value}})
           Float64.new(MrbCast.cast_to_float({{mrb}}, {{value}}))
       {% elsif type.resolve <= Float %}
-        elsif {{value}}.tt == MrbInternal::MrbVType::MRB_TT_FLOAT
+        elsif MrbCast.check_for_float({{value}})
           {{type}}.new(MrbCast.cast_to_float({{mrb}}, {{value}}))
       {% elsif type.resolve <= String %}
-        elsif {{value}}.tt == MrbInternal::MrbVType::MRB_TT_STRING
+        elsif MrbCast.check_for_string({{value}})
           MrbCast.cast_to_string({{mrb}}, {{value}})
+      {% elsif type.resolve <= Struct %}
+        elsif MrbCast.check_for_data({{value}})
+          MrbMacro.convert_from_ruby_struct({{mrb}}, {{value}}, {{type}}).value.content
+      {% elsif type.resolve? %}
+        elsif MrbCast.check_for_data({{value}})
+          MrbMacro.convert_from_ruby_object({{mrb}}, {{value}}, {{type}}).value
       {% else %}
-        {% raise "Invalid type: #{type}" %}
+        {% raise "Could not resolve type #{type}" %}
       {% end %}
     {% end %}
     else

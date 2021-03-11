@@ -84,12 +84,47 @@ module MrbCast
 
     return new_ruby_object
   end
+  
+  # Class check methods
 
-  # TODO: Use proper casting methods from mruby
-  # TODO: Put checks in separate methods
+  def self.check_for_undef(value : MrbInternal::MrbValue)
+    value.tt == MrbInternal::MrbVType::MRB_TT_UNDEF
+  end
+
+  def self.check_for_nil(value : MrbInternal::MrbValue)
+    value.tt == MrbInternal::MrbVType::MRB_TT_FALSE && value.value.value_int == 0
+  end
+
+  def self.check_for_true(value : MrbInternal::MrbValue)
+    value.tt == MrbInternal::MrbVType::MRB_TT_TRUE
+  end
+
+  def self.check_for_false(value : MrbInternal::MrbValue)
+    value.tt == MrbInternal::MrbVType::MRB_TT_FALSE && value.value.value_int != 0
+  end
+
+  def self.check_for_bool(value : MrbInternal::MrbValue)
+    MrbCast.check_for_true(value) || MrbCast.check_for_false(value)
+  end
+
+  def self.check_for_fixnum(value : MrbInternal::MrbValue)
+    value.tt == MrbInternal::MrbVType::MRB_TT_FIXNUM
+  end
+
+  def self.check_for_float(value : MrbInternal::MrbValue)
+    value.tt == MrbInternal::MrbVType::MRB_TT_FLOAT
+  end
+
+  def self.check_for_string(value : MrbInternal::MrbValue)
+    value.tt == MrbInternal::MrbVType::MRB_TT_STRING
+  end
+
+  def self.check_for_data(value : MrbInternal::MrbValue)
+    value.tt == MrbInternal::MrbVType::MRB_TT_DATA
+  end
 
   def self.cast_to_nil(mrb : MrbInternal::MrbState*, value : MrbInternal::MrbValue)
-    if value.tt == MrbInternal::MrbVType::MRB_TT_FALSE && value.value.value_int == 0
+    if MrbCast.check_for_nil(value)
       nil
     else
       MrbInternal.mrb_raise_argument_error(mrb, "Could not cast #{value} to Nil.")
@@ -98,9 +133,9 @@ module MrbCast
   end
 
   def self.cast_to_bool(mrb : MrbInternal::MrbState*, value : MrbInternal::MrbValue)
-    if value.tt == MrbInternal::MrbVType::MRB_TT_TRUE
+    if MrbCast.check_for_true(value)
       true
-    elsif value.tt == MrbInternal::MrbVType::MRB_TT_FALSE && value.value.value_int != 0
+    elsif MrbCast.check_for_false(value)
       false
     else
       MrbInternal.mrb_raise_argument_error(mrb, "Could not cast #{value} to Bool.")
@@ -109,7 +144,7 @@ module MrbCast
   end
 
   def self.cast_to_int(mrb : MrbInternal::MrbState*, value : MrbInternal::MrbValue)
-    if value.tt == MrbInternal::MrbVType::MRB_TT_FIXNUM
+    if MrbCast.check_for_fixnum(value)
       value.value.value_int
     else
       MrbInternal.mrb_raise_argument_error(mrb, "Could not cast #{value} to Int.")
@@ -118,7 +153,7 @@ module MrbCast
   end
 
   def self.cast_to_float(mrb : MrbInternal::MrbState*, value : MrbInternal::MrbValue)
-    if value.tt == MrbInternal::MrbVType::MRB_TT_FLOAT
+    if MrbCast.check_for_float(value)
       value.value.value_float
     else
       MrbInternal.mrb_raise_argument_error(mrb, "Could not cast #{value} to Float.")
@@ -127,7 +162,7 @@ module MrbCast
   end
 
   def self.cast_to_string(mrb : MrbInternal::MrbState*, value : MrbInternal::MrbValue)
-    if value.tt == MrbInternal::MrbVType::MRB_TT_STRING
+    if MrbCast.check_for_string(value)
       String.new(MrbInternal.mrb_str_to_cstr(mrb, value))
     else
       MrbInternal.mrb_raise_argument_error(mrb, "Could not cast #{value} to String.")
@@ -135,11 +170,12 @@ module MrbCast
     end
   end
 
-  def self.is_undef?(value : MrbInternal::MrbValue)
-    value.tt == MrbInternal::MrbVType::MRB_TT_UNDEF
+  def self.is_undef?(value : MrbInternal::MrbValue) # Just a more readable synonym
+    MrbCast.check_for_undef(value)
   end
 
   # TODO: Object casting for this method
+  # TODO: Is the method really required?
 
   def self.interpret_ruby_value(mrb : MrbInternal::MrbState*, value : MrbInternal::MrbValue)
     case value.tt

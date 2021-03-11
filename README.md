@@ -324,8 +324,8 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 
 #### Major features
 
-* [ ] Wrappers for unions
-* [ ] Wrappers for nilable objects
+* [X] Wrappers for unions (currently only with full type path)
+* [X] Wrappers for nilable objects
 
 #### Minor features
 
@@ -338,8 +338,8 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 #### Safety
 
 * [ ] Support for Crystal 0.36.1 (should already work, not tested yet)
-* [ ] Compiletime errors for macros
-* [ ] More stable type casting
+* [X] More useful compiletime errors for macros
+* [X] More information when encountering type casting errors
 * [X] Use Array(TypeDeclaration) instead of Hash for keywords in internal methods
 
 #### Usability
