@@ -21,8 +21,10 @@ This project is currently in the early development phase, so please report any b
 * Bindings to an mruby interpreter
 * Wrapping of nearly arbitrary Crystal classes and methods to mruby
 * Easy syntax without unnecessary boilerplate code
-* Support for keyword arguments and default values
 * Simple system to prevent garbage collector conflicts
+* Support for keyword arguments and default values
+* Objects, structs, enums and unions as function arguments are completely valid
+* Methods and constants can be excluded, modified or renamed with annotations
 
 # Prerequisites
 
@@ -122,13 +124,11 @@ More features will be added in the future.
 # Limitations
 
 * Currently, Anyolite does not work on Windows due to Crystal compiler bugs
-* Arrays, hashes and other complex mruby objects are not directly supported
-* Configuration options for mruby are relatively limited (yet)
-* Default values for unnamed function arguments are limited to integers and floats
-* Optional keyword arguments need a default value (can be a different one than the Crystal value, though)
+* Arrays and hashes are not directly supported
+* Symbols do not work due to their compiletime nature in Crystal
+* Splat arguments and arbitrary keywords are not possible due to their reliance on symbols
+* Unnamed function arguments are not very flexible (keyword arguments however are!)
 * Keywords will always be given to functions, even if optional (then with default values)
-* Splat arguments and arbitrary keywords are not possible due to compiletime symbols in Crystal
-* Only one type per argument is allowed
 
 # Why this name?
 
