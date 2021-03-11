@@ -176,7 +176,7 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 
 ### Version 0.4.0
 
-#### Major features
+#### Features
 
 * Easier wrapping of classes and all of their methods and constants
 * Annotation to exclude functions from wrapping
@@ -255,13 +255,10 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 
 ### Version 0.2.0
 
-#### Major features
+#### Features
 
 * Keyword argument support
 * Support for optional keywords
-
-#### Minor features
-
 * Casting from MrbValue objects to closest Crystal values
 * Option to use a JSON config file
 
@@ -300,7 +297,7 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 
 ### Version 0.1.0
 
-#### Major features
+#### Features
 
 * Basic structure
 * Ubuntu support
@@ -320,16 +317,12 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 
 ## Upcoming releases
 
-### Version 0.6.0+
+### Version 0.6.0
 
-#### Major features
+#### Features
 
 * [X] Wrappers for unions (currently only with full type path)
 * [X] Wrappers for nilable objects
-
-#### Minor features
-
-* [ ] Support for more flexible mruby configuration options
 
 #### Breaking changes
 
@@ -344,21 +337,18 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 
 #### Usability
 
-* [ ] Crystal specs for testing
-* [ ] Mac support (might be possible, not tested yet)
 * [X] Cleaned up some code fragments
-
-#### Bugfixes
-
-
 
 ### Version 1.0.0
 
 * [ ] Windows support (currently not supported due to problems with Crystal)
+* [ ] Crystal specs for testing
+* [ ] Mac support (might be possible, not tested yet)
+* [ ] More configuration options for the Rakefile
 
 ### Future ideas (might not actually be possible to implement)
 
+* [ ] Options for inherited and/or inheriting classes
 * [ ] Arrays and/or hashes as argument and return values
 * [ ] Splat argument and/or arbitrary keyword passing
 * [ ] Method in mruby to determine owner of object
-* [ ] Options for inherited and/or inheriting classes
