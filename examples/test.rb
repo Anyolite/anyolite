@@ -59,3 +59,8 @@ a.overload_test
 
 a.nilable_test(arg: 123)
 a.nilable_test(arg: nil)
+
+test_struct_thingy = TestModule::TestStructRenamed.new
+puts "Initial value: #{test_struct_thingy.value}"
+test_struct_thingy.value = 4242
+puts "Modified value: #{test_struct_thingy.value}\n"

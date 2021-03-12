@@ -385,11 +385,15 @@ module MrbMacro
 
   macro call_and_return_instance_method(mrb, proc, converted_obj, converted_args, operator = "")
     if {{converted_obj}}.is_a?(MrbWrap::StructWrapper)
+      working_content = {{converted_obj}}.content
+
       {% if proc.stringify == "MrbWrap::Empty" %}
-        return_value = {{converted_obj}}.content.{{operator.id}}(*{{converted_args}})
+        return_value = working_content.{{operator.id}}(*{{converted_args}})
       {% else %}
-        return_value = {{converted_obj}}.content.{{proc}}{{operator.id}}(*{{converted_args}})
+        return_value = working_content.{{proc}}{{operator.id}}(*{{converted_args}})
       {% end %}
+
+      {{converted_obj}}.content = working_content
     else
       {% if proc.stringify == "MrbWrap::Empty" %}
         return_value = {{converted_obj}}.{{operator.id}}(*{{converted_args}})
@@ -402,10 +406,12 @@ module MrbMacro
 
   macro call_and_return_keyword_instance_method(mrb, proc, converted_obj, converted_regular_args, keyword_args, kw_args, operator = "", empty_regular = false, context = nil)
     if {{converted_obj}}.is_a?(MrbWrap::StructWrapper)
+      working_content = {{converted_obj}}.content
+
       {% if proc.stringify == "MrbWrap::Empty" %}
-        return_value = {{converted_obj}}.content.{{operator.id}}(
+        return_value = working_content.{{operator.id}}(
       {% else %}
-        return_value = {{converted_obj}}.content.{{proc}}{{operator.id}}(
+        return_value = working_content.{{proc}}{{operator.id}}(
       {% end %}
         {% if empty_regular %}
           {% c = 0 %}
@@ -422,6 +428,8 @@ module MrbMacro
           {% end %}
         {% end %}
       )
+
+      {{converted_obj}}.content = working_content
     else
       {% if proc.stringify == "MrbWrap::Empty" %}
         return_value = {{converted_obj}}.{{operator.id}}(
@@ -608,7 +616,7 @@ module MrbMacro
       converted_args = MrbMacro.get_converted_args(mrb, {{proc_arg_array}}, context: {{context}})
 
       if {{crystal_class}} <= Struct
-        converted_obj = MrbMacro.convert_from_ruby_struct(mrb, obj, {{crystal_class}}).value.content
+        converted_obj = MrbMacro.convert_from_ruby_struct(mrb, obj, {{crystal_class}}).value
       else
         converted_obj = MrbMacro.convert_from_ruby_object(mrb, obj, {{crystal_class}}).value
       end
@@ -636,7 +644,7 @@ module MrbMacro
       converted_regular_args = MrbMacro.convert_args(mrb, regular_arg_tuple, {{regular_arg_array}}, context: {{context}})
 
       if {{crystal_class}} <= Struct
-        converted_obj = MrbMacro.convert_from_ruby_struct(mrb, obj, {{crystal_class}}).value.content
+        converted_obj = MrbMacro.convert_from_ruby_struct(mrb, obj, {{crystal_class}}).value
       else
         converted_obj = MrbMacro.convert_from_ruby_object(mrb, obj, {{crystal_class}}).value
       end

@@ -341,7 +341,7 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 
 #### Bugfixes
 
-* [ ] Struct properties do not work correctly
+* [X] Wrapped struct objects were immutable
 * [ ] In a context path, the final element is not transmitted
 
 ### Version 1.0.0
