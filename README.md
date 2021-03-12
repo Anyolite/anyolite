@@ -330,7 +330,6 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 
 #### Safety
 
-* [ ] Support for Crystal 0.36.1 (should already work, not tested yet)
 * [X] More useful compiletime errors for macros
 * [X] More information when encountering type casting errors
 * [X] Use Array(TypeDeclaration) instead of Hash for keywords in internal methods
@@ -342,7 +341,6 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 #### Bugfixes
 
 * [X] Wrapped struct objects were immutable
-* [ ] In a context path, the final element is not transmitted
 
 ### Version 1.0.0
 

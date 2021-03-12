@@ -299,7 +299,7 @@ module MrbWrap
 
     MrbMacro.wrap_all_instance_methods({{mrb_state}}, {{crystal_class}}, {{instance_method_exclusions}}, {{verbose}}, context: {{under}}, use_enum_constructor: {{use_enum_constructor}})
     MrbMacro.wrap_all_class_methods({{mrb_state}}, {{crystal_class}}, {{class_method_exclusions}}, {{verbose}}, context: {{under}})
-    MrbMacro.wrap_all_constants({{mrb_state}}, {{crystal_class}}, {{constant_exclusions}}, {{verbose}})
+    MrbMacro.wrap_all_constants({{mrb_state}}, {{crystal_class}}, {{constant_exclusions}}, {{verbose}}, context: {{under}})
   end
 
   # Wraps a whole module structure under a module into mruby.
@@ -327,8 +327,9 @@ module MrbWrap
     {% end %}
 
     MrbWrap.wrap_module({{mrb_state}}, {{crystal_module.resolve}}, {{actual_name}}, under: {{under}})
+
     MrbMacro.wrap_all_class_methods({{mrb_state}}, {{crystal_module}}, {{class_method_exclusions}}, {{verbose}}, context: {{under}})
-    MrbMacro.wrap_all_constants({{mrb_state}}, {{crystal_module}}, {{constant_exclusions}}, {{verbose}})
+    MrbMacro.wrap_all_constants({{mrb_state}}, {{crystal_module}}, {{constant_exclusions}}, {{verbose}}, context: {{under}})
   end
 
   # Wraps a whole class or module structure under a module into mruby.

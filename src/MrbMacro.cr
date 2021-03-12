@@ -37,7 +37,7 @@ module MrbMacro
       {% end %}
     {% elsif context %}
       {% if context.names[0..-2].size > 0 %}
-        {% new_context = context.names[0..-2].join("::") %}
+        {% new_context = context.names[0..-2].join("::").id %}
         MrbMacro.resolve_format_char({{new_context}}::{{raw_arg}}, {{raw_arg}}, {{new_context}})
       {% else %}
         MrbMacro.resolve_format_char({{raw_arg}}, {{raw_arg}})
@@ -73,7 +73,7 @@ module MrbMacro
       {% end %}
     {% elsif context %}
       {% if context.names[0..-2].size > 0 %}
-        {% new_context = context.names[0..-2].join("::") %}
+        {% new_context = context.names[0..-2].join("::").id %}
         MrbMacro.resolve_type_in_ruby({{new_context}}::{{raw_type}}, {{raw_type}}, {{new_context}})
       {% else %}
         MrbMacro.resolve_type_in_ruby({{raw_type}}, {{raw_type}})
@@ -109,7 +109,7 @@ module MrbMacro
       {% end %}
     {% elsif context %}
       {% if context.names[0..-2].size > 0 %}
-        {% new_context = context.names[0..-2].join("::") %}
+        {% new_context = context.names[0..-2].join("::").id %}
         MrbMacro.resolve_pointer_type({{new_context}}::{{raw_type}}, {{raw_type}}, {{new_context}})
       {% else %}
         MrbMacro.resolve_pointer_type({{raw_type}}, {{raw_type}})
@@ -178,7 +178,7 @@ module MrbMacro
       {% end %}
     {% elsif context %}
       {% if context.names[0..-2].size > 0 %}
-        {% new_context = context.names[0..-2].join("::") %}
+        {% new_context = context.names[0..-2].join("::").id %}
         MrbMacro.convert_resolved_arg({{mrb}}, {{arg}}, {{new_context}}::{{raw_arg_type}}, {{raw_arg_type}}, {{new_context}})
       {% else %}
         MrbMacro.convert_resolved_arg({{mrb}}, {{arg}}, {{raw_arg_type}}, {{raw_arg_type}})
@@ -247,7 +247,7 @@ module MrbMacro
       {% end %}
     {% elsif context %}
       {% if context.names[0..-2].size > 0 %}
-        {% new_context = context.names[0..-2].join("::") %}
+        {% new_context = context.names[0..-2].join("::").id %}
         MrbMacro.convert_resolved_keyword_arg({{mrb}}, {{arg}}, {{new_context}}::{{raw_arg_type}}, {{raw_arg_type}}, {{new_context}})
       {% else %}
         MrbMacro.convert_resolved_keyword_arg({{mrb}}, {{arg}}, {{raw_arg_type}}, {{raw_arg_type}})
@@ -319,7 +319,7 @@ module MrbMacro
       end
     {% elsif context %}
       {% if context.names[0..-2].size > 0 %}
-        {% new_context = context.names[0..-2].join("::") %}
+        {% new_context = context.names[0..-2].join("::").id %}
         MrbMacro.check_and_cast_resolved_union_type({{mrb}}, {{value}}, {{new_context}}::{{raw_type}}, {{raw_type}}, {{new_context}})
       {% else %}
         MrbMacro.check_and_cast_resolved_union_type({{mrb}}, {{value}}, {{raw_type}}, {{raw_type}})
@@ -1023,7 +1023,9 @@ module MrbMacro
     {% end %}
   end
 
-  macro wrap_all_constants(mrb_state, crystal_class, exclusions, verbose)
+  macro wrap_all_constants(mrb_state, crystal_class, exclusions, verbose, context = nil)
+    # TODO: Is the context needed here?
+
     {% for constant, index in crystal_class.resolve.constants %}
       {% all_annotations_exclude_im = crystal_class.resolve.annotations(MrbWrap::ExcludeConstant) %}
       {% annotation_exclude_im = all_annotations_exclude_im.find { |element| element[0].id.stringify == constant.stringify } %}
