@@ -9,7 +9,7 @@ module MrbRefTable
 
   @@options = {
     :logging                      => false,
-    :warnings                     => true,
+    :warnings                     => false,
     :replace_conflicting_pointers => false,
   }
 
@@ -21,7 +21,7 @@ module MrbRefTable
     puts "> Added reference #{identification} -> #{value}" if option_active?(:logging)
     if @@content[identification]?
       if value != @@content[identification][0]
-        puts "WARNING: Value #{identification} replaced pointers." if option_active?(:warnings)
+        puts "WARNING: Value #{identification} replaced pointers (#{value} vs #{@@content[identification][0]})." if option_active?(:warnings)
         if option_active?(:replace_conflicting_pointers)
           @@content[identification] = {value, @@content[identification][1] + 1}
         else

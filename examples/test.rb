@@ -64,3 +64,5 @@ test_struct_thingy = TestModule::TestStructRenamed.new
 puts "Initial value: #{test_struct_thingy.value}"
 test_struct_thingy.value = 4242
 puts "Modified value: #{test_struct_thingy.value}\n"
+
+puts "This function returns an enum: #{a.returns_an_enum.value}"

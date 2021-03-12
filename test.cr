@@ -129,6 +129,10 @@ module SomeModule
       puts "Received argument #{arg.inspect}"
     end
 
+    def returns_an_enum
+      TestEnum::Five
+    end
+
     def method_without_keywords(arg)
       puts "Argument is #{arg}"
     end
