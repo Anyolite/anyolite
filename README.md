@@ -321,7 +321,7 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 
 #### Features
 
-* [X] Wrappers for unions (currently only with full type path)
+* [X] Wrappers for unions
 * [X] Wrappers for nilable objects
 
 #### Breaking changes
@@ -338,6 +338,11 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 #### Usability
 
 * [X] Cleaned up some code fragments
+
+#### Bugfixes
+
+* [ ] Struct properties do not work correctly
+* [ ] In a context path, the final element is not transmitted
 
 ### Version 1.0.0
 

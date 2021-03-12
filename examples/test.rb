@@ -54,6 +54,7 @@ a.overload_test(arg: true)
 a.overload_test(arg: nil)
 a.overload_test(arg: 3.0 / 5.0)
 a.overload_test(arg: b)
+a.overload_test(arg: TestModule::Test::TestEnum::Four)
 a.overload_test
 
 a.nilable_test(arg: 123)

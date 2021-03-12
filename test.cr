@@ -117,7 +117,7 @@ module SomeModule
       ret = self + other
     end
 
-    def overload_test(arg : Int32 | String | Bool | Nil | Float32 | SomeModule::Test = "Default String")
+    def overload_test(arg : Int32 | String | Bool | Nil | Float32 | Test | Test::TestEnum = "Default String")
       if arg.is_a?(Test)
         puts "Test: A test object with x = #{arg.x}"
       else

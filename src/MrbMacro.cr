@@ -155,6 +155,7 @@ module MrbMacro
   end
 
   macro convert_resolved_arg(mrb, arg, arg_type, raw_arg_type, context = nil)
+    # TODO: Does this need union types as well?
     {% if arg_type.resolve? %}
       {% if arg_type.resolve <= Bool %}
         ({{arg}} != 0)
@@ -200,24 +201,28 @@ module MrbMacro
           raise("Undefined argument {{arg}} of {{arg_type}} in context {{context}}")
         {% end %}
       else
-        {% if arg_type.type.resolve? && arg_type.type.resolve.union? %}
+        # Yes, this is not the elegant way
+        # However, when a union type component moves out of its context, it is not resolvable by its own anymore
+        # This then leads to problems, so it is better to test for '|' instead of using the resolve.union? method
+        {% if arg_type.type.stringify.includes?('|') %}
           MrbMacro.convert_keyword_arg({{mrb}}, {{arg}}, Union({{arg_type.type}}), context: {{context}})
         {% else %}
           MrbMacro.convert_keyword_arg({{mrb}}, {{arg}}, {{arg_type.type}}, context: {{context}})
         {% end %}
       end
-    {% elsif context %}
-      MrbMacro.convert_resolved_keyword_arg({{mrb}}, {{arg}}, {{context}}::{{arg_type}}, {{arg_type}}, {{context}})
+    {% elsif context && !arg_type.stringify.starts_with?("Union") %}
+      MrbMacro.convert_resolved_keyword_arg({{mrb}}, {{arg}}, {{context}}::{{arg_type}}, {{arg_type}}, context: {{context}})
     {% else %}
-      MrbMacro.convert_resolved_keyword_arg({{mrb}}, {{arg}}, {{arg_type}}, {{arg_type}})
+      MrbMacro.convert_resolved_keyword_arg({{mrb}}, {{arg}}, {{arg_type}}, {{arg_type}}, context: {{context}})
     {% end %}
   end
 
   macro convert_resolved_keyword_arg(mrb, arg, arg_type, raw_arg_type, context = nil)
-    {% if arg_type.resolve? %}
-      {% if arg_type.resolve.union? %}
-        MrbMacro.cast_to_union_value({{mrb}}, {{arg}}, {{arg_type.resolve.union_types}})
-      {% elsif arg_type.resolve <= Nil %}
+    {% if arg_type.stringify.includes?('|') %}
+      # Same as above, this sadly needs some uncanny magic
+      MrbMacro.cast_to_union_value({{mrb}}, {{arg}}, {{arg_type.stringify[6..-2].split('|').map{|x| x.id}}}, context: {{context}})
+    {% elsif arg_type.resolve? %}
+      {% if arg_type.resolve <= Nil %}
         MrbCast.cast_to_nil({{mrb}}, {{arg}})
       {% elsif arg_type.resolve <= Bool %}
         MrbCast.cast_to_bool({{mrb}}, {{arg}})
@@ -253,55 +258,79 @@ module MrbMacro
     {% end %}
   end
 
-  # TODO: Some double checks could be omitted 
-  # TODO: Proper resolution of type context trees (this is probably not trivial and might require further splitting of this method)
-
-  macro cast_to_union_value(mrb, value, types)
-    if false
-      raise "This should obviously not happen and is just for a simpler code structure"
+  macro cast_to_union_value(mrb, value, types, context = nil)
+    final_value = nil
+    
     {% for type in types %}
-      {% if type.resolve <= Nil %}
-        elsif MrbCast.check_for_nil({{value}})
-          MrbCast.cast_to_nil({{mrb}}, {{value}})
-      {% elsif type.resolve <= Bool %}
-        elsif MrbCast.check_for_bool({{value}})
-          MrbCast.cast_to_bool({{mrb}}, {{value}})
-      {% elsif type.resolve == Number %}
-        elsif MrbCast.check_for_float({{value}})
-          Float64.new(MrbCast.cast_to_float({{mrb}}, {{value}}))
-      {% elsif type.resolve == Int %}
-        elsif MrbCast.check_for_fixnum({{value}})
-          Int64.new(MrbCast.cast_to_int({{mrb}}, {{value}}))
-      {% elsif type.resolve <= Int %}
-        elsif MrbCast.check_for_fixnum({{value}})
-          {{type}}.new(MrbCast.cast_to_int({{mrb}}, {{value}}))
-      {% elsif type.resolve == Float %}
-        elsif MrbCast.check_for_float({{value}})
-          Float64.new(MrbCast.cast_to_float({{mrb}}, {{value}}))
-      {% elsif type.resolve <= Float %}
-        elsif MrbCast.check_for_float({{value}})
-          {{type}}.new(MrbCast.cast_to_float({{mrb}}, {{value}}))
-      {% elsif type.resolve <= String %}
-        elsif MrbCast.check_for_string({{value}})
-          MrbCast.cast_to_string({{mrb}}, {{value}})
-      {% elsif type.resolve <= Struct %}
-        elsif MrbCast.check_for_data({{value}})
-          MrbMacro.convert_from_ruby_struct({{mrb}}, {{value}}, {{type}}).value.content
-      {% elsif type.resolve? %}
-        elsif MrbCast.check_for_data({{value}})
-          MrbMacro.convert_from_ruby_object({{mrb}}, {{value}}, {{type}}).value
+      {% if type.resolve? %}
+        MrbMacro.check_and_cast_resolved_union_type({{mrb}}, {{value}}, {{type}}, {{type}})
+      {% elsif context %}
+        MrbMacro.check_and_cast_resolved_union_type({{mrb}}, {{value}}, {{context}}::{{type}}, {{type}}, {{context}})
       {% else %}
-        {% raise "Could not resolve type #{type}" %}
+        MrbMacro.check_and_cast_resolved_union_type({{mrb}}, {{value}}, {{type}}, {{type}})
       {% end %}
     {% end %}
-    else
-      MrbInternal.mrb_raise_argument_error({{mrb}}, "Could not resolve #{{{value}}} to any type in {{types}}")
-      raise "Crystal compiler will complain if this isn't here, albeit this will never be reached"
-    end
+
+    final_value
+  end
+
+  # TODO: Some double checks could be omitted 
+
+  macro check_and_cast_resolved_union_type(mrb, value, type, raw_type, context = nil)
+    {% if type.resolve <= Nil %}
+      if MrbCast.check_for_nil({{value}})
+        final_value = MrbCast.cast_to_nil({{mrb}}, {{value}})
+      end
+    {% elsif type.resolve <= Bool %}
+      if MrbCast.check_for_bool({{value}})
+        final_value = MrbCast.cast_to_bool({{mrb}}, {{value}})
+      end
+    {% elsif type.resolve == Number %}
+      if MrbCast.check_for_float({{value}})
+        final_value = Float64.new(MrbCast.cast_to_float({{mrb}}, {{value}}))
+      end
+    {% elsif type.resolve == Int %}
+      if MrbCast.check_for_fixnum({{value}})
+        final_value = Int64.new(MrbCast.cast_to_int({{mrb}}, {{value}}))
+      end
+    {% elsif type.resolve <= Int %}
+      if MrbCast.check_for_fixnum({{value}})
+        final_value = {{type}}.new(MrbCast.cast_to_int({{mrb}}, {{value}}))
+      end
+    {% elsif type.resolve == Float %}
+      if MrbCast.check_for_float({{value}})
+        final_value = Float64.new(MrbCast.cast_to_float({{mrb}}, {{value}}))
+      end
+    {% elsif type.resolve <= Float %}
+      if MrbCast.check_for_float({{value}})
+        final_value = {{type}}.new(MrbCast.cast_to_float({{mrb}}, {{value}}))
+      end
+    {% elsif type.resolve <= String %}
+      if MrbCast.check_for_string({{value}})
+        final_value = MrbCast.cast_to_string({{mrb}}, {{value}})
+      end
+    {% elsif type.resolve <= Struct %}
+      if MrbCast.check_for_data({{value}}) && MrbCast.check_custom_type({{mrb}}, {{value}}, {{type}})
+        final_value = MrbMacro.convert_from_ruby_struct({{mrb}}, {{value}}, {{type}}).value.content
+      end
+    {% elsif type.resolve? %}
+      if MrbCast.check_for_data({{value}}) && MrbCast.check_custom_type({{mrb}}, {{value}}, {{type}})
+        final_value = MrbMacro.convert_from_ruby_object({{mrb}}, {{value}}, {{type}}).value
+      end
+    {% elsif context %}
+      {% if context.names[0..-2].size > 0 %}
+        {% new_context = context.names[0..-2].join("::") %}
+        MrbMacro.check_and_cast_resolved_union_type({{mrb}}, {{value}}, {{new_context}}::{{raw_type}}, {{raw_type}}, {{new_context}})
+      {% else %}
+        MrbMacro.check_and_cast_resolved_union_type({{mrb}}, {{value}}, {{raw_type}}, {{raw_type}})
+      {% end %}
+    {% else %}
+      {% raise "Could not resolve type #{type}" %}
+    {% end %}
   end
 
   macro convert_from_ruby_object(mrb, obj, crystal_type)
-    if MrbInternal.mrb_obj_is_kind_of({{mrb}}, {{obj}}, MrbClassCache.get({{crystal_type}})) == 0
+    if !MrbCast.check_custom_type({{mrb}}, {{obj}}, {{crystal_type}})
       obj_class = MrbInternal.get_class_of_obj({{mrb}}, {{obj}})
       MrbInternal.mrb_raise_argument_error({{mrb}}, "Invalid data type #{obj_class} for object #{{{obj}}}:\n Should be #{{{crystal_type}}} -> MrbClassCache.get({{crystal_type}}) instead.")
     end
@@ -311,7 +340,7 @@ module MrbMacro
   end
 
   macro convert_from_ruby_struct(mrb, obj, crystal_type)
-    if MrbInternal.mrb_obj_is_kind_of({{mrb}}, {{obj}}, MrbClassCache.get({{crystal_type}})) == 0
+    if !MrbCast.check_custom_type({{mrb}}, {{obj}}, {{crystal_type}})
       obj_class = MrbInternal.get_class_of_obj({{mrb}}, {{obj}})
       MrbInternal.mrb_raise_argument_error({{mrb}}, "ERROR: Invalid data type #{obj_class} for object #{{{obj}}}:\n Should be #{{{crystal_type}}} -> MrbClassCache.get({{crystal_type}}) instead.")
     end

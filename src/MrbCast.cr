@@ -170,6 +170,10 @@ module MrbCast
     end
   end
 
+  macro check_custom_type(mrb, value, crystal_type)
+    MrbInternal.mrb_obj_is_kind_of({{mrb}}, {{value}}, MrbClassCache.get({{crystal_type}})) != 0
+  end
+
   def self.is_undef?(value : MrbInternal::MrbValue) # Just a more readable synonym
     MrbCast.check_for_undef(value)
   end
