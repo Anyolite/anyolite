@@ -66,3 +66,4 @@ test_struct_thingy.value = 4242
 puts "Modified value: #{test_struct_thingy.value}\n"
 
 puts "This function returns an enum: #{a.returns_an_enum.value}"
+puts "Either an int or a string: #{a.returns_something_random.inspect}"

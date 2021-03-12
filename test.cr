@@ -133,6 +133,14 @@ module SomeModule
       TestEnum::Five
     end
 
+    def returns_something_random
+      if rand < 0.5
+        3
+      else
+        "Hello"
+      end
+    end
+
     def method_without_keywords(arg)
       puts "Argument is #{arg}"
     end

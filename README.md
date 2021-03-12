@@ -14,7 +14,7 @@ Anyolite is a Crystal shard which adds a fully functional mruby interpreter to C
 Anyolite allows for wrapping Crystal classes and functions into mruby with little effort.
 This way, mruby can be used as a scripting language to Crystal projects, with the major advantage of a similar syntax.
 
-This project is currently in the early development phase, so please report any bugs or missing relevant features.
+This project is currently in active development, so please report any bugs or missing relevant features.
 
 # Features
 
@@ -23,7 +23,7 @@ This project is currently in the early development phase, so please report any b
 * Easy syntax without unnecessary boilerplate code
 * Simple system to prevent garbage collector conflicts
 * Support for keyword arguments and default values
-* Objects, structs, enums and unions as function arguments are completely valid
+* Objects, structs, enums and unions as function arguments and return values are completely valid
 * Methods and constants can be excluded, modified or renamed with annotations
 
 # Prerequisites
@@ -348,6 +348,7 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 * [ ] Crystal specs for testing
 * [ ] Mac support (might be possible, not tested yet)
 * [ ] More configuration options for the Rakefile
+* [ ] Documentation of all relevant features and wrappers
 
 ### Future ideas (might not actually be possible to implement)
 
