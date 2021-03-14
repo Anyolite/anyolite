@@ -142,6 +142,31 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 
 ## Releases
 
+### Version 0.6.0
+
+#### Features
+
+* Wrappers for unions
+* Wrappers for nilable objects
+
+#### Breaking changes
+
+* Wrapping of specific functions has a more consistent syntax using Arrays instead of Hashes
+
+#### Safety
+
+* More useful compiletime errors for macros
+* More information when encountering type casting errors
+* Use Array(TypeDeclaration) instead of Hash for keywords in internal methods
+
+#### Usability
+
+* Cleaned up some code fragments
+
+#### Bugfixes
+
+* Wrapped struct objects were immutable
+
 ### Version 0.5.0
 
 #### Features
@@ -316,31 +341,6 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 * Basic documentation
 
 ## Upcoming releases
-
-### Version 0.6.0
-
-#### Features
-
-* [X] Wrappers for unions
-* [X] Wrappers for nilable objects
-
-#### Breaking changes
-
-* [X] Wrapping of specific functions has a more consistent syntax using Arrays instead of Hashes
-
-#### Safety
-
-* [X] More useful compiletime errors for macros
-* [X] More information when encountering type casting errors
-* [X] Use Array(TypeDeclaration) instead of Hash for keywords in internal methods
-
-#### Usability
-
-* [X] Cleaned up some code fragments
-
-#### Bugfixes
-
-* [X] Wrapped struct objects were immutable
 
 ### Version 1.0.0
 
