@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="generator" content="Crystal Docs 0.36.1">
-<meta name="crystal_docs.project_version" content="0.5.0">
+<meta name="crystal_docs.project_version" content="0.6.0">
 <meta name="crystal_docs.project_name" content="anyolite">
 
 
@@ -13,7 +13,7 @@
 <script type="text/javascript" src="js/doc.js"></script>
 
   <meta name="repository-name" content="anyolite">
-  <title>anyolite 0.5.0</title>
+  <title>anyolite 0.6.0</title>
   <script type="text/javascript">
   CrystalDocs.base_path = "";
   </script>
@@ -39,7 +39,7 @@
       </h1>
 
       <span class="project-version">
-        0.5.0
+        0.6.0
       </span>
     </div>
   </div>
@@ -237,7 +237,7 @@
 <p>Anyolite allows for wrapping Crystal classes and functions into mruby with little effort.
 This way, mruby can be used as a scripting language to Crystal projects, with the major advantage of a similar syntax.</p>
 
-<p>This project is currently in the early development phase, so please report any bugs or missing relevant features.</p>
+<p>This project is currently in active development, so please report any bugs or missing relevant features.</p>
 
 <h1><a id="features" class="anchor" href="#features">
   <svg class="octicon-link" aria-hidden="true">
@@ -245,7 +245,7 @@ This way, mruby can be used as a scripting language to Crystal projects, with th
   </svg>
 </a>Features</h1>
 
-<ul><li>Bindings to an mruby interpreter</li><li>Wrapping of nearly arbitrary Crystal classes and methods to mruby</li><li>Easy syntax without unnecessary boilerplate code</li><li>Support for keyword arguments and default values</li><li>Simple system to prevent garbage collector conflicts</li></ul>
+<ul><li>Bindings to an mruby interpreter</li><li>Wrapping of nearly arbitrary Crystal classes and methods to mruby</li><li>Easy syntax without unnecessary boilerplate code</li><li>Simple system to prevent garbage collector conflicts</li><li>Support for keyword arguments and default values</li><li>Objects, structs, enums and unions as function arguments and return values are completely valid</li><li>Methods and constants can be excluded, modified or renamed with annotations</li></ul>
 
 <h1><a id="prerequisites" class="anchor" href="#prerequisites">
   <svg class="octicon-link" aria-hidden="true">
@@ -347,7 +347,7 @@ More features will be added in the future.</p>
   </svg>
 </a>Limitations</h1>
 
-<ul><li>Currently, Anyolite does not work on Windows due to Crystal compiler bugs</li><li>Arrays, hashes and other complex mruby objects are not directly supported</li><li>Configuration options for mruby are relatively limited (yet)</li><li>Default values for unnamed function arguments are limited to integers and floats</li><li>Optional keyword arguments need a default value (can be a different one than the Crystal value, though)</li><li>Keywords will always be given to functions, even if optional (then with default values)</li><li>Splat arguments and arbitrary keywords are not possible due to compiletime symbols in Crystal</li><li>Only one type per argument is allowed</li></ul>
+<ul><li>Currently, Anyolite does not work on Windows due to Crystal compiler bugs</li><li>Arrays and hashes are not directly supported</li><li>Symbols do not work due to their compiletime nature in Crystal</li><li>Splat arguments and arbitrary keywords are not possible due to their reliance on symbols</li><li>Regular function arguments are not very flexible (keyword arguments however are!)</li><li>Keywords will always be given to functions, even if optional (then with default values)</li></ul>
 
 <h1><a id="why-this-name" class="anchor" href="#why-this-name">
   <svg class="octicon-link" aria-hidden="true">
@@ -372,6 +372,52 @@ More features will be added in the future.</p>
     <use href="#octicon-link"/>
   </svg>
 </a>Releases</h2>
+
+<h3><a id="version-0.6.0" class="anchor" href="#version-0.6.0">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Version 0.6.0</h3>
+
+<h4><a id="features" class="anchor" href="#features">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Features</h4>
+
+<ul><li>Wrappers for unions</li><li>Wrappers for nilable objects</li></ul>
+
+<h4><a id="breaking-changes" class="anchor" href="#breaking-changes">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Breaking changes</h4>
+
+<ul><li>Wrapping of specific functions has a more consistent syntax using Arrays instead of Hashes</li></ul>
+
+<h4><a id="safety" class="anchor" href="#safety">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Safety</h4>
+
+<ul><li>More useful compiletime errors for macros</li><li>More information when encountering type casting errors</li><li>Use Array(TypeDeclaration) instead of Hash for keywords in internal methods</li></ul>
+
+<h4><a id="usability" class="anchor" href="#usability">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Usability</h4>
+
+<ul><li>Cleaned up some code fragments</li></ul>
+
+<h4><a id="bugfixes" class="anchor" href="#bugfixes">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Bugfixes</h4>
+
+<ul><li>Wrapped struct objects were immutable</li></ul>
 
 <h3><a id="version-0.5.0" class="anchor" href="#version-0.5.0">
   <svg class="octicon-link" aria-hidden="true">
@@ -431,11 +477,11 @@ More features will be added in the future.</p>
   </svg>
 </a>Version 0.4.0</h3>
 
-<h4><a id="major-features" class="anchor" href="#major-features">
+<h4><a id="features" class="anchor" href="#features">
   <svg class="octicon-link" aria-hidden="true">
     <use href="#octicon-link"/>
   </svg>
-</a>Major features</h4>
+</a>Features</h4>
 
 <ul><li>Easier wrapping of classes and all of their methods and constants</li><li>Annotation to exclude functions from wrapping</li><li>Annotation to specialize functions for wrapping</li><li>Annotation to rename wrapped functions</li><li>Full wrapping of module and class hierarchies</li></ul>
 
@@ -573,21 +619,13 @@ More features will be added in the future.</p>
   </svg>
 </a>Version 0.2.0</h3>
 
-<h4><a id="major-features" class="anchor" href="#major-features">
+<h4><a id="features" class="anchor" href="#features">
   <svg class="octicon-link" aria-hidden="true">
     <use href="#octicon-link"/>
   </svg>
-</a>Major features</h4>
+</a>Features</h4>
 
-<ul><li>Keyword argument support</li><li>Support for optional keywords</li></ul>
-
-<h4><a id="minor-features" class="anchor" href="#minor-features">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>Minor features</h4>
-
-<ul><li>Casting from MrbValue objects to closest Crystal values</li><li>Option to use a JSON config file</li></ul>
+<ul><li>Keyword argument support</li><li>Support for optional keywords</li><li>Casting from MrbValue objects to closest Crystal values</li><li>Option to use a JSON config file</li></ul>
 
 <h4><a id="breaking-changes" class="anchor" href="#breaking-changes">
   <svg class="octicon-link" aria-hidden="true">
@@ -649,11 +687,11 @@ More features will be added in the future.</p>
   </svg>
 </a>Version 0.1.0</h3>
 
-<h4><a id="major-features" class="anchor" href="#major-features">
+<h4><a id="features" class="anchor" href="#features">
   <svg class="octicon-link" aria-hidden="true">
     <use href="#octicon-link"/>
   </svg>
-</a>Major features</h4>
+</a>Features</h4>
 
 <ul><li>Basic structure</li><li>Ubuntu support</li><li>Wrappers for classes</li><li>Wrappers for modules</li><li>Support for classes in modules</li><li>Wrappers for properties</li><li>Wrappers for instance methods</li><li>Wrappers for module and class methods</li><li>Wrappers for constants</li><li>Optional values for simple argument types</li><li>Crystal GC respects the mruby GC</li><li>Hooks for mruby object creation and deletion</li><li>Simple examples</li><li>Build tests</li><li>Basic documentation</li></ul>
 
@@ -663,21 +701,13 @@ More features will be added in the future.</p>
   </svg>
 </a>Upcoming releases</h2>
 
-<h3><a id="version-0.6.0" class="anchor" href="#version-0.6.0">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>Version 0.6.0+</h3>
-
-<ul><li>[ ] Support for Crystal 0.36.1 (should already work, not tested yet)</li><li>[ ] Crystal specs for testing</li><li>[ ] Mac support (might be possible, not tested yet)</li><li>[ ] Compiletime errors for macros</li><li>[ ] Support for more flexible mruby configuration options</li><li>[ ] More stable type casting</li><li>[ ] Use Array(TypeDeclaration) instead of Hash for keywords in internal methods</li><li>[ ] Options for inherited and/or inheriting classes</li></ul>
-
 <h3><a id="version-1.0.0" class="anchor" href="#version-1.0.0">
   <svg class="octicon-link" aria-hidden="true">
     <use href="#octicon-link"/>
   </svg>
 </a>Version 1.0.0</h3>
 
-<ul><li>[ ] Windows support (currently not supported due to problems with Crystal)</li></ul>
+<ul><li>[ ] Windows support (currently not supported due to problems with Crystal)</li><li>[ ] Crystal specs for testing</li><li>[ ] Mac support (might be possible, not tested yet)</li><li>[ ] More configuration options for the Rakefile</li><li>[ ] Documentation of all relevant features and wrappers</li></ul>
 
 <h3><a id="future-ideas-might-not-actually-be-possible-to-implement" class="anchor" href="#future-ideas-might-not-actually-be-possible-to-implement">
   <svg class="octicon-link" aria-hidden="true">
@@ -685,7 +715,7 @@ More features will be added in the future.</p>
   </svg>
 </a>Future ideas (might not actually be possible to implement)</h3>
 
-<ul><li>[ ] Arrays and/or hashes as argument and return values</li><li>[ ] Splat argument and/or arbitrary keyword passing</li><li>[ ] Method in mruby to determine owner of object</li><li>[ ] Wrappers for nilable objects</li><li>[ ] Wrappers for unions</li></ul>
+<ul><li>[ ] Options for inherited and/or inheriting classes</li><li>[ ] Arrays and/or hashes as argument and return values</li><li>[ ] Splat argument and/or arbitrary keyword passing</li><li>[ ] Method in mruby to determine owner of object</li></ul>
 </div>
 </body>
 </html>
