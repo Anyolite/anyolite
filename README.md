@@ -342,6 +342,12 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 
 ## Upcoming releases
 
+### Version 0.6.1
+
+#### Bugfixes
+
+* [ ] Non-public constructor methods could not be wrapped
+
 ### Version 1.0.0
 
 * [ ] Windows support (currently not supported due to problems with Crystal)
