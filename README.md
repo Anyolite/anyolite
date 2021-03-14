@@ -358,6 +358,10 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 
 * [ ] Find consistent solution for non-keyword arguments
 
+#### Usability
+
+* [ ] More helpful error messages when path resolution fails
+
 ### Version 1.0.0
 
 * [ ] Windows support (currently not supported due to problems with Crystal)
