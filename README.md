@@ -348,6 +348,16 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 
 * [ ] Non-public constructor methods could not be wrapped
 
+### Version 0.7.0
+
+#### Features
+
+* [ ] Support for wrapping generics (unless impossible)
+
+#### Breaking changes
+
+* [ ] Find consistent solution for non-keyword arguments
+
 ### Version 1.0.0
 
 * [ ] Windows support (currently not supported due to problems with Crystal)
