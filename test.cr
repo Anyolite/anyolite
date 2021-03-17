@@ -141,6 +141,11 @@ module SomeModule
       puts "Received argument #{arg.inspect}"
     end
 
+    @[MrbWrap::Specialize([arg1 : Int32 | String, arg2 : Float32, arg_req : Float32, arg_opt_1 : String = "Cookies", arg_opt_2 : Int32 = 32])]
+    def complicated_method(arg1, arg2, arg_req : Float32, arg_opt_1 : String = "Cookies", arg_opt_2 : Int32 = 32)
+      "#{arg1} - #{arg2} - #{arg_req} - #{arg_opt_1} - #{arg_opt_2}"
+    end
+
     def returns_an_enum
       TestEnum::Five
     end
@@ -190,6 +195,9 @@ module SomeModule
     def mrb_finalize(mrb)
       puts "Mruby destructor called for value #{@x}"
     end
+  end
+
+  class SubTest < SomeModule::Test
   end
 
   class Bla

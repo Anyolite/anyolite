@@ -346,7 +346,7 @@ module MrbMacro
   macro convert_from_ruby_struct(mrb, obj, crystal_type)
     if !MrbCast.check_custom_type({{mrb}}, {{obj}}, {{crystal_type}})
       obj_class = MrbInternal.get_class_of_obj({{mrb}}, {{obj}})
-      MrbInternal.mrb_raise_argument_error({{mrb}}, "ERROR: Invalid data type #{obj_class} for object #{{{obj}}}:\n Should be #{{{crystal_type}}} -> MrbClassCache.get({{crystal_type}}) instead.")
+      MrbInternal.mrb_raise_argument_error({{mrb}}, "Invalid data type #{obj_class} for object #{{{obj}}}:\n Should be #{{{crystal_type}}} -> MrbClassCache.get({{crystal_type}}) instead.")
     end
     
     ptr = MrbInternal.get_data_ptr({{obj}})
