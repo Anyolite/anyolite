@@ -877,7 +877,7 @@ module MrbMacro
       {% puts "> Processing instance method #{crystal_class}::#{method.name} to #{ruby_name}\n--> Args: #{method.args}" if verbose %}
       
       # Ignore private and protected methods (can't be called from outside, they'd need to be wrapped for this to work)
-      {% if method.visibility != :public %}
+      {% if method.visibility != :public && method.name != "initialize" %}
         {% puts "--> Excluding #{crystal_class}::#{method.name} (Exclusion due to visibility)" if verbose %}
       # Ignore mrb hooks, to_unsafe and finalize (unless specialized, but this is not recommended)
       {% elsif (method.name.starts_with?("mrb_") || method.name == "finalize" || method.name == "to_unsafe") && !has_specialized_method[method.name.stringify] %}

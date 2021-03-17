@@ -2,6 +2,12 @@
 
 ## Releases
 
+### Version 0.6.1
+
+#### Bugfixes
+
+* Non-public constructor methods could not be wrapped
+
 ### Version 0.6.0
 
 #### Features
