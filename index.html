@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="generator" content="Crystal Docs 0.36.1">
-<meta name="crystal_docs.project_version" content="0.6.0">
+<meta name="crystal_docs.project_version" content="0.6.1">
 <meta name="crystal_docs.project_name" content="anyolite">
 
 
@@ -13,7 +13,7 @@
 <script type="text/javascript" src="js/doc.js"></script>
 
   <meta name="repository-name" content="anyolite">
-  <title>anyolite 0.6.0</title>
+  <title>anyolite 0.6.1</title>
   <script type="text/javascript">
   CrystalDocs.base_path = "";
   </script>
@@ -39,7 +39,7 @@
       </h1>
 
       <span class="project-version">
-        0.6.0
+        0.6.1
       </span>
     </div>
   </div>
@@ -367,339 +367,41 @@ More features will be added in the future.</p>
   </svg>
 </a>Roadmap</h1>
 
-<h2><a id="releases" class="anchor" href="#releases">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>Releases</h2>
-
-<h3><a id="version-0.6.0" class="anchor" href="#version-0.6.0">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>Version 0.6.0</h3>
-
-<h4><a id="features" class="anchor" href="#features">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>Features</h4>
-
-<ul><li>Wrappers for unions</li><li>Wrappers for nilable objects</li></ul>
-
-<h4><a id="breaking-changes" class="anchor" href="#breaking-changes">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>Breaking changes</h4>
-
-<ul><li>Wrapping of specific functions has a more consistent syntax using Arrays instead of Hashes</li></ul>
-
-<h4><a id="safety" class="anchor" href="#safety">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>Safety</h4>
-
-<ul><li>More useful compiletime errors for macros</li><li>More information when encountering type casting errors</li><li>Use Array(TypeDeclaration) instead of Hash for keywords in internal methods</li></ul>
-
-<h4><a id="usability" class="anchor" href="#usability">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>Usability</h4>
-
-<ul><li>Cleaned up some code fragments</li></ul>
-
-<h4><a id="bugfixes" class="anchor" href="#bugfixes">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>Bugfixes</h4>
-
-<ul><li>Wrapped struct objects were immutable</li></ul>
-
-<h3><a id="version-0.5.0" class="anchor" href="#version-0.5.0">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>Version 0.5.0</h3>
-
-<h4><a id="features" class="anchor" href="#features">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>Features</h4>
-
-<ul><li>Support for enums</li><li>Ability to rename classes and modules</li></ul>
-
-<h4><a id="usability" class="anchor" href="#usability">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>Usability</h4>
-
-<ul><li>Empty argument list for specialization can be specified with nil</li><li>Exclusion message for mruby methods, finalize and to_unsafe</li><li>Exclusion of non-public methods</li><li>Exclusion of to_unsafe</li><li>Non-fatal runtime errors are triggered in mruby instead of Crystal</li></ul>
-
-<h4><a id="bugfixes" class="anchor" href="#bugfixes">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>Bugfixes</h4>
-
-<ul><li>Proper resolution of class and module hierarchies</li></ul>
-
-<h3><a id="version-0.4.1" class="anchor" href="#version-0.4.1">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>Version 0.4.1</h3>
-
-<h4><a id="usability" class="anchor" href="#usability">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>Usability</h4>
-
-<ul><li>Method names in annotations can be given as strings</li><li>More and better verbose information for wrapping</li></ul>
-
-<h4><a id="bugfixes" class="anchor" href="#bugfixes">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>Bugfixes</h4>
-
-<ul><li>Setters can be excluded correctly</li><li>Manually wrapped properties work correctly now</li><li>Correct handling of generic function arguments like Int, Number or Float</li></ul>
-
-<h3><a id="version-0.4.0" class="anchor" href="#version-0.4.0">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>Version 0.4.0</h3>
-
-<h4><a id="features" class="anchor" href="#features">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>Features</h4>
-
-<ul><li>Easier wrapping of classes and all of their methods and constants</li><li>Annotation to exclude functions from wrapping</li><li>Annotation to specialize functions for wrapping</li><li>Annotation to rename wrapped functions</li><li>Full wrapping of module and class hierarchies</li></ul>
-
-<h4><a id="breaking-changes" class="anchor" href="#breaking-changes">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>Breaking changes</h4>
-
-<ul><li>Function names with operators do not include the operator into the ruby name anymore</li><li>Unified module and class cache</li></ul>
-
-<h4><a id="usability" class="anchor" href="#usability">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>Usability</h4>
-
-<ul><li>Documentation updates for the new wrapping routines</li><li>Functions with only an operator in their name can now be wrapped using <code><a href="MrbWrap/Empty.html">MrbWrap::Empty</a></code></li></ul>
-
-<h4><a id="bugfixes" class="anchor" href="#bugfixes">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>Bugfixes</h4>
-
-<ul><li>Nested classes and modules can now be wrapped reliably</li></ul>
-
-<h3><a id="version-0.3.0" class="anchor" href="#version-0.3.0">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>Version 0.3.0</h3>
-
-<h4><a id="features" class="anchor" href="#features">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>Features</h4>
-
-<ul><li>Crystal structs are wrapped using wrapper objects</li></ul>
-
-<h4><a id="breaking-changes" class="anchor" href="#breaking-changes">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>Breaking changes</h4>
-
-<ul><li>Struct hash values as object ID replacements are obsolete</li><li>Option hash for reference table instead of flags</li><li>Consistent naming for mruby hooks</li></ul>
-
-<h4><a id="safety" class="anchor" href="#safety">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>Safety</h4>
-
-<ul><li>Structs with equal hash values do not interfere anymore</li></ul>
-
-<h4><a id="usability" class="anchor" href="#usability">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>Usability</h4>
-
-<ul><li>MrbModule instances and Crystal modules can both be used in wrapper methods</li></ul>
-
-<h3><a id="version-0.2.3" class="anchor" href="#version-0.2.3">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>Version 0.2.3</h3>
-
-<h4><a id="usability" class="anchor" href="#usability">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>Usability</h4>
-
-<ul><li>More options for adjusting reference table</li></ul>
-
-<h4><a id="bugfixes" class="anchor" href="#bugfixes">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>Bugfixes</h4>
-
-<ul><li>Fixed reference counter not increasing</li></ul>
-
-<h3><a id="version-0.2.2" class="anchor" href="#version-0.2.2">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>Version 0.2.2</h3>
-
-<h4><a id="usability" class="anchor" href="#usability">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>Usability</h4>
-
-<ul><li>Added more debugging methods</li><li>Allowed for custom object IDs by defining <code>mruby_object_id</code> for a class</li></ul>
-
-<h4><a id="bugfixes" class="anchor" href="#bugfixes">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>Bugfixes</h4>
-
-<ul><li>Fixed problems with struct wrapping</li></ul>
-
-<h3><a id="version-0.2.1" class="anchor" href="#version-0.2.1">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>Version 0.2.1</h3>
-
-<h4><a id="usability" class="anchor" href="#usability">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>Usability</h4>
-
-<ul><li>Operator suffixes as general optional argument for MrbWrap functions</li><li>Option to inspect reference table</li><li>Reference counting in reference table</li><li>Reference table can be cleared</li></ul>
-
-<h4><a id="bugfixes" class="anchor" href="#bugfixes">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>Bugfixes</h4>
-
-<ul><li>Fixed structs not being able to be wrapped</li><li>Fixed example in documentation</li><li>Fixed memory leak when returning nontrivial objects in mruby</li><li>Removed constructor limitations for types being able to be used as return values </li></ul>
-
-<h3><a id="version-0.2.0" class="anchor" href="#version-0.2.0">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>Version 0.2.0</h3>
-
-<h4><a id="features" class="anchor" href="#features">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>Features</h4>
-
-<ul><li>Keyword argument support</li><li>Support for optional keywords</li><li>Casting from MrbValue objects to closest Crystal values</li><li>Option to use a JSON config file</li></ul>
-
-<h4><a id="breaking-changes" class="anchor" href="#breaking-changes">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>Breaking changes</h4>
-
-<ul><li>Optional arguments are passed using tuples instead of <code>MrbWrap::Opt</code></li></ul>
-
-<h4><a id="safety" class="anchor" href="#safety">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>Safety</h4>
-
-<ul><li>Class checks for arguments</li><li>Checks for correct keyword classes</li><li>Module cache analogous to the class cache</li></ul>
-
-<h4><a id="usability" class="anchor" href="#usability">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>Usability</h4>
-
-<ul><li>Simplified some macro functions considerably</li><li>Arguments can be specified consistently as arrays or standalone</li><li>Documentation builds only for releases</li><li>Uniform system for passing optional arguments</li><li>Updated examples and documentation for keyword support</li></ul>
-
-<h4><a id="bugfixes" class="anchor" href="#bugfixes">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>Bugfixes</h4>
-
-<ul><li>Fixed erros when naming MrbState instances anything other than 'mrb'</li></ul>
-
-<h3><a id="version-0.1.1" class="anchor" href="#version-0.1.1">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>Version 0.1.1</h3>
-
-<h4><a id="safety" class="anchor" href="#safety">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>Safety</h4>
-
-<ul><li>Added safeguards for reference table access</li></ul>
-
-<h4><a id="bugfixes" class="anchor" href="#bugfixes">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>Bugfixes</h4>
-
-<ul><li>Fixed mruby function return values not being cached</li><li>Fixed minor documentation errors</li></ul>
-
-<h3><a id="version-0.1.0" class="anchor" href="#version-0.1.0">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>Version 0.1.0</h3>
-
-<h4><a id="features" class="anchor" href="#features">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>Features</h4>
-
-<ul><li>Basic structure</li><li>Ubuntu support</li><li>Wrappers for classes</li><li>Wrappers for modules</li><li>Support for classes in modules</li><li>Wrappers for properties</li><li>Wrappers for instance methods</li><li>Wrappers for module and class methods</li><li>Wrappers for constants</li><li>Optional values for simple argument types</li><li>Crystal GC respects the mruby GC</li><li>Hooks for mruby object creation and deletion</li><li>Simple examples</li><li>Build tests</li><li>Basic documentation</li></ul>
-
 <h2><a id="upcoming-releases" class="anchor" href="#upcoming-releases">
   <svg class="octicon-link" aria-hidden="true">
     <use href="#octicon-link"/>
   </svg>
 </a>Upcoming releases</h2>
+
+<h3><a id="version-0.7.0" class="anchor" href="#version-0.7.0">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Version 0.7.0</h3>
+
+<h4><a id="features" class="anchor" href="#features">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Features</h4>
+
+<ul><li>[ ] Support for wrapping generics (unless impossible)</li></ul>
+
+<h4><a id="breaking-changes" class="anchor" href="#breaking-changes">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Breaking changes</h4>
+
+<ul><li>[ ] Find consistent solution for non-keyword arguments</li></ul>
+
+<h4><a id="usability" class="anchor" href="#usability">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Usability</h4>
+
+<ul><li>[ ] More helpful error messages when path resolution fails</li></ul>
 
 <h3><a id="version-1.0.0" class="anchor" href="#version-1.0.0">
   <svg class="octicon-link" aria-hidden="true">
