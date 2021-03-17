@@ -45,6 +45,15 @@ module SomeModule
     struct DeepTestStruct
     end
 
+    @[MrbWrap::SpecifyGenericTypes([U, V])]
+    struct GenericTest(U, V)
+      def test(u : U, v : V)
+        puts "u is #{u} and has class #{U}, v is #{v} and has class #{V}."
+      end
+    end
+
+    alias GTIntFloat = GenericTest(Int32, Float32)
+
     property x : Int32 = 0
 
     @@counter : Int32 = 0

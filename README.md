@@ -146,7 +146,7 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 
 #### Features
 
-* [ ] Support for wrapping generics (unless impossible)
+* [X] Support for wrapping generics using annotations
 
 #### Breaking changes
 

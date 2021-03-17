@@ -267,6 +267,10 @@ module MrbWrap
   # to positional arguments.
   annotation WrapWithoutKeywordsClassMethod; end
 
+  # Specifies the generic type names for the following class as its argument,
+  # in form of an `Array` of their names.
+  annotation SpecifyGenericTypes; end
+
   # Wraps a whole class structure under a module into mruby.
   #
   # The `Class` *crystal_class* will be integrated into the `MrbState` *mrb_state*,
@@ -289,17 +293,24 @@ module MrbWrap
       {% puts ">>> Going into class #{crystal_class} under #{under}\n\n" %}
     {% end %}
 
-    {% if crystal_class.resolve.annotation(MrbWrap::RenameClass) %}
-      {% actual_name = crystal_class.resolve.annotation(MrbWrap::RenameClass)[0] %}
+    {% if verbose && crystal_class.is_a?(Generic) %}
+      {% puts "> Wrapping of generics not supported, thus skipping #{crystal_class}\e[0m\n\n" %}
     {% else %}
-      {% actual_name = crystal_class.names.last.stringify %}
+      {% resolved_class = crystal_class.resolve %}
+
+      {% if resolved_class.annotation(MrbWrap::RenameClass) %}
+        {% actual_name = resolved_class.annotation(MrbWrap::RenameClass)[0] %}
+      {% else %}
+        {% actual_name = crystal_class.names.last.stringify %}
+      {% end %}
+
+      MrbWrap.wrap_class({{mrb_state}}, {{resolved_class}}, {{actual_name}}, under: {{under}})
+
+      MrbMacro.wrap_all_instance_methods({{mrb_state}}, {{crystal_class}}, {{instance_method_exclusions}}, 
+        {{verbose}}, context: {{under}}, use_enum_constructor: {{use_enum_constructor}})
+      MrbMacro.wrap_all_class_methods({{mrb_state}}, {{crystal_class}}, {{class_method_exclusions}}, {{verbose}}, context: {{under}})
+      MrbMacro.wrap_all_constants({{mrb_state}}, {{crystal_class}}, {{constant_exclusions}}, {{verbose}}, context: {{under}})
     {% end %}
-
-    MrbWrap.wrap_class({{mrb_state}}, {{crystal_class.resolve}}, {{actual_name}}, under: {{under}})
-
-    MrbMacro.wrap_all_instance_methods({{mrb_state}}, {{crystal_class}}, {{instance_method_exclusions}}, {{verbose}}, context: {{under}}, use_enum_constructor: {{use_enum_constructor}})
-    MrbMacro.wrap_all_class_methods({{mrb_state}}, {{crystal_class}}, {{class_method_exclusions}}, {{verbose}}, context: {{under}})
-    MrbMacro.wrap_all_constants({{mrb_state}}, {{crystal_class}}, {{constant_exclusions}}, {{verbose}}, context: {{under}})
   end
 
   # Wraps a whole module structure under a module into mruby.

@@ -61,9 +61,11 @@ a.nilable_test(arg: 123)
 a.nilable_test(arg: nil)
 
 test_struct_thingy = TestModule::TestStructRenamed.new
-puts "Initial value: #{test_struct_thingy.value}"
+puts "Initial value: #{test_struct_thingy.value}\n"
 test_struct_thingy.value = 4242
 puts "Modified value: #{test_struct_thingy.value}\n"
 
 puts "This function returns an enum: #{a.returns_an_enum.value}"
 puts "Either an int or a string: #{a.returns_something_random.inspect}"
+
+TestModule::Test::GTIntFloat.new.test(u: 3, v: 5.5)

@@ -44,7 +44,7 @@ module MrbMacro
       {% end %}
     {% else %}
       # TODO: Maybe add full original context?
-      {% raise "Could not resolve #{arg} in any meaningful way." %}
+      {% raise "Could not resolve #{arg}, which is a #{arg.class_name}, in any meaningful way" %}
     {% end %}
   end
 
@@ -80,7 +80,7 @@ module MrbMacro
       {% end %}
     {% else %}
       # TODO: Maybe add full original context?
-      {% raise "Could not resolve #{type} in any meaningful way." %}
+      {% raise "Could not resolve #{type}, which is a #{type.class_name}, in any meaningful way" %}
     {% end %}
   end
 
@@ -116,7 +116,7 @@ module MrbMacro
       {% end %}
     {% else %}
       # TODO: Maybe add full original context?
-      {% raise "Could not resolve #{type} in any meaningful way." %}
+      {% raise "Could not resolve #{type}, which is a #{type.class_name}, in any meaningful way" %}
     {% end %}
   end
 
@@ -185,12 +185,15 @@ module MrbMacro
       {% end %}
     {% else %}
       # TODO: Maybe add full original context?
-      {% raise "Could not resolve #{arg_type} in any meaningful way." %}
+      {% raise "Could not resolve #{arg_type}, which is a #{arg_type.class_name}, in any meaningful way" %}
     {% end %}
   end
 
-  macro convert_keyword_arg(mrb, arg, arg_type, context = nil)
-    {% if arg_type.is_a?(Call) %}
+  macro convert_keyword_arg(mrb, arg, arg_type, context = nil, type_vars = nil, type_var_names = nil)
+    {% if type_var_names && type_var_names.includes?(arg_type.type) %}
+      {% type_var_names.each_with_index{|element, index| result = index if element == arg_type.type} %}
+      MrbMacro.convert_keyword_arg({{mrb}}, {{arg}}, {{type_vars[result]}}, context: {{context}})
+    {% elsif arg_type.is_a?(Call) %}
       {% raise "Received Call #{arg_type} instead of TypeDeclaration or TypeNode" %}
     {% elsif arg_type.is_a?(TypeDeclaration) %}
       if MrbCast.is_undef?({{arg}})
@@ -243,7 +246,8 @@ module MrbMacro
       {% elsif arg_type.resolve? %}
         MrbMacro.convert_from_ruby_object({{mrb}}, {{arg}}, {{arg_type}}).value
       {% else %}
-        {% raise "Could not resolve type #{arg_type}" %}
+        # TODO: Add special annotation in order to specify generics
+        {% raise "Could not resolve type #{arg_type}, which is a #{arg_type.class_name}" %}
       {% end %}
     {% elsif context %}
       {% if context.names[0..-2].size > 0 %}
@@ -254,7 +258,7 @@ module MrbMacro
       {% end %}
     {% else %}
       # TODO: Maybe add full original context?
-      {% raise "Could not resolve type #{arg_type}" %}
+      {% raise "Could not resolve type #{arg_type}, which is a #{arg_type.class_name}" %}
     {% end %}
   end
 
@@ -325,7 +329,7 @@ module MrbMacro
         MrbMacro.check_and_cast_resolved_union_type({{mrb}}, {{value}}, {{raw_type}}, {{raw_type}})
       {% end %}
     {% else %}
-      {% raise "Could not resolve type #{type}" %}
+      {% raise "Could not resolve type #{type}, which is a #{type.class_name}" %}
     {% end %}
   end
 
@@ -404,7 +408,9 @@ module MrbMacro
     MrbCast.return_value({{mrb}}, return_value)
   end
 
-  macro call_and_return_keyword_instance_method(mrb, proc, converted_obj, converted_regular_args, keyword_args, kw_args, operator = "", empty_regular = false, context = nil)
+  macro call_and_return_keyword_instance_method(mrb, proc, converted_obj, converted_regular_args, keyword_args, kw_args, operator = "", 
+    empty_regular = false, context = nil, type_vars = nil, type_var_names = nil)
+
     if {{converted_obj}}.is_a?(MrbWrap::StructWrapper)
       working_content = {{converted_obj}}.content
 
@@ -416,14 +422,16 @@ module MrbMacro
         {% if empty_regular %}
           {% c = 0 %}
           {% for keyword in keyword_args %}
-            {{keyword.var.id}}: MrbMacro.convert_keyword_arg({{mrb}}, {{kw_args}}.values[{{c}}], {{keyword}}, context: {{context}}),
+            {{keyword.var.id}}: MrbMacro.convert_keyword_arg({{mrb}}, {{kw_args}}.values[{{c}}], {{keyword}}, context: {{context}}, 
+              type_vars: {{type_vars}}, type_var_names: {{type_var_names}}),
             {% c += 1 %}
           {% end %}
         {% else %}
           *{{converted_regular_args}},
           {% c = 0 %}
           {% for keyword in keyword_args %}
-            {{keyword.var.id}}: MrbMacro.convert_keyword_arg({{mrb}}, {{kw_args}}.values[{{c}}], {{keyword}}, context: {{context}}),
+            {{keyword.var.id}}: MrbMacro.convert_keyword_arg({{mrb}}, {{kw_args}}.values[{{c}}], {{keyword}}, context: {{context}},
+              type_vars: {{type_vars}}, type_var_names: {{type_var_names}}),
             {% c += 1 %}
           {% end %}
         {% end %}
@@ -431,6 +439,7 @@ module MrbMacro
 
       {{converted_obj}}.content = working_content
     else
+
       {% if proc.stringify == "MrbWrap::Empty" %}
         return_value = {{converted_obj}}.{{operator.id}}(
       {% else %}
@@ -439,18 +448,21 @@ module MrbMacro
         {% if empty_regular %}
           {% c = 0 %}
           {% for keyword in keyword_args %}
-            {{keyword.var.id}}: MrbMacro.convert_keyword_arg({{mrb}}, {{kw_args}}.values[{{c}}], {{keyword}}, context: {{context}}),
+            {{keyword.var.id}}: MrbMacro.convert_keyword_arg({{mrb}}, {{kw_args}}.values[{{c}}], {{keyword}}, context: {{context}},
+              type_vars: {{type_vars}}, type_var_names: {{type_var_names}}),
             {% c += 1 %}
           {% end %}
         {% else %}
           *{{converted_regular_args}},
           {% c = 0 %}
           {% for keyword in keyword_args %}
-            {{keyword.var.id}}: MrbMacro.convert_keyword_arg({{mrb}}, {{kw_args}}.values[{{c}}], {{keyword}}, context: {{context}}),
+            {{keyword.var.id}}: MrbMacro.convert_keyword_arg({{mrb}}, {{kw_args}}.values[{{c}}], {{keyword}}, context: {{context}},
+              type_vars: {{type_vars}}, type_var_names: {{type_var_names}}),
             {% c += 1 %}
           {% end %}
         {% end %}
       )
+
     end
 
     MrbCast.return_value({{mrb}}, return_value)
@@ -528,6 +540,10 @@ module MrbMacro
       {% proc_arg_array = [proc_args] %}
     {% end %}
 
+    {% type_vars = crystal_class.resolve.type_vars %}
+    {% type_var_names_annotation = crystal_class.resolve.annotation(MrbWrap::SpecifyGenericTypes) %}
+    {% type_var_names = type_var_names_annotation ? type_var_names_annotation[0] : nil %}
+
     {% proc_arg_array = MrbMacro.put_args_in_array(proc_args) %}
 
     wrapped_method = MrbFunc.new do |mrb, obj|
@@ -571,6 +587,10 @@ module MrbMacro
       {% proc_arg_array = [proc_args] %}
     {% end %}
 
+    {% type_vars = crystal_class.resolve.type_vars %}
+    {% type_var_names_annotation = crystal_class.resolve.annotation(MrbWrap::SpecifyGenericTypes) %}
+    {% type_var_names = type_var_names_annotation ? type_var_names_annotation[0] : nil %}
+
     wrapped_method = MrbFunc.new do |mrb, obj|
       converted_args = MrbMacro.get_converted_args(mrb, {{proc_arg_array}}, context: {{context}})
       MrbMacro.call_and_return(mrb, {{proc}}, {{proc_arg_array}}, converted_args, operator: {{operator}})
@@ -586,6 +606,10 @@ module MrbMacro
       {% regular_arg_array = [regular_args] %}
     {% end %}
 
+    {% type_vars = crystal_class.resolve.type_vars %}
+    {% type_var_names_annotation = crystal_class.resolve.annotation(MrbWrap::SpecifyGenericTypes) %}
+    {% type_var_names = type_var_names_annotation ? type_var_names_annotation[0] : nil %}
+
     wrapped_method = MrbFunc.new do |mrb, obj|
       regular_arg_tuple = MrbMacro.generate_arg_tuple({{regular_arg_array}}, context: {{context}})
       format_string = MrbMacro.format_string({{regular_arg_array}}, context: {{context}}) + ":"
@@ -596,9 +620,11 @@ module MrbMacro
       converted_regular_args = MrbMacro.convert_args(mrb, regular_arg_tuple, {{regular_arg_array}}, context: {{context}})
 
       {% if regular_arg_array.size == 0 %}
-        MrbMacro.call_and_return_keyword_method(mrb, {{proc}}, converted_regular_args, {{keyword_args}}, kw_args, operator: {{operator}}, empty_regular: true)
+        MrbMacro.call_and_return_keyword_method(mrb, {{proc}}, converted_regular_args, {{keyword_args}}, kw_args, operator: {{operator}}, 
+          empty_regular: true, type_vars: {{type_vars}}, type_var_names: {{type_var_names}})
       {% else %}
-        MrbMacro.call_and_return_keyword_method(mrb, {{proc}}, converted_regular_args, {{keyword_args}}, kw_args, operator: {{operator}})
+        MrbMacro.call_and_return_keyword_method(mrb, {{proc}}, converted_regular_args, {{keyword_args}}, kw_args, operator: {{operator}}, 
+          type_vars: {{type_vars}}, type_var_names: {{type_var_names}})
       {% end %}
     end
 
@@ -611,6 +637,10 @@ module MrbMacro
     {% else %}
       {% proc_arg_array = [proc_args] %}
     {% end %}
+
+    {% type_vars = crystal_class.resolve.type_vars %}
+    {% type_var_names_annotation = crystal_class.resolve.annotation(MrbWrap::SpecifyGenericTypes) %}
+    {% type_var_names = type_var_names_annotation ? type_var_names_annotation[0] : nil %}
 
     wrapped_method = MrbFunc.new do |mrb, obj|
       converted_args = MrbMacro.get_converted_args(mrb, {{proc_arg_array}}, context: {{context}})
@@ -634,6 +664,10 @@ module MrbMacro
       {% regular_arg_array = [regular_args] %}
     {% end %}
 
+    {% type_vars = crystal_class.resolve.type_vars %}
+    {% type_var_names_annotation = crystal_class.resolve.annotation(MrbWrap::SpecifyGenericTypes) %}
+    {% type_var_names = type_var_names_annotation ? type_var_names_annotation[0] : nil %}
+
     wrapped_method = MrbFunc.new do |mrb, obj|
       regular_arg_tuple = MrbMacro.generate_arg_tuple({{regular_arg_array}}, context: {{context}})
       format_string = MrbMacro.format_string({{regular_arg_array}}, context: {{context}}) + ":"
@@ -650,9 +684,11 @@ module MrbMacro
       end
 
       {% if regular_arg_array.size == 0 %}
-        MrbMacro.call_and_return_keyword_instance_method(mrb, {{proc}}, converted_obj, converted_regular_args, {{keyword_args}}, kw_args, operator: {{operator}}, empty_regular: true, context: {{context}})
+        MrbMacro.call_and_return_keyword_instance_method(mrb, {{proc}}, converted_obj, converted_regular_args, {{keyword_args}}, kw_args, operator: {{operator}}, 
+          empty_regular: true, context: {{context}}, type_vars: {{type_vars}}, type_var_names: {{type_var_names}})
       {% else %}
-        MrbMacro.call_and_return_keyword_instance_method(mrb, {{proc}}, converted_obj, converted_regular_args, {{keyword_args}}, kw_args, operator: {{operator}}, context: {{context}})
+        MrbMacro.call_and_return_keyword_instance_method(mrb, {{proc}}, converted_obj, converted_regular_args, {{keyword_args}}, kw_args, operator: {{operator}}, 
+          context: {{context}}, type_vars: {{type_vars}}, type_var_names: {{type_var_names}})
       {% end %}
     end
 
@@ -665,6 +701,10 @@ module MrbMacro
     {% else %}
       {% proc_arg_array = [proc_args] %}
     {% end %}
+
+    {% type_vars = crystal_class.resolve.type_vars %}
+    {% type_var_names_annotation = crystal_class.resolve.annotation(MrbWrap::SpecifyGenericTypes) %}
+    {% type_var_names = type_var_names_annotation ? type_var_names_annotation[0] : nil %}
 
     wrapped_method = MrbFunc.new do |mrb, obj|
       converted_args = MrbMacro.get_converted_args(mrb, {{proc_arg_array}}, context: {{context}})
@@ -684,6 +724,10 @@ module MrbMacro
       {% regular_arg_array = [regular_args] %}
     {% end %}
 
+    {% type_vars = crystal_class.resolve.type_vars %}
+    {% type_var_names_annotation = crystal_class.resolve.annotation(MrbWrap::SpecifyGenericTypes) %}
+    {% type_var_names = type_var_names_annotation ? type_var_names_annotation[0] : nil %}
+
     wrapped_method = MrbFunc.new do |mrb, obj|
       regular_arg_tuple = MrbMacro.generate_arg_tuple({{regular_arg_array}}, context: {{context}})
       format_string = MrbMacro.format_string({{regular_arg_array}}, context: {{context}}) + ":"
@@ -697,7 +741,8 @@ module MrbMacro
         new_obj = {{proc}}{{operator.id}}(
           {% c = 0 %}
           {% for keyword in keyword_args %}
-            {{keyword.var.id}}: MrbMacro.convert_keyword_arg(mrb, kw_args.values[{{c}}], {{keyword}}, context: {{context}}),
+            {{keyword.var.id}}: MrbMacro.convert_keyword_arg(mrb, kw_args.values[{{c}}], {{keyword}}, context: {{context}}, 
+              type_vars: {{type_vars}}, type_var_names: {{type_var_names}}),
             {% c += 1 %}
           {% end %}
         )
@@ -705,7 +750,8 @@ module MrbMacro
         new_obj = {{proc}}{{operator.id}}(*converted_regular_args,
           {% c = 0 %}
           {% for keyword in keyword_args %}
-            {{keyword.var.id}}: MrbMacro.convert_keyword_arg(mrb, kw_args.values[{{c}}], {{keyword}}, context: {{context}}),
+            {{keyword.var.id}}: MrbMacro.convert_keyword_arg(mrb, kw_args.values[{{c}}], {{keyword}}, context: {{context}}, 
+              type_vars: {{type_vars}}, type_var_names: {{type_var_names}}),
             {% c += 1 %}
           {% end %}
         )
@@ -1026,29 +1072,32 @@ module MrbMacro
   macro wrap_all_constants(mrb_state, crystal_class, exclusions, verbose, context = nil)
     # TODO: Is the context needed here?
 
-    {% for constant, index in crystal_class.resolve.constants %}
-      {% all_annotations_exclude_im = crystal_class.resolve.annotations(MrbWrap::ExcludeConstant) %}
-      {% annotation_exclude_im = all_annotations_exclude_im.find { |element| element[0].id.stringify == constant.stringify } %}
+    # NOTE: This check is necessary due to https://github.com/crystal-lang/crystal/issues/5757
+    {% if crystal_class.resolve.type_vars.empty? %}
+      {% for constant, index in crystal_class.resolve.constants %}
+        {% all_annotations_exclude_im = crystal_class.resolve.annotations(MrbWrap::ExcludeConstant) %}
+        {% annotation_exclude_im = all_annotations_exclude_im.find { |element| element[0].id.stringify == constant.stringify } %}
 
-      {% all_annotations_rename_im = crystal_class.resolve.annotations(MrbWrap::RenameConstant) %}
-      {% annotation_rename_im = all_annotations_rename_im.find { |element| element[0].id.stringify == constant.stringify } %}
+        {% all_annotations_rename_im = crystal_class.resolve.annotations(MrbWrap::RenameConstant) %}
+        {% annotation_rename_im = all_annotations_rename_im.find { |element| element[0].id.stringify == constant.stringify } %}
 
-      {% if annotation_rename_im && constant.stringify == annotation_rename_im[0].stringify %}
-        {% ruby_name = annotation_rename_im[1].id %}
-      {% else %}
-        {% ruby_name = constant %}
+        {% if annotation_rename_im && constant.stringify == annotation_rename_im[0].stringify %}
+          {% ruby_name = annotation_rename_im[1].id %}
+        {% else %}
+          {% ruby_name = constant %}
+        {% end %}
+
+        {% puts "> Processing constant #{crystal_class}::#{constant} to #{ruby_name}" if verbose %}
+        # Exclude methods which were annotated to be excluded
+        {% if exclusions.includes?(constant.symbolize) || exclusions.includes?(constant) %}
+          {% puts "--> Excluding #{crystal_class}::#{constant} (Exclusion argument)" if verbose %}
+        {% elsif annotation_exclude_im %}
+          {% puts "--> Excluding #{crystal_class}::#{constant} (Exclusion annotation)" if verbose %}
+        {% else %}
+          MrbMacro.wrap_constant_or_class({{mrb_state}}, {{crystal_class}}, "{{ruby_name}}", {{constant}}, {{verbose}})
+        {% end %}
+        {% puts "" if verbose %}
       {% end %}
-
-      {% puts "> Processing constant #{crystal_class}::#{constant} to #{ruby_name}" if verbose %}
-      # Exclude methods which were annotated to be excluded
-      {% if exclusions.includes?(constant.symbolize) || exclusions.includes?(constant) %}
-        {% puts "--> Excluding #{crystal_class}::#{constant} (Exclusion argument)" if verbose %}
-      {% elsif annotation_exclude_im %}
-        {% puts "--> Excluding #{crystal_class}::#{constant} (Exclusion annotation)" if verbose %}
-      {% else %}
-        MrbMacro.wrap_constant_or_class({{mrb_state}}, {{crystal_class}}, "{{ruby_name}}", {{constant}}, {{verbose}})
-      {% end %}
-      {% puts "" if verbose %}
     {% end %}
   end
 
@@ -1061,8 +1110,11 @@ module MrbMacro
         MrbWrap.wrap_class_with_methods({{mrb_state}}, {{actual_constant}}, under: {{under_class_or_module}}, verbose: {{verbose}})
       {% elsif actual_constant.union? %}
         {% puts "\e[31m> WARNING: Wrapping of unions not supported, thus skipping #{actual_constant}\e[0m" %}
-      {% else %}
+      {% elsif actual_constant < Enum %}
         MrbWrap.wrap_class_with_methods({{mrb_state}}, {{actual_constant}}, under: {{under_class_or_module}}, use_enum_constructor: true, verbose: {{verbose}})
+      {% else %}
+        # Could be an alias, just try the default case
+        MrbWrap.wrap_class_with_methods({{mrb_state}}, {{actual_constant}}, under: {{under_class_or_module}}, verbose: {{verbose}})
       {% end %}
     {% else %}
       MrbWrap.wrap_constant_under_class({{mrb_state}}, {{under_class_or_module}}, {{ruby_name}}, {{under_class_or_module}}::{{value}})
