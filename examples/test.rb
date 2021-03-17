@@ -55,6 +55,7 @@ a.overload_test(arg: nil)
 a.overload_test(arg: 3.0 / 5.0)
 a.overload_test(arg: b)
 a.overload_test(arg: TestModule::Test::TestEnum::Four)
+a.overload_test(arg: TestModule::Test::GTIntInt.new)
 a.overload_test
 
 a.nilable_test(arg: 123)
@@ -69,3 +70,4 @@ puts "This function returns an enum: #{a.returns_an_enum.value}"
 puts "Either an int or a string: #{a.returns_something_random.inspect}"
 
 TestModule::Test::GTIntFloat.new.test(u: 3, v: 5.5)
+TestModule::Test::GTIntInt.new.test(u: 3, v: 9)

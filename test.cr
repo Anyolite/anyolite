@@ -53,6 +53,7 @@ module SomeModule
     end
 
     alias GTIntFloat = GenericTest(Int32, Float32)
+    alias GTIntInt = GenericTest(Int32, Int32)
 
     property x : Int32 = 0
 
@@ -126,9 +127,11 @@ module SomeModule
       ret = self + other
     end
 
-    def overload_test(arg : Int32 | String | Bool | Nil | Float32 | Test | Test::TestEnum = "Default String")
+    def overload_test(arg : Int32 | String | Bool | Nil | Float32 | Test | Test::TestEnum | Test::GenericTest(Int32, Int32) = "Default String")
       if arg.is_a?(Test)
         puts "Test: A test object with x = #{arg.x}"
+      elsif arg.is_a?(GenericTest(Int32, Int32))
+        puts "Test: A generic test"
       else
         puts "Test: #{arg.inspect}"
       end
