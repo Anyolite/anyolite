@@ -189,10 +189,10 @@ module MrbMacro
     {% end %}
   end
 
-  macro convert_keyword_arg(mrb, arg, arg_type, context = nil, type_vars = nil, type_var_names = nil)
+  macro convert_keyword_arg(mrb, arg, arg_type, context = nil, type_vars = nil, type_var_names = nil, debug_information = nil)
     {% if type_var_names && type_var_names.includes?(arg_type.type) %}
       {% type_var_names.each_with_index{|element, index| result = index if element == arg_type.type} %}
-      MrbMacro.convert_keyword_arg({{mrb}}, {{arg}}, {{type_vars[result]}}, context: {{context}})
+      MrbMacro.convert_keyword_arg({{mrb}}, {{arg}}, {{type_vars[result]}}, context: {{context}}, debug_information: {{debug_information}})
     {% elsif arg_type.is_a?(Call) %}
       {% raise "Received Call #{arg_type} instead of TypeDeclaration or TypeNode" %}
     {% elsif arg_type.is_a?(TypeDeclaration) %}
@@ -208,19 +208,19 @@ module MrbMacro
         # However, when a union type component moves out of its context, it is not resolvable by its own anymore
         # This then leads to problems, so it is better to test for '|' instead of using the resolve.union? method
         {% if arg_type.type.stringify.includes?('|') %}
-          MrbMacro.convert_keyword_arg({{mrb}}, {{arg}}, Union({{arg_type.type}}), context: {{context}})
+          MrbMacro.convert_keyword_arg({{mrb}}, {{arg}}, Union({{arg_type.type}}), context: {{context}}, debug_information: {{debug_information}})
         {% else %}
-          MrbMacro.convert_keyword_arg({{mrb}}, {{arg}}, {{arg_type.type}}, context: {{context}})
+          MrbMacro.convert_keyword_arg({{mrb}}, {{arg}}, {{arg_type.type}}, context: {{context}}, debug_information: {{debug_information}})
         {% end %}
       end
     {% elsif context && !arg_type.stringify.starts_with?("Union") %}
-      MrbMacro.convert_resolved_keyword_arg({{mrb}}, {{arg}}, {{context}}::{{arg_type}}, {{arg_type}}, context: {{context}})
+      MrbMacro.convert_resolved_keyword_arg({{mrb}}, {{arg}}, {{context}}::{{arg_type}}, {{arg_type}}, context: {{context}}, debug_information: {{debug_information}})
     {% else %}
-      MrbMacro.convert_resolved_keyword_arg({{mrb}}, {{arg}}, {{arg_type}}, {{arg_type}}, context: {{context}})
+      MrbMacro.convert_resolved_keyword_arg({{mrb}}, {{arg}}, {{arg_type}}, {{arg_type}}, context: {{context}}, debug_information: {{debug_information}})
     {% end %}
   end
 
-  macro convert_resolved_keyword_arg(mrb, arg, arg_type, raw_arg_type, context = nil)
+  macro convert_resolved_keyword_arg(mrb, arg, arg_type, raw_arg_type, context = nil, debug_information = nil)
     {% if arg_type.stringify.includes?('|') %}
       # Same as above, this sadly needs some uncanny magic
       MrbMacro.cast_to_union_value({{mrb}}, {{arg}}, {{arg_type.stringify[6..-2].split('|').map{|x| x.id}}}, context: {{context}})
@@ -247,18 +247,18 @@ module MrbMacro
         MrbMacro.convert_from_ruby_object({{mrb}}, {{arg}}, {{arg_type}}).value
       {% else %}
         # TODO: Add special annotation in order to specify generics
-        {% raise "Could not resolve type #{arg_type}, which is a #{arg_type.class_name}" %}
+        {% raise "Could not resolve type #{arg_type}, which is a #{arg_type.class_name.id} (#{debug_information.id})" %}
       {% end %}
     {% elsif context %}
       {% if context.names[0..-2].size > 0 %}
         {% new_context = context.names[0..-2].join("::").id %}
-        MrbMacro.convert_resolved_keyword_arg({{mrb}}, {{arg}}, {{new_context}}::{{raw_arg_type}}, {{raw_arg_type}}, {{new_context}})
+        MrbMacro.convert_resolved_keyword_arg({{mrb}}, {{arg}}, {{new_context}}::{{raw_arg_type}}, {{raw_arg_type}}, {{new_context}}, debug_information: {{debug_information}})
       {% else %}
-        MrbMacro.convert_resolved_keyword_arg({{mrb}}, {{arg}}, {{raw_arg_type}}, {{raw_arg_type}})
+        MrbMacro.convert_resolved_keyword_arg({{mrb}}, {{arg}}, {{raw_arg_type}}, {{raw_arg_type}}, debug_information: {{debug_information}})
       {% end %}
     {% else %}
       # TODO: Maybe add full original context?
-      {% raise "Could not resolve type #{arg_type}, which is a #{arg_type.class_name}" %}
+      {% raise "Could not resolve type #{arg_type}, which is a #{arg_type.class_name.id} (#{debug_information.id})" %}
     {% end %}
   end
 
@@ -371,14 +371,14 @@ module MrbMacro
       {% if empty_regular %}
         {% c = 0 %}
         {% for keyword in keyword_args %}
-          {{keyword.var.id}}: MrbMacro.convert_keyword_arg({{mrb}}, {{kw_args}}.values[{{c}}], {{keyword}}),
+          {{keyword.var.id}}: MrbMacro.convert_keyword_arg({{mrb}}, {{kw_args}}.values[{{c}}], {{keyword}}, debug_information: {{proc.stringify + " - " + keyword_args.stringify}}),
           {% c += 1 %}
         {% end %}
       {% else %}
         *{{converted_regular_args}},
         {% c = 0 %}
         {% for keyword in keyword_args %}
-          {{keyword.var.id}}: MrbMacro.convert_keyword_arg({{mrb}}, {{kw_args}}.values[{{c}}], {{keyword}}),
+          {{keyword.var.id}}: MrbMacro.convert_keyword_arg({{mrb}}, {{kw_args}}.values[{{c}}], {{keyword}}, debug_information: {{proc.stringify + " - " + keyword_args.stringify}}),
           {% c += 1 %}
         {% end %}
       {% end %}
@@ -423,7 +423,7 @@ module MrbMacro
           {% c = 0 %}
           {% for keyword in keyword_args %}
             {{keyword.var.id}}: MrbMacro.convert_keyword_arg({{mrb}}, {{kw_args}}.values[{{c}}], {{keyword}}, context: {{context}}, 
-              type_vars: {{type_vars}}, type_var_names: {{type_var_names}}),
+              type_vars: {{type_vars}}, type_var_names: {{type_var_names}}, debug_information: {{proc.stringify + " - " + keyword_args.stringify}}),
             {% c += 1 %}
           {% end %}
         {% else %}
@@ -431,7 +431,7 @@ module MrbMacro
           {% c = 0 %}
           {% for keyword in keyword_args %}
             {{keyword.var.id}}: MrbMacro.convert_keyword_arg({{mrb}}, {{kw_args}}.values[{{c}}], {{keyword}}, context: {{context}},
-              type_vars: {{type_vars}}, type_var_names: {{type_var_names}}),
+              type_vars: {{type_vars}}, type_var_names: {{type_var_names}}, debug_information: {{proc.stringify + " - " + keyword_args.stringify}}),
             {% c += 1 %}
           {% end %}
         {% end %}
@@ -449,7 +449,7 @@ module MrbMacro
           {% c = 0 %}
           {% for keyword in keyword_args %}
             {{keyword.var.id}}: MrbMacro.convert_keyword_arg({{mrb}}, {{kw_args}}.values[{{c}}], {{keyword}}, context: {{context}},
-              type_vars: {{type_vars}}, type_var_names: {{type_var_names}}),
+              type_vars: {{type_vars}}, type_var_names: {{type_var_names}}, debug_information: {{proc.stringify + " - " + keyword_args.stringify}}),
             {% c += 1 %}
           {% end %}
         {% else %}
@@ -457,7 +457,7 @@ module MrbMacro
           {% c = 0 %}
           {% for keyword in keyword_args %}
             {{keyword.var.id}}: MrbMacro.convert_keyword_arg({{mrb}}, {{kw_args}}.values[{{c}}], {{keyword}}, context: {{context}},
-              type_vars: {{type_vars}}, type_var_names: {{type_var_names}}),
+              type_vars: {{type_vars}}, type_var_names: {{type_var_names}}, debug_information: {{proc.stringify + " - " + keyword_args.stringify}}),
             {% c += 1 %}
           {% end %}
         {% end %}
@@ -742,7 +742,7 @@ module MrbMacro
           {% c = 0 %}
           {% for keyword in keyword_args %}
             {{keyword.var.id}}: MrbMacro.convert_keyword_arg(mrb, kw_args.values[{{c}}], {{keyword}}, context: {{context}}, 
-              type_vars: {{type_vars}}, type_var_names: {{type_var_names}}),
+              type_vars: {{type_vars}}, type_var_names: {{type_var_names}}, debug_information: {{proc.stringify + " - " + keyword_args.stringify}}),
             {% c += 1 %}
           {% end %}
         )
@@ -751,7 +751,7 @@ module MrbMacro
           {% c = 0 %}
           {% for keyword in keyword_args %}
             {{keyword.var.id}}: MrbMacro.convert_keyword_arg(mrb, kw_args.values[{{c}}], {{keyword}}, context: {{context}}, 
-              type_vars: {{type_vars}}, type_var_names: {{type_var_names}}),
+              type_vars: {{type_vars}}, type_var_names: {{type_var_names}}, debug_information: {{proc.stringify + " - " + keyword_args.stringify}}),
             {% c += 1 %}
           {% end %}
         )
