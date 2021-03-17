@@ -293,8 +293,8 @@ module MrbWrap
       {% puts ">>> Going into class #{crystal_class} under #{under}\n\n" %}
     {% end %}
 
-    {% if verbose && crystal_class.is_a?(Generic) %}
-      {% puts "> Wrapping of generics not supported, thus skipping #{crystal_class}\e[0m\n\n" %}
+    {% if crystal_class.is_a?(Generic) %}
+      {% puts "> Wrapping of generics not supported, thus skipping #{crystal_class}\e[0m\n\n" if verbose %}
     {% else %}
       {% resolved_class = crystal_class.resolve %}
 
