@@ -147,14 +147,20 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 #### Features
 
 * [X] Support for wrapping generics using annotations
+* [ ] Non-keyword arguments allow for union and generic type arguments
+* [ ] Annotation for non-keyword arguments accepts number as optional argument
 
 #### Breaking changes
 
-* [ ] Find consistent solution for non-keyword arguments
+* [ ] Non-keyword arguments need to be specialized explicitly
 
 #### Usability
 
 * [X] More helpful error messages when path resolution fails
+
+#### Bugfixes
+
+* [X] Specialization to new arguments did not allow non-keyword annotations
 
 ### Version 1.0.0
 
@@ -163,10 +169,10 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 * [ ] Mac support (might be possible, not tested yet)
 * [ ] More configuration options for the Rakefile
 * [ ] Documentation of all relevant features and wrappers
+* [ ] Options for inherited and/or inheriting classes
 
 ### Future ideas (might not actually be possible to implement)
 
-* [ ] Options for inherited and/or inheriting classes
 * [ ] Arrays and/or hashes as argument and return values
 * [ ] Splat argument and/or arbitrary keyword passing
 * [ ] Method in mruby to determine owner of object

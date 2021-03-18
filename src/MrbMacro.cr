@@ -8,6 +8,8 @@ module MrbMacro
     ""
   end
 
+  # TODO: Update this and other non-keyword-argument-macros to support union and generic types
+
   macro format_char(arg, optional_values = false, context = nil)
     {% if arg.is_a?(TypeDeclaration) %}
       {% if optional_values != true && arg.value %}
@@ -155,7 +157,6 @@ module MrbMacro
   end
 
   macro convert_resolved_arg(mrb, arg, arg_type, raw_arg_type, context = nil)
-    # TODO: Does this need union types as well?
     {% if arg_type.resolve? %}
       {% if arg_type.resolve <= Bool %}
         ({{arg}} != 0)
@@ -786,6 +787,12 @@ module MrbMacro
       {% final_method_name = method.name %}
     {% end %}
 
+    # TODO: Restructure whole function to these cases (and functions):
+    # - No args (wrap_instance_method)
+    # - Only regular args (wrap_instance_method)
+    # - Only keyword args (wrap_instance_method_with_keywords)
+    # - Keyword args and regular args (wrap_instance_method_with_keywords)
+
     {% if method.args.empty? %}
       {% if is_class_method %}
         MrbWrap.wrap_class_method({{mrb_state}}, {{crystal_class}}, {{ruby_name}}, {{crystal_class}}.{{final_method_name}}, operator: {{operator}}, context: {{context}})
@@ -799,8 +806,14 @@ module MrbMacro
       {% if without_keywords %}
         {% type_array = [] of Crystal::Macros::ASTNode %}
 
-        {% for arg in method.args %}
-          {% type_array.push(arg.restriction) %}
+        {% if added_keyword_args %}
+          {% for arg in added_keyword_args %}
+            {% type_array.push(arg.type) %}
+          {% end %}
+        {% else %}
+          {% for arg in method.args %}
+            {% type_array.push(arg.restriction) %}
+          {% end %}
         {% end %}
 
         {% if is_class_method %}
