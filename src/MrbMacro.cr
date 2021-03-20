@@ -929,8 +929,10 @@ module MrbMacro
 
       {% without_keywords = false %}
 
-      {% if method.annotation(MrbWrap::WrapWithoutKeywords) || annotation_without_keyword_im %}
-        {% without_keywords = true %}
+      {% if method.annotation(MrbWrap::WrapWithoutKeywords) %}
+        {% without_keywords = method.annotation(MrbWrap::WrapWithoutKeywords)[0] ? method.annotation(MrbWrap::WrapWithoutKeywords)[0] : -1 %}
+      {% elsif annotation_without_keyword_im %}
+        {% without_keywords = annotation_without_keyword_im[1] ? annotation_without_keyword_im[1] : -1 %}
       {% end %}
 
       {% puts "> Processing instance method #{crystal_class}::#{method.name} to #{ruby_name}\n--> Args: #{method.args}" if verbose %}
@@ -956,9 +958,9 @@ module MrbMacro
         {% operator = method.name.tr(without_operator.stringify, "") %}
 
         {% if without_operator.empty? %}
-          MrbMacro.wrap_method_index({{mrb_state}}, {{crystal_class}}, {{index}}, "{{ruby_name}}", operator: "{{operator}}", without_keywords: true, context: {{context}})
+          MrbMacro.wrap_method_index({{mrb_state}}, {{crystal_class}}, {{index}}, "{{ruby_name}}", operator: "{{operator}}", without_keywords: -1, context: {{context}})
         {% else %}
-          MrbMacro.wrap_method_index({{mrb_state}}, {{crystal_class}}, {{index}}, "{{ruby_name}}", operator: "{{operator}}", cut_name: {{without_operator}}, without_keywords: true, context: {{context}})
+          MrbMacro.wrap_method_index({{mrb_state}}, {{crystal_class}}, {{index}}, "{{ruby_name}}", operator: "{{operator}}", cut_name: {{without_operator}}, without_keywords: -1, context: {{context}})
         {% end %}
         {% how_many_times_wrapped[ruby_name.stringify] = how_many_times_wrapped[ruby_name.stringify] ? how_many_times_wrapped[ruby_name.stringify] + 1 : 1 %}
       # Handle constructors
@@ -1048,8 +1050,10 @@ module MrbMacro
 
       {% without_keywords = false %}
 
-      {% if method.annotation(MrbWrap::WrapWithoutKeywords) || annotation_without_keyword_im %}
-        {% without_keywords = true %}
+      {% if method.annotation(MrbWrap::WrapWithoutKeywords) %}
+        {% without_keywords = method.annotation(MrbWrap::WrapWithoutKeywords)[0] ? method.annotation(MrbWrap::WrapWithoutKeywords)[0] : -1 %}
+      {% elsif annotation_without_keyword_im %}
+        {% without_keywords = annotation_without_keyword_im[1] ? annotation_without_keyword_im[1] : -1 %}
       {% end %}
 
       {% puts "> Processing class method #{crystal_class}::#{method.name} to #{ruby_name}\n--> Args: #{method.args}" if verbose %}
