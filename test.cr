@@ -137,6 +137,10 @@ module SomeModule
       end
     end
 
+    def happy😀emoji😀test😀😀(arg : Int32)
+      puts "😀 for number #{arg}"
+    end
+
     def nilable_test(arg : Int32?)
       puts "Received argument #{arg.inspect}"
     end

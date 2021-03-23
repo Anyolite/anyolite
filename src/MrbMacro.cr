@@ -802,7 +802,8 @@ module MrbMacro
         MrbWrap.wrap_instance_method({{mrb_state}}, {{crystal_class}}, {{ruby_name}}, {{final_method_name}}, operator: {{operator}}, context: {{context}})
       {% end %}
 
-    {% elsif method.args.stringify.includes?(":") || (added_keyword_args && added_keyword_args.stringify.includes?(":")) %}
+    # A complicated check, but it is more stable than simply checking for colons
+    {% elsif method.args.find {|m| (m.is_a?(TypeDeclaration) && m.type) || (m.is_a?(Arg) && m.restriction)} || (added_keyword_args && added_keyword_args.find {|m| (m.is_a?(TypeDeclaration) && m.type) || (m.is_a?(Arg) && m.restriction)}) %}
       {% if without_keywords %}
         {% type_array = [] of Crystal::Macros::ASTNode %}
 
@@ -953,9 +954,10 @@ module MrbMacro
       {% elsif has_specialized_method[method.name.stringify] && !(method.annotation(MrbWrap::Specialize) || (annotation_specialize_im && (method.args.stringify == annotation_specialize_im[1].stringify || (method.args.stringify == "[]" && annotation_specialize_im[1] == nil)))) %}
         {% puts "--> Excluding #{crystal_class}::#{method.name} #{method.args} (Specialization)" if verbose %}
       # Handle operator methods (including setters)
-      {% elsif method.name =~ /\W/ %}
-        {% without_operator = method.name.gsub(/\W/, "") %}
-        {% operator = method.name.tr(without_operator.stringify, "") %}
+      # TODO: Make this more stable (methods '=', '==' are not working currently, and '+' is weird)
+      {% elsif method.name[-1..-1] =~ /\W/ %}
+        {% without_operator = method.name[0..-2] %}
+        {% operator = method.name[-1..-1] %}
 
         {% if without_operator.empty? %}
           MrbMacro.wrap_method_index({{mrb_state}}, {{crystal_class}}, {{index}}, "{{ruby_name}}", operator: "{{operator}}", without_keywords: -1, context: {{context}})

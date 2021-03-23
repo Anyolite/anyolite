@@ -155,6 +155,7 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 #### Breaking changes
 
 * [ ] Non-keyword arguments need to be specialized explicitly
+* [ ] More consistent wrapping of operator methods
 
 #### Usability
 
@@ -164,6 +165,8 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 
 * [X] Specialization to new arguments did not allow non-keyword annotations
 * [X] Correct wrapping of most aliased types
+* [X] Methods with non-letter-symbols could not be wrapped
+* [X] Default arguments with colons were wrongly assumed to be keywords
 
 ### Version 1.0.0
 

@@ -73,3 +73,4 @@ TestModule::Test::GTIntFloat.new.test(u: 3, v: 5.5)
 TestModule::Test::GTIntInt.new.test(u: 3, v: 9)
 
 puts "Results of complicated method: #{a.complicated_method(19, 0.567, 0.111, "Hello", 31313)}"
+puts a.happy😀emoji😀test😀😀(1234567)
