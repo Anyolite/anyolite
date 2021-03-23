@@ -84,7 +84,7 @@ module MrbCast
 
     return new_ruby_object
   end
-  
+
   # Class check methods
 
   def self.check_for_undef(value : MrbInternal::MrbValue)

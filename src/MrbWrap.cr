@@ -225,12 +225,12 @@ module MrbWrap
   # The optional first argument overwrites the original argument array.
   annotation Specialize; end
 
-  # Excludes all definitions of the instance method given as the first argument 
+  # Excludes all definitions of the instance method given as the first argument
   # besides the one with the arguments given in the second argument (`nil` for none) from wrapping.
   # The optional third argument overwrites the original argument array.
   annotation SpecializeInstanceMethod; end
 
-  # Excludes all definitions of the class method given as the first argument 
+  # Excludes all definitions of the class method given as the first argument
   # besides the one with the arguments given in the second argument (`nil` for none) from wrapping.
   # The optional third argument overwrites the original argument array.
   annotation SpecializeClassMethod; end
@@ -275,10 +275,10 @@ module MrbWrap
   #
   # The `Class` *crystal_class* will be integrated into the `MrbState` *mrb_state*,
   # with the optional parent module *under*.
-  # Methods or constants to be excluded can be specified as 
-  # `Symbol` or `String` in the `Array` 
+  # Methods or constants to be excluded can be specified as
+  # `Symbol` or `String` in the `Array`
   # *instance_method_exclusions* (for instance methods),
-  # *class_method_exclusions* (for class methods) or 
+  # *class_method_exclusions* (for class methods) or
   # *constant_exclusions* (for constants).
   # Enum classes can be wrapped by setting *use_enum_constructor*.
   # If *verbose* is set, wrapping information will be displayed.
@@ -317,9 +317,9 @@ module MrbWrap
   #
   # The module *crystal_module* will be integrated into the `MrbState` *mrb_state*,
   # with the optional parent module *under*.
-  # Methods or constants to be excluded can be specified as 
-  # `Symbol` or `String` in the `Array` 
-  # *class_method_exclusions* (for class methods) or 
+  # Methods or constants to be excluded can be specified as
+  # `Symbol` or `String` in the `Array`
+  # *class_method_exclusions* (for class methods) or
   # *constant_exclusions* (for constants).
   # If *verbose* is set, wrapping information will be displayed.
   macro wrap_module_with_methods(mrb_state, crystal_module, under = nil,
@@ -345,14 +345,14 @@ module MrbWrap
 
   # Wraps a whole class or module structure under a module into mruby.
   #
-  # The class or module *crystal_module_or_class* will be integrated 
+  # The class or module *crystal_module_or_class* will be integrated
   # into the `MrbState` *mrb_state*,
   # with the optional parent module *under*.
-  # Methods or constants to be excluded can be specified as 
-  # `Symbol` or `String` in the `Array` 
-  # *class_method_exclusions* (for class methods) or 
+  # Methods or constants to be excluded can be specified as
+  # `Symbol` or `String` in the `Array`
+  # *class_method_exclusions* (for class methods) or
   # *constant_exclusions* (for constants).
-  # If *verbose* is set, wrapping information will be displayed. 
+  # If *verbose* is set, wrapping information will be displayed.
   macro wrap(mrb_state, crystal_module_or_class, under = nil,
              instance_method_exclusions = [] of String | Symbol,
              class_method_exclusions = [] of String | Symbol,

@@ -23,7 +23,6 @@ module SomeModule
   @[MrbWrap::SpecializeInstanceMethod(method_without_keywords, [arg], [arg : String])]
   @[MrbWrap::SpecializeInstanceMethod(method_with_various_args, nil)]
   class Test
-
     @[MrbWrap::RenameClass("UnderTestRenamed")]
     class UnderTest
       module DeepUnderTest
@@ -94,7 +93,7 @@ module SomeModule
 
     # Gets called in Crystal and mruby
     def initialize(@x : Int32 = 0)
-      Test.increase_counter()
+      Test.increase_counter
       puts "Test object initialized with value #{@x}"
     end
 
@@ -211,7 +210,7 @@ module SomeModule
   end
 end
 
-#MrbRefTable.set_option(:logging)
+# MrbRefTable.set_option(:logging)
 
 MrbState.create do |mrb|
   MrbWrap.wrap_module(mrb, SomeModule, "TestModule")

@@ -192,7 +192,7 @@ module MrbMacro
 
   macro convert_keyword_arg(mrb, arg, arg_type, context = nil, type_vars = nil, type_var_names = nil, debug_information = nil)
     {% if type_var_names && type_var_names.includes?(arg_type.type) %}
-      {% type_var_names.each_with_index{|element, index| result = index if element == arg_type.type} %}
+      {% type_var_names.each_with_index { |element, index| result = index if element == arg_type.type } %}
       MrbMacro.convert_keyword_arg({{mrb}}, {{arg}}, {{type_vars[result]}}, context: {{context}}, debug_information: {{debug_information}})
     {% elsif arg_type.is_a?(Call) %}
       {% raise "Received Call #{arg_type} instead of TypeDeclaration or TypeNode" %}
@@ -224,7 +224,7 @@ module MrbMacro
   macro convert_resolved_keyword_arg(mrb, arg, arg_type, raw_arg_type, context = nil, debug_information = nil)
     {% if arg_type.stringify.includes?('|') %}
       # Same as above, this sadly needs some uncanny magic
-      MrbMacro.cast_to_union_value({{mrb}}, {{arg}}, {{arg_type.stringify[6..-2].split('|').map{|x| x.id}}}, context: {{context}})
+      MrbMacro.cast_to_union_value({{mrb}}, {{arg}}, {{arg_type.stringify[6..-2].split('|').map { |x| x.id }}}, context: {{context}})
     {% elsif arg_type.resolve? %}
       {% if arg_type.resolve <= Nil %}
         MrbCast.cast_to_nil({{mrb}}, {{arg}})
@@ -279,7 +279,7 @@ module MrbMacro
     final_value
   end
 
-  # TODO: Some double checks could be omitted 
+  # TODO: Some double checks could be omitted
 
   macro check_and_cast_resolved_union_type(mrb, value, type, raw_type, context = nil)
     {% if type.resolve <= Nil %}
@@ -409,8 +409,8 @@ module MrbMacro
     MrbCast.return_value({{mrb}}, return_value)
   end
 
-  macro call_and_return_keyword_instance_method(mrb, proc, converted_obj, converted_regular_args, keyword_args, kw_args, operator = "", 
-    empty_regular = false, context = nil, type_vars = nil, type_var_names = nil)
+  macro call_and_return_keyword_instance_method(mrb, proc, converted_obj, converted_regular_args, keyword_args, kw_args, operator = "",
+                                                empty_regular = false, context = nil, type_vars = nil, type_var_names = nil)
 
     if {{converted_obj}}.is_a?(MrbWrap::StructWrapper)
       working_content = {{converted_obj}}.content
@@ -803,7 +803,7 @@ module MrbMacro
       {% end %}
 
     # A complicated check, but it is more stable than simply checking for colons
-    {% elsif method.args.find {|m| (m.is_a?(TypeDeclaration) && m.type) || (m.is_a?(Arg) && m.restriction)} || (added_keyword_args && added_keyword_args.find {|m| (m.is_a?(TypeDeclaration) && m.type) || (m.is_a?(Arg) && m.restriction)}) %}
+    {% elsif method.args.find { |m| (m.is_a?(TypeDeclaration) && m.type) || (m.is_a?(Arg) && m.restriction) } || (added_keyword_args && added_keyword_args.find { |m| (m.is_a?(TypeDeclaration) && m.type) || (m.is_a?(Arg) && m.restriction) }) %}
       {% if without_keywords %}
         {% type_array = [] of Crystal::Macros::ASTNode %}
 
