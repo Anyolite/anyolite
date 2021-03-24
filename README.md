@@ -127,8 +127,8 @@ More features will be added in the future.
 * Arrays and hashes are not directly supported
 * Symbols do not work due to their compiletime nature in Crystal
 * Splat arguments and arbitrary keywords are not possible due to their reliance on symbols
-* Regular function arguments are not very flexible (keyword arguments however are!)
 * Keywords will always be given to functions, even if optional (then with default values)
+* Non-keyword function arguments are always set to their default values before receiving their final values
 
 # Why this name?
 

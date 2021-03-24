@@ -226,7 +226,9 @@ module MrbMacro
           {{arg_type.value}}
         {% else %}
           # Should only happen if no default value was given
-          raise("Undefined argument {{arg}} of {{arg_type}} in context {{context}}")
+          MrbInternal.mrb_raise_argument_error({{mrb}}, "Undefined argument #{{{arg}}} of {{arg_type}} in context {{context}}")
+          # Code should jump to somewhere else before this point, but we want to have a NoReturn type here
+          raise("Should not be reached")
         {% end %}
       else
         # Yes, this is not the elegant way
@@ -299,7 +301,8 @@ module MrbMacro
     {% end %}
     
     if final_value.is_a?(Symbol)
-      raise("Could not determine any value for #{{{value}}} with types {{types}} in context {{context}}")
+      MrbInternal.mrb_raise_argument_error({{mrb}}, "Could not determine any value for #{{{value}}} with types {{types}} in context {{context}}")
+      raise("Should not be reached")
     else
       final_value
     end
