@@ -268,8 +268,8 @@ module MrbMacro
   end
 
   macro cast_to_union_value(mrb, value, types, context = nil)
-    final_value = nil
-    
+    final_value = :invalid
+
     {% for type in types %}
       {% if type.resolve? %}
         MrbMacro.check_and_cast_resolved_union_type({{mrb}}, {{value}}, {{type}}, {{type}})
@@ -279,8 +279,12 @@ module MrbMacro
         MrbMacro.check_and_cast_resolved_union_type({{mrb}}, {{value}}, {{type}}, {{type}})
       {% end %}
     {% end %}
-
-    final_value
+    
+    if final_value.is_a?(Symbol)
+      raise("Could not determine any value for {{value}} with types {{types}} in context {{context}}")
+    else
+      final_value
+    end
   end
 
   # TODO: Some double checks could be omitted

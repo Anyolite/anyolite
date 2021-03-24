@@ -174,8 +174,12 @@ module MrbCast
     MrbInternal.mrb_obj_is_kind_of({{mrb}}, {{value}}, MrbClassCache.get({{crystal_type}})) != 0
   end
 
-  def self.is_undef?(value : MrbInternal::MrbValue) # Just a more readable synonym
-    MrbCast.check_for_undef(value)
+  def self.is_undef?(value) # Excludes non-MrbValue types as well
+    if value.is_a?(MrbInternal::MrbValue)
+      MrbCast.check_for_undef(value)
+    else
+      false
+    end
   end
 
   # TODO: Object casting for this method
