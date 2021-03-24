@@ -144,10 +144,10 @@ module SomeModule
       puts "Received argument #{arg.inspect}"
     end
 
-    @[MrbWrap::Specialize([arg1 : Int32, arg2 : Float32, arg_req : Float32, arg_opt_1 : String = "Cookies", arg_opt_2 : Int32 = 32])]
+    @[MrbWrap::Specialize([arg1 : Int32, arg2 : Float32, arg_req : Float32, arg_opt_1 : String | Test | Bool | Test::TestEnum = "Cookies", arg_opt_2 : Int32 = 32])]
     @[MrbWrap::WrapWithoutKeywords(4)]
-    def complicated_method(arg1, arg2, arg_req : Float32, arg_opt_1 : String | Bool = "Cookies", arg_opt_2 : Int32 = 32)
-      "#{arg1} - #{arg2} - #{arg_req} - #{arg_opt_1} - #{arg_opt_2}"
+    def complicated_method(arg1, arg2, arg_req : Float32, arg_opt_1 : String | Test | Bool | Test::TestEnum = "Cookies", arg_opt_2 : Int32 = 32)
+      "#{arg1} - #{arg2} - #{arg_req} - #{arg_opt_1.is_a?(Test) ? arg_opt_1.x : arg_opt_1} - #{arg_opt_2}"
     end
 
     def returns_an_enum

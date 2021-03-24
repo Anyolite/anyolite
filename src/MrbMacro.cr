@@ -10,10 +10,16 @@ module MrbMacro
     ""
   end
 
-  # TODO: Update this and other non-keyword-argument-macros to support union and generic types
+  # TODO: Update this and other non-keyword-argument-macros to support generic types
 
   macro format_char(arg, optional_values = false, context = nil)
-    {% if arg.is_a?(TypeDeclaration) %}
+    {% if arg.stringify.includes?('|') %}
+      {% if optional_values != true && arg.stringify.includes?('|') %}
+        "|o"
+      {% else %}
+        "o"
+      {% end %}
+    {% elsif arg.is_a?(TypeDeclaration) %}
       {% if optional_values != true && arg.value %}
         "|" + MrbMacro.format_char({{arg.type}}, optional_values: true, context: {{context}})
       {% else %}
@@ -52,7 +58,9 @@ module MrbMacro
   end
 
   macro type_in_ruby(type, context = nil)
-    {% if type.is_a?(TypeDeclaration) %}
+    {% if type.stringify.includes?('|') %}
+      MrbInternal::MrbValue
+    {% elsif type.is_a?(TypeDeclaration) %}
       MrbMacro.type_in_ruby({{type.type}})
     {% elsif context %}
       MrbMacro.resolve_type_in_ruby({{context}}::{{type}}, {{type}}, {{context}})
@@ -88,7 +96,9 @@ module MrbMacro
   end
 
   macro pointer_type(type, context = nil)
-    {% if type.is_a?(TypeDeclaration) %}
+    {% if type.stringify.includes?('|') %}
+      Pointer(MrbInternal::MrbValue)
+    {% elsif type.is_a?(TypeDeclaration) %}
       MrbMacro.pointer_type({{type.type}}, context: {{context}})
     {% elsif context %}
       MrbMacro.resolve_pointer_type({{context}}::{{type}}, {{type}}, {{context}})
@@ -122,13 +132,16 @@ module MrbMacro
     {% end %}
   end
 
-  macro generate_arg_tuple(args, context = nil)
+  macro generate_arg_tuple(mrb, args, context = nil)
     Tuple.new(
       {% if args %}
         {% for arg in args %}
           {% if arg.is_a?(TypeDeclaration) %}
             {% if arg.value %}
-              {% if arg.type.resolve <= String %}
+              {% if arg.type.stringify.includes?('|') %}
+                # This does work, but I'm a bit surprised
+                MrbMacro.pointer_type({{arg}}, context: {{context}}).malloc(size: 1, value: MrbCast.return_value({{mrb}}, {{arg.value}})),
+              {% elsif arg.type.resolve <= String %}
                 # The outer gods bless my wretched soul that this does neither segfault nor leak
                 MrbMacro.pointer_type({{arg}}, context: {{context}}).malloc(size: 1, value: {{arg.value}}.to_unsafe),
               {% else %}
@@ -146,7 +159,7 @@ module MrbMacro
   end
 
   macro get_raw_args(mrb, regular_args, context = nil)
-    args = MrbMacro.generate_arg_tuple({{regular_args}}, context: {{context}})
+    args = MrbMacro.generate_arg_tuple({{mrb}}, {{regular_args}}, context: {{context}})
     format_string = MrbMacro.format_string({{regular_args}}, context: {{context}})
     MrbInternal.mrb_get_args({{mrb}}, format_string, *args)
     args
@@ -154,7 +167,12 @@ module MrbMacro
 
   # Converts Ruby values to Crystal values
   macro convert_arg(mrb, arg, arg_type, context = nil)
-    {% if arg_type.is_a?(TypeDeclaration) %}
+    {% if arg_type.stringify.includes?('|') %}
+      # This is kind of cheating, but hey, it does its job
+      # ...
+      # Please don't judge me
+      MrbMacro.convert_keyword_arg({{mrb}}, {{arg}}, {{arg_type}}, context: {{context}})
+    {% elsif arg_type.is_a?(TypeDeclaration) %}
       MrbMacro.convert_arg({{mrb}}, {{arg}}, {{arg_type.type}}, context: {{context}})
     {% elsif context %}
       MrbMacro.convert_resolved_arg({{mrb}}, {{arg}}, {{context}}::{{arg_type}}, {{arg_type}}, {{context}})
@@ -281,7 +299,7 @@ module MrbMacro
     {% end %}
     
     if final_value.is_a?(Symbol)
-      raise("Could not determine any value for {{value}} with types {{types}} in context {{context}}")
+      raise("Could not determine any value for #{{{value}}} with types {{types}} in context {{context}}")
     else
       final_value
     end
@@ -490,7 +508,7 @@ module MrbMacro
   end
 
   macro get_converted_args(mrb, regular_args, context)
-    args = MrbMacro.generate_arg_tuple({{regular_args}}, context: {{context}})
+    args = MrbMacro.generate_arg_tuple({{mrb}}, {{regular_args}}, context: {{context}})
     format_string = MrbMacro.format_string({{regular_args}}, context: {{context}})
     
     MrbInternal.mrb_get_args({{mrb}}, format_string, *args)
@@ -577,7 +595,7 @@ module MrbMacro
     {% end %}
 
     wrapped_method = MrbFunc.new do |mrb, obj|
-      regular_arg_tuple = MrbMacro.generate_arg_tuple({{regular_arg_array}}, context: {{context}})
+      regular_arg_tuple = MrbMacro.generate_arg_tuple({{mrb_state}}, {{regular_arg_array}}, context: {{context}})
       format_string = MrbMacro.format_string({{regular_arg_array}}, context: {{context}}) + ":"
 
       kw_args = MrbMacro.generate_keyword_argument_struct({{keyword_args}})
@@ -630,7 +648,7 @@ module MrbMacro
     {% type_var_names = type_var_names_annotation ? type_var_names_annotation[0] : nil %}
 
     wrapped_method = MrbFunc.new do |mrb, obj|
-      regular_arg_tuple = MrbMacro.generate_arg_tuple({{regular_arg_array}}, context: {{context}})
+      regular_arg_tuple = MrbMacro.generate_arg_tuple({{mrb_state}}, {{regular_arg_array}}, context: {{context}})
       format_string = MrbMacro.format_string({{regular_arg_array}}, context: {{context}}) + ":"
 
       kw_args = MrbMacro.generate_keyword_argument_struct({{keyword_args}})
@@ -692,7 +710,7 @@ module MrbMacro
     {% type_var_names = type_var_names_annotation ? type_var_names_annotation[0] : nil %}
 
     wrapped_method = MrbFunc.new do |mrb, obj|
-      regular_arg_tuple = MrbMacro.generate_arg_tuple({{regular_arg_array}}, context: {{context}})
+      regular_arg_tuple = MrbMacro.generate_arg_tuple({{mrb_state}}, {{regular_arg_array}}, context: {{context}})
       format_string = MrbMacro.format_string({{regular_arg_array}}, context: {{context}}) + ":"
 
       kw_args = MrbMacro.generate_keyword_argument_struct({{keyword_args}})
@@ -756,7 +774,7 @@ module MrbMacro
     {% type_var_names = type_var_names_annotation ? type_var_names_annotation[0] : nil %}
 
     wrapped_method = MrbFunc.new do |mrb, obj|
-      regular_arg_tuple = MrbMacro.generate_arg_tuple({{regular_arg_array}}, context: {{context}})
+      regular_arg_tuple = MrbMacro.generate_arg_tuple({{mrb_state}}, {{regular_arg_array}}, context: {{context}})
       format_string = MrbMacro.format_string({{regular_arg_array}}, context: {{context}}) + ":"
 
       kw_args = MrbMacro.generate_keyword_argument_struct({{keyword_args}})

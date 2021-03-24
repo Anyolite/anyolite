@@ -72,9 +72,15 @@ puts "Either an int or a string: #{a.returns_something_random.inspect}"
 TestModule::Test::GTIntFloat.new.test(u: 3, v: 5.5)
 TestModule::Test::GTIntInt.new.test(u: 3, v: 9)
 
-puts "Results of complicated method: #{a.complicated_method(19, 0.567, 0.111, "Hello", arg_opt_2: 31313)}"
-puts "Results of complicated method: #{a.complicated_method(19, 0.567, 0.111, "Hello")}"
-puts "Results of complicated method: #{a.complicated_method(19, 0.567, 0.111, arg_opt_2: 31313)}"
-puts "Results of complicated method: #{a.complicated_method(19, 0.567, 0.111)}"
+puts "Results of complicated method: #{a.complicated_method(11, 0.111, 0.1, "Hello", arg_opt_2: 1)}"
+puts "Results of complicated method: #{a.complicated_method(22, 0.222, 0.2, "Hello")}"
+puts "Results of complicated method: #{a.complicated_method(33, 0.333, 0.3, a, arg_opt_2: 2)}"
+puts "Results of complicated method: #{a.complicated_method(44, 0.444, 0.4, b)}"
+puts "Results of complicated method: #{a.complicated_method(55, 0.555, 0.5, true, arg_opt_2: 3)}"
+puts "Results of complicated method: #{a.complicated_method(66, 0.666, 0.6, false)}"
+puts "Results of complicated method: #{a.complicated_method(77, 0.777, 0.7, TestModule::Test::TestEnum::Three, arg_opt_2: 4)}"
+puts "Results of complicated method: #{a.complicated_method(88, 0.888, 0.8, TestModule::Test::TestEnum::Four)}"
+puts "Results of complicated method: #{a.complicated_method(99, 0.999, 0.9, arg_opt_2: 5)}"
+puts "Results of complicated method: #{a.complicated_method(100, 0.000, 1.0)}"
 
 puts a.happy😀emoji😀test😀😀(1234567)
