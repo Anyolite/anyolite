@@ -168,14 +168,17 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 * [X] Default arguments with colons were wrongly assumed to be keywords
 * [X] Enabled support for regular string argument with default values
 
+### Version 0.8.0 (last planned feature release before 1.0.0)
+
+* [ ] Options for inherited and/or inheriting classes
+
 ### Version 1.0.0
 
 * [ ] Windows support (currently not supported due to problems with Crystal)
 * [ ] Crystal specs for testing
+* [ ] Documentation of all relevant features and wrappers
 * [ ] Mac support (might be possible, not tested yet)
 * [ ] More configuration options for the Rakefile
-* [ ] Documentation of all relevant features and wrappers
-* [ ] Options for inherited and/or inheriting classes
 
 ### Future ideas (might not actually be possible to implement)
 
