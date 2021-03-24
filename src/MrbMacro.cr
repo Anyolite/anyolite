@@ -47,20 +47,18 @@ module MrbMacro
         MrbMacro.resolve_format_char({{raw_arg}}, {{raw_arg}})
       {% end %}
     {% else %}
-      # TODO: Maybe add full original context?
       {% raise "Could not resolve #{arg}, which is a #{arg.class_name}, in any meaningful way" %}
     {% end %}
   end
 
   macro type_in_ruby(type, context = nil)
     {% if type.is_a?(TypeDeclaration) %}
-      MrbMacro.type_in_ruby({{type.type}}) # TODO: Allow nil for regular arguments as default
+      MrbMacro.type_in_ruby({{type.type}})
     {% elsif context %}
       MrbMacro.resolve_type_in_ruby({{context}}::{{type}}, {{type}}, {{context}})
     {% else %}
       MrbMacro.resolve_type_in_ruby({{type}}, {{type}})
     {% end %}
-    {% debug %}
   end
 
   macro resolve_type_in_ruby(type, raw_type, context = nil)
@@ -85,7 +83,6 @@ module MrbMacro
         MrbMacro.resolve_type_in_ruby({{raw_type}}, {{raw_type}})
       {% end %}
     {% else %}
-      # TODO: Maybe add full original context?
       {% raise "Could not resolve #{type}, which is a #{type.class_name}, in any meaningful way" %}
     {% end %}
   end
@@ -121,7 +118,6 @@ module MrbMacro
         MrbMacro.resolve_pointer_type({{raw_type}}, {{raw_type}})
       {% end %}
     {% else %}
-      # TODO: Maybe add full original context?
       {% raise "Could not resolve #{type}, which is a #{type.class_name}, in any meaningful way" %}
     {% end %}
   end
@@ -196,7 +192,6 @@ module MrbMacro
         MrbMacro.convert_resolved_arg({{mrb}}, {{arg}}, {{raw_arg_type}}, {{raw_arg_type}})
       {% end %}
     {% else %}
-      # TODO: Maybe add full original context?
       {% raise "Could not resolve #{arg_type}, which is a #{arg_type.class_name}, in any meaningful way" %}
     {% end %}
   end
@@ -258,7 +253,6 @@ module MrbMacro
       {% elsif arg_type.resolve? %}
         MrbMacro.convert_from_ruby_object({{mrb}}, {{arg}}, {{arg_type}}).value
       {% else %}
-        # TODO: Add special annotation in order to specify generics
         {% raise "Could not resolve type #{arg_type}, which is a #{arg_type.class_name.id} (#{debug_information.id})" %}
       {% end %}
     {% elsif context %}
@@ -269,7 +263,6 @@ module MrbMacro
         MrbMacro.convert_resolved_keyword_arg({{mrb}}, {{arg}}, {{raw_arg_type}}, {{raw_arg_type}}, debug_information: {{debug_information}})
       {% end %}
     {% else %}
-      # TODO: Maybe add full original context?
       {% raise "Could not resolve type #{arg_type}, which is a #{arg_type.class_name.id} (#{debug_information.id})" %}
     {% end %}
   end
