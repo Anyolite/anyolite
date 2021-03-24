@@ -82,5 +82,6 @@ puts "Results of complicated method: #{a.complicated_method(77, 0.777, 0.7, Test
 puts "Results of complicated method: #{a.complicated_method(88, 0.888, 0.8, TestModule::Test::TestEnum::Four)}"
 puts "Results of complicated method: #{a.complicated_method(99, 0.999, 0.9, arg_opt_2: 5)}"
 puts "Results of complicated method: #{a.complicated_method(100, 0.000, 1.0)}"
+puts "Results of complicated method: #{a.complicated_method(0, 0.0, 0.0, TestModule::Test::GTIntInt.new)}"
 
 puts a.happy😀emoji😀test😀😀(1234567)
