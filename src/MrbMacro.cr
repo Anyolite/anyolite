@@ -60,6 +60,7 @@ module MrbMacro
     {% else %}
       MrbMacro.resolve_type_in_ruby({{type}}, {{type}})
     {% end %}
+    {% debug %}
   end
 
   macro resolve_type_in_ruby(type, raw_type, context = nil)
@@ -70,8 +71,9 @@ module MrbMacro
         MrbInternal::MrbInt
       {% elsif type.resolve <= Float %}
         MrbInternal::MrbFloat
-      {% elsif type.resolve <= String %}  # TODO: Default string arguments do not work here yet, can this be fixed?
-        LibC::Char*
+      {% elsif type.resolve <= String %}
+        # Should actually never occur due to special handling before this function
+        Pointer(LibC::Char)
       {% else %}
         MrbInternal::MrbValue
       {% end %}
@@ -130,7 +132,12 @@ module MrbMacro
         {% for arg in args %}
           {% if arg.is_a?(TypeDeclaration) %}
             {% if arg.value %}
-              MrbMacro.pointer_type({{arg}}, context: {{context}}).malloc(size: 1, value: MrbMacro.type_in_ruby({{arg}}, context: {{context}}).new({{arg.value}})),
+              {% if arg.type.resolve <= String %}
+                # The outer gods bless my wretched soul that this does neither segfault nor leak
+                MrbMacro.pointer_type({{arg}}, context: {{context}}).malloc(size: 1, value: {{arg.value}}.to_unsafe),
+              {% else %}
+                MrbMacro.pointer_type({{arg}}, context: {{context}}).malloc(size: 1, value: MrbMacro.type_in_ruby({{arg}}, context: {{context}}).new({{arg.value}})),
+              {% end %}
             {% else %}
               MrbMacro.pointer_type({{arg}}, context: {{context}}).malloc(size: 1),
             {% end %}
@@ -834,46 +841,27 @@ module MrbMacro
           {% keyword_arg_partition = final_arg_array[without_keywords .. -1] %}
         {% end %}
 
-        # TODO: Maybe don't just give types as parameters, but still full type declarations
-        # This way, default arguments can be transferred in a more natural way and overall handling could be simplified
-        # If this isn't possible, at least use {Type, Arg} tuples
-
-        {% if regular_arg_partition %}
-          {% type_array = [] of ASTNode %}
-          {% for arg in regular_arg_partition %}
-            {% if arg.is_a?(TypeDeclaration) %}
-              {% type_array.push(arg.type) %}
-            {% elsif arg.is_a?(Arg) %}
-              {% type_array.push(arg.restriction) %}
-            {% else %}
-              {% raise "Could not read type of #{arg.class_name.id} #{arg}" %}
-            {% end %}
-          {% end %}
-        {% else %}
-          {% type_array = nil %}
-        {% end %}
-
         {% if keyword_arg_partition %}
           {% if is_class_method %}
             MrbWrap.wrap_class_method_with_keywords({{mrb_state}}, {{crystal_class}}, {{ruby_name}}, {{crystal_class}}.{{final_method_name}}, 
-              {{keyword_arg_partition}}, regular_args: {{type_array}}, operator: {{operator}}, context: {{context}})
+              {{keyword_arg_partition}}, regular_args: {{regular_arg_partition}}, operator: {{operator}}, context: {{context}})
           {% elsif is_constructor %}
             MrbWrap.wrap_constructor_with_keywords({{mrb_state}}, {{crystal_class}}, 
-              {{keyword_arg_partition}}, regular_args: {{type_array}}, operator: {{operator}}, context: {{context}})
+              {{keyword_arg_partition}}, regular_args: {{regular_arg_partition}}, operator: {{operator}}, context: {{context}})
           {% else %}
             MrbWrap.wrap_instance_method_with_keywords({{mrb_state}}, {{crystal_class}}, {{ruby_name}}, {{final_method_name}}, 
-              {{keyword_arg_partition}}, regular_args: {{type_array}}, operator: {{operator}}, context: {{context}})
+              {{keyword_arg_partition}}, regular_args: {{regular_arg_partition}}, operator: {{operator}}, context: {{context}})
           {% end %}
         {% else %}
           {% if is_class_method %}
             MrbWrap.wrap_class_method({{mrb_state}}, {{crystal_class}}, {{ruby_name}}, {{crystal_class}}.{{final_method_name}}, 
-              {{type_array}}, operator: {{operator}}, context: {{context}})
+              {{regular_arg_partition}}, operator: {{operator}}, context: {{context}})
           {% elsif is_constructor %}
             MrbWrap.wrap_constructor({{mrb_state}}, {{crystal_class}}, 
-              {{type_array}}, operator: {{operator}}, context: {{context}})
+              {{regular_arg_partition}}, operator: {{operator}}, context: {{context}})
           {% else %}
             MrbWrap.wrap_instance_method({{mrb_state}}, {{crystal_class}}, {{ruby_name}}, {{final_method_name}}, 
-              {{type_array}}, operator: {{operator}}, context: {{context}})
+              {{regular_arg_partition}}, operator: {{operator}}, context: {{context}})
           {% end %}
         {% end %}
       {% else %}
