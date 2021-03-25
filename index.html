@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8" />
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="generator" content="Crystal Docs 0.36.1">
-<meta name="crystal_docs.project_version" content="0.6.1">
+<meta name="generator" content="Crystal Docs 1.0.0">
+<meta name="crystal_docs.project_version" content="0.7.0">
 <meta name="crystal_docs.project_name" content="anyolite">
 
 
@@ -13,7 +13,7 @@
 <script type="text/javascript" src="js/doc.js"></script>
 
   <meta name="repository-name" content="anyolite">
-  <title>anyolite 0.6.1</title>
+  <title>anyolite 0.7.0</title>
   <script type="text/javascript">
   CrystalDocs.base_path = "";
   </script>
@@ -39,7 +39,7 @@
       </h1>
 
       <span class="project-version">
-        0.6.1
+        0.7.0
       </span>
     </div>
   </div>
@@ -173,6 +173,11 @@
   
   <li class=" " data-id="anyolite/MrbWrap/SpecializeInstanceMethod" data-name="mrbwrap::specializeinstancemethod">
       <a href="MrbWrap/SpecializeInstanceMethod.html">SpecializeInstanceMethod</a>
+      
+    </li>
+  
+  <li class=" " data-id="anyolite/MrbWrap/SpecifyGenericTypes" data-name="mrbwrap::specifygenerictypes">
+      <a href="MrbWrap/SpecifyGenericTypes.html">SpecifyGenericTypes</a>
       
     </li>
   
@@ -347,7 +352,7 @@ More features will be added in the future.</p>
   </svg>
 </a>Limitations</h1>
 
-<ul><li>Currently, Anyolite does not work on Windows due to Crystal compiler bugs</li><li>Arrays and hashes are not directly supported</li><li>Symbols do not work due to their compiletime nature in Crystal</li><li>Splat arguments and arbitrary keywords are not possible due to their reliance on symbols</li><li>Regular function arguments are not very flexible (keyword arguments however are!)</li><li>Keywords will always be given to functions, even if optional (then with default values)</li></ul>
+<ul><li>Currently, Anyolite does not work on Windows due to Crystal compiler bugs</li><li>Arrays and hashes are not directly supported</li><li>Symbols do not work due to their compiletime nature in Crystal</li><li>Splat arguments and arbitrary keywords are not possible due to their reliance on symbols</li><li>Keywords will always be given to functions, even if optional (then with default values)</li><li>Non-keyword function arguments are always set to their default values before receiving their final values</li><li>Default arguments need to be specialized with their full class and module path in order to work</li></ul>
 
 <h1><a id="why-this-name" class="anchor" href="#why-this-name">
   <svg class="octicon-link" aria-hidden="true">
@@ -373,35 +378,17 @@ More features will be added in the future.</p>
   </svg>
 </a>Upcoming releases</h2>
 
-<h3><a id="version-0.7.0" class="anchor" href="#version-0.7.0">
+<h3><a id="version-0.8.0" class="anchor" href="#version-0.8.0">
   <svg class="octicon-link" aria-hidden="true">
     <use href="#octicon-link"/>
   </svg>
-</a>Version 0.7.0</h3>
+</a>Version 0.8.0</h3>
 
-<h4><a id="features" class="anchor" href="#features">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>Features</h4>
+<p>Version 0.8.0 is planned to be the last feature release before 1.0.0.
+Currently, the way its features are going to be implemented is not yet determined,
+so it will probably take some time before it will be released.</p>
 
-<ul><li>[ ] Support for wrapping generics (unless impossible)</li></ul>
-
-<h4><a id="breaking-changes" class="anchor" href="#breaking-changes">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>Breaking changes</h4>
-
-<ul><li>[ ] Find consistent solution for non-keyword arguments</li></ul>
-
-<h4><a id="usability" class="anchor" href="#usability">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>Usability</h4>
-
-<ul><li>[ ] More helpful error messages when path resolution fails</li></ul>
+<ul><li>[ ] Options for inherited and/or inheriting classes</li></ul>
 
 <h3><a id="version-1.0.0" class="anchor" href="#version-1.0.0">
   <svg class="octicon-link" aria-hidden="true">
@@ -409,7 +396,7 @@ More features will be added in the future.</p>
   </svg>
 </a>Version 1.0.0</h3>
 
-<ul><li>[ ] Windows support (currently not supported due to problems with Crystal)</li><li>[ ] Crystal specs for testing</li><li>[ ] Mac support (might be possible, not tested yet)</li><li>[ ] More configuration options for the Rakefile</li><li>[ ] Documentation of all relevant features and wrappers</li></ul>
+<ul><li>[ ] Windows support (currently not supported due to problems with Crystal)</li><li>[ ] Crystal specs for testing</li><li>[ ] Documentation of all relevant features and wrappers</li><li>[ ] Mac support (might be possible, not tested yet)</li><li>[ ] More configuration options for the Rakefile</li></ul>
 
 <h3><a id="future-ideas-might-not-actually-be-possible-to-implement" class="anchor" href="#future-ideas-might-not-actually-be-possible-to-implement">
   <svg class="octicon-link" aria-hidden="true">
@@ -417,7 +404,7 @@ More features will be added in the future.</p>
   </svg>
 </a>Future ideas (might not actually be possible to implement)</h3>
 
-<ul><li>[ ] Options for inherited and/or inheriting classes</li><li>[ ] Arrays and/or hashes as argument and return values</li><li>[ ] Splat argument and/or arbitrary keyword passing</li><li>[ ] Method in mruby to determine owner of object</li></ul>
+<ul><li>[ ] Arrays and/or hashes as argument and return values</li><li>[ ] Splat argument and/or arbitrary keyword passing</li><li>[ ] Method in mruby to determine owner of object</li></ul>
 </div>
 </body>
 </html>
