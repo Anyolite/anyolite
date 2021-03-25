@@ -292,11 +292,11 @@ module MrbMacro
 
     {% for type in types %}
       {% if type.resolve? %}
-        MrbMacro.check_and_cast_resolved_union_type({{mrb}}, {{value}}, {{type}}, {{type}})
+        MrbMacro.check_and_cast_union_type({{mrb}}, {{value}}, {{type}}, {{type}}, context: {{context}})
       {% elsif context %}
-        MrbMacro.check_and_cast_resolved_union_type({{mrb}}, {{value}}, {{context}}::{{type}}, {{type}}, {{context}})
+        MrbMacro.check_and_cast_union_type({{mrb}}, {{value}}, {{context}}::{{type}}, {{type}}, context: {{context}})
       {% else %}
-        MrbMacro.check_and_cast_resolved_union_type({{mrb}}, {{value}}, {{type}}, {{type}})
+        {% raise "Could not resolve type #{type}, which is a #{type.class_name}, in context #{context}" %}
       {% end %}
     {% end %}
     
@@ -306,6 +306,21 @@ module MrbMacro
     else
       final_value
     end
+  end
+
+  macro check_and_cast_union_type(mrb, value, type, raw_type, context = nil)
+    {% if type.resolve? %}
+      MrbMacro.check_and_cast_resolved_union_type({{mrb}}, {{value}}, {{type}}, {{type}})
+    {% elsif context %}
+      {% if context.names[0..-2].size > 0 %}
+        {% new_context = context.names[0..-2].join("::").id %}
+        MrbMacro.check_and_cast_resolved_union_type({{mrb}}, {{value}}, {{new_context}}::{{raw_type}}, {{raw_type}}, {{new_context}})
+      {% else %}
+        MrbMacro.check_and_cast_resolved_union_type({{mrb}}, {{value}}, {{raw_type}}, {{raw_type}})
+      {% end %}
+    {% else %}
+      {% raise "Could not resolve type #{type}, which is a #{type.class_name}" %}
+    {% end %}
   end
 
   # TODO: Some double checks could be omitted
@@ -351,13 +366,6 @@ module MrbMacro
       if MrbCast.check_for_data({{value}}) && MrbCast.check_custom_type({{mrb}}, {{value}}, {{type}})
         final_value = MrbMacro.convert_from_ruby_object({{mrb}}, {{value}}, {{type}}).value
       end
-    {% elsif context %}
-      {% if context.names[0..-2].size > 0 %}
-        {% new_context = context.names[0..-2].join("::").id %}
-        MrbMacro.check_and_cast_resolved_union_type({{mrb}}, {{value}}, {{new_context}}::{{raw_type}}, {{raw_type}}, {{new_context}})
-      {% else %}
-        MrbMacro.check_and_cast_resolved_union_type({{mrb}}, {{value}}, {{raw_type}}, {{raw_type}})
-      {% end %}
     {% else %}
       {% raise "Could not resolve type #{type}, which is a #{type.class_name}" %}
     {% end %}

@@ -337,6 +337,8 @@ module MrbWrap
     {% else %}
       {% resolved_class = crystal_class.resolve %}
 
+      {% new_context = crystal_class %}
+
       {% if resolved_class.annotation(MrbWrap::RenameClass) %}
         {% actual_name = resolved_class.annotation(MrbWrap::RenameClass)[0] %}
       {% else %}
@@ -346,9 +348,9 @@ module MrbWrap
       MrbWrap.wrap_class({{mrb_state}}, {{resolved_class}}, {{actual_name}}, under: {{under}})
 
       MrbMacro.wrap_all_instance_methods({{mrb_state}}, {{crystal_class}}, {{instance_method_exclusions}}, 
-        {{verbose}}, context: {{under}}, use_enum_constructor: {{use_enum_constructor}})
-      MrbMacro.wrap_all_class_methods({{mrb_state}}, {{crystal_class}}, {{class_method_exclusions}}, {{verbose}}, context: {{under}})
-      MrbMacro.wrap_all_constants({{mrb_state}}, {{crystal_class}}, {{constant_exclusions}}, {{verbose}}, context: {{under}})
+        {{verbose}}, context: {{new_context}}, use_enum_constructor: {{use_enum_constructor}})
+      MrbMacro.wrap_all_class_methods({{mrb_state}}, {{crystal_class}}, {{class_method_exclusions}}, {{verbose}}, context: {{new_context}})
+      MrbMacro.wrap_all_constants({{mrb_state}}, {{crystal_class}}, {{constant_exclusions}}, {{verbose}}, context: {{new_context}})
     {% end %}
   end
 

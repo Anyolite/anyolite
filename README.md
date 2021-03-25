@@ -167,7 +167,7 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 * [X] Methods with non-letter-symbols could not be wrapped
 * [X] Default arguments with colons were wrongly assumed to be keywords
 * [X] Enabled support for regular string argument with default values
-* [ ] Fixed incomplete resolution of paths
+* [X] Fixed incomplete resolution of paths
 
 ### Version 0.8.0 (last planned feature release before 1.0.0)
 

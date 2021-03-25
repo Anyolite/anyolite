@@ -130,7 +130,7 @@ module SomeModule
       ret = self + other
     end
 
-    def overload_test(arg : Int32 | String | Bool | Nil | Float32 | Test | Test::TestEnum | Test::GenericTest(Int32, Int32) = "Default String")
+    def overload_test(arg : Int32 | String | Bool | Nil | Float32 | Test | TestEnum | GenericTest(Int32, Int32) = "Default String")
       if arg.is_a?(Test)
         puts "Test: A test object with x = #{arg.x}"
       elsif arg.is_a?(GenericTest(Int32, Int32))
@@ -148,9 +148,9 @@ module SomeModule
       puts "Received argument #{arg.inspect}"
     end
 
-    @[MrbWrap::Specialize([arg1 : Int32, arg2 : Float32, arg_req : Float32, arg_opt_1 : String | Test | Bool | Test::TestEnum | Test::GenericTest(Int32, Int32) = "Cookies", arg_opt_2 : Int32 = 32])]
+    @[MrbWrap::Specialize([arg1 : Int32, arg2 : Float32, arg_req : Float32, arg_opt_1 : String | Test | Bool | TestEnum | GenericTest(Int32, Int32) = "Cookies", arg_opt_2 : Int32 = 32])]
     @[MrbWrap::WrapWithoutKeywords(4)]
-    def complicated_method(arg1, arg2, arg_req : Float32, arg_opt_1 : String | Test | Bool | Test::TestEnum | Test::GenericTest(Int32, Int32) = "Cookies", arg_opt_2 : Int32 = 32)
+    def complicated_method(arg1, arg2, arg_req : Float32, arg_opt_1 : String | Test | Bool | TestEnum | GenericTest(Int32, Int32) = "Cookies", arg_opt_2 : Int32 = 32)
       "#{arg1} - #{arg2} - #{arg_req} - #{arg_opt_1.is_a?(Test) ? arg_opt_1.x : arg_opt_1} - #{arg_opt_2}"
     end
 
