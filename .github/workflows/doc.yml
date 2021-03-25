@@ -2,7 +2,7 @@ name: Doc
 
 on:
   release:
-    types: [published, created, edited, prereleased]
+    types: [published, edited, prereleased]
 
 jobs:
   build:
