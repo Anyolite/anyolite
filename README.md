@@ -129,6 +129,7 @@ More features will be added in the future.
 * Splat arguments and arbitrary keywords are not possible due to their reliance on symbols
 * Keywords will always be given to functions, even if optional (then with default values)
 * Non-keyword function arguments are always set to their default values before receiving their final values
+* Default arguments need to be specialized with their full class and module path in order to work
 
 # Why this name?
 

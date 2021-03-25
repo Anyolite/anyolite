@@ -392,7 +392,9 @@ module MrbMacro
     MrbCast.return_value({{mrb}}, return_value)
   end
 
-  macro call_and_return_keyword_method(mrb, proc, converted_regular_args, keyword_args, kw_args, operator = "", empty_regular = false)
+  macro call_and_return_keyword_method(mrb, proc, converted_regular_args, keyword_args, kw_args, operator = "", 
+    empty_regular = false, context = nil, type_vars = nil, type_var_names = nil)
+
     {% if proc.stringify == "MrbWrap::Empty" %}
       return_value = {{operator.id}}(
     {% else %}
@@ -401,14 +403,16 @@ module MrbMacro
       {% if empty_regular %}
         {% c = 0 %}
         {% for keyword in keyword_args %}
-          {{keyword.var.id}}: MrbMacro.convert_keyword_arg({{mrb}}, {{kw_args}}.values[{{c}}], {{keyword}}, debug_information: {{proc.stringify + " - " + keyword_args.stringify}}),
+          {{keyword.var.id}}: MrbMacro.convert_keyword_arg({{mrb}}, {{kw_args}}.values[{{c}}], {{keyword}}, context: {{context}}, 
+            type_vars: {{type_vars}}, type_var_names: {{type_var_names}},debug_information: {{proc.stringify + " - " + keyword_args.stringify}}),
           {% c += 1 %}
         {% end %}
       {% else %}
         *{{converted_regular_args}},
         {% c = 0 %}
         {% for keyword in keyword_args %}
-          {{keyword.var.id}}: MrbMacro.convert_keyword_arg({{mrb}}, {{kw_args}}.values[{{c}}], {{keyword}}, debug_information: {{proc.stringify + " - " + keyword_args.stringify}}),
+          {{keyword.var.id}}: MrbMacro.convert_keyword_arg({{mrb}}, {{kw_args}}.values[{{c}}], {{keyword}}, context: {{context}}}, 
+            type_vars: {{type_vars}}, type_var_names: {{type_var_names}},debug_information: {{proc.stringify + " - " + keyword_args.stringify}}),
           {% c += 1 %}
         {% end %}
       {% end %}
@@ -607,9 +611,9 @@ module MrbMacro
       converted_regular_args = MrbMacro.convert_args(mrb, regular_arg_tuple, {{regular_arg_array}}, context: {{context}})
 
       {% if !regular_arg_array || regular_arg_array.size == 0 %}
-        MrbMacro.call_and_return_keyword_method(mrb, {{proc}}, converted_regular_args, {{keyword_args}}, kw_args, operator: {{operator}}, empty_regular: true)
+        MrbMacro.call_and_return_keyword_method(mrb, {{proc}}, converted_regular_args, {{keyword_args}}, kw_args, operator: {{operator}}, empty_regular: true, context: {{context}})
       {% else %}
-        MrbMacro.call_and_return_keyword_method(mrb, {{proc}}, converted_regular_args, {{keyword_args}}, kw_args, operator: {{operator}})
+        MrbMacro.call_and_return_keyword_method(mrb, {{proc}}, converted_regular_args, {{keyword_args}}, kw_args, operator: {{operator}}, context: {{context}})
       {% end %}
     end
 
@@ -661,10 +665,10 @@ module MrbMacro
 
       {% if regular_arg_array.size == 0 %}
         MrbMacro.call_and_return_keyword_method(mrb, {{proc}}, converted_regular_args, {{keyword_args}}, kw_args, operator: {{operator}}, 
-          empty_regular: true, type_vars: {{type_vars}}, type_var_names: {{type_var_names}})
+          empty_regular: true, context: {{context}}, type_vars: {{type_vars}}, type_var_names: {{type_var_names}})
       {% else %}
         MrbMacro.call_and_return_keyword_method(mrb, {{proc}}, converted_regular_args, {{keyword_args}}, kw_args, operator: {{operator}}, 
-          type_vars: {{type_vars}}, type_var_names: {{type_var_names}})
+          context: {{context}}, type_vars: {{type_vars}}, type_var_names: {{type_var_names}})
       {% end %}
     end
 
