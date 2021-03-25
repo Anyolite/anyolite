@@ -2,6 +2,32 @@
 
 ## Releases
 
+### Version 0.7.0
+
+#### Features
+
+* Support for wrapping generics using annotations
+* Non-keyword arguments allow for union and generic type arguments
+* Annotation for non-keyword arguments accepts number as optional argument
+
+#### Breaking changes
+
+* Non-keyword arguments need to be specialized explicitly
+* More consistent wrapping of operator methods
+
+#### Usability
+
+* More helpful error messages when path resolution fails
+
+#### Bugfixes
+
+* Specialization to new arguments did not allow non-keyword annotations
+* Correct wrapping of most aliased types
+* Methods with non-letter-symbols could not be wrapped
+* Default arguments with colons were wrongly assumed to be keywords
+* Enabled support for regular string argument with default values
+* Fixed incomplete resolution of paths
+
 ### Version 0.6.1
 
 #### Bugfixes

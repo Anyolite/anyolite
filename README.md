@@ -143,33 +143,11 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 
 ## Upcoming releases
 
-### Version 0.7.0
+### Version 0.8.0
 
-#### Features
-
-* [X] Support for wrapping generics using annotations
-* [X] Non-keyword arguments allow for union and generic type arguments
-* [X] Annotation for non-keyword arguments accepts number as optional argument
-
-#### Breaking changes
-
-* [X] Non-keyword arguments need to be specialized explicitly
-* [X] More consistent wrapping of operator methods
-
-#### Usability
-
-* [X] More helpful error messages when path resolution fails
-
-#### Bugfixes
-
-* [X] Specialization to new arguments did not allow non-keyword annotations
-* [X] Correct wrapping of most aliased types
-* [X] Methods with non-letter-symbols could not be wrapped
-* [X] Default arguments with colons were wrongly assumed to be keywords
-* [X] Enabled support for regular string argument with default values
-* [X] Fixed incomplete resolution of paths
-
-### Version 0.8.0 (last planned feature release before 1.0.0)
+Version 0.8.0 is planned to be the last feature release before 1.0.0.
+Currently, the way its features are going to be implemented is not yet determined,
+so it will probably take some time before it will be released.
 
 * [ ] Options for inherited and/or inheriting classes
 

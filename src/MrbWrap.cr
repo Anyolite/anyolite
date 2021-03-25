@@ -372,6 +372,8 @@ module MrbWrap
       {% puts ">>> Going into module #{crystal_module} under #{under}\n\n" %}
     {% end %}
 
+    {% new_context = crystal_module %}
+
     {% if crystal_module.resolve.annotation(MrbWrap::RenameModule) %}
       {% actual_name = crystal_module.resolve.annotation(MrbWrap::RenameModule)[0] %}
     {% else %}
@@ -380,8 +382,8 @@ module MrbWrap
 
     MrbWrap.wrap_module({{mrb_state}}, {{crystal_module.resolve}}, {{actual_name}}, under: {{under}})
 
-    MrbMacro.wrap_all_class_methods({{mrb_state}}, {{crystal_module}}, {{class_method_exclusions}}, {{verbose}}, context: {{under}})
-    MrbMacro.wrap_all_constants({{mrb_state}}, {{crystal_module}}, {{constant_exclusions}}, {{verbose}}, context: {{under}})
+    MrbMacro.wrap_all_class_methods({{mrb_state}}, {{crystal_module}}, {{class_method_exclusions}}, {{verbose}}, context: {{new_context}})
+    MrbMacro.wrap_all_constants({{mrb_state}}, {{crystal_module}}, {{constant_exclusions}}, {{verbose}}, context: {{new_context}})
   end
 
   # Wraps a whole class or module structure under a module into mruby.
