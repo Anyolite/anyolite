@@ -149,7 +149,6 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 * [X] Support for wrapping generics using annotations
 * [X] Non-keyword arguments allow for union and generic type arguments
 * [X] Annotation for non-keyword arguments accepts number as optional argument
-* [ ] `MrbWrap.wrap` is now able to wrap any object
 
 #### Breaking changes
 
