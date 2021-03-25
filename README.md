@@ -154,7 +154,7 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 #### Breaking changes
 
 * [X] Non-keyword arguments need to be specialized explicitly
-* [ ] More consistent wrapping of operator methods
+* [X] More consistent wrapping of operator methods
 
 #### Usability
 

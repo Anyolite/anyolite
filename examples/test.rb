@@ -62,9 +62,9 @@ a.nilable_test(arg: 123)
 a.nilable_test(arg: nil)
 
 test_struct_thingy = TestModule::TestStructRenamed.new
-puts "Initial value: #{test_struct_thingy.value}\n"
+puts "Initial value: #{test_struct_thingy.value}"
 test_struct_thingy.value = 4242
-puts "Modified value: #{test_struct_thingy.value}\n"
+puts "Modified value: #{test_struct_thingy.value}"
 
 puts "This function returns an enum: #{a.returns_an_enum.value}"
 puts "Either an int or a string: #{a.returns_something_random.inspect}"
@@ -84,4 +84,9 @@ puts "Results of complicated method: #{a.complicated_method(99, 0.999, 0.9, arg_
 puts "Results of complicated method: #{a.complicated_method(100, 0.000, 1.0)}"
 puts "Results of complicated method: #{a.complicated_method(0, 0.0, 0.0, TestModule::Test::GTIntInt.new)}"
 
-puts a.happy😀emoji😀test😀😀(1234567)
+a.happy😀emoji😀test😀😀😀(1234567)
+
+same_as_a = TestModule::Test.new(x: a.x)
+
+puts "Are a and b equal? #{a == b}"
+puts "Are a and same_as_a equal? #{a == same_as_a}"

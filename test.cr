@@ -102,6 +102,10 @@ module SomeModule
       puts "Object registered in mruby"
     end
 
+    def ==(other : Test)
+      (self.x == other.x)
+    end
+
     # Gets called in Crystal unless program terminates early
     def finalize
       puts "Finalized with value #{@x}"
@@ -136,7 +140,7 @@ module SomeModule
       end
     end
 
-    def happy😀emoji😀test😀😀(arg : Int32)
+    def happy😀emoji😀test😀😀😀(arg : Int32)
       puts "😀 for number #{arg}"
     end
 

@@ -978,11 +978,11 @@ module MrbMacro
       # Exclude methods which are not the specialized methods
       {% elsif has_specialized_method[method.name.stringify] && !(method.annotation(MrbWrap::Specialize) || (annotation_specialize_im && (method.args.stringify == annotation_specialize_im[1].stringify || (method.args.stringify == "[]" && annotation_specialize_im[1] == nil)))) %}
         {% puts "--> Excluding #{crystal_class}::#{method.name} #{method.args} (Specialization)" if verbose %}
-      # Handle operator methods (including setters)
-      # TODO: Make this more stable (methods '=', '==' are not working currently, and '+' is weird)
+      # Handle operator methods (including setters) by just transferring the original name into the operator
+      # TODO: This might still be a source for potential bugs, so this code might need some reworking in the future
       {% elsif method.name[-1..-1] =~ /\W/ %}
-        {% without_operator = method.name[0..-2] %}
-        {% operator = method.name[-1..-1] %}
+        {% without_operator = "" %}
+        {% operator = ruby_name %}
 
         {% if without_operator.empty? %}
           MrbMacro.wrap_method_index({{mrb_state}}, {{crystal_class}}, {{index}}, "{{ruby_name}}", operator: "{{operator}}", without_keywords: -1, context: {{context}})
