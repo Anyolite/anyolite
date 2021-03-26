@@ -24,6 +24,7 @@ task :load_config do
     # Default config
     $config_ANYOLITE_BUILDPATH = "build"
     $config_ANYOLITE_MRUBY_FORK = "https://github.com/mruby/mruby"
+    $config_ANYOLITE_MRUBY_RELEASE = "2.1.2"
     $config_ANYOLITE_MRUBY_DIR = "third_party"
     $config_ANYOLITE_MRUBY_CONFIG_PATH = "utility/mruby_build_config.rb"
     $config_ANYOLITE_COMPILER = determine_compiler
@@ -35,6 +36,7 @@ task :load_config do
             content = JSON.parse(f)
             $config_ANYOLITE_BUILDPATH = content["ANYOLITE_BUILDPATH"] if content["ANYOLITE_BUILDPATH"]
             $config_ANYOLITE_MRUBY_FORK = content["ANYOLITE_MRUBY_FORK"] if content["ANYOLITE_MRUBY_FORK"]
+            $config_ANYOLITE_MRUBY_RELEASE = content["ANYOLITE_MRUBY_RELEASE"] if content["ANYOLITE_MRUBY_RELEASE"]
             $config_ANYOLITE_MRUBY_DIR = content["ANYOLITE_MRUBY_DIR"] if content["ANYOLITE_MRUBY_DIR"]
             $config_ANYOLITE_MRUBY_CONFIG_PATH = content["ANYOLITE_MRUBY_CONFIG_PATH"] if content["ANYOLITE_MRUBY_CONFIG_PATH"]
             $config_ANYOLITE_COMPILER = content["ANYOLITE_COMPILER"] if content["ANYOLITE_COMPILER"]
@@ -48,7 +50,7 @@ task :install_mruby do
     FileUtils.mkdir_p($config_ANYOLITE_BUILDPATH)
 
     unless File.exist?("#{$config_ANYOLITE_MRUBY_DIR}/mruby/Rakefile")
-        system "git clone #{$config_ANYOLITE_MRUBY_FORK} --branch 2.1.2 --recursive #{$config_ANYOLITE_MRUBY_DIR}/mruby"
+        system "git clone #{$config_ANYOLITE_MRUBY_FORK} --branch #{$config_ANYOLITE_MRUBY_RELEASE} --recursive #{$config_ANYOLITE_MRUBY_DIR}/mruby"
     end
 end
 

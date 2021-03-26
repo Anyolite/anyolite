@@ -29,51 +29,98 @@ lib MrbInternal
     value_sym : MrbSymbol
   end
 
-  enum MrbVType
-    MRB_TT_FALSE     = 0
-    MRB_TT_TRUE
-    MRB_TT_FLOAT
-    MRB_TT_FIXNUM
-    MRB_TT_SYMBOL
-    MRB_TT_UNDEF
-    MRB_TT_CPTR
-    MRB_TT_FREE
-    MRB_TT_OBJECT
-    MRB_TT_CLASS
-    MRB_TT_MODULE
-    MRB_TT_ICLASS
-    MRB_TT_SCLASS
-    MRB_TT_PROC
-    MRB_TT_ARRAY
-    MRB_TT_HASH
-    MRB_TT_STRING
-    MRB_TT_RANGE
-    MRB_TT_EXCEPTION
-    MRB_TT_ENV
-    MRB_TT_DATA
-    MRB_TT_FIBER
-    MRB_TT_ISTRUCT
-    MRB_TT_BREAK
-    MRB_TT_MAXDEFINE
-  end
+  {% if flag?(:anyolite_use_legacy_mruby_2_1_2) %}
+    enum MrbVType
+      MRB_TT_FALSE     = 0
+      MRB_TT_TRUE
+      MRB_TT_FLOAT
+      MRB_TT_FIXNUM
+      MRB_TT_SYMBOL
+      MRB_TT_UNDEF
+      MRB_TT_CPTR
+      MRB_TT_FREE
+      MRB_TT_OBJECT
+      MRB_TT_CLASS
+      MRB_TT_MODULE
+      MRB_TT_ICLASS
+      MRB_TT_SCLASS
+      MRB_TT_PROC
+      MRB_TT_ARRAY
+      MRB_TT_HASH
+      MRB_TT_STRING
+      MRB_TT_RANGE
+      MRB_TT_EXCEPTION
+      MRB_TT_ENV
+      MRB_TT_DATA
+      MRB_TT_FIBER
+      MRB_TT_ISTRUCT
+      MRB_TT_BREAK
+      MRB_TT_MAXDEFINE
+    end
+  {% else %}
+    enum MrbVType
+      MRB_TT_FALSE     = 0
+      MRB_TT_TRUE
+      MRB_TT_FLOAT
+      MRB_TT_FIXNUM
+      MRB_TT_SYMBOL
+      MRB_TT_UNDEF
+      MRB_TT_CPTR
+      MRB_TT_FREE
+      MRB_TT_OBJECT
+      MRB_TT_CLASS
+      MRB_TT_MODULE
+      MRB_TT_ICLASS
+      MRB_TT_SCLASS
+      MRB_TT_PROC
+      MRB_TT_ARRAY
+      MRB_TT_HASH
+      MRB_TT_STRING
+      MRB_TT_RANGE
+      MRB_TT_EXCEPTION
+      MRB_TT_ENV
+      MRB_TT_DATA
+      MRB_TT_FIBER
+      MRB_TT_ISTRUCT
+      MRB_TT_BREAK
+      MRB_TT_MAXDEFINE
+    end
+  {% end %}
 
-  struct MrbValue
-    value : MrbValueUnion
-    tt : MrbVType
-  end
+  {% if flag?(:anyolite_use_legacy_mruby_2_1_2) %}
+    struct MrbValue
+      value : MrbValueUnion
+      tt : MrbVType
+    end
+  {% else %}
+    struct MrbValue
+      value : MrbValueUnion
+      tt : MrbVType
+    end
+  {% end %}
 
   struct MrbDataType
     struct_name : LibC::Char*
     dfree : MrbState*, Void* -> Void
   end
 
-  struct KWArgs
-    num : UInt32
-    values : MrbValue*
-    table : LibC::Char**
-    required : UInt32
-    rest : MrbValue*
-  end
+  {% if flag?(:anyolite_use_legacy_mruby_2_1_2) %}
+    struct KWArgs
+      num : UInt32
+      values : MrbValue*
+      table : LibC::Char**
+      required : UInt32
+      rest : MrbValue*
+    end
+  {% else %}
+    struct KWArgs
+      num : UInt32
+      values : MrbValue*
+      table : LibC::Char**
+      required : UInt32
+      rest : MrbValue*
+    end
+  {% end %}
 
   fun mrb_open : MrbState*
   fun mrb_close(mrb : MrbState*)
