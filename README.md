@@ -145,7 +145,19 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 
 ### Version 0.8.0
 
-Version 0.8.0 is planned to be the last feature release before 1.0.0.
+* [ ] Upgrade to mruby 3.0.0
+
+#### Compatibility to mruby 3.0.0
+
+* [ ] Make code independent of boxing style
+* [ ] Allow specification of mruby version in Rakefile
+* [ ] Change keyword table to symbols
+* [ ] Update type enum
+* [ ] Update keyword argument struct
+
+### Version 0.9.0
+
+Version 0.9.0 is planned to be the last feature release before 1.0.0.
 Currently, the way its features are going to be implemented is not yet determined,
 so it will probably take some time before it will be released.
 
