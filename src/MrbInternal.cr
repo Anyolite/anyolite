@@ -104,6 +104,20 @@ lib MrbInternal
   fun get_float_value(mrb : MrbState*, value : MrbFloat) : MrbValue
   fun get_string_value(mrb : MrbState*, value : LibC::Char*) : MrbValue
 
+  fun check_mrb_fixnum(value : MrbValue) : LibC::Int
+  fun check_mrb_float(value : MrbValue) : LibC::Int
+  fun check_mrb_true(value : MrbValue) : LibC::Int
+  fun check_mrb_false(value : MrbValue) : LibC::Int
+  fun check_mrb_nil(value : MrbValue) : LibC::Int
+  fun check_mrb_undef(value : MrbValue) : LibC::Int
+  fun check_mrb_string(value : MrbValue) : LibC::Int
+  fun check_mrb_data(value : MrbValue) : LibC::Int
+
+  fun get_mrb_fixnum(value : MrbValue) : MrbInt 
+  fun get_mrb_float(value : MrbValue) : MrbFloat
+  fun get_mrb_bool(value : MrbValue) : MrbBool
+  fun get_mrb_string(mrb : MrbState*, value : MrbValue) : LibC::Char*
+
   fun mrb_str_to_cstr(mrb : MrbState*, value : MrbValue) : LibC::Char*
 
   # Base class, not to be confused with `get_class_of_obj`
