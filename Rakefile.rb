@@ -24,7 +24,7 @@ task :load_config do
     # Default config
     $config_ANYOLITE_BUILDPATH = "build"
     $config_ANYOLITE_MRUBY_FORK = "https://github.com/mruby/mruby"
-    $config_ANYOLITE_MRUBY_RELEASE = "2.1.2"
+    $config_ANYOLITE_MRUBY_RELEASE = "3.0.0"
     $config_ANYOLITE_MRUBY_DIR = "third_party"
     $config_ANYOLITE_MRUBY_CONFIG_PATH = "utility/mruby_build_config.rb"
     $config_ANYOLITE_COMPILER = determine_compiler

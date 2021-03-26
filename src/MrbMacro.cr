@@ -558,8 +558,8 @@ module MrbMacro
     end
   end
 
-  macro generate_keyword_argument_struct(keyword_args)
-    kw_names = MrbMacro.generate_keyword_names({{keyword_args}})
+  macro generate_keyword_argument_struct(mrb_state, keyword_args)
+    kw_names = MrbMacro.generate_keyword_names({{mrb_state}}, {{keyword_args}})
     kw_args = MrbInternal::KWArgs.new
     kw_args.num = {{keyword_args.size}}
     kw_args.values = Pointer(MrbInternal::MrbValue).malloc(size: {{keyword_args.size}})
@@ -569,10 +569,10 @@ module MrbMacro
     kw_args
   end
 
-  macro generate_keyword_names(keyword_args)
+  macro generate_keyword_names(mrb_state, keyword_args)
     [
       {% for keyword in keyword_args %}
-        {{keyword.var.stringify}}.to_unsafe,
+        MrbInternal.convert_to_mrb_sym({{mrb_state}}, {{keyword.var.stringify}}),
       {% end %}
     ]
   end
@@ -613,7 +613,7 @@ module MrbMacro
       regular_arg_tuple = MrbMacro.generate_arg_tuple({{mrb_state}}, {{regular_arg_array}}, context: {{context}})
       format_string = MrbMacro.format_string({{regular_arg_array}}, context: {{context}}) + ":"
 
-      kw_args = MrbMacro.generate_keyword_argument_struct({{keyword_args}})
+      kw_args = MrbMacro.generate_keyword_argument_struct({{mrb_state}}, {{keyword_args}})
       MrbInternal.mrb_get_args(mrb, format_string, *regular_arg_tuple, pointerof(kw_args))
 
       converted_regular_args = MrbMacro.convert_args(mrb, regular_arg_tuple, {{regular_arg_array}}, context: {{context}})
@@ -666,7 +666,7 @@ module MrbMacro
       regular_arg_tuple = MrbMacro.generate_arg_tuple({{mrb_state}}, {{regular_arg_array}}, context: {{context}})
       format_string = MrbMacro.format_string({{regular_arg_array}}, context: {{context}}) + ":"
 
-      kw_args = MrbMacro.generate_keyword_argument_struct({{keyword_args}})
+      kw_args = MrbMacro.generate_keyword_argument_struct({{mrb_state}}, {{keyword_args}})
       MrbInternal.mrb_get_args(mrb, format_string, *regular_arg_tuple, pointerof(kw_args))
 
       converted_regular_args = MrbMacro.convert_args(mrb, regular_arg_tuple, {{regular_arg_array}}, context: {{context}})
@@ -728,7 +728,7 @@ module MrbMacro
       regular_arg_tuple = MrbMacro.generate_arg_tuple({{mrb_state}}, {{regular_arg_array}}, context: {{context}})
       format_string = MrbMacro.format_string({{regular_arg_array}}, context: {{context}}) + ":"
 
-      kw_args = MrbMacro.generate_keyword_argument_struct({{keyword_args}})
+      kw_args = MrbMacro.generate_keyword_argument_struct({{mrb_state}}, {{keyword_args}})
       MrbInternal.mrb_get_args(mrb, format_string, *regular_arg_tuple, pointerof(kw_args))
 
       converted_regular_args = MrbMacro.convert_args(mrb, regular_arg_tuple, {{regular_arg_array}}, context: {{context}})
@@ -792,7 +792,7 @@ module MrbMacro
       regular_arg_tuple = MrbMacro.generate_arg_tuple({{mrb_state}}, {{regular_arg_array}}, context: {{context}})
       format_string = MrbMacro.format_string({{regular_arg_array}}, context: {{context}}) + ":"
 
-      kw_args = MrbMacro.generate_keyword_argument_struct({{keyword_args}})
+      kw_args = MrbMacro.generate_keyword_argument_struct({{mrb_state}}, {{keyword_args}})
       MrbInternal.mrb_get_args(mrb, format_string, *regular_arg_tuple, pointerof(kw_args))
 
       converted_regular_args = MrbMacro.convert_args(mrb, regular_arg_tuple, {{regular_arg_array}}, context: {{context}})

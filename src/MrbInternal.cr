@@ -31,7 +31,7 @@ lib MrbInternal
 
   {% if flag?(:anyolite_use_legacy_mruby_2_1_2) %}
     enum MrbVType
-      MRB_TT_FALSE     = 0
+      MRB_TT_FALSE = 0
       MRB_TT_TRUE
       MRB_TT_FLOAT
       MRB_TT_FIXNUM
@@ -59,14 +59,14 @@ lib MrbInternal
     end
   {% else %}
     enum MrbVType
-      MRB_TT_FALSE     = 0
+      MRB_TT_FALSE = 0
       MRB_TT_TRUE
-      MRB_TT_FLOAT
-      MRB_TT_FIXNUM
       MRB_TT_SYMBOL
       MRB_TT_UNDEF
-      MRB_TT_CPTR
       MRB_TT_FREE
+      MRB_TT_FLOAT
+      MRB_TT_INTEGER
+      MRB_TT_CPTR
       MRB_TT_OBJECT
       MRB_TT_CLASS
       MRB_TT_MODULE
@@ -83,6 +83,8 @@ lib MrbInternal
       MRB_TT_FIBER
       MRB_TT_ISTRUCT
       MRB_TT_BREAK
+      MRB_TT_COMPLEX
+      MRB_TT_RATIONAL
       MRB_TT_MAXDEFINE
     end
   {% end %}
@@ -94,8 +96,7 @@ lib MrbInternal
     end
   {% else %}
     struct MrbValue
-      value : MrbValueUnion
-      tt : MrbVType
+      w : LibC::ULong
     end
   {% end %}
 
@@ -115,9 +116,9 @@ lib MrbInternal
   {% else %}
     struct KWArgs
       num : UInt32
-      values : MrbValue*
-      table : LibC::Char**
       required : UInt32
+      table : MrbSymbol*
+      values : MrbValue*
       rest : MrbValue*
     end
   {% end %}
@@ -166,6 +167,8 @@ lib MrbInternal
   fun get_mrb_string(mrb : MrbState*, value : MrbValue) : LibC::Char*
 
   fun mrb_str_to_cstr(mrb : MrbState*, value : MrbValue) : LibC::Char*
+
+  fun convert_to_mrb_sym(mrb : MrbState*, value : LibC::Char*) : MrbSymbol
 
   # Base class, not to be confused with `get_class_of_obj`
   fun get_object_class(mrb : MrbState*) : RClass*

@@ -38,3 +38,9 @@ extern struct RClass* get_class_of_obj(mrb_state* mrb, mrb_value object) {
     return mrb_class(mrb, object);
 
 }
+
+extern mrb_sym convert_to_mrb_sym(mrb_state* mrb, const char* str) {
+
+    return mrb_intern_check_cstr(mrb, str);
+
+}
