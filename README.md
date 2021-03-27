@@ -54,6 +54,7 @@ which allows for changing multiple options when installing the shard. Possible o
 
 * `ANYOLITE_BUILDPATH` - The relative directory in which Anyolite will be built
 * `ANYOLITE_MRUBY_FORK` - The web address of the mruby repository
+* `ANYOLITE_MRUBY_RELEASE` - The release tag of the mruby version to be used
 * `ANYOLITE_MRUBY_DIR` - The relative directory mruby will be installed in
 * `ANYOLITE_MRUBY_CONFIG_PATH` - The config file which is used for building mruby
 * `ANYOLITE_COMPILER` - The C compiler used for building Anyolite
@@ -142,20 +143,6 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 # Roadmap
 
 ## Upcoming releases
-
-### Version 0.8.0
-
-#### Features
-
-* [X] Uses mruby 3.0.0 by default
-
-#### Breaking changes
-
-* [X] Compatibility with mruby 2.1.2 requires additional flag
-
-#### Usability
-
-* [X] Casting methods are more compatible between mruby versions
 
 ### Version 0.9.0
 

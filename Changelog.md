@@ -2,6 +2,20 @@
 
 ## Releases
 
+### Version 0.8.0
+
+#### Features
+
+* Uses mruby 3.0.0 by default
+
+#### Breaking changes
+
+* Compatibility with mruby 2.1.2 requires additional flag
+
+#### Usability
+
+* Casting methods are more compatible between mruby versions
+
 ### Version 0.7.0
 
 #### Features
