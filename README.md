@@ -145,6 +145,19 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 
 ## Upcoming releases
 
+### Version 0.8.1
+
+#### Usability
+
+* [ ] Explicitly exclude pointers
+* [ ] Explicitly exclude procs
+
+#### Bugfixes
+
+* [X] Fixed exception for class methods with empty regular argument list
+* [ ] Allow operator methods for class methods
+* [ ] Resolve generics as arguments for generics properly
+
 ### Version 0.9.0
 
 Version 0.9.0 is planned to be the last feature release before 1.0.0.
@@ -166,3 +179,5 @@ so it will probably take some time before it will be released.
 * [ ] Arrays and/or hashes as argument and return values
 * [ ] Splat argument and/or arbitrary keyword passing
 * [ ] Method in mruby to determine owner of object
+* [ ] Support for procs and/or pointers
+

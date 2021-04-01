@@ -671,7 +671,7 @@ module MrbMacro
 
       converted_regular_args = MrbMacro.convert_args(mrb, regular_arg_tuple, {{regular_arg_array}}, context: {{context}})
 
-      {% if regular_arg_array.size == 0 %}
+      {% if !regular_arg_array || regular_arg_array.size == 0 %}
         MrbMacro.call_and_return_keyword_method(mrb, {{proc}}, converted_regular_args, {{keyword_args}}, kw_args, operator: {{operator}}, 
           empty_regular: true, context: {{context}}, type_vars: {{type_vars}}, type_var_names: {{type_var_names}})
       {% else %}

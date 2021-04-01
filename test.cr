@@ -49,6 +49,10 @@ module SomeModule
       def test(u : U, v : V)
         puts "u is #{u} and has class #{U}, v is #{v} and has class #{V}."
       end
+
+      # TODO: Fix this
+      #def compare(other : GenericTest(U, V))
+      #end
     end
 
     alias GTIntFloat = GenericTest(Int32, Float32)
