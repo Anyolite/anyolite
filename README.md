@@ -131,6 +131,7 @@ More features will be added in the future.
 * Keywords will always be given to functions, even if optional (then with default values)
 * Non-keyword function arguments are always set to their default values before receiving their final values
 * Default arguments need to be specialized with their full class and module path in order to work
+* Private constants need to be excluded in order to prevent errors
 
 # Why this name?
 
@@ -143,13 +144,6 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 # Roadmap
 
 ## Upcoming releases
-
-### Version 0.8.1
-
-#### Bugfixes
-
-* [ ] Removed unnecessary "Generic" message
-* [ ] Fixed error when encountering private constant
 
 ### Version 0.9.0
 
