@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="generator" content="Crystal Docs 1.0.0">
-<meta name="crystal_docs.project_version" content="0.8.0">
+<meta name="crystal_docs.project_version" content="0.8.1">
 <meta name="crystal_docs.project_name" content="anyolite">
 
 
@@ -13,7 +13,7 @@
 <script type="text/javascript" src="js/doc.js"></script>
 
   <meta name="repository-name" content="anyolite">
-  <title>anyolite 0.8.0</title>
+  <title>anyolite 0.8.1</title>
   <script type="text/javascript">
   CrystalDocs.base_path = "";
   </script>
@@ -39,7 +39,7 @@
       </h1>
 
       <span class="project-version">
-        0.8.0
+        0.8.1
       </span>
     </div>
   </div>
@@ -352,7 +352,7 @@ More features will be added in the future.</p>
   </svg>
 </a>Limitations</h1>
 
-<ul><li>Currently, Anyolite does not work on Windows due to Crystal compiler bugs</li><li>Arrays and hashes are not directly supported</li><li>Symbols do not work due to their compiletime nature in Crystal</li><li>Splat arguments and arbitrary keywords are not possible due to their reliance on symbols</li><li>Keywords will always be given to functions, even if optional (then with default values)</li><li>Non-keyword function arguments are always set to their default values before receiving their final values</li><li>Default arguments need to be specialized with their full class and module path in order to work</li></ul>
+<ul><li>Currently, Anyolite does not work on Windows due to Crystal compiler bugs</li><li>Arrays and hashes are not directly supported</li><li>Symbols do not work due to their compiletime nature in Crystal</li><li>Splat arguments and arbitrary keywords are not possible due to their reliance on symbols</li><li>Keywords will always be given to functions, even if optional (then with default values)</li><li>Non-keyword function arguments are always set to their default values before receiving their final values</li><li>Default arguments need to be specialized with their full class and module path in order to work</li><li>Private constants need to be excluded in order to prevent errors</li></ul>
 
 <h1><a id="why-this-name" class="anchor" href="#why-this-name">
   <svg class="octicon-link" aria-hidden="true">
@@ -384,7 +384,37 @@ More features will be added in the future.</p>
   </svg>
 </a>Version 0.9.0</h3>
 
-<p>Version 0.9.0 is planned to be the last feature release before 1.0.0.
+<h4><a id="features" class="anchor" href="#features">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Features</h4>
+
+<ul><li>[ ] Additional compatibility layer between Anyolite and mruby</li><li>[ ] More configuration options</li></ul>
+
+<h4><a id="breaking-changes" class="anchor" href="#breaking-changes">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Breaking changes</h4>
+
+<ul><li>[ ] Rename <code><a href="MrbWrap.html">MrbWrap</a></code> to <code>Anyolite</code></li><li>[ ] Rename <code><a href="MrbMacro.html">MrbMacro</a></code> to <code>Anyolite::Macro</code></li><li>[ ] Rename <code>mrb</code> and <code>mruby</code> in the code to <code>rb</code> and <code>ruby</code></li><li>[ ] Rework configurations for the Rakefile into a class</li></ul>
+
+<h4><a id="usability" class="anchor" href="#usability">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Usability</h4>
+
+<ul><li>[ ] Split macro source file into smaller parts</li><li>[ ] Update documentation to new code</li></ul>
+
+<h3><a id="version-0.10.0" class="anchor" href="#version-0.10.0">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Version 0.10.0</h3>
+
+<p>This version is planned to be the last feature release before 1.0.0.
 Currently, the way its features are going to be implemented is not yet determined,
 so it will probably take some time before it will be released.</p>
 
@@ -404,7 +434,9 @@ so it will probably take some time before it will be released.</p>
   </svg>
 </a>Future ideas (might not actually be possible to implement)</h3>
 
-<ul><li>[ ] Arrays and/or hashes as argument and return values</li><li>[ ] Splat argument and/or arbitrary keyword passing</li><li>[ ] Method in mruby to determine owner of object</li></ul>
+<ul><li>[ ] Arrays and/or hashes as argument and return values</li><li>[ ] Splat argument and/or arbitrary keyword passing</li><li>[ ] Method in mruby to determine owner of object</li><li>[ ] Support for procs and/or pointers</li></ul>
+
+
 </div>
 </body>
 </html>
