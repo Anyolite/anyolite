@@ -229,6 +229,16 @@ module MrbMacro
     {% elsif type_var_names && type_var_names.includes?(arg_type.type) %}
       {% type_var_names.each_with_index { |element, index| result = index if element == arg_type.type } %}
       MrbMacro.convert_keyword_arg({{mrb}}, {{arg}}, {{type_vars[result]}}, context: {{context}}, debug_information: {{debug_information}})
+    {% elsif type_var_names %}
+      {% replacement_arg_type = arg_type.stringify.gsub(/([\(\s\:])([A-Z]+)([\),\s])/, "\\1\#\\3") %}
+      {% for type_var_name, index in type_var_names %}
+        {% puts "NOW: #{replacement_arg_type}, SPLIT = #{replacement_arg_type.split("\#")}" %}
+        {% split_types = replacement_arg_type.split("\#")[0..-2] %}
+        {% for split_type, split_type_index in split_types %}
+          # TODO
+        {% end %}
+      {% end %}
+      MrbMacro.convert_keyword_arg({{mrb}}, {{arg}}, {{replacement_arg_type.id}}, context: {{context}}, debug_information: {{debug_information}})
     {% elsif arg_type.is_a?(Call) %}
       {% raise "Received Call #{arg_type} instead of TypeDeclaration or TypeNode" %}
     {% elsif arg_type.is_a?(TypeDeclaration) %}
@@ -423,7 +433,7 @@ module MrbMacro
         {% c = 0 %}
         {% for keyword in keyword_args %}
           {{keyword.var.id}}: MrbMacro.convert_keyword_arg({{mrb}}, {{kw_args}}.values[{{c}}], {{keyword}}, context: {{context}}, 
-            type_vars: {{type_vars}}, type_var_names: {{type_var_names}},debug_information: {{proc.stringify + " - " + keyword_args.stringify}}),
+            type_vars: {{type_vars}}, type_var_names: {{type_var_names}}, debug_information: {{proc.stringify + " - " + keyword_args.stringify}}),
           {% c += 1 %}
         {% end %}
       {% else %}
@@ -431,7 +441,7 @@ module MrbMacro
         {% c = 0 %}
         {% for keyword in keyword_args %}
           {{keyword.var.id}}: MrbMacro.convert_keyword_arg({{mrb}}, {{kw_args}}.values[{{c}}], {{keyword}}, context: {{context}}}, 
-            type_vars: {{type_vars}}, type_var_names: {{type_var_names}},debug_information: {{proc.stringify + " - " + keyword_args.stringify}}),
+            type_vars: {{type_vars}}, type_var_names: {{type_var_names}}, debug_information: {{proc.stringify + " - " + keyword_args.stringify}}),
           {% c += 1 %}
         {% end %}
       {% end %}
@@ -731,6 +741,7 @@ module MrbMacro
       {% regular_arg_array = [regular_args] %}
     {% end %}
 
+    {% puts "RESOLVING #{crystal_class} -> #{crystal_class.resolve.type_vars}" if !crystal_class.resolve.type_vars.empty? %}
     {% type_vars = crystal_class.resolve.type_vars %}
     {% type_var_names_annotation = crystal_class.resolve.annotation(MrbWrap::SpecifyGenericTypes) %}
     {% type_var_names = type_var_names_annotation ? type_var_names_annotation[0] : nil %}
