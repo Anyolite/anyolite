@@ -156,6 +156,7 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 
 * [X] Fixed exception for class methods with empty regular argument list
 * [X] Allow operator methods for class and module methods
+* [X] Fixed path resolution for types starting with `::`
 * [ ] Resolve generics as arguments for generics properly
 
 ### Version 0.9.0

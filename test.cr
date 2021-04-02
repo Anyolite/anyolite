@@ -103,6 +103,11 @@ module SomeModule
       return a
     end
 
+    # TODO: Make this work or at least give a better error message
+    #def pointer_test(p : ::Pointer(Test))
+    #  puts "Pointer has value #{p.value.x}"
+    #end
+
     # Gets called in Crystal and mruby
     def initialize(@x : Int32 = 0)
       Test.increase_counter

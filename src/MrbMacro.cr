@@ -26,7 +26,7 @@ module MrbMacro
         MrbMacro.format_char({{arg.type}}, optional_values: {{optional_values}}, context: {{context}})
       {% end %}
     {% elsif context %}
-      MrbMacro.resolve_format_char({{context}}::{{arg}}, {{arg}}, {{context}})
+      MrbMacro.resolve_format_char({{context}}::{{arg.stringify.starts_with?("::") ? arg.stringify[2..-1].id  : arg}}, {{arg}}, {{context}})
     {% else %}
       MrbMacro.resolve_format_char({{arg}}, {{arg}})
     {% end %}
@@ -47,8 +47,8 @@ module MrbMacro
       {% end %}
     {% elsif context %}
       {% if context.names[0..-2].size > 0 %}
-        {% new_context = context.names[0..-2].join("::").id %}
-        MrbMacro.resolve_format_char({{new_context}}::{{raw_arg}}, {{raw_arg}}, {{new_context}})
+        {% new_context = context.names[0..-2].join("::").gsub(/(::)+/, "::").id %}
+        MrbMacro.resolve_format_char({{new_context}}::{{raw_arg.stringify.starts_with?("::") ? raw_arg.stringify[2..-1].id  : raw_arg}}, {{raw_arg}}, {{new_context}})
       {% else %}
         MrbMacro.resolve_format_char({{raw_arg}}, {{raw_arg}})
       {% end %}
@@ -63,7 +63,7 @@ module MrbMacro
     {% elsif type.is_a?(TypeDeclaration) %}
       MrbMacro.type_in_ruby({{type.type}})
     {% elsif context %}
-      MrbMacro.resolve_type_in_ruby({{context}}::{{type}}, {{type}}, {{context}})
+      MrbMacro.resolve_type_in_ruby({{context}}::{{type.stringify.starts_with?("::") ? type.stringify[2..-1].id  : type}}, {{type}}, {{context}})
     {% else %}
       MrbMacro.resolve_type_in_ruby({{type}}, {{type}})
     {% end %}
@@ -85,8 +85,8 @@ module MrbMacro
       {% end %}
     {% elsif context %}
       {% if context.names[0..-2].size > 0 %}
-        {% new_context = context.names[0..-2].join("::").id %}
-        MrbMacro.resolve_type_in_ruby({{new_context}}::{{raw_type}}, {{raw_type}}, {{new_context}})
+        {% new_context = context.names[0..-2].join("::").gsub(/(\:\:)+/, "::").id %}
+        MrbMacro.resolve_type_in_ruby({{new_context}}::{{raw_type.stringify.starts_with?("::") ? raw_type.stringify[2..-1].id : raw_type}}, {{raw_type}}, {{new_context}})
       {% else %}
         MrbMacro.resolve_type_in_ruby({{raw_type}}, {{raw_type}})
       {% end %}
@@ -101,7 +101,7 @@ module MrbMacro
     {% elsif type.is_a?(TypeDeclaration) %}
       MrbMacro.pointer_type({{type.type}}, context: {{context}})
     {% elsif context %}
-      MrbMacro.resolve_pointer_type({{context}}::{{type}}, {{type}}, {{context}})
+      MrbMacro.resolve_pointer_type({{context}}::{{type.stringify.starts_with?("::") ? type.stringify[2..-1].id : type}}, {{type}}, {{context}})
     {% else %}
       MrbMacro.resolve_pointer_type({{type}}, {{type}})
     {% end %}
@@ -122,8 +122,8 @@ module MrbMacro
       {% end %}
     {% elsif context %}
       {% if context.names[0..-2].size > 0 %}
-        {% new_context = context.names[0..-2].join("::").id %}
-        MrbMacro.resolve_pointer_type({{new_context}}::{{raw_type}}, {{raw_type}}, {{new_context}})
+        {% new_context = context.names[0..-2].join("::").gsub(/(\:\:)+/, "::").id %}
+        MrbMacro.resolve_pointer_type({{new_context}}::{{raw_type.stringify.starts_with?("::") ? raw_type.stringify[2..-1].id : raw_type}}, {{raw_type}}, {{new_context}})
       {% else %}
         MrbMacro.resolve_pointer_type({{raw_type}}, {{raw_type}})
       {% end %}
@@ -175,7 +175,7 @@ module MrbMacro
     {% elsif arg_type.is_a?(TypeDeclaration) %}
       MrbMacro.convert_arg({{mrb}}, {{arg}}, {{arg_type.type}}, context: {{context}})
     {% elsif context %}
-      MrbMacro.convert_resolved_arg({{mrb}}, {{arg}}, {{context}}::{{arg_type}}, {{arg_type}}, {{context}})
+      MrbMacro.convert_resolved_arg({{mrb}}, {{arg}}, {{context}}::{{arg_type.stringify.starts_with?("::") ? arg_type.stringify[2..-1].id : arg_type}}, {{arg_type}}, {{context}})
     {% else %}
       MrbMacro.convert_resolved_arg({{mrb}}, {{arg}}, {{arg_type}}, {{arg_type}})
     {% end %}
@@ -204,8 +204,8 @@ module MrbMacro
       {% end %}
     {% elsif context %}
       {% if context.names[0..-2].size > 0 %}
-        {% new_context = context.names[0..-2].join("::").id %}
-        MrbMacro.convert_resolved_arg({{mrb}}, {{arg}}, {{new_context}}::{{raw_arg_type}}, {{raw_arg_type}}, {{new_context}})
+        {% new_context = context.names[0..-2].join("::").gsub(/(\:\:)+/, "::").id %}
+        MrbMacro.convert_resolved_arg({{mrb}}, {{arg}}, {{new_context}}::{{raw_arg_type.stringify.starts_with?("::") ? raw_arg_type.stringify[2..-1].id : raw_arg_type}}, {{raw_arg_type}}, {{new_context}})
       {% else %}
         MrbMacro.convert_resolved_arg({{mrb}}, {{arg}}, {{raw_arg_type}}, {{raw_arg_type}})
       {% end %}
@@ -241,7 +241,7 @@ module MrbMacro
         {% end %}
       end
     {% elsif context && !arg_type.stringify.starts_with?("Union") %}
-      MrbMacro.convert_resolved_keyword_arg({{mrb}}, {{arg}}, {{context}}::{{arg_type}}, {{arg_type}}, context: {{context}}, debug_information: {{debug_information}})
+      MrbMacro.convert_resolved_keyword_arg({{mrb}}, {{arg}}, {{context}}::{{arg_type.stringify.starts_with?("::") ? arg_type.stringify[2..-1].id : arg_type}}, {{arg_type}}, context: {{context}}, debug_information: {{debug_information}})
     {% else %}
       MrbMacro.convert_resolved_keyword_arg({{mrb}}, {{arg}}, {{arg_type}}, {{arg_type}}, context: {{context}}, debug_information: {{debug_information}})
     {% end %}
@@ -277,8 +277,8 @@ module MrbMacro
       {% end %}
     {% elsif context %}
       {% if context.names[0..-2].size > 0 %}
-        {% new_context = context.names[0..-2].join("::").id %}
-        MrbMacro.convert_resolved_keyword_arg({{mrb}}, {{arg}}, {{new_context}}::{{raw_arg_type}}, {{raw_arg_type}}, {{new_context}}, debug_information: {{debug_information}})
+        {% new_context = context.names[0..-2].join("::").gsub(/(\:\:)+/, "::").id %}
+        MrbMacro.convert_resolved_keyword_arg({{mrb}}, {{arg}}, {{new_context}}::{{raw_arg_type.stringify.starts_with?("::") ? raw_arg_type.stringify[2..-1].id : raw_arg_type}}, {{raw_arg_type}}, {{new_context}}, debug_information: {{debug_information}})
       {% else %}
         MrbMacro.convert_resolved_keyword_arg({{mrb}}, {{arg}}, {{raw_arg_type}}, {{raw_arg_type}}, debug_information: {{debug_information}})
       {% end %}
@@ -294,7 +294,7 @@ module MrbMacro
       {% if type.resolve? %}
         MrbMacro.check_and_cast_union_type({{mrb}}, {{value}}, {{type}}, {{type}}, context: {{context}})
       {% elsif context %}
-        MrbMacro.check_and_cast_union_type({{mrb}}, {{value}}, {{context}}::{{type}}, {{type}}, context: {{context}})
+        MrbMacro.check_and_cast_union_type({{mrb}}, {{value}}, {{context}}::{{type.stringify.starts_with?("::") ? type.stringify[2..-1].id : type}}, {{type}}, context: {{context}})
       {% else %}
         {% raise "Could not resolve type #{type}, which is a #{type.class_name}, in context #{context}" %}
       {% end %}
@@ -313,8 +313,8 @@ module MrbMacro
       MrbMacro.check_and_cast_resolved_union_type({{mrb}}, {{value}}, {{type}}, {{type}})
     {% elsif context %}
       {% if context.names[0..-2].size > 0 %}
-        {% new_context = context.names[0..-2].join("::").id %}
-        MrbMacro.check_and_cast_resolved_union_type({{mrb}}, {{value}}, {{new_context}}::{{raw_type}}, {{raw_type}}, {{new_context}})
+        {% new_context = context.names[0..-2].join("::").gsub(/(\:\:)+/, "::").id %}
+        MrbMacro.check_and_cast_resolved_union_type({{mrb}}, {{value}}, {{new_context}}::{{raw_type.stringify.starts_with?("::") ? raw_type[2..-1] : raw_type}}, {{raw_type}}, {{new_context}})
       {% else %}
         MrbMacro.check_and_cast_resolved_union_type({{mrb}}, {{value}}, {{raw_type}}, {{raw_type}})
       {% end %}
