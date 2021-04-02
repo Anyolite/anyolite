@@ -145,22 +145,6 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 
 ## Upcoming releases
 
-### Version 0.8.1
-
-#### Usability
-
-* Explicitly exclude pointers
-* Explicitly exclude procs
-* Added recompilation options for the Rakefile
-
-#### Bugfixes
-
-* Fixed exception for class methods with empty regular argument list
-* Allow operator methods for class and module methods
-* Fixed path resolution for types starting with `::`
-* Resolve generics as arguments for generics properly
-* Fix broken floats in mruby
-
 ### Version 0.9.0
 
 #### Features
