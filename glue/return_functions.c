@@ -1,7 +1,7 @@
-#include <mruby.h>
-#include <mruby/class.h>
-#include <mruby/data.h>
-#include <mruby/string.h>
+#include <ruby.h>
+#include <ruby/class.h>
+#include <ruby/data.h>
+#include <ruby/string.h>
 #include <string.h>
 
 extern struct RClass* get_object_class(mrb_state* mrb) {

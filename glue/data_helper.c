@@ -1,6 +1,6 @@
-#include <mruby.h>
-#include <mruby/class.h>
-#include <mruby/data.h>
+#include <ruby.h>
+#include <ruby/class.h>
+#include <ruby/data.h>
 
 extern const mrb_data_type* data_type(mrb_value value) {
 

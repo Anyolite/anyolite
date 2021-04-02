@@ -1,7 +1,7 @@
-#include <mruby.h>
-#include <mruby/class.h>
-#include <mruby/data.h>
-#include <mruby/compile.h>
+#include <ruby.h>
+#include <ruby/class.h>
+#include <ruby/data.h>
+#include <ruby/compile.h>
 
 extern mrb_value load_script_from_file(mrb_state* mrb, const char* filename) {
 
