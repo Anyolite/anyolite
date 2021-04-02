@@ -10,8 +10,6 @@ module MrbMacro
     ""
   end
 
-  # TODO: Update this and other non-keyword-argument-macros to support generic types
-
   macro format_char(arg, optional_values = false, context = nil)
     {% if arg.stringify.includes?('|') %}
       {% if optional_values != true && arg.stringify.includes?('|') %}
@@ -167,7 +165,13 @@ module MrbMacro
 
   # Converts Ruby values to Crystal values
   macro convert_arg(mrb, arg, arg_type, context = nil)
-    {% if arg_type.stringify.includes?('|') %}
+    {% if arg_type.stringify.includes?("->") || arg_type.stringify.includes?(" Proc(") %}
+      {% puts "\e[33m> INFO: Proc types are not allowed as arguments.\e[0m" %}
+      raise "Proc types are not allowed as arguments ({{debug_information.id}})"
+    {% elsif arg_type.is_a?(Generic) && arg_type.name.stringify.gsub(/(\:\:)+/, "") == "Pointer" %}
+      {% puts "\e[33m> INFO: Pointer types are not allowed as arguments.\e[0m" %}
+      raise "Pointer types are not allowed as arguments ({{debug_information.id}})"
+    {% elsif arg_type.stringify.includes?('|') %}
       # This is kind of cheating, but hey, it does its job
       # ...
       # Please don't judge me
@@ -215,7 +219,14 @@ module MrbMacro
   end
 
   macro convert_keyword_arg(mrb, arg, arg_type, context = nil, type_vars = nil, type_var_names = nil, debug_information = nil)
-    {% if type_var_names && type_var_names.includes?(arg_type.type) %}
+    # TODO: Is it possible to put the message somewhere else... or at least CATCH the exception?
+    {% if arg_type.stringify.includes?("->") || arg_type.stringify.includes?(" Proc(") %}
+      {% puts "\e[33m> INFO: Proc types are not allowed as arguments (#{debug_information.id}).\e[0m" %}
+      raise "Proc types are not allowed as arguments ({{debug_information.id}})"
+    {% elsif arg_type.is_a?(Generic) && arg_type.name.stringify.gsub(/(\:\:)+/, "") == "Pointer" %}
+      {% puts "\e[33m> INFO: Pointer types are not allowed as arguments (#{debug_information.id}).\e[0m" %}
+      raise "Pointer types are not allowed as arguments ({{debug_information.id}})"
+    {% elsif type_var_names && type_var_names.includes?(arg_type.type) %}
       {% type_var_names.each_with_index { |element, index| result = index if element == arg_type.type } %}
       MrbMacro.convert_keyword_arg({{mrb}}, {{arg}}, {{type_vars[result]}}, context: {{context}}, debug_information: {{debug_information}})
     {% elsif arg_type.is_a?(Call) %}

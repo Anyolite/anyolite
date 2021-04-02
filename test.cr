@@ -103,10 +103,18 @@ module SomeModule
       return a
     end
 
-    # TODO: Make this work or at least give a better error message
-    #def pointer_test(p : ::Pointer(Test))
-    #  puts "Pointer has value #{p.value.x}"
-    #end
+    # Would all trigger an error!
+    # def pointer_test(p : ::Pointer(Test))
+    #   puts "Pointer has value #{p.value.x}"
+    # end
+
+    # def proc_test(pr : Int32 | (Int32 -> Int32))
+    #   pr.call(12)
+    # end
+
+    # def proc_test_2(pr : Proc(Int32))
+    #   pr.call(12)
+    # end
 
     # Gets called in Crystal and mruby
     def initialize(@x : Int32 = 0)
