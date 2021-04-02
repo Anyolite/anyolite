@@ -160,7 +160,26 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 
 ### Version 0.9.0
 
-Version 0.9.0 is planned to be the last feature release before 1.0.0.
+#### Features
+
+* [ ] Additional compatibility layer between Anyolite and mruby
+* [ ] More configuration options
+
+#### Breaking changes
+
+* [ ] Rename `MrbWrap` to `Anyolite`
+* [ ] Rename `MrbMacro` to `Anyolite::Macro`
+* [ ] Rename `mrb` and `mruby` in the code to `rb` and `ruby`
+* [ ] Rework configurations for the Rakefile into a class
+
+#### Usability
+
+* [ ] Split macro source file into smaller parts
+* [ ] Update documentation to new code
+
+### Version 0.10.0
+
+This version is planned to be the last feature release before 1.0.0.
 Currently, the way its features are going to be implemented is not yet determined,
 so it will probably take some time before it will be released.
 
