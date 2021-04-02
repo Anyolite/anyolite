@@ -26,6 +26,10 @@ module SomeModule
     @[MrbWrap::RenameClass("UnderTestRenamed")]
     class UnderTest
       module DeepUnderTest
+        def self.+(value : Int)
+          "Well, you can't just add #{value} to a module..."
+        end
+
         class VeryDeepUnderTest
           def nested_test
             puts "This is a nested test"
@@ -68,6 +72,10 @@ module SomeModule
 
     def self.increase_counter
       @@counter += 1
+    end
+
+    def self.+(other_value : Int)
+      @@counter + other_value
     end
 
     def self.counter

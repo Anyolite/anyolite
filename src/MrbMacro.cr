@@ -838,23 +838,39 @@ module MrbMacro
 
     {% if !operator.empty? %}
       {% if cut_name %}
-        {% final_method_name = cut_name %}
+        {% if is_class_method %}
+          {% final_method_name = "#{crystal_class}.#{cut_name}".id %}
+          {% final_operator = "#{crystal_class}.#{operator.id}" %}
+        {% else %}
+          {% final_method_name = cut_name %}
+          {% final_operator = operator %}
+        {% end %}
       {% else %}
         {% final_method_name = MrbWrap::Empty %}
+        {% if is_class_method %}
+          {% final_operator = "#{crystal_class}.#{operator.id}" %}
+        {% else %}
+          {% final_operator = operator %}
+        {% end %}
       {% end %}
     {% else %}
-      {% final_method_name = method.name %}
+      {% if is_class_method %}
+        {% final_method_name = "#{crystal_class}.#{method.name}".id %}
+      {% else %}
+        {% final_method_name = method.name %}
+      {% end %}
+      {% final_operator = operator %}
     {% end %}
 
     {% final_arg_array = added_keyword_args ? added_keyword_args : method.args %}
 
     {% if final_arg_array.empty? %}
       {% if is_class_method %}
-        MrbWrap.wrap_class_method({{mrb_state}}, {{crystal_class}}, {{ruby_name}}, {{crystal_class}}.{{final_method_name}}, operator: {{operator}}, context: {{context}})
+        MrbWrap.wrap_class_method({{mrb_state}}, {{crystal_class}}, {{ruby_name}}, {{final_method_name}}, operator: {{final_operator}}, context: {{context}})
       {% elsif is_constructor %}
         MrbWrap.wrap_constructor({{mrb_state}}, {{crystal_class}}, context: {{context}})
       {% else %}
-        MrbWrap.wrap_instance_method({{mrb_state}}, {{crystal_class}}, {{ruby_name}}, {{final_method_name}}, operator: {{operator}}, context: {{context}})
+        MrbWrap.wrap_instance_method({{mrb_state}}, {{crystal_class}}, {{ruby_name}}, {{final_method_name}}, operator: {{final_operator}}, context: {{context}})
       {% end %}
 
     # A complicated check, but it is more stable than simply checking for colons
@@ -873,37 +889,37 @@ module MrbMacro
 
         {% if keyword_arg_partition %}
           {% if is_class_method %}
-            MrbWrap.wrap_class_method_with_keywords({{mrb_state}}, {{crystal_class}}, {{ruby_name}}, {{crystal_class}}.{{final_method_name}}, 
-              {{keyword_arg_partition}}, regular_args: {{regular_arg_partition}}, operator: {{operator}}, context: {{context}})
+            MrbWrap.wrap_class_method_with_keywords({{mrb_state}}, {{crystal_class}}, {{ruby_name}}, {{final_method_name}}, 
+              {{keyword_arg_partition}}, regular_args: {{regular_arg_partition}}, operator: {{final_operator}}, context: {{context}})
           {% elsif is_constructor %}
             MrbWrap.wrap_constructor_with_keywords({{mrb_state}}, {{crystal_class}}, 
-              {{keyword_arg_partition}}, regular_args: {{regular_arg_partition}}, operator: {{operator}}, context: {{context}})
+              {{keyword_arg_partition}}, regular_args: {{regular_arg_partition}}, operator: {{final_operator}}, context: {{context}})
           {% else %}
             MrbWrap.wrap_instance_method_with_keywords({{mrb_state}}, {{crystal_class}}, {{ruby_name}}, {{final_method_name}}, 
-              {{keyword_arg_partition}}, regular_args: {{regular_arg_partition}}, operator: {{operator}}, context: {{context}})
+              {{keyword_arg_partition}}, regular_args: {{regular_arg_partition}}, operator: {{final_operator}}, context: {{context}})
           {% end %}
         {% else %}
           {% if is_class_method %}
-            MrbWrap.wrap_class_method({{mrb_state}}, {{crystal_class}}, {{ruby_name}}, {{crystal_class}}.{{final_method_name}}, 
-              {{regular_arg_partition}}, operator: {{operator}}, context: {{context}})
+            MrbWrap.wrap_class_method({{mrb_state}}, {{crystal_class}}, {{ruby_name}}, {{final_method_name}}, 
+              {{regular_arg_partition}}, operator: {{final_operator}}, context: {{context}})
           {% elsif is_constructor %}
             MrbWrap.wrap_constructor({{mrb_state}}, {{crystal_class}}, 
-              {{regular_arg_partition}}, operator: {{operator}}, context: {{context}})
+              {{regular_arg_partition}}, operator: {{final_operator}}, context: {{context}})
           {% else %}
             MrbWrap.wrap_instance_method({{mrb_state}}, {{crystal_class}}, {{ruby_name}}, {{final_method_name}}, 
-              {{regular_arg_partition}}, operator: {{operator}}, context: {{context}})
+              {{regular_arg_partition}}, operator: {{final_operator}}, context: {{context}})
           {% end %}
         {% end %}
       {% else %}
         {% if is_class_method %}
-          MrbWrap.wrap_class_method_with_keywords({{mrb_state}}, {{crystal_class}}, {{ruby_name}}, {{crystal_class}}.{{final_method_name}}, 
-            {{final_arg_array}}, operator: {{operator}}, context: {{context}})
+          MrbWrap.wrap_class_method_with_keywords({{mrb_state}}, {{crystal_class}}, {{ruby_name}}, {{final_method_name}}, 
+            {{final_arg_array}}, operator: {{final_operator}}, context: {{context}})
         {% elsif is_constructor %}
           MrbWrap.wrap_constructor_with_keywords({{mrb_state}}, {{crystal_class}}, 
-            {{final_arg_array}}, operator: {{operator}}, context: {{context}})
+            {{final_arg_array}}, operator: {{final_operator}}, context: {{context}})
         {% else %}
           MrbWrap.wrap_instance_method_with_keywords({{mrb_state}}, {{crystal_class}}, {{ruby_name}}, {{final_method_name}}, 
-            {{final_arg_array}}, operator: {{operator}}, context: {{context}})
+            {{final_arg_array}}, operator: {{final_operator}}, context: {{context}})
         {% end %}
       {% end %}
 
@@ -993,14 +1009,9 @@ module MrbMacro
       # Handle operator methods (including setters) by just transferring the original name into the operator
       # TODO: This might still be a source for potential bugs, so this code might need some reworking in the future
       {% elsif method.name[-1..-1] =~ /\W/ %}
-        {% without_operator = "" %}
         {% operator = ruby_name %}
 
-        {% if without_operator.empty? %}
-          MrbMacro.wrap_method_index({{mrb_state}}, {{crystal_class}}, {{index}}, "{{ruby_name}}", operator: "{{operator}}", without_keywords: -1, context: {{context}})
-        {% else %}
-          MrbMacro.wrap_method_index({{mrb_state}}, {{crystal_class}}, {{index}}, "{{ruby_name}}", operator: "{{operator}}", cut_name: {{without_operator}}, without_keywords: -1, context: {{context}})
-        {% end %}
+        MrbMacro.wrap_method_index({{mrb_state}}, {{crystal_class}}, {{index}}, "{{ruby_name}}", operator: "{{operator}}", without_keywords: -1, context: {{context}})
         {% how_many_times_wrapped[ruby_name.stringify] = how_many_times_wrapped[ruby_name.stringify] ? how_many_times_wrapped[ruby_name.stringify] + 1 : 1 %}
       # Handle constructors
       {% elsif method.name == "initialize" && use_enum_constructor == false %}
@@ -1112,6 +1123,11 @@ module MrbMacro
       # Exclude methods which are not the specialized methods
       {% elsif has_specialized_method[method.name.stringify] && !(method.annotation(MrbWrap::Specialize) || (annotation_specialize_im && (method.args.stringify == annotation_specialize_im[1].stringify || (method.args.stringify == "[]" && annotation_specialize_im[1] == nil)))) %}
         {% puts "--> Excluding #{crystal_class}::#{method.name} (Specialization)" if verbose %}
+      {% elsif method.name[-1..-1] =~ /\W/ %}
+        {% operator = ruby_name %}
+
+        MrbMacro.wrap_method_index({{mrb_state}}, {{crystal_class}}, {{index}}, "{{ruby_name}}", operator: "{{operator}}", is_class_method: true, without_keywords: -1, context: {{context}})
+        {% how_many_times_wrapped[ruby_name.stringify] = how_many_times_wrapped[ruby_name.stringify] ? how_many_times_wrapped[ruby_name.stringify] + 1 : 1 %}
       # Handle other class methods
       {% else %}
         MrbMacro.wrap_method_index({{mrb_state}}, {{crystal_class}}, {{index}}, "{{ruby_name}}", is_class_method: true, without_keywords: {{without_keywords}}, added_keyword_args: {{added_keyword_args}}, context: {{context}})

@@ -25,7 +25,9 @@ puts "Some struct test: #{some_struct.test.x}"
 puts "Output: #{a.output_together_with(str: ts)}"
 puts "Output: #{a.output_together_with(str: some_struct)}"
 
-puts "Values of Test: #{TestModule::Test.counter}"
+puts "Value of Test: #{TestModule::Test.counter}"
+puts "Value of Test after adding 17: #{TestModule::Test + 17}"
+puts "Value of nested module: #{TestModule::Test::UnderTestRenamed::DeepUnderTest + 13}"
 
 puts "Test constant is: #{TestModule::SOME_CONSTANT}"
 
