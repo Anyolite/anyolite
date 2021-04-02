@@ -14,6 +14,8 @@ def determine_compiler
 end
 
 task :build_shard => [:load_config, :install_mruby, :build_mruby, :build_glue]
+task :recompile_glue => [:load_config, :build_glue]
+task :recompile => [:load_config, :build_mruby, :build_glue]
 
 GLUE_FILES = ["return_functions", "data_helper", "script_helper", "error_helper"]
 

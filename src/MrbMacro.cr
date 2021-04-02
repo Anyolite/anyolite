@@ -230,15 +230,36 @@ module MrbMacro
       {% type_var_names.each_with_index { |element, index| result = index if element == arg_type.type } %}
       MrbMacro.convert_keyword_arg({{mrb}}, {{arg}}, {{type_vars[result]}}, context: {{context}}, debug_information: {{debug_information}})
     {% elsif type_var_names %}
-      {% replacement_arg_type = arg_type.stringify.gsub(/([\(\s\:])([A-Z]+)([\),\s])/, "\\1\#\\3") %}
+      {% magical_regex = /([\(\s\:])([A-Z]+)([\),\s])/ %}
+      {% replacement_arg_type = arg_type.type.stringify.gsub(magical_regex, "\\1\#\\2\#\\3") %}
+
       {% for type_var_name, index in type_var_names %}
-        {% puts "NOW: #{replacement_arg_type}, SPLIT = #{replacement_arg_type.split("\#")}" %}
-        {% split_types = replacement_arg_type.split("\#")[0..-2] %}
+        {% split_types = replacement_arg_type.split("\#") %}
+        {% odd = true %}
+        {% final_split_types = [] of ASTNode %}
         {% for split_type, split_type_index in split_types %}
-          # TODO
+          {% if !odd %}
+            {% result = nil %}
+            {% type_var_names.each_with_index { |element, index| result = index if element.stringify == split_type } %}
+            {% if result %}
+              {% final_split_types.push(type_vars[result].stringify) %}
+            {% else %}
+              {% final_split_types.push(split_type) %}
+            {% end %}
+          {% else %}
+            {% final_split_types.push(split_type) %}
+          {% end %}
+          {% odd = !odd %}
         {% end %}
       {% end %}
-      MrbMacro.convert_keyword_arg({{mrb}}, {{arg}}, {{replacement_arg_type.id}}, context: {{context}}, debug_information: {{debug_information}})
+
+      {% if arg_type.value %}
+       {% final_type_def = "#{arg_type.var} : #{final_split_types.join("").id} = #{arg_type.value}" %}
+      {% else %}
+        {% final_type_def = "#{arg_type.var} : #{final_split_types.join("").id}" %}
+      {% end %}
+
+      MrbMacro.convert_keyword_arg({{mrb}}, {{arg}}, {{final_type_def.id}}, context: {{context}}, debug_information: {{debug_information}})
     {% elsif arg_type.is_a?(Call) %}
       {% raise "Received Call #{arg_type} instead of TypeDeclaration or TypeNode" %}
     {% elsif arg_type.is_a?(TypeDeclaration) %}
@@ -741,7 +762,6 @@ module MrbMacro
       {% regular_arg_array = [regular_args] %}
     {% end %}
 
-    {% puts "RESOLVING #{crystal_class} -> #{crystal_class.resolve.type_vars}" if !crystal_class.resolve.type_vars.empty? %}
     {% type_vars = crystal_class.resolve.type_vars %}
     {% type_var_names_annotation = crystal_class.resolve.annotation(MrbWrap::SpecifyGenericTypes) %}
     {% type_var_names = type_var_names_annotation ? type_var_names_annotation[0] : nil %}

@@ -21,7 +21,7 @@ MRuby::Build.new do |conf|
   conf.gem :mgem => 'dir'
   conf.gem :mgem => 'regexp-pcre'
 
-  conf.cc.flags << '-DMRB_USE_FLOAT -DMRB_UTF8_STRING -DMRB_INT64'
+  conf.cc.flags << '-DMRB_UTF8_STRING -DMRB_INT64'
 
   conf.build_dir = ENV["MRUBY_BUILD_DIR"] || raise("MRUBY_BUILD_DIR undefined!")
 

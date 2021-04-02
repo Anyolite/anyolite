@@ -57,7 +57,7 @@ a.overload_test(arg: nil)
 a.overload_test(arg: 3.0 / 5.0)
 a.overload_test(arg: b)
 a.overload_test(arg: TestModule::Test::TestEnum::Four)
-a.overload_test(arg: TestModule::Test::GTIntInt.new)
+a.overload_test(arg: TestModule::Test::GTIntInt.new(u: 1, v: 3))
 a.overload_test
 
 a.nilable_test(arg: 123)
@@ -71,8 +71,10 @@ puts "Modified value: #{test_struct_thingy.value}"
 puts "This function returns an enum: #{a.returns_an_enum.value}"
 puts "Either an int or a string: #{a.returns_something_random.inspect}"
 
-TestModule::Test::GTIntFloat.new.test(u: 3, v: 5.5)
-TestModule::Test::GTIntInt.new.test(u: 3, v: 9)
+TestModule::Test::GTIntFloat.new(u: 1, v: 0.4).test(u1: 3, v1: 5.5)
+TestModule::Test::GTIntInt.new(u: 7, v: 10).test(u1: 3, v1: 9)
+
+TestModule::Test::GTIntFloat.new(u: 1, v: 10.0).compare(other: TestModule::Test::GTIntFloat.new(u: 2, v: 5.0))
 
 puts "Results of complicated method: #{a.complicated_method(11, 0.111, 0.1, "Hello", arg_opt_2: 1)}"
 puts "Results of complicated method: #{a.complicated_method(22, 0.222, 0.2, "Hello")}"
@@ -84,7 +86,7 @@ puts "Results of complicated method: #{a.complicated_method(77, 0.777, 0.7, Test
 puts "Results of complicated method: #{a.complicated_method(88, 0.888, 0.8, TestModule::Test::TestEnum::Four)}"
 puts "Results of complicated method: #{a.complicated_method(99, 0.999, 0.9, arg_opt_2: 5)}"
 puts "Results of complicated method: #{a.complicated_method(100, 0.000, 1.0)}"
-puts "Results of complicated method: #{a.complicated_method(0, 0.0, 0.0, TestModule::Test::GTIntInt.new)}"
+puts "Results of complicated method: #{a.complicated_method(0, 0.0, 0.0, TestModule::Test::GTIntInt.new(u: 1, v: 1))}"
 
 a.happy😀emoji😀test😀😀😀(1234567)
 

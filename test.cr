@@ -50,14 +50,22 @@ module SomeModule
 
     @[MrbWrap::SpecifyGenericTypes([U, V])]
     struct GenericTest(U, V)
-      def test(u : U, v : V)
-        puts "u is #{u} and has class #{U}, v is #{v} and has class #{V}."
+
+      property u : U 
+      property v : V
+
+      def initialize(u : U, v : V)
+        @u = u
+        @v = v
       end
 
-      # TODO: Currently, this will not work
-      # def compare(other : GenericTest(U, V))
-      #   puts "This has #{self.u} and #{self.v}, the other has #{other.u} and #{other.v}."
-      # end
+      def test(u1 : U, v1 : V)
+        puts "u1 is #{u1} and has class #{U}, v1 is #{v1} and has class #{V}."
+      end
+
+      def compare(other : GenericTest(U, V))
+        puts "This has #{@u} and #{@v}, the other has #{other.u} and #{other.v}."
+      end
     end
 
     alias GTIntFloat = GenericTest(Int32, Float32)

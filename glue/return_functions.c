@@ -54,7 +54,7 @@ extern mrb_value get_string_value(mrb_state* mrb, char* value) {
 
 extern int check_mrb_fixnum(mrb_value value) {
 
-    return mrb_fixnum_p(value);
+    return mrb_integer_p(value);
 
 }
 
@@ -102,7 +102,7 @@ extern int check_mrb_data(mrb_value value) {
 
 extern mrb_int get_mrb_fixnum(mrb_value value) {
 
-    return mrb_fixnum(value);
+    return mrb_integer(value);
 
 }
 

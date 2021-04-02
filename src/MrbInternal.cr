@@ -17,17 +17,19 @@ lib MrbInternal
   type RClass = Void
   type File = Void
 
-  alias MrbFloat = LibC::Float
+  alias MrbFloat = LibC::Double
   alias MrbInt = Int64
   alias MrbBool = UInt8
   alias MrbSymbol = UInt32
 
-  union MrbValueUnion
-    value_float : MrbFloat
-    value_pointer : Void*
-    value_int : MrbInt
-    value_sym : MrbSymbol
-  end
+  {% if flag?(:anyolite_use_legacy_mruby_2_1_2) %}
+    union MrbValueUnion
+      value_float : MrbFloat
+      value_pointer : Void*
+      value_int : MrbInt
+      value_sym : MrbSymbol
+    end
+  {% end %}
 
   {% if flag?(:anyolite_use_legacy_mruby_2_1_2) %}
     enum MrbVType
