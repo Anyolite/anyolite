@@ -28,7 +28,7 @@ module MrbTypeCache
       end
 
       # Delete the Crystal reference to this object
-      MrbRefTable.delete(MrbRefTable.get_object_id(crystal_ptr.value))
+      Anyolite::RbRefTable.delete(Anyolite::RbRefTable.get_object_id(crystal_ptr.value))
     }
   end
 end

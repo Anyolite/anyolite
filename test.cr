@@ -248,7 +248,7 @@ module SomeModule
   end
 end
 
-# MrbRefTable.set_option(:logging)
+# Anyolite::RbRefTable.set_option(:logging)
 
 Anyolite::RbInterpreter.create do |mrb|
   Anyolite.wrap_module(mrb, SomeModule, "TestModule")
@@ -291,8 +291,8 @@ module TestModule
   end
 end
 
-puts "Reference table: #{MrbRefTable.inspect}"
-MrbRefTable.reset
+puts "Reference table: #{Anyolite::RbRefTable.inspect}"
+Anyolite::RbRefTable.reset
 
 puts "------------------------------"
 
@@ -302,4 +302,4 @@ Anyolite::RbInterpreter.create do |mrb|
   mrb.load_script_from_file("examples/hp_example.rb")
 end
 
-puts "Reference table: #{MrbRefTable.inspect}"
+puts "Reference table: #{Anyolite::RbRefTable.inspect}"

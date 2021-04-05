@@ -155,7 +155,7 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 #### Breaking changes
 
 * [X] Rename `MrbWrap` to `Anyolite`
-* [ ] Rename `MrbMacro` to `Anyolite::Macro`
+* [X] Rename `MrbMacro` to `Anyolite::Macro`
 * [ ] Rename `mrb` and `mruby` in the code to `rb` and `ruby`
 * [ ] Rework configurations for the Rakefile into a class
 

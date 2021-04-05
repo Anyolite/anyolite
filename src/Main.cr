@@ -3,11 +3,11 @@ require "./MrbInternal.cr"
 require "./RbInterpreter.cr"
 require "./RbClass.cr"
 require "./MrbCast.cr"
-require "./MrbMacro.cr"
-require "./MrbClassCache.cr"
+require "./Macro.cr"
+require "./RbClassCache.cr"
 require "./MrbTypeCache.cr"
 require "./RbModule.cr"
-require "./MrbRefTable.cr"
+require "./RbRefTable.cr"
 
 # Alias for the mruby function pointers.
 alias MrbFunc = Proc(MrbInternal::MrbState*, MrbInternal::MrbValue, MrbInternal::MrbValue)
@@ -66,10 +66,10 @@ module Anyolite
   #
   # Each class can be defined in a specifiy module by setting *under* to a `Anyolite::RbModule`.
   macro wrap_class(mrb_state, crystal_class, name, under = nil, superclass = nil)
-    new_class = Anyolite::RbClass.new({{mrb_state}}, {{name}}, under: MrbClassCache.get({{under}}), superclass: MrbClassCache.get({{superclass}}))
+    new_class = Anyolite::RbClass.new({{mrb_state}}, {{name}}, under: Anyolite::RbClassCache.get({{under}}), superclass: Anyolite::RbClassCache.get({{superclass}}))
     MrbInternal.set_instance_tt_as_data(new_class)
-    MrbClassCache.register({{crystal_class}}, new_class)
-    MrbClassCache.get({{crystal_class}})
+    Anyolite::RbClassCache.register({{crystal_class}}, new_class)
+    Anyolite::RbClassCache.get({{crystal_class}})
   end
 
   # Wraps a Crystal module into an mruby module.
@@ -79,9 +79,9 @@ module Anyolite
   #
   # The parent module can be specified with the module argument *under*.
   macro wrap_module(mrb_state, crystal_module, name, under = nil)
-    new_module = Anyolite::RbModule.new({{mrb_state}}, {{name}}, under: MrbClassCache.get({{under}}))
-    MrbClassCache.register({{crystal_module}}, new_module)
-    MrbClassCache.get({{crystal_module}})
+    new_module = Anyolite::RbModule.new({{mrb_state}}, {{name}}, under: Anyolite::RbClassCache.get({{under}}))
+    Anyolite::RbClassCache.register({{crystal_module}}, new_module)
+    Anyolite::RbClassCache.get({{crystal_module}})
   end
 
   # Wraps the constructor of a Crystal class into mruby.
@@ -92,7 +92,7 @@ module Anyolite
   # The value *operator* will append the specified `String`
   # to the final name and *context* can give the function a `Path` for resolving types correctly.
   macro wrap_constructor(mrb_state, crystal_class, proc_args = nil, operator = "", context = nil)
-    MrbMacro.wrap_constructor_function_with_args({{mrb_state}}, {{crystal_class}}, {{crystal_class}}.new, {{proc_args}}, operator: {{operator}}, context: {{context}})
+    Anyolite::Macro.wrap_constructor_function_with_args({{mrb_state}}, {{crystal_class}}, {{crystal_class}}.new, {{proc_args}}, operator: {{operator}}, context: {{context}})
   end
 
   # Wraps the constructor of a Crystal class into mruby, using keyword arguments.
@@ -103,7 +103,7 @@ module Anyolite
   # The value *operator* will append the specified `String`
   # to the final name and *context* can give the function a `Path` for resolving types correctly.
   macro wrap_constructor_with_keywords(mrb_state, crystal_class, keyword_args, regular_args = nil, operator = "", context = nil)
-    MrbMacro.wrap_constructor_function_with_keyword_args({{mrb_state}}, {{crystal_class}}, {{crystal_class}}.new, {{keyword_args}}, {{regular_args}}, operator: {{operator}}, context: {{context}})
+    Anyolite::Macro.wrap_constructor_function_with_keyword_args({{mrb_state}}, {{crystal_class}}, {{crystal_class}}.new, {{keyword_args}}, {{regular_args}}, operator: {{operator}}, context: {{context}})
   end
 
   # Wraps a module function into mruby.
@@ -116,7 +116,7 @@ module Anyolite
   # The value *operator* will append the specified `String`
   # to the final name and *context* can give the function a `Path` for resolving types correctly.
   macro wrap_module_function(mrb_state, under_module, name, proc, proc_args = nil, operator = "", context = nil)
-    MrbMacro.wrap_module_function_with_args({{mrb_state}}, {{under_module}}, {{name}}, {{proc}}, {{proc_args}}, operator: {{operator}}, context: {{context}})
+    Anyolite::Macro.wrap_module_function_with_args({{mrb_state}}, {{under_module}}, {{name}}, {{proc}}, {{proc_args}}, operator: {{operator}}, context: {{context}})
   end
 
   # Wraps a module function into mruby, using keyword arguments.
@@ -129,7 +129,7 @@ module Anyolite
   # The value *operator* will append the specified `String`
   # to the final name and *context* can give the function a `Path` for resolving types correctly.
   macro wrap_module_function_with_keywords(mrb_state, under_module, name, proc, keyword_args, regular_args = nil, operator = "", context = nil)
-    MrbMacro.wrap_module_function_with_keyword_args({{mrb_state}}, {{under_module}}, {{name}}, {{proc}}, {{keyword_args}}, {{regular_args}}, operator: {{operator}}, context: {{context}})
+    Anyolite::Macro.wrap_module_function_with_keyword_args({{mrb_state}}, {{under_module}}, {{name}}, {{proc}}, {{keyword_args}}, {{regular_args}}, operator: {{operator}}, context: {{context}})
   end
 
   # Wraps a class method into mruby.
@@ -142,7 +142,7 @@ module Anyolite
   # The value *operator* will append the specified `String`
   # to the final name and *context* can give the function a `Path` for resolving types correctly.
   macro wrap_class_method(mrb_state, crystal_class, name, proc, proc_args = nil, operator = "", context = nil)
-    MrbMacro.wrap_class_method_with_args({{mrb_state}}, {{crystal_class}}, {{name}}, {{proc}}, {{proc_args}}, operator: {{operator}}, context: {{context}})
+    Anyolite::Macro.wrap_class_method_with_args({{mrb_state}}, {{crystal_class}}, {{name}}, {{proc}}, {{proc_args}}, operator: {{operator}}, context: {{context}})
   end
 
   # Wraps a class method into mruby, using keyword arguments.
@@ -155,7 +155,7 @@ module Anyolite
   # The value *operator* will append the specified `String`
   # to the final name and *context* can give the function a `Path` for resolving types correctly.
   macro wrap_class_method_with_keywords(mrb_state, crystal_class, name, proc, keyword_args, regular_args = nil, operator = "", context = nil)
-    MrbMacro.wrap_class_method_with_keyword_args({{mrb_state}}, {{crystal_class}}, {{name}}, {{proc}}, {{keyword_args}}, {{regular_args}}, operator: {{operator}}, context: {{context}})
+    Anyolite::Macro.wrap_class_method_with_keyword_args({{mrb_state}}, {{crystal_class}}, {{name}}, {{proc}}, {{keyword_args}}, {{regular_args}}, operator: {{operator}}, context: {{context}})
   end
 
   # Wraps an instance method into mruby.
@@ -168,7 +168,7 @@ module Anyolite
   # The value *operator* will append the specified `String`
   # to the final name and *context* can give the function a `Path` for resolving types correctly.
   macro wrap_instance_method(mrb_state, crystal_class, name, proc, proc_args = nil, operator = "", context = nil)
-    MrbMacro.wrap_instance_function_with_args({{mrb_state}}, {{crystal_class}}, {{name}}, {{proc}}, {{proc_args}}, operator: {{operator}}, context: {{context}})
+    Anyolite::Macro.wrap_instance_function_with_args({{mrb_state}}, {{crystal_class}}, {{name}}, {{proc}}, {{proc_args}}, operator: {{operator}}, context: {{context}})
   end
 
   # Wraps an instance method into mruby, using keyword arguments.
@@ -181,7 +181,7 @@ module Anyolite
   # The value *operator* will append the specified `String`
   # to the final name and *context* can give the function a `Path` for resolving types correctly.
   macro wrap_instance_method_with_keywords(mrb_state, crystal_class, name, proc, keyword_args, regular_args = nil, operator = "", context = nil)
-    MrbMacro.wrap_instance_function_with_keyword_args({{mrb_state}}, {{crystal_class}}, {{name}}, {{proc}}, {{keyword_args}}, {{regular_args}}, operator: {{operator}}, context: {{context}})
+    Anyolite::Macro.wrap_instance_function_with_keyword_args({{mrb_state}}, {{crystal_class}}, {{name}}, {{proc}}, {{keyword_args}}, {{regular_args}}, operator: {{operator}}, context: {{context}})
   end
 
   # Wraps a setter into mruby.
@@ -194,7 +194,7 @@ module Anyolite
   # The value *operator* will append the specified `String`
   # to the final name and *context* can give the function a `Path` for resolving types correctly.
   macro wrap_setter(mrb_state, crystal_class, name, proc, proc_arg, operator = "=", context = nil)
-    MrbMacro.wrap_instance_function_with_args({{mrb_state}}, {{crystal_class}}, {{name}}, {{proc}}, {{proc_arg}}, operator: {{operator}}, context: {{context}})
+    Anyolite::Macro.wrap_instance_function_with_args({{mrb_state}}, {{crystal_class}}, {{name}}, {{proc}}, {{proc_arg}}, operator: {{operator}}, context: {{context}})
   end
 
   # Wraps a getter into mruby.
@@ -206,7 +206,7 @@ module Anyolite
   # The value *operator* will append the specified `String`
   # to the final name and *context* can give the function a `Path` for resolving types correctly.
   macro wrap_getter(mrb_state, crystal_class, name, proc, operator = "", context = nil)
-    MrbMacro.wrap_instance_function_with_args({{mrb_state}}, {{crystal_class}}, {{name}}, {{proc}}, operator: {{operator}}, context: {{context}})
+    Anyolite::Macro.wrap_instance_function_with_args({{mrb_state}}, {{crystal_class}}, {{name}}, {{proc}}, operator: {{operator}}, context: {{context}})
   end
 
   # Wraps a property into mruby.
@@ -228,7 +228,7 @@ module Anyolite
   # The value *crystal_value* will be integrated into the `MrbState` *mrb_state*,
   # with the name *name* and the parent module *under_module*.
   macro wrap_constant(mrb_state, under_module, name, crystal_value)
-    MrbInternal.mrb_define_const({{mrb_state}}, MrbClassCache.get({{under_module}}), {{name}}, MrbCast.return_value({{mrb_state}}.to_unsafe, {{crystal_value}}))
+    MrbInternal.mrb_define_const({{mrb_state}}, Anyolite::RbClassCache.get({{under_module}}), {{name}}, MrbCast.return_value({{mrb_state}}.to_unsafe, {{crystal_value}}))
   end
 
   # Wraps a constant value under a class into mruby.
@@ -236,7 +236,7 @@ module Anyolite
   # The value *crystal_value* will be integrated into the `MrbState` *mrb_state*,
   # with the name *name* and the parent `Class` *under_class*.
   macro wrap_constant_under_class(mrb_state, under_class, name, crystal_value)
-    MrbInternal.mrb_define_const({{mrb_state}}, MrbClassCache.get({{under_class}}), {{name}}, MrbCast.return_value({{mrb_state}}.to_unsafe, {{crystal_value}}))
+    MrbInternal.mrb_define_const({{mrb_state}}, Anyolite::RbClassCache.get({{under_class}}), {{name}}, MrbCast.return_value({{mrb_state}}.to_unsafe, {{crystal_value}}))
   end
 
   # NOTE: Annotations like SpecializeConstant are not defined for obvious reasons
@@ -347,10 +347,10 @@ module Anyolite
 
       Anyolite.wrap_class({{mrb_state}}, {{resolved_class}}, {{actual_name}}, under: {{under}})
 
-      MrbMacro.wrap_all_instance_methods({{mrb_state}}, {{crystal_class}}, {{instance_method_exclusions}}, 
+      Anyolite::Macro.wrap_all_instance_methods({{mrb_state}}, {{crystal_class}}, {{instance_method_exclusions}}, 
         {{verbose}}, context: {{new_context}}, use_enum_constructor: {{use_enum_constructor}})
-      MrbMacro.wrap_all_class_methods({{mrb_state}}, {{crystal_class}}, {{class_method_exclusions}}, {{verbose}}, context: {{new_context}})
-      MrbMacro.wrap_all_constants({{mrb_state}}, {{crystal_class}}, {{constant_exclusions}}, {{verbose}}, context: {{new_context}})
+      Anyolite::Macro.wrap_all_class_methods({{mrb_state}}, {{crystal_class}}, {{class_method_exclusions}}, {{verbose}}, context: {{new_context}})
+      Anyolite::Macro.wrap_all_constants({{mrb_state}}, {{crystal_class}}, {{constant_exclusions}}, {{verbose}}, context: {{new_context}})
     {% end %}
   end
 
@@ -382,8 +382,8 @@ module Anyolite
 
     Anyolite.wrap_module({{mrb_state}}, {{crystal_module.resolve}}, {{actual_name}}, under: {{under}})
 
-    MrbMacro.wrap_all_class_methods({{mrb_state}}, {{crystal_module}}, {{class_method_exclusions}}, {{verbose}}, context: {{new_context}})
-    MrbMacro.wrap_all_constants({{mrb_state}}, {{crystal_module}}, {{constant_exclusions}}, {{verbose}}, context: {{new_context}})
+    Anyolite::Macro.wrap_all_class_methods({{mrb_state}}, {{crystal_module}}, {{class_method_exclusions}}, {{verbose}}, context: {{new_context}})
+    Anyolite::Macro.wrap_all_constants({{mrb_state}}, {{crystal_module}}, {{constant_exclusions}}, {{verbose}}, context: {{new_context}})
   end
 
   # Wraps a whole class or module structure under a module into mruby.

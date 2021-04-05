@@ -53,7 +53,7 @@ module MrbCast
   end
 
   def self.return_value(mrb : MrbInternal::MrbState*, value : Struct)
-    ruby_class = MrbClassCache.get(typeof(value))
+    ruby_class = Anyolite::RbClassCache.get(typeof(value))
 
     destructor = MrbTypeCache.destructor_method(typeof(value))
 
@@ -61,16 +61,16 @@ module MrbCast
 
     new_ruby_object = MrbInternal.new_empty_object(mrb, ruby_class, ptr.as(Void*), MrbTypeCache.register(typeof(value), destructor))
 
-    struct_wrapper = MrbMacro.convert_from_ruby_struct(mrb, new_ruby_object, typeof(value))
+    struct_wrapper = Anyolite::Macro.convert_from_ruby_struct(mrb, new_ruby_object, typeof(value))
     struct_wrapper.value = Anyolite::StructWrapper(typeof(value)).new(value)
 
-    MrbRefTable.add(MrbRefTable.get_object_id(struct_wrapper.value), ptr.as(Void*))
+    Anyolite::RbRefTable.add(Anyolite::RbRefTable.get_object_id(struct_wrapper.value), ptr.as(Void*))
 
     return new_ruby_object
   end
 
   def self.return_value(mrb : MrbInternal::MrbState*, value : Object)
-    ruby_class = MrbClassCache.get(typeof(value))
+    ruby_class = Anyolite::RbClassCache.get(typeof(value))
 
     destructor = MrbTypeCache.destructor_method(typeof(value))
 
@@ -78,9 +78,9 @@ module MrbCast
 
     new_ruby_object = MrbInternal.new_empty_object(mrb, ruby_class, ptr.as(Void*), MrbTypeCache.register(typeof(value), destructor))
 
-    MrbMacro.convert_from_ruby_object(mrb, new_ruby_object, typeof(value)).value = value
+    Anyolite::Macro.convert_from_ruby_object(mrb, new_ruby_object, typeof(value)).value = value
 
-    MrbRefTable.add(MrbRefTable.get_object_id(value), ptr.as(Void*))
+    Anyolite::RbRefTable.add(Anyolite::RbRefTable.get_object_id(value), ptr.as(Void*))
 
     return new_ruby_object
   end
@@ -171,7 +171,7 @@ module MrbCast
   end
 
   macro check_custom_type(mrb, value, crystal_type)
-    MrbInternal.mrb_obj_is_kind_of({{mrb}}, {{value}}, MrbClassCache.get({{crystal_type}})) != 0
+    MrbInternal.mrb_obj_is_kind_of({{mrb}}, {{value}}, Anyolite::RbClassCache.get({{crystal_type}})) != 0
   end
 
   def self.is_undef?(value) # Excludes non-MrbValue types as well
