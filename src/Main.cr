@@ -2,10 +2,10 @@ require "./MrbInternal.cr"
 
 require "./RbInterpreter.cr"
 require "./RbClass.cr"
-require "./MrbCast.cr"
+require "./RbCast.cr"
 require "./Macro.cr"
 require "./RbClassCache.cr"
-require "./MrbTypeCache.cr"
+require "./RbTypeCache.cr"
 require "./RbModule.cr"
 require "./RbRefTable.cr"
 
@@ -228,7 +228,7 @@ module Anyolite
   # The value *crystal_value* will be integrated into the `MrbState` *mrb_state*,
   # with the name *name* and the parent module *under_module*.
   macro wrap_constant(mrb_state, under_module, name, crystal_value)
-    MrbInternal.mrb_define_const({{mrb_state}}, Anyolite::RbClassCache.get({{under_module}}), {{name}}, MrbCast.return_value({{mrb_state}}.to_unsafe, {{crystal_value}}))
+    MrbInternal.mrb_define_const({{mrb_state}}, Anyolite::RbClassCache.get({{under_module}}), {{name}}, Anyolite::RbCast.return_value({{mrb_state}}.to_unsafe, {{crystal_value}}))
   end
 
   # Wraps a constant value under a class into mruby.
@@ -236,7 +236,7 @@ module Anyolite
   # The value *crystal_value* will be integrated into the `MrbState` *mrb_state*,
   # with the name *name* and the parent `Class` *under_class*.
   macro wrap_constant_under_class(mrb_state, under_class, name, crystal_value)
-    MrbInternal.mrb_define_const({{mrb_state}}, Anyolite::RbClassCache.get({{under_class}}), {{name}}, MrbCast.return_value({{mrb_state}}.to_unsafe, {{crystal_value}}))
+    MrbInternal.mrb_define_const({{mrb_state}}, Anyolite::RbClassCache.get({{under_class}}), {{name}}, Anyolite::RbCast.return_value({{mrb_state}}.to_unsafe, {{crystal_value}}))
   end
 
   # NOTE: Annotations like SpecializeConstant are not defined for obvious reasons

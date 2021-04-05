@@ -139,7 +139,7 @@ module Anyolite
               {% if arg.value %}
                 {% if arg.type.stringify.includes?('|') %}
                   # This does work, but I'm a bit surprised
-                  Anyolite::Macro.pointer_type({{arg}}, context: {{context}}).malloc(size: 1, value: MrbCast.return_value({{mrb}}, {{arg.value}})),
+                  Anyolite::Macro.pointer_type({{arg}}, context: {{context}}).malloc(size: 1, value: Anyolite::RbCast.return_value({{mrb}}, {{arg.value}})),
                 {% elsif arg.type.resolve <= String %}
                   # The outer gods bless my wretched soul that this does neither segfault nor leak
                   Anyolite::Macro.pointer_type({{arg}}, context: {{context}}).malloc(size: 1, value: {{arg.value}}.to_unsafe),
@@ -264,7 +264,7 @@ module Anyolite
       {% elsif arg_type.is_a?(Call) %}
         {% raise "Received Call #{arg_type} instead of TypeDeclaration or TypeNode" %}
       {% elsif arg_type.is_a?(TypeDeclaration) %}
-        if MrbCast.is_undef?({{arg}})
+        if Anyolite::RbCast.is_undef?({{arg}})
           {% if arg_type.value || arg_type.value == false || arg_type.value == nil %}
             {{arg_type.value}}
           {% else %}
@@ -296,21 +296,21 @@ module Anyolite
         Anyolite::Macro.cast_to_union_value({{mrb}}, {{arg}}, {{arg_type.stringify[6..-2].split('|').map { |x| x.id }}}, context: {{context}})
       {% elsif arg_type.resolve? %}
         {% if arg_type.resolve <= Nil %}
-          MrbCast.cast_to_nil({{mrb}}, {{arg}})
+          Anyolite::RbCast.cast_to_nil({{mrb}}, {{arg}})
         {% elsif arg_type.resolve <= Bool %}
-          MrbCast.cast_to_bool({{mrb}}, {{arg}})
+          Anyolite::RbCast.cast_to_bool({{mrb}}, {{arg}})
         {% elsif arg_type.resolve == Number %}
-          Float64.new(MrbCast.cast_to_float({{mrb}}, {{arg}}))
+          Float64.new(Anyolite::RbCast.cast_to_float({{mrb}}, {{arg}}))
         {% elsif arg_type.resolve == Int %}
-          Int64.new(MrbCast.cast_to_int({{mrb}}, {{arg}}))
+          Int64.new(Anyolite::RbCast.cast_to_int({{mrb}}, {{arg}}))
         {% elsif arg_type.resolve <= Int %}
-          {{arg_type}}.new(MrbCast.cast_to_int({{mrb}}, {{arg}}))
+          {{arg_type}}.new(Anyolite::RbCast.cast_to_int({{mrb}}, {{arg}}))
         {% elsif arg_type.resolve == Float %}
-          Float64.new(MrbCast.cast_to_float({{mrb}}, {{arg}}))
+          Float64.new(Anyolite::RbCast.cast_to_float({{mrb}}, {{arg}}))
         {% elsif arg_type.resolve <= Float %}
-          {{arg_type}}.new(MrbCast.cast_to_float({{mrb}}, {{arg}}))
+          {{arg_type}}.new(Anyolite::RbCast.cast_to_float({{mrb}}, {{arg}}))
         {% elsif arg_type.resolve <= String %}
-          MrbCast.cast_to_string({{mrb}}, {{arg}})
+          Anyolite::RbCast.cast_to_string({{mrb}}, {{arg}})
         {% elsif arg_type.resolve <= Struct %}
           Anyolite::Macro.convert_from_ruby_struct({{mrb}}, {{arg}}, {{arg_type}}).value.content
         {% elsif arg_type.resolve? %}
@@ -370,43 +370,43 @@ module Anyolite
 
     macro check_and_cast_resolved_union_type(mrb, value, type, raw_type, context = nil)
       {% if type.resolve <= Nil %}
-        if MrbCast.check_for_nil({{value}})
-          final_value = MrbCast.cast_to_nil({{mrb}}, {{value}})
+        if Anyolite::RbCast.check_for_nil({{value}})
+          final_value = Anyolite::RbCast.cast_to_nil({{mrb}}, {{value}})
         end
       {% elsif type.resolve <= Bool %}
-        if MrbCast.check_for_bool({{value}})
-          final_value = MrbCast.cast_to_bool({{mrb}}, {{value}})
+        if Anyolite::RbCast.check_for_bool({{value}})
+          final_value = Anyolite::RbCast.cast_to_bool({{mrb}}, {{value}})
         end
       {% elsif type.resolve == Number %}
-        if MrbCast.check_for_float({{value}})
-          final_value = Float64.new(MrbCast.cast_to_float({{mrb}}, {{value}}))
+        if Anyolite::RbCast.check_for_float({{value}})
+          final_value = Float64.new(Anyolite::RbCast.cast_to_float({{mrb}}, {{value}}))
         end
       {% elsif type.resolve == Int %}
-        if MrbCast.check_for_fixnum({{value}})
-          final_value = Int64.new(MrbCast.cast_to_int({{mrb}}, {{value}}))
+        if Anyolite::RbCast.check_for_fixnum({{value}})
+          final_value = Int64.new(Anyolite::RbCast.cast_to_int({{mrb}}, {{value}}))
         end
       {% elsif type.resolve <= Int %}
-        if MrbCast.check_for_fixnum({{value}})
-          final_value = {{type}}.new(MrbCast.cast_to_int({{mrb}}, {{value}}))
+        if Anyolite::RbCast.check_for_fixnum({{value}})
+          final_value = {{type}}.new(Anyolite::RbCast.cast_to_int({{mrb}}, {{value}}))
         end
       {% elsif type.resolve == Float %}
-        if MrbCast.check_for_float({{value}})
-          final_value = Float64.new(MrbCast.cast_to_float({{mrb}}, {{value}}))
+        if Anyolite::RbCast.check_for_float({{value}})
+          final_value = Float64.new(Anyolite::RbCast.cast_to_float({{mrb}}, {{value}}))
         end
       {% elsif type.resolve <= Float %}
-        if MrbCast.check_for_float({{value}})
-          final_value = {{type}}.new(MrbCast.cast_to_float({{mrb}}, {{value}}))
+        if Anyolite::RbCast.check_for_float({{value}})
+          final_value = {{type}}.new(Anyolite::RbCast.cast_to_float({{mrb}}, {{value}}))
         end
       {% elsif type.resolve <= String %}
-        if MrbCast.check_for_string({{value}})
-          final_value = MrbCast.cast_to_string({{mrb}}, {{value}})
+        if Anyolite::RbCast.check_for_string({{value}})
+          final_value = Anyolite::RbCast.cast_to_string({{mrb}}, {{value}})
         end
       {% elsif type.resolve <= Struct %}
-        if MrbCast.check_for_data({{value}}) && MrbCast.check_custom_type({{mrb}}, {{value}}, {{type}})
+        if Anyolite::RbCast.check_for_data({{value}}) && Anyolite::RbCast.check_custom_type({{mrb}}, {{value}}, {{type}})
           final_value = Anyolite::Macro.convert_from_ruby_struct({{mrb}}, {{value}}, {{type}}).value.content
         end
       {% elsif type.resolve? %}
-        if MrbCast.check_for_data({{value}}) && MrbCast.check_custom_type({{mrb}}, {{value}}, {{type}})
+        if Anyolite::RbCast.check_for_data({{value}}) && Anyolite::RbCast.check_custom_type({{mrb}}, {{value}}, {{type}})
           final_value = Anyolite::Macro.convert_from_ruby_object({{mrb}}, {{value}}, {{type}}).value
         end
       {% else %}
@@ -415,7 +415,7 @@ module Anyolite
     end
 
     macro convert_from_ruby_object(mrb, obj, crystal_type)
-      if !MrbCast.check_custom_type({{mrb}}, {{obj}}, {{crystal_type}})
+      if !Anyolite::RbCast.check_custom_type({{mrb}}, {{obj}}, {{crystal_type}})
         obj_class = MrbInternal.get_class_of_obj({{mrb}}, {{obj}})
         MrbInternal.mrb_raise_argument_error({{mrb}}, "Invalid data type #{obj_class} for object #{{{obj}}}:\n Should be #{{{crystal_type}}} -> Anyolite::RbClassCache.get({{crystal_type}}) instead.")
       end
@@ -425,7 +425,7 @@ module Anyolite
     end
 
     macro convert_from_ruby_struct(mrb, obj, crystal_type)
-      if !MrbCast.check_custom_type({{mrb}}, {{obj}}, {{crystal_type}})
+      if !Anyolite::RbCast.check_custom_type({{mrb}}, {{obj}}, {{crystal_type}})
         obj_class = MrbInternal.get_class_of_obj({{mrb}}, {{obj}})
         MrbInternal.mrb_raise_argument_error({{mrb}}, "Invalid data type #{obj_class} for object #{{{obj}}}:\n Should be #{{{crystal_type}}} -> Anyolite::RbClassCache.get({{crystal_type}}) instead.")
       end
@@ -440,7 +440,7 @@ module Anyolite
       {% else %}
         return_value = {{proc}}{{operator.id}}(*{{converted_args}})
       {% end %}
-      MrbCast.return_value({{mrb}}, return_value)
+      Anyolite::RbCast.return_value({{mrb}}, return_value)
     end
 
     macro call_and_return_keyword_method(mrb, proc, converted_regular_args, keyword_args, kw_args, operator = "", 
@@ -469,7 +469,7 @@ module Anyolite
         {% end %}
       )
 
-      MrbCast.return_value({{mrb}}, return_value)
+      Anyolite::RbCast.return_value({{mrb}}, return_value)
     end
 
     macro call_and_return_instance_method(mrb, proc, converted_obj, converted_args, operator = "")
@@ -490,7 +490,7 @@ module Anyolite
           return_value = {{converted_obj}}.{{proc}}{{operator.id}}(*{{converted_args}})
         {% end %}
       end
-      MrbCast.return_value({{mrb}}, return_value)
+      Anyolite::RbCast.return_value({{mrb}}, return_value)
     end
 
     macro call_and_return_keyword_instance_method(mrb, proc, converted_obj, converted_regular_args, keyword_args, kw_args, operator = "",
@@ -550,7 +550,7 @@ module Anyolite
 
       end
 
-      MrbCast.return_value({{mrb}}, return_value)
+      Anyolite::RbCast.return_value({{mrb}}, return_value)
     end
 
     macro convert_args(mrb, args, regular_args, context)
@@ -588,16 +588,16 @@ module Anyolite
 
         puts "> S: {{crystal_class}}: #{new_obj_ptr.value.inspect}" if Anyolite::RbRefTable.option_active?(:logging)
 
-        destructor = MrbTypeCache.destructor_method({{crystal_class}})
-        MrbInternal.set_data_ptr_and_type({{obj}}, new_obj_ptr, MrbTypeCache.register({{crystal_class}}, destructor))
+        destructor = Anyolite::RbTypeCache.destructor_method({{crystal_class}})
+        MrbInternal.set_data_ptr_and_type({{obj}}, new_obj_ptr, Anyolite::RbTypeCache.register({{crystal_class}}, destructor))
       else
         new_obj_ptr = Pointer({{crystal_class}}).malloc(size: 1, value: {{new_obj}})
         Anyolite::RbRefTable.add(Anyolite::RbRefTable.get_object_id(new_obj_ptr.value), new_obj_ptr.as(Void*))
 
         puts "> C: {{crystal_class}}: #{new_obj_ptr.value.inspect}" if Anyolite::RbRefTable.option_active?(:logging)
 
-        destructor = MrbTypeCache.destructor_method({{crystal_class}})
-        MrbInternal.set_data_ptr_and_type({{obj}}, new_obj_ptr, MrbTypeCache.register({{crystal_class}}, destructor))
+        destructor = Anyolite::RbTypeCache.destructor_method({{crystal_class}})
+        MrbInternal.set_data_ptr_and_type({{obj}}, new_obj_ptr, Anyolite::RbTypeCache.register({{crystal_class}}, destructor))
       end
     end
 
