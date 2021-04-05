@@ -162,10 +162,18 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 * Reworked configurations for the Rakefile into a class
 * Dropped support for mruby 2
 
+#### Safety
+
+* [ ] Warning message when a reference table with values is reset
+
 #### Usability
 
 * Split macro source file into smaller parts
 * Update documentation to new code
+
+#### Bugfixes
+
+* [ ] Enums are falsely tracked in the reference table
 
 ### Version 0.10.0
 

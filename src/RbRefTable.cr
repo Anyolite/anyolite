@@ -10,7 +10,7 @@ module Anyolite
 
     @@options = {
       :logging                      => false,
-      :warnings                     => false,
+      :warnings                     => true,
       :replace_conflicting_pointers => false,
     }
 
