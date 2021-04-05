@@ -126,6 +126,7 @@ More features will be added in the future.
 # Limitations
 
 * Currently, Anyolite does not work on Windows due to Crystal compiler bugs
+* Anyolite is only compatible with mruby 3 at the current time
 * Arrays and hashes are not directly supported
 * Symbols do not work due to their compiletime nature in Crystal
 * Splat arguments and arbitrary keywords are not possible due to their reliance on symbols
@@ -159,10 +160,11 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 * [X] Renamed `MrbMacro` to `Anyolite::Macro`
 * [X] Renamed `mrb` and `mruby` in the code to `rb` and `ruby`
 * [X] Reworked configurations for the Rakefile into a class
+* [X] Dropped support for mruby 2
 
 #### Usability
 
-* [ ] Split macro source file into smaller parts
+* [X] Split macro source file into smaller parts
 * [X] Update documentation to new code
 
 ### Version 0.10.0
