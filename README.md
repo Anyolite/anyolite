@@ -52,11 +52,12 @@ manually to install the shard without using the crystal shards program.
 If you want to use other options for Anyolite, you can set `ANYOLITE_CONFIG_PATH` to the filename of a JSON config file,
 which allows for changing multiple options when installing the shard. Possible options are:
 
-* `ANYOLITE_BUILDPATH` - The relative directory in which Anyolite will be built
-* `ANYOLITE_MRUBY_FORK` - The web address of the mruby repository
-* `ANYOLITE_MRUBY_RELEASE` - The release tag of the mruby version to be used
-* `ANYOLITE_MRUBY_DIR` - The relative directory mruby will be installed in
-* `ANYOLITE_MRUBY_CONFIG_PATH` - The config file which is used for building mruby
+* `ANYOLITE_BUILD_PATH` - The relative directory in which Anyolite will be built
+* `ANYOLITE_RUBY_FORK` - The web address of the mruby repository
+* `ANYOLITE_RUBY_RELEASE` - The release tag of the mruby version to be used
+* `ANYOLITE_RUBY_DIR` - The relative directory mruby will be installed in
+* `ANYOLITE_RUBY_CONFIG` - The config file which is used for building mruby
+* `ANYOLITE_GLUE_DIR` - The directory in which helper function C files are located
 * `ANYOLITE_COMPILER` - The C compiler used for building Anyolite
 
 # How to use
@@ -149,20 +150,20 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 
 #### Features
 
-* [ ] Additional compatibility layer between Anyolite and mruby
-* [ ] More configuration options
+* [X] Additional compatibility layer between Anyolite and mruby
+* [X] More configuration options
 
 #### Breaking changes
 
-* [X] Rename `MrbWrap` to `Anyolite`
-* [X] Rename `MrbMacro` to `Anyolite::Macro`
-* [X] Rename `mrb` and `mruby` in the code to `rb` and `ruby`
-* [ ] Rework configurations for the Rakefile into a class
+* [X] Renamed `MrbWrap` to `Anyolite`
+* [X] Renamed `MrbMacro` to `Anyolite::Macro`
+* [X] Renamed `mrb` and `mruby` in the code to `rb` and `ruby`
+* [X] Reworked configurations for the Rakefile into a class
 
 #### Usability
 
 * [ ] Split macro source file into smaller parts
-* [ ] Update documentation to new code
+* [X] Update documentation to new code
 
 ### Version 0.10.0
 
