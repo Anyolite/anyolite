@@ -71,7 +71,7 @@ module Anyolite
         if Anyolite::RbCast.check_for_string({{value}})
           final_value = Anyolite::RbCast.cast_to_string({{rb}}, {{value}})
         end
-      {% elsif type.resolve <= Struct %}
+      {% elsif type.resolve <= Struct || type.resolve <= Enum %}
         if Anyolite::RbCast.check_for_data({{value}}) && Anyolite::RbCast.check_custom_type({{rb}}, {{value}}, {{type}})
           final_value = Anyolite::Macro.convert_from_ruby_struct({{rb}}, {{value}}, {{type}}).value.content
         end

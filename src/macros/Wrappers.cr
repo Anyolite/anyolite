@@ -122,7 +122,7 @@ module Anyolite
       wrapped_method = Anyolite::RbCore::RbFunc.new do |rb, obj|
         converted_args = Anyolite::Macro.get_converted_args(rb, {{regular_arg_array}}, context: {{context}})
 
-        if {{crystal_class}} <= Struct
+        if {{crystal_class}} <= Struct || {{crystal_class}} <= Enum
           converted_obj = Anyolite::Macro.convert_from_ruby_struct(rb, obj, {{crystal_class}}).value
         else
           converted_obj = Anyolite::Macro.convert_from_ruby_object(rb, obj, {{crystal_class}}).value
@@ -156,7 +156,7 @@ module Anyolite
 
         converted_regular_args = Anyolite::Macro.convert_args(rb, regular_arg_tuple, {{regular_arg_array}}, context: {{context}})
 
-        if {{crystal_class}} <= Struct
+        if {{crystal_class}} <= Struct || {{crystal_class}} <= Enum
           converted_obj = Anyolite::Macro.convert_from_ruby_struct(rb, obj, {{crystal_class}}).value
         else
           converted_obj = Anyolite::Macro.convert_from_ruby_object(rb, obj, {{crystal_class}}).value

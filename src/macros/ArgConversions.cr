@@ -45,7 +45,7 @@ module Anyolite
           {{arg_type}}.new({{arg}})
         {% elsif arg_type.resolve <= String %}
           {{arg_type}}.new({{arg}})
-        {% elsif arg_type.resolve <= Struct %}
+        {% elsif arg_type.resolve <= Struct || arg_type.resolve <= Enum %}
           Anyolite::Macro.convert_from_ruby_struct({{rb}}, {{arg}}, {{arg_type}}).value.content
         {% else %}
           Anyolite::Macro.convert_from_ruby_object({{rb}}, {{arg}}, {{arg_type}}).value
@@ -154,7 +154,7 @@ module Anyolite
           {{arg_type}}.new(Anyolite::RbCast.cast_to_float({{rb}}, {{arg}}))
         {% elsif arg_type.resolve <= String %}
           Anyolite::RbCast.cast_to_string({{rb}}, {{arg}})
-        {% elsif arg_type.resolve <= Struct %}
+        {% elsif arg_type.resolve <= Struct || arg_type.resolve <= Enum %}
           Anyolite::Macro.convert_from_ruby_struct({{rb}}, {{arg}}, {{arg_type}}).value.content
         {% elsif arg_type.resolve? %}
           Anyolite::Macro.convert_from_ruby_object({{rb}}, {{arg}}, {{arg_type}}).value

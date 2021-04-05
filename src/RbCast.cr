@@ -53,7 +53,7 @@ module Anyolite
       self.return_string(rb, value)
     end
 
-    def self.return_value(rb : RbCore::State*, value : Struct)
+    def self.return_value(rb : RbCore::State*, value : Struct | Enum)
       ruby_class = RbClassCache.get(typeof(value))
 
       destructor = RbTypeCache.destructor_method(typeof(value))

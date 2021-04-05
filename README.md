@@ -164,7 +164,7 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 
 #### Safety
 
-* [ ] Warning message when a reference table with values is reset
+* Warning message when a reference table with values is reset
 
 #### Usability
 
@@ -173,7 +173,7 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 
 #### Bugfixes
 
-* [ ] Enums are falsely tracked in the reference table
+* Enums are now correctly tracked in the reference table
 
 ### Version 0.10.0
 

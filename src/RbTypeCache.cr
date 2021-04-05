@@ -13,7 +13,7 @@ module Anyolite
 
     macro destructor_method(crystal_class)
       ->(rb_state : Anyolite::RbCore::State*, ptr : Void*) {
-        if {{crystal_class}} <= Struct
+        if {{crystal_class}} <= Struct || {{crystal_class}} <= Enum
           crystal_ptr = ptr.as(Anyolite::StructWrapper({{crystal_class}})*)
 
           # Call optional mruby callback
