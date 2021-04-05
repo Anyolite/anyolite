@@ -97,7 +97,7 @@ Now, you want to wrap this class in Ruby. All you need to do is to execute the f
 require "anyolite"
 
 MrbState.create do |mrb|
-  MrbWrap.wrap(mrb, TestModule)
+  Anyolite.wrap(mrb, TestModule)
 
   mrb.load_script_from_file("examples/hp_example.rb")
 end
@@ -154,7 +154,7 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 
 #### Breaking changes
 
-* [ ] Rename `MrbWrap` to `Anyolite`
+* [X] Rename `MrbWrap` to `Anyolite`
 * [ ] Rename `MrbMacro` to `Anyolite::Macro`
 * [ ] Rename `mrb` and `mruby` in the code to `rb` and `ruby`
 * [ ] Rework configurations for the Rakefile into a class

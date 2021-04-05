@@ -13,7 +13,7 @@ require "./MrbRefTable.cr"
 alias MrbFunc = Proc(MrbInternal::MrbState*, MrbInternal::MrbValue, MrbInternal::MrbValue)
 
 # Main wrapper module, which should be covering most of the use cases.
-module MrbWrap
+module Anyolite
   # Alias for all possible mruby return types.
   alias Interpreted = Nil | Bool | MrbInternal::MrbFloat | MrbInternal::MrbInt | String | Undefined
 
@@ -219,8 +219,8 @@ module MrbWrap
   # The values *operator_getter* and *operator_setter* will append the specified `String`
   # to the final names and *context* can give the function a `Path` for resolving types correctly.
   macro wrap_property(mrb_state, crystal_class, name, proc, proc_arg, operator_getter = "", operator_setter = "=", context = nil)
-    MrbWrap.wrap_getter({{mrb_state}}, {{crystal_class}}, {{name}}, {{proc}}, operator: {{operator_getter}}, context: {{context}})
-    MrbWrap.wrap_setter({{mrb_state}}, {{crystal_class}}, {{name + "="}}, {{proc}}, {{proc_arg}}, operator: {{operator_setter}}, context: {{context}})
+    Anyolite.wrap_getter({{mrb_state}}, {{crystal_class}}, {{name}}, {{proc}}, operator: {{operator_getter}}, context: {{context}})
+    Anyolite.wrap_setter({{mrb_state}}, {{crystal_class}}, {{name + "="}}, {{proc}}, {{proc_arg}}, operator: {{operator_setter}}, context: {{context}})
   end
 
   # Wraps a constant value under a module into mruby.
@@ -339,13 +339,13 @@ module MrbWrap
 
       {% new_context = crystal_class %}
 
-      {% if resolved_class.annotation(MrbWrap::RenameClass) %}
-        {% actual_name = resolved_class.annotation(MrbWrap::RenameClass)[0] %}
+      {% if resolved_class.annotation(Anyolite::RenameClass) %}
+        {% actual_name = resolved_class.annotation(Anyolite::RenameClass)[0] %}
       {% else %}
         {% actual_name = crystal_class.names.last.stringify %}
       {% end %}
 
-      MrbWrap.wrap_class({{mrb_state}}, {{resolved_class}}, {{actual_name}}, under: {{under}})
+      Anyolite.wrap_class({{mrb_state}}, {{resolved_class}}, {{actual_name}}, under: {{under}})
 
       MrbMacro.wrap_all_instance_methods({{mrb_state}}, {{crystal_class}}, {{instance_method_exclusions}}, 
         {{verbose}}, context: {{new_context}}, use_enum_constructor: {{use_enum_constructor}})
@@ -374,13 +374,13 @@ module MrbWrap
 
     {% new_context = crystal_module %}
 
-    {% if crystal_module.resolve.annotation(MrbWrap::RenameModule) %}
-      {% actual_name = crystal_module.resolve.annotation(MrbWrap::RenameModule)[0] %}
+    {% if crystal_module.resolve.annotation(Anyolite::RenameModule) %}
+      {% actual_name = crystal_module.resolve.annotation(Anyolite::RenameModule)[0] %}
     {% else %}
       {% actual_name = crystal_module.names.last.stringify %}
     {% end %}
 
-    MrbWrap.wrap_module({{mrb_state}}, {{crystal_module.resolve}}, {{actual_name}}, under: {{under}})
+    Anyolite.wrap_module({{mrb_state}}, {{crystal_module.resolve}}, {{actual_name}}, under: {{under}})
 
     MrbMacro.wrap_all_class_methods({{mrb_state}}, {{crystal_module}}, {{class_method_exclusions}}, {{verbose}}, context: {{new_context}})
     MrbMacro.wrap_all_constants({{mrb_state}}, {{crystal_module}}, {{constant_exclusions}}, {{verbose}}, context: {{new_context}})
@@ -405,13 +405,13 @@ module MrbWrap
     {% if !crystal_module_or_class.is_a?(Path) %}
       {% puts "\e[31m> WARNING: Object #{crystal_module_or_class} of #{crystal_module_or_class.class_name.id} is neither a class nor module, so it will be skipped\e[0m" %}
     {% elsif crystal_module_or_class.resolve.module? %}
-      MrbWrap.wrap_module_with_methods({{mrb_state}}, {{crystal_module_or_class}}, under: {{under}},
+      Anyolite.wrap_module_with_methods({{mrb_state}}, {{crystal_module_or_class}}, under: {{under}},
         class_method_exclusions: {{class_method_exclusions}},
         constant_exclusions: {{constant_exclusions}},
         verbose: {{verbose}}
       )
     {% elsif crystal_module_or_class.resolve.class? || crystal_module_or_class.resolve.struct? %}
-      MrbWrap.wrap_class_with_methods({{mrb_state}}, {{crystal_module_or_class}}, under: {{under}},
+      Anyolite.wrap_class_with_methods({{mrb_state}}, {{crystal_module_or_class}}, under: {{under}},
         instance_method_exclusions: {{instance_method_exclusions}},
         class_method_exclusions: {{class_method_exclusions}},
         constant_exclusions: {{constant_exclusions}},
@@ -420,7 +420,7 @@ module MrbWrap
     {% elsif crystal_module_or_class.resolve.union? %}
       {% puts "\e[31m> WARNING: Wrapping of unions not supported, thus skipping #{crystal_module_or_class}\e[0m" %}
     {% elsif crystal_module_or_class.resolve < Enum %}
-      MrbWrap.wrap_class_with_methods({{mrb_state}}, {{crystal_module_or_class}}, under: {{under}},
+      Anyolite.wrap_class_with_methods({{mrb_state}}, {{crystal_module_or_class}}, under: {{under}},
         instance_method_exclusions: {{instance_method_exclusions}},
         class_method_exclusions: {{class_method_exclusions}},
         constant_exclusions: {{constant_exclusions}},
@@ -428,7 +428,7 @@ module MrbWrap
         verbose: {{verbose}}
       )
     {% elsif crystal_module_or_class.resolve.is_a?(TypeNode) %}
-      MrbWrap.wrap_class_with_methods({{mrb_state}}, {{crystal_module_or_class}}, under: {{under}},
+      Anyolite.wrap_class_with_methods({{mrb_state}}, {{crystal_module_or_class}}, under: {{under}},
         instance_method_exclusions: {{instance_method_exclusions}},
         class_method_exclusions: {{class_method_exclusions}},
         constant_exclusions: {{constant_exclusions}},

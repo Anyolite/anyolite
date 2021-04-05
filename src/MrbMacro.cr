@@ -430,11 +430,11 @@ module MrbMacro
     end
     
     ptr = MrbInternal.get_data_ptr({{obj}})
-    ptr.as(MrbWrap::StructWrapper({{crystal_type}})*)
+    ptr.as(Anyolite::StructWrapper({{crystal_type}})*)
   end
 
   macro call_and_return(mrb, proc, regular_args, converted_args, operator = "")
-    {% if proc.stringify == "MrbWrap::Empty" %}
+    {% if proc.stringify == "Anyolite::Empty" %}
       return_value = {{operator.id}}(*{{converted_args}})
     {% else %}
       return_value = {{proc}}{{operator.id}}(*{{converted_args}})
@@ -445,7 +445,7 @@ module MrbMacro
   macro call_and_return_keyword_method(mrb, proc, converted_regular_args, keyword_args, kw_args, operator = "", 
     empty_regular = false, context = nil, type_vars = nil, type_var_names = nil)
 
-    {% if proc.stringify == "MrbWrap::Empty" %}
+    {% if proc.stringify == "Anyolite::Empty" %}
       return_value = {{operator.id}}(
     {% else %}
       return_value = {{proc}}{{operator.id}}(
@@ -472,10 +472,10 @@ module MrbMacro
   end
 
   macro call_and_return_instance_method(mrb, proc, converted_obj, converted_args, operator = "")
-    if {{converted_obj}}.is_a?(MrbWrap::StructWrapper)
+    if {{converted_obj}}.is_a?(Anyolite::StructWrapper)
       working_content = {{converted_obj}}.content
 
-      {% if proc.stringify == "MrbWrap::Empty" %}
+      {% if proc.stringify == "Anyolite::Empty" %}
         return_value = working_content.{{operator.id}}(*{{converted_args}})
       {% else %}
         return_value = working_content.{{proc}}{{operator.id}}(*{{converted_args}})
@@ -483,7 +483,7 @@ module MrbMacro
 
       {{converted_obj}}.content = working_content
     else
-      {% if proc.stringify == "MrbWrap::Empty" %}
+      {% if proc.stringify == "Anyolite::Empty" %}
         return_value = {{converted_obj}}.{{operator.id}}(*{{converted_args}})
       {% else %}
         return_value = {{converted_obj}}.{{proc}}{{operator.id}}(*{{converted_args}})
@@ -495,10 +495,10 @@ module MrbMacro
   macro call_and_return_keyword_instance_method(mrb, proc, converted_obj, converted_regular_args, keyword_args, kw_args, operator = "",
                                                 empty_regular = false, context = nil, type_vars = nil, type_var_names = nil)
 
-    if {{converted_obj}}.is_a?(MrbWrap::StructWrapper)
+    if {{converted_obj}}.is_a?(Anyolite::StructWrapper)
       working_content = {{converted_obj}}.content
 
-      {% if proc.stringify == "MrbWrap::Empty" %}
+      {% if proc.stringify == "Anyolite::Empty" %}
         return_value = working_content.{{operator.id}}(
       {% else %}
         return_value = working_content.{{proc}}{{operator.id}}(
@@ -524,7 +524,7 @@ module MrbMacro
       {{converted_obj}}.content = working_content
     else
 
-      {% if proc.stringify == "MrbWrap::Empty" %}
+      {% if proc.stringify == "Anyolite::Empty" %}
         return_value = {{converted_obj}}.{{operator.id}}(
       {% else %}
         return_value = {{converted_obj}}.{{proc}}{{operator.id}}(
@@ -581,8 +581,8 @@ module MrbMacro
 
     # Allocate memory so we do not lose this object
     if {{crystal_class}} <= Struct
-      struct_wrapper = MrbWrap::StructWrapper({{crystal_class}}).new({{new_obj}})
-      new_obj_ptr = Pointer(MrbWrap::StructWrapper({{crystal_class}})).malloc(size: 1, value: struct_wrapper)
+      struct_wrapper = Anyolite::StructWrapper({{crystal_class}}).new({{new_obj}})
+      new_obj_ptr = Pointer(Anyolite::StructWrapper({{crystal_class}})).malloc(size: 1, value: struct_wrapper)
       MrbRefTable.add(MrbRefTable.get_object_id(new_obj_ptr.value), new_obj_ptr.as(Void*))
 
       puts "> S: {{crystal_class}}: #{new_obj_ptr.value.inspect}" if MrbRefTable.option_active?(:logging)
@@ -629,7 +629,7 @@ module MrbMacro
     {% end %}
 
     {% type_vars = crystal_class.resolve.type_vars %}
-    {% type_var_names_annotation = crystal_class.resolve.annotation(MrbWrap::SpecifyGenericTypes) %}
+    {% type_var_names_annotation = crystal_class.resolve.annotation(Anyolite::SpecifyGenericTypes) %}
     {% type_var_names = type_var_names_annotation ? type_var_names_annotation[0] : nil %}
 
     {% proc_arg_array = MrbMacro.put_args_in_array(regular_args) %}
@@ -680,7 +680,7 @@ module MrbMacro
     {% end %}
 
     {% type_vars = crystal_class.resolve.type_vars %}
-    {% type_var_names_annotation = crystal_class.resolve.annotation(MrbWrap::SpecifyGenericTypes) %}
+    {% type_var_names_annotation = crystal_class.resolve.annotation(Anyolite::SpecifyGenericTypes) %}
     {% type_var_names = type_var_names_annotation ? type_var_names_annotation[0] : nil %}
 
     wrapped_method = MrbFunc.new do |mrb, obj|
@@ -701,7 +701,7 @@ module MrbMacro
     {% end %}
 
     {% type_vars = crystal_class.resolve.type_vars %}
-    {% type_var_names_annotation = crystal_class.resolve.annotation(MrbWrap::SpecifyGenericTypes) %}
+    {% type_var_names_annotation = crystal_class.resolve.annotation(Anyolite::SpecifyGenericTypes) %}
     {% type_var_names = type_var_names_annotation ? type_var_names_annotation[0] : nil %}
 
     wrapped_method = MrbFunc.new do |mrb, obj|
@@ -735,7 +735,7 @@ module MrbMacro
     {% end %}
 
     {% type_vars = crystal_class.resolve.type_vars %}
-    {% type_var_names_annotation = crystal_class.resolve.annotation(MrbWrap::SpecifyGenericTypes) %}
+    {% type_var_names_annotation = crystal_class.resolve.annotation(Anyolite::SpecifyGenericTypes) %}
     {% type_var_names = type_var_names_annotation ? type_var_names_annotation[0] : nil %}
 
     wrapped_method = MrbFunc.new do |mrb, obj|
@@ -763,7 +763,7 @@ module MrbMacro
     {% end %}
 
     {% type_vars = crystal_class.resolve.type_vars %}
-    {% type_var_names_annotation = crystal_class.resolve.annotation(MrbWrap::SpecifyGenericTypes) %}
+    {% type_var_names_annotation = crystal_class.resolve.annotation(Anyolite::SpecifyGenericTypes) %}
     {% type_var_names = type_var_names_annotation ? type_var_names_annotation[0] : nil %}
 
     wrapped_method = MrbFunc.new do |mrb, obj|
@@ -803,7 +803,7 @@ module MrbMacro
     {% end %}
 
     {% type_vars = crystal_class.resolve.type_vars %}
-    {% type_var_names_annotation = crystal_class.resolve.annotation(MrbWrap::SpecifyGenericTypes) %}
+    {% type_var_names_annotation = crystal_class.resolve.annotation(Anyolite::SpecifyGenericTypes) %}
     {% type_var_names = type_var_names_annotation ? type_var_names_annotation[0] : nil %}
 
     wrapped_method = MrbFunc.new do |mrb, obj|
@@ -827,7 +827,7 @@ module MrbMacro
     {% end %}
 
     {% type_vars = crystal_class.resolve.type_vars %}
-    {% type_var_names_annotation = crystal_class.resolve.annotation(MrbWrap::SpecifyGenericTypes) %}
+    {% type_var_names_annotation = crystal_class.resolve.annotation(Anyolite::SpecifyGenericTypes) %}
     {% type_var_names = type_var_names_annotation ? type_var_names_annotation[0] : nil %}
 
     wrapped_method = MrbFunc.new do |mrb, obj|
@@ -888,7 +888,7 @@ module MrbMacro
           {% final_operator = operator %}
         {% end %}
       {% else %}
-        {% final_method_name = MrbWrap::Empty %}
+        {% final_method_name = Anyolite::Empty %}
         {% if is_class_method %}
           {% final_operator = "#{crystal_class}.#{operator.id}" %}
         {% else %}
@@ -908,11 +908,11 @@ module MrbMacro
 
     {% if final_arg_array.empty? %}
       {% if is_class_method %}
-        MrbWrap.wrap_class_method({{mrb_state}}, {{crystal_class}}, {{ruby_name}}, {{final_method_name}}, operator: {{final_operator}}, context: {{context}})
+        Anyolite.wrap_class_method({{mrb_state}}, {{crystal_class}}, {{ruby_name}}, {{final_method_name}}, operator: {{final_operator}}, context: {{context}})
       {% elsif is_constructor %}
-        MrbWrap.wrap_constructor({{mrb_state}}, {{crystal_class}}, context: {{context}})
+        Anyolite.wrap_constructor({{mrb_state}}, {{crystal_class}}, context: {{context}})
       {% else %}
-        MrbWrap.wrap_instance_method({{mrb_state}}, {{crystal_class}}, {{ruby_name}}, {{final_method_name}}, operator: {{final_operator}}, context: {{context}})
+        Anyolite.wrap_instance_method({{mrb_state}}, {{crystal_class}}, {{ruby_name}}, {{final_method_name}}, operator: {{final_operator}}, context: {{context}})
       {% end %}
 
     # A complicated check, but it is more stable than simply checking for colons
@@ -931,36 +931,36 @@ module MrbMacro
 
         {% if keyword_arg_partition %}
           {% if is_class_method %}
-            MrbWrap.wrap_class_method_with_keywords({{mrb_state}}, {{crystal_class}}, {{ruby_name}}, {{final_method_name}}, 
+            Anyolite.wrap_class_method_with_keywords({{mrb_state}}, {{crystal_class}}, {{ruby_name}}, {{final_method_name}}, 
               {{keyword_arg_partition}}, regular_args: {{regular_arg_partition}}, operator: {{final_operator}}, context: {{context}})
           {% elsif is_constructor %}
-            MrbWrap.wrap_constructor_with_keywords({{mrb_state}}, {{crystal_class}}, 
+            Anyolite.wrap_constructor_with_keywords({{mrb_state}}, {{crystal_class}}, 
               {{keyword_arg_partition}}, regular_args: {{regular_arg_partition}}, operator: {{final_operator}}, context: {{context}})
           {% else %}
-            MrbWrap.wrap_instance_method_with_keywords({{mrb_state}}, {{crystal_class}}, {{ruby_name}}, {{final_method_name}}, 
+            Anyolite.wrap_instance_method_with_keywords({{mrb_state}}, {{crystal_class}}, {{ruby_name}}, {{final_method_name}}, 
               {{keyword_arg_partition}}, regular_args: {{regular_arg_partition}}, operator: {{final_operator}}, context: {{context}})
           {% end %}
         {% else %}
           {% if is_class_method %}
-            MrbWrap.wrap_class_method({{mrb_state}}, {{crystal_class}}, {{ruby_name}}, {{final_method_name}}, 
+            Anyolite.wrap_class_method({{mrb_state}}, {{crystal_class}}, {{ruby_name}}, {{final_method_name}}, 
               {{regular_arg_partition}}, operator: {{final_operator}}, context: {{context}})
           {% elsif is_constructor %}
-            MrbWrap.wrap_constructor({{mrb_state}}, {{crystal_class}}, 
+            Anyolite.wrap_constructor({{mrb_state}}, {{crystal_class}}, 
               {{regular_arg_partition}}, operator: {{final_operator}}, context: {{context}})
           {% else %}
-            MrbWrap.wrap_instance_method({{mrb_state}}, {{crystal_class}}, {{ruby_name}}, {{final_method_name}}, 
+            Anyolite.wrap_instance_method({{mrb_state}}, {{crystal_class}}, {{ruby_name}}, {{final_method_name}}, 
               {{regular_arg_partition}}, operator: {{final_operator}}, context: {{context}})
           {% end %}
         {% end %}
       {% else %}
         {% if is_class_method %}
-          MrbWrap.wrap_class_method_with_keywords({{mrb_state}}, {{crystal_class}}, {{ruby_name}}, {{final_method_name}}, 
+          Anyolite.wrap_class_method_with_keywords({{mrb_state}}, {{crystal_class}}, {{ruby_name}}, {{final_method_name}}, 
             {{final_arg_array}}, operator: {{final_operator}}, context: {{context}})
         {% elsif is_constructor %}
-          MrbWrap.wrap_constructor_with_keywords({{mrb_state}}, {{crystal_class}}, 
+          Anyolite.wrap_constructor_with_keywords({{mrb_state}}, {{crystal_class}}, 
             {{final_arg_array}}, operator: {{final_operator}}, context: {{context}})
         {% else %}
-          MrbWrap.wrap_instance_method_with_keywords({{mrb_state}}, {{crystal_class}}, {{ruby_name}}, {{final_method_name}}, 
+          Anyolite.wrap_instance_method_with_keywords({{mrb_state}}, {{crystal_class}}, {{ruby_name}}, {{final_method_name}}, 
             {{final_arg_array}}, operator: {{final_operator}}, context: {{context}})
         {% end %}
       {% end %}
@@ -978,10 +978,10 @@ module MrbMacro
     {% has_specialized_method = {} of String => Bool %}
 
     {% for method in crystal_class.resolve.methods %}
-      {% all_annotations_specialize_im = crystal_class.resolve.annotations(MrbWrap::SpecializeInstanceMethod) %}
+      {% all_annotations_specialize_im = crystal_class.resolve.annotations(Anyolite::SpecializeInstanceMethod) %}
       {% annotation_specialize_im = all_annotations_specialize_im.find { |element| element[0].stringify == method.name.stringify || element[0] == method.name.stringify } %}
 
-      {% if method.annotation(MrbWrap::Specialize) %}
+      {% if method.annotation(Anyolite::Specialize) %}
         {% has_specialized_method[method.name.stringify] = true %}
       {% end %}
 
@@ -993,20 +993,20 @@ module MrbMacro
     {% how_many_times_wrapped = {} of String => UInt32 %}
 
     {% for method, index in crystal_class.resolve.methods %}
-      {% all_annotations_exclude_im = crystal_class.resolve.annotations(MrbWrap::ExcludeInstanceMethod) %}
+      {% all_annotations_exclude_im = crystal_class.resolve.annotations(Anyolite::ExcludeInstanceMethod) %}
       {% annotation_exclude_im = all_annotations_exclude_im.find { |element| element[0].id.stringify == method.name.stringify } %}
 
-      {% all_annotations_specialize_im = crystal_class.resolve.annotations(MrbWrap::SpecializeInstanceMethod) %}
+      {% all_annotations_specialize_im = crystal_class.resolve.annotations(Anyolite::SpecializeInstanceMethod) %}
       {% annotation_specialize_im = all_annotations_specialize_im.find { |element| element[0].id.stringify == method.name.stringify } %}
 
-      {% all_annotations_rename_im = crystal_class.resolve.annotations(MrbWrap::RenameInstanceMethod) %}
+      {% all_annotations_rename_im = crystal_class.resolve.annotations(Anyolite::RenameInstanceMethod) %}
       {% annotation_rename_im = all_annotations_rename_im.find { |element| element[0].id.stringify == method.name.stringify } %}
 
-      {% all_annotations_without_keywords_im = crystal_class.resolve.annotations(MrbWrap::WrapWithoutKeywordsInstanceMethod) %}
+      {% all_annotations_without_keywords_im = crystal_class.resolve.annotations(Anyolite::WrapWithoutKeywordsInstanceMethod) %}
       {% annotation_without_keyword_im = all_annotations_without_keywords_im.find { |element| element[0].id.stringify == method.name.stringify } %}
 
-      {% if method.annotation(MrbWrap::Rename) %}
-        {% ruby_name = method.annotation(MrbWrap::Rename)[0].id %}
+      {% if method.annotation(Anyolite::Rename) %}
+        {% ruby_name = method.annotation(Anyolite::Rename)[0].id %}
       {% elsif annotation_rename_im && method.name.stringify == annotation_rename_im[0].stringify %}
         {% ruby_name = annotation_rename_im[1].id %}
       {% else %}
@@ -1015,8 +1015,8 @@ module MrbMacro
 
       {% added_keyword_args = nil %}
 
-      {% if method.annotation(MrbWrap::Specialize) && method.annotation(MrbWrap::Specialize)[0] %}
-        {% added_keyword_args = method.annotation(MrbWrap::Specialize)[0] %}
+      {% if method.annotation(Anyolite::Specialize) && method.annotation(Anyolite::Specialize)[0] %}
+        {% added_keyword_args = method.annotation(Anyolite::Specialize)[0] %}
       {% end %}
 
       {% if annotation_specialize_im && (method.args.stringify == annotation_specialize_im[1].stringify || (method.args.stringify == "[]" && annotation_specialize_im[1] == nil)) %}
@@ -1025,8 +1025,8 @@ module MrbMacro
 
       {% without_keywords = false %}
 
-      {% if method.annotation(MrbWrap::WrapWithoutKeywords) %}
-        {% without_keywords = method.annotation(MrbWrap::WrapWithoutKeywords)[0] ? method.annotation(MrbWrap::WrapWithoutKeywords)[0] : -1 %}
+      {% if method.annotation(Anyolite::WrapWithoutKeywords) %}
+        {% without_keywords = method.annotation(Anyolite::WrapWithoutKeywords)[0] ? method.annotation(Anyolite::WrapWithoutKeywords)[0] : -1 %}
       {% elsif annotation_without_keyword_im %}
         {% without_keywords = annotation_without_keyword_im[1] ? annotation_without_keyword_im[1] : -1 %}
       {% end %}
@@ -1043,10 +1043,10 @@ module MrbMacro
       {% elsif exclusions.includes?(method.name.symbolize) || exclusions.includes?(method.name.stringify) %}
         {% puts "--> Excluding #{crystal_class}::#{method.name} (Exclusion argument)" if verbose %}
       # Exclude methods which were annotated to be excluded
-      {% elsif method.annotation(MrbWrap::Exclude) || (annotation_exclude_im) %}
+      {% elsif method.annotation(Anyolite::Exclude) || (annotation_exclude_im) %}
         {% puts "--> Excluding #{crystal_class}::#{method.name} (Exclusion annotation)" if verbose %}
       # Exclude methods which are not the specialized methods
-      {% elsif has_specialized_method[method.name.stringify] && !(method.annotation(MrbWrap::Specialize) || (annotation_specialize_im && (method.args.stringify == annotation_specialize_im[1].stringify || (method.args.stringify == "[]" && annotation_specialize_im[1] == nil)))) %}
+      {% elsif has_specialized_method[method.name.stringify] && !(method.annotation(Anyolite::Specialize) || (annotation_specialize_im && (method.args.stringify == annotation_specialize_im[1].stringify || (method.args.stringify == "[]" && annotation_specialize_im[1] == nil)))) %}
         {% puts "--> Excluding #{crystal_class}::#{method.name} #{method.args} (Specialization)" if verbose %}
       # Handle operator methods (including setters) by just transferring the original name into the operator
       # TODO: This might still be a source for potential bugs, so this code might need some reworking in the future
@@ -1082,22 +1082,22 @@ module MrbMacro
 
   macro add_default_constructor(mrb_state, crystal_class, verbose)
     {% puts "> Adding constructor for #{crystal_class}\n\n" if verbose %}
-    MrbWrap.wrap_constructor({{mrb_state}}, {{crystal_class}})
+    Anyolite.wrap_constructor({{mrb_state}}, {{crystal_class}})
   end
 
   macro add_enum_constructor(mrb_state, crystal_class, verbose)
     {% puts "> Adding enum constructor for #{crystal_class}\n\n" if verbose %}
-    MrbWrap.wrap_constructor({{mrb_state}}, {{crystal_class}}, [Int32])
+    Anyolite.wrap_constructor({{mrb_state}}, {{crystal_class}}, [Int32])
   end
 
   macro wrap_all_class_methods(mrb_state, crystal_class, exclusions, verbose, context = nil)
     {% has_specialized_method = {} of String => Bool %}
 
     {% for method in crystal_class.resolve.class.methods %}
-      {% all_annotations_specialize_im = crystal_class.resolve.annotations(MrbWrap::SpecializeClassMethod) %}
+      {% all_annotations_specialize_im = crystal_class.resolve.annotations(Anyolite::SpecializeClassMethod) %}
       {% annotation_specialize_im = all_annotations_specialize_im.find { |element| element[0].stringify == method.name.stringify || element[0] == method.name.stringify } %}
 
-      {% if method.annotation(MrbWrap::Specialize) %}
+      {% if method.annotation(Anyolite::Specialize) %}
         {% has_specialized_method[method.name.stringify] = true %}
       {% end %}
 
@@ -1110,20 +1110,20 @@ module MrbMacro
 
     # TODO: Replace all im here with cm
     {% for method, index in crystal_class.resolve.class.methods %}
-      {% all_annotations_exclude_im = crystal_class.resolve.annotations(MrbWrap::ExcludeClassMethod) %}
+      {% all_annotations_exclude_im = crystal_class.resolve.annotations(Anyolite::ExcludeClassMethod) %}
       {% annotation_exclude_im = all_annotations_exclude_im.find { |element| element[0].id.stringify == method.name.stringify } %}
 
-      {% all_annotations_specialize_im = crystal_class.resolve.annotations(MrbWrap::SpecializeClassMethod) %}
+      {% all_annotations_specialize_im = crystal_class.resolve.annotations(Anyolite::SpecializeClassMethod) %}
       {% annotation_specialize_im = all_annotations_specialize_im.find { |element| element[0].id.stringify == method.name.stringify } %}
 
-      {% all_annotations_rename_im = crystal_class.resolve.annotations(MrbWrap::RenameClassMethod) %}
+      {% all_annotations_rename_im = crystal_class.resolve.annotations(Anyolite::RenameClassMethod) %}
       {% annotation_rename_im = all_annotations_rename_im.find { |element| element[0].id.stringify == method.name.stringify } %}
 
-      {% all_annotations_without_keywords_im = crystal_class.resolve.annotations(MrbWrap::WrapWithoutKeywordsClassMethod) %}
+      {% all_annotations_without_keywords_im = crystal_class.resolve.annotations(Anyolite::WrapWithoutKeywordsClassMethod) %}
       {% annotation_without_keyword_im = all_annotations_without_keywords_im.find { |element| element[0].id.stringify == method.name.stringify } %}
 
-      {% if method.annotation(MrbWrap::Rename) %}
-        {% ruby_name = method.annotation(MrbWrap::Rename)[0].id %}
+      {% if method.annotation(Anyolite::Rename) %}
+        {% ruby_name = method.annotation(Anyolite::Rename)[0].id %}
       {% elsif annotation_rename_im && method.name.stringify == annotation_rename_im[0].stringify %}
         {% ruby_name = annotation_rename_im[1].id %}
       {% else %}
@@ -1132,8 +1132,8 @@ module MrbMacro
 
       {% added_keyword_args = nil %}
 
-      {% if method.annotation(MrbWrap::Specialize) && method.annotation(MrbWrap::Specialize)[1] %}
-        {% added_keyword_args = method.annotation(MrbWrap::Specialize)[1] %}
+      {% if method.annotation(Anyolite::Specialize) && method.annotation(Anyolite::Specialize)[1] %}
+        {% added_keyword_args = method.annotation(Anyolite::Specialize)[1] %}
       {% end %}
 
       {% if annotation_specialize_im && (method.args.stringify == annotation_specialize_im[1].stringify || (method.args.stringify == "[]" && annotation_specialize_im[1] == nil)) %}
@@ -1142,8 +1142,8 @@ module MrbMacro
 
       {% without_keywords = false %}
 
-      {% if method.annotation(MrbWrap::WrapWithoutKeywords) %}
-        {% without_keywords = method.annotation(MrbWrap::WrapWithoutKeywords)[0] ? method.annotation(MrbWrap::WrapWithoutKeywords)[0] : -1 %}
+      {% if method.annotation(Anyolite::WrapWithoutKeywords) %}
+        {% without_keywords = method.annotation(Anyolite::WrapWithoutKeywords)[0] ? method.annotation(Anyolite::WrapWithoutKeywords)[0] : -1 %}
       {% elsif annotation_without_keyword_im %}
         {% without_keywords = annotation_without_keyword_im[1] ? annotation_without_keyword_im[1] : -1 %}
       {% end %}
@@ -1160,10 +1160,10 @@ module MrbMacro
       {% elsif exclusions.includes?(method.name.symbolize) || exclusions.includes?(method.name) %}
         {% puts "--> Excluding #{crystal_class}::#{method.name} (Exclusion argument)" if verbose %}
       # Exclude methods which were annotated to be excluded
-      {% elsif method.annotation(MrbWrap::Exclude) || (annotation_exclude_im) %}
+      {% elsif method.annotation(Anyolite::Exclude) || (annotation_exclude_im) %}
         {% puts "--> Excluding #{crystal_class}::#{method.name} (Exclusion annotation)" if verbose %}
       # Exclude methods which are not the specialized methods
-      {% elsif has_specialized_method[method.name.stringify] && !(method.annotation(MrbWrap::Specialize) || (annotation_specialize_im && (method.args.stringify == annotation_specialize_im[1].stringify || (method.args.stringify == "[]" && annotation_specialize_im[1] == nil)))) %}
+      {% elsif has_specialized_method[method.name.stringify] && !(method.annotation(Anyolite::Specialize) || (annotation_specialize_im && (method.args.stringify == annotation_specialize_im[1].stringify || (method.args.stringify == "[]" && annotation_specialize_im[1] == nil)))) %}
         {% puts "--> Excluding #{crystal_class}::#{method.name} (Specialization)" if verbose %}
       {% elsif method.name[-1..-1] =~ /\W/ %}
         {% operator = ruby_name %}
@@ -1189,10 +1189,10 @@ module MrbMacro
     # NOTE: This check is necessary due to https://github.com/crystal-lang/crystal/issues/5757
     {% if crystal_class.resolve.type_vars.empty? %}
       {% for constant, index in crystal_class.resolve.constants %}
-        {% all_annotations_exclude_im = crystal_class.resolve.annotations(MrbWrap::ExcludeConstant) %}
+        {% all_annotations_exclude_im = crystal_class.resolve.annotations(Anyolite::ExcludeConstant) %}
         {% annotation_exclude_im = all_annotations_exclude_im.find { |element| element[0].id.stringify == constant.stringify } %}
 
-        {% all_annotations_rename_im = crystal_class.resolve.annotations(MrbWrap::RenameConstant) %}
+        {% all_annotations_rename_im = crystal_class.resolve.annotations(Anyolite::RenameConstant) %}
         {% annotation_rename_im = all_annotations_rename_im.find { |element| element[0].id.stringify == constant.stringify } %}
 
         {% if annotation_rename_im && constant.stringify == annotation_rename_im[0].stringify %}
@@ -1219,19 +1219,19 @@ module MrbMacro
     {% actual_constant = under_class_or_module.resolve.constant(value.id) %}
     {% if actual_constant.is_a?(TypeNode) %}
       {% if actual_constant.module? %}
-        MrbWrap.wrap_module_with_methods({{mrb_state}}, {{actual_constant}}, under: {{under_class_or_module}}, verbose: {{verbose}})
+        Anyolite.wrap_module_with_methods({{mrb_state}}, {{actual_constant}}, under: {{under_class_or_module}}, verbose: {{verbose}})
       {% elsif actual_constant.class? || actual_constant.struct? %}
-        MrbWrap.wrap_class_with_methods({{mrb_state}}, {{actual_constant}}, under: {{under_class_or_module}}, verbose: {{verbose}})
+        Anyolite.wrap_class_with_methods({{mrb_state}}, {{actual_constant}}, under: {{under_class_or_module}}, verbose: {{verbose}})
       {% elsif actual_constant.union? %}
         {% puts "\e[31m> WARNING: Wrapping of unions not supported, thus skipping #{actual_constant}\e[0m" %}
       {% elsif actual_constant < Enum %}
-        MrbWrap.wrap_class_with_methods({{mrb_state}}, {{actual_constant}}, under: {{under_class_or_module}}, use_enum_constructor: true, verbose: {{verbose}})
+        Anyolite.wrap_class_with_methods({{mrb_state}}, {{actual_constant}}, under: {{under_class_or_module}}, use_enum_constructor: true, verbose: {{verbose}})
       {% else %}
         # Could be an alias, just try the default case
-        MrbWrap.wrap_class_with_methods({{mrb_state}}, {{actual_constant}}, under: {{under_class_or_module}}, verbose: {{verbose}})
+        Anyolite.wrap_class_with_methods({{mrb_state}}, {{actual_constant}}, under: {{under_class_or_module}}, verbose: {{verbose}})
       {% end %}
     {% else %}
-      MrbWrap.wrap_constant_under_class({{mrb_state}}, {{under_class_or_module}}, {{ruby_name}}, {{under_class_or_module}}::{{value}})
+      Anyolite.wrap_constant_under_class({{mrb_state}}, {{under_class_or_module}}, {{ruby_name}}, {{under_class_or_module}}::{{value}})
     {% end %}
   end
 end

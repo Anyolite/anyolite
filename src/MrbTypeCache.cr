@@ -13,7 +13,7 @@ module MrbTypeCache
   macro destructor_method(crystal_class)
     ->(mrb : MrbInternal::MrbState*, ptr : Void*) {
       if {{crystal_class}} <= Struct
-        crystal_ptr = ptr.as(MrbWrap::StructWrapper({{crystal_class}})*)
+        crystal_ptr = ptr.as(Anyolite::StructWrapper({{crystal_class}})*)
 
         # Call optional mruby callback
         if (crystal_value = crystal_ptr.value.content).responds_to?(:mrb_finalize)

@@ -62,7 +62,7 @@ module MrbCast
     new_ruby_object = MrbInternal.new_empty_object(mrb, ruby_class, ptr.as(Void*), MrbTypeCache.register(typeof(value), destructor))
 
     struct_wrapper = MrbMacro.convert_from_ruby_struct(mrb, new_ruby_object, typeof(value))
-    struct_wrapper.value = MrbWrap::StructWrapper(typeof(value)).new(value)
+    struct_wrapper.value = Anyolite::StructWrapper(typeof(value)).new(value)
 
     MrbRefTable.add(MrbRefTable.get_object_id(struct_wrapper.value), ptr.as(Void*))
 

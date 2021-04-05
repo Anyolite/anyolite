@@ -1,1 +1,1 @@
-require "./src/MrbWrap.cr"
+require "./src/Main.cr"

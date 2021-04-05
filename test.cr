@@ -5,7 +5,7 @@ module SomeModule
     puts "#{str} and #{int}"
   end
 
-  @[MrbWrap::RenameClass("TestStructRenamed")]
+  @[Anyolite::RenameClass("TestStructRenamed")]
   struct TestStruct
     property value : Int32 = -123
     property test : Test = Test.new(-234)
@@ -15,15 +15,15 @@ module SomeModule
     end
   end
 
-  @[MrbWrap::SpecializeInstanceMethod(output_this_and_struct, [str : TestStruct])]
-  @[MrbWrap::RenameInstanceMethod(output_this_and_struct, "output_together_with")]
-  @[MrbWrap::ExcludeInstanceMethod(do_not_wrap_this_either)]
-  @[MrbWrap::ExcludeConstant(CONSTANT_NOT_TO_WRAP)]
-  @[MrbWrap::RenameConstant(CONSTANT, RUBY_CONSTANT)]
-  @[MrbWrap::SpecializeInstanceMethod(method_without_keywords, [arg], [arg : String])]
-  @[MrbWrap::SpecializeInstanceMethod(method_with_various_args, nil)]
+  @[Anyolite::SpecializeInstanceMethod(output_this_and_struct, [str : TestStruct])]
+  @[Anyolite::RenameInstanceMethod(output_this_and_struct, "output_together_with")]
+  @[Anyolite::ExcludeInstanceMethod(do_not_wrap_this_either)]
+  @[Anyolite::ExcludeConstant(CONSTANT_NOT_TO_WRAP)]
+  @[Anyolite::RenameConstant(CONSTANT, RUBY_CONSTANT)]
+  @[Anyolite::SpecializeInstanceMethod(method_without_keywords, [arg], [arg : String])]
+  @[Anyolite::SpecializeInstanceMethod(method_with_various_args, nil)]
   class Test
-    @[MrbWrap::RenameClass("UnderTestRenamed")]
+    @[Anyolite::RenameClass("UnderTestRenamed")]
     class UnderTest
       module DeepUnderTest
         def self.+(value : Int)
@@ -48,7 +48,7 @@ module SomeModule
     struct DeepTestStruct
     end
 
-    @[MrbWrap::SpecifyGenericTypes([U, V])]
+    @[Anyolite::SpecifyGenericTypes([U, V])]
     struct GenericTest(U, V)
 
       property u : U 
@@ -98,12 +98,12 @@ module SomeModule
       s
     end
 
-    @[MrbWrap::WrapWithoutKeywords]
+    @[Anyolite::WrapWithoutKeywords]
     def self.without_keywords(int : Int32)
       int * 10
     end
 
-    @[MrbWrap::Rename("test")]
+    @[Anyolite::Rename("test")]
     def test_instance_method(int : Int32, bool : Bool, str : String, float : Float32 = 0.4f32)
       puts "Old value is #{@x}"
       a = "Args given for instance method: #{int}, #{bool}, #{str}, #{float}"
@@ -149,14 +149,14 @@ module SomeModule
       Test.new(@x + other.x)
     end
 
-    @[MrbWrap::Exclude]
+    @[Anyolite::Exclude]
     def do_not_wrap_this
     end
 
     def do_not_wrap_this_either
     end
 
-    @[MrbWrap::Exclude]
+    @[Anyolite::Exclude]
     def self.do_not_wrap_this_class_method
     end
 
@@ -182,8 +182,8 @@ module SomeModule
       puts "Received argument #{arg.inspect}"
     end
 
-    @[MrbWrap::Specialize([arg1 : Int32, arg2 : Float32, arg_req : Float32, arg_opt_1 : String | Test | Bool | TestEnum | GenericTest(Int32, Int32) = "Cookies", arg_opt_2 : Int32 = 32])]
-    @[MrbWrap::WrapWithoutKeywords(4)]
+    @[Anyolite::Specialize([arg1 : Int32, arg2 : Float32, arg_req : Float32, arg_opt_1 : String | Test | Bool | TestEnum | GenericTest(Int32, Int32) = "Cookies", arg_opt_2 : Int32 = 32])]
+    @[Anyolite::WrapWithoutKeywords(4)]
     def complicated_method(arg1, arg2, arg_req : Float32, arg_opt_1 : String | Test | Bool | TestEnum | GenericTest(Int32, Int32) = "Cookies", arg_opt_2 : Int32 = 32)
       "#{arg1} - #{arg2} - #{arg_req} - #{arg_opt_1.is_a?(Test) ? arg_opt_1.x : arg_opt_1} - #{arg_opt_2}"
     end
@@ -213,7 +213,7 @@ module SomeModule
       raise "This should not be wrapped"
     end
 
-    @[MrbWrap::Specialize([strvar : String, intvar : Int32, floatvar : Float64 = 0.123, strvarkw : String = "nothing", boolvar : Bool = true, othervar : Test = SomeModule::Test.new(17)])]
+    @[Anyolite::Specialize([strvar : String, intvar : Int32, floatvar : Float64 = 0.123, strvarkw : String = "nothing", boolvar : Bool = true, othervar : Test = SomeModule::Test.new(17)])]
     def keyword_test(strvar : String, intvar : Int32, floatvar : Float64 = 0.123, strvarkw : String = "nothing", boolvar : Bool = true, othervar : Test = Test.new(17))
       puts "str = #{strvar}, int = #{intvar}, float = #{floatvar}, stringkw = #{strvarkw}, bool = #{boolvar}, other.x = #{othervar.x}"
     end
@@ -251,16 +251,16 @@ end
 # MrbRefTable.set_option(:logging)
 
 MrbState.create do |mrb|
-  MrbWrap.wrap_module(mrb, SomeModule, "TestModule")
-  MrbWrap.wrap_module_function_with_keywords(mrb, SomeModule, "test_method", SomeModule.test_method, [int : Int32 = 19, str : String])
-  MrbWrap.wrap_constant(mrb, SomeModule, "SOME_CONSTANT", "Smile! 😊")
+  Anyolite.wrap_module(mrb, SomeModule, "TestModule")
+  Anyolite.wrap_module_function_with_keywords(mrb, SomeModule, "test_method", SomeModule.test_method, [int : Int32 = 19, str : String])
+  Anyolite.wrap_constant(mrb, SomeModule, "SOME_CONSTANT", "Smile! 😊")
 
-  MrbWrap.wrap(mrb, SomeModule::Bla, under: SomeModule, verbose: true)
+  Anyolite.wrap(mrb, SomeModule::Bla, under: SomeModule, verbose: true)
 
-  MrbWrap.wrap(mrb, SomeModule::TestStruct, under: SomeModule, verbose: true)
+  Anyolite.wrap(mrb, SomeModule::TestStruct, under: SomeModule, verbose: true)
 
-  MrbWrap.wrap(mrb, SomeModule::Test, under: SomeModule, instance_method_exclusions: [:add], verbose: true)
-  MrbWrap.wrap_instance_method(mrb, SomeModule::Test, "add", add, [SomeModule::Test])
+  Anyolite.wrap(mrb, SomeModule::Test, under: SomeModule, instance_method_exclusions: [:add], verbose: true)
+  Anyolite.wrap_instance_method(mrb, SomeModule::Test, "add", add, [SomeModule::Test])
 
   mrb.load_script_from_file("examples/test.rb")
 end
@@ -297,7 +297,7 @@ MrbRefTable.reset
 puts "------------------------------"
 
 MrbState.create do |mrb|
-  MrbWrap.wrap(mrb, TestModule)
+  Anyolite.wrap(mrb, TestModule)
 
   mrb.load_script_from_file("examples/hp_example.rb")
 end
