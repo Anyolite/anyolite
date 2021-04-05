@@ -11,6 +11,7 @@ module Anyolite
     @@options = {
       :logging                      => false,
       :warnings                     => true,
+      :pedantic                     => true,
       :replace_conflicting_pointers => false,
     }
 
@@ -23,6 +24,7 @@ module Anyolite
       if @@content[identification]?
         if value != @@content[identification][0]
           puts "WARNING: Value #{identification} replaced pointers (#{value} vs #{@@content[identification][0]})." if option_active?(:warnings)
+          raise "Corrupted reference table" if option_active?(:pedantic)
           if option_active?(:replace_conflicting_pointers)
             @@content[identification] = {value, @@content[identification][1] + 1}
           else
@@ -45,6 +47,7 @@ module Anyolite
         end
       else
         puts "WARNING: Tried to remove unregistered object #{identification} from reference table." if option_active?(:warnings)
+        raise "Corrupted reference table" if option_active?(:pedantic)
       end
       nil
     end
@@ -60,6 +63,7 @@ module Anyolite
     def self.reset
       if !@@content.empty?
         puts "WARNING: Reference table is not empty (#{@@content.size} elements will be deleted)." if option_active?(:warnings)
+        raise "Corrupted reference table" if option_active?(:pedantic)
       end
       @@content.clear
     end

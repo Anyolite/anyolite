@@ -165,6 +165,7 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 #### Safety
 
 * Warning message when a reference table with values is reset
+* Added pedantic setting for reference table (default)
 
 #### Usability
 
