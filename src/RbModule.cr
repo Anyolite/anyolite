@@ -1,13 +1,13 @@
 module Anyolite
   # Reference to a mruby module
   class RbModule
-    @module_ptr : MrbInternal::RClass*
+    @module_ptr : RbCore::RClass*
 
-    def initialize(@mrb : RbInterpreter, @name : String, @under : RbModule | RbClass | Nil = nil)
+    def initialize(@rb : RbInterpreter, @name : String, @under : RbModule | RbClass | Nil = nil)
       if mod = @under
-        @module_ptr = MrbInternal.mrb_define_module_under(@mrb, mod, @name)
+        @module_ptr = RbCore.rb_define_module_under(@rb, mod, @name)
       else
-        @module_ptr = MrbInternal.mrb_define_module(@mrb, @name)
+        @module_ptr = RbCore.rb_define_module(@rb, @name)
       end
     end
 

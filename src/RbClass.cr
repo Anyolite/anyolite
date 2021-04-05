@@ -1,14 +1,14 @@
 module Anyolite
   # Reference to a mruby class
   class RbClass
-    @class_ptr : MrbInternal::RClass*
+    @class_ptr : RbCore::RClass*
 
-    def initialize(@mrb : RbInterpreter, @name : String, superclass : RbClass | Nil = nil, @under : RbModule | RbClass | Nil = nil)
-      actual_superclass = superclass ? superclass : MrbInternal.get_object_class(@mrb)
+    def initialize(@rb : RbInterpreter, @name : String, superclass : RbClass | Nil = nil, @under : RbModule | RbClass | Nil = nil)
+      actual_superclass = superclass ? superclass : RbCore.get_object_class(@rb)
       if mod = @under
-        @class_ptr = MrbInternal.mrb_define_class_under(@mrb, mod, @name, actual_superclass)
+        @class_ptr = RbCore.rb_define_class_under(@rb, mod, @name, actual_superclass)
       else
-        @class_ptr = MrbInternal.mrb_define_class(@mrb, @name, actual_superclass)
+        @class_ptr = RbCore.rb_define_class(@rb, @name, actual_superclass)
       end
     end
 

@@ -58,7 +58,7 @@ module Anyolite
 
     macro type_in_ruby(type, context = nil)
       {% if type.stringify.includes?('|') %}
-        MrbInternal::MrbValue
+        Anyolite::RbCore::RbValue
       {% elsif type.is_a?(TypeDeclaration) %}
         Anyolite::Macro.type_in_ruby({{type.type}})
       {% elsif context %}
@@ -71,16 +71,16 @@ module Anyolite
     macro resolve_type_in_ruby(type, raw_type, context = nil)
       {% if type.resolve? %}
         {% if type.resolve <= Bool %}
-          MrbInternal::MrbBool
+          Anyolite::RbCore::RbBool
         {% elsif type.resolve <= Int %}
-          MrbInternal::MrbInt
+          Anyolite::RbCore::RbInt
         {% elsif type.resolve <= Float %}
-          MrbInternal::MrbFloat
+          Anyolite::RbCore::RbFloat
         {% elsif type.resolve <= String %}
           # Should actually never occur due to special handling before this function
           Pointer(LibC::Char)
         {% else %}
-          MrbInternal::MrbValue
+          Anyolite::RbCore::RbValue
         {% end %}
       {% elsif context %}
         {% if context.names[0..-2].size > 0 %}
@@ -96,7 +96,7 @@ module Anyolite
 
     macro pointer_type(type, context = nil)
       {% if type.stringify.includes?('|') %}
-        Pointer(MrbInternal::MrbValue)
+        Pointer(Anyolite::RbCore::RbValue)
       {% elsif type.is_a?(TypeDeclaration) %}
         Anyolite::Macro.pointer_type({{type.type}}, context: {{context}})
       {% elsif context %}
@@ -109,15 +109,15 @@ module Anyolite
     macro resolve_pointer_type(type, raw_type, context = nil)
       {% if type.resolve? %}
         {% if type.resolve <= Bool %}
-          Pointer(MrbInternal::MrbBool)
+          Pointer(Anyolite::RbCore::RbBool)
         {% elsif type.resolve <= Int %}
-          Pointer(MrbInternal::MrbInt)
+          Pointer(Anyolite::RbCore::RbInt)
         {% elsif type.resolve <= Float || type.resolve == Number %}
-          Pointer(MrbInternal::MrbFloat)
+          Pointer(Anyolite::RbCore::RbFloat)
         {% elsif type.resolve <= String %}
           Pointer(LibC::Char*)
         {% else %}
-          Pointer(MrbInternal::MrbValue)
+          Pointer(Anyolite::RbCore::RbValue)
         {% end %}
       {% elsif context %}
         {% if context.names[0..-2].size > 0 %}
@@ -131,7 +131,7 @@ module Anyolite
       {% end %}
     end
 
-    macro generate_arg_tuple(mrb, args, context = nil)
+    macro generate_arg_tuple(rb, args, context = nil)
       Tuple.new(
         {% if args %}
           {% for arg in args %}
@@ -139,7 +139,7 @@ module Anyolite
               {% if arg.value %}
                 {% if arg.type.stringify.includes?('|') %}
                   # This does work, but I'm a bit surprised
-                  Anyolite::Macro.pointer_type({{arg}}, context: {{context}}).malloc(size: 1, value: Anyolite::RbCast.return_value({{mrb}}, {{arg.value}})),
+                  Anyolite::Macro.pointer_type({{arg}}, context: {{context}}).malloc(size: 1, value: Anyolite::RbCast.return_value({{rb}}, {{arg.value}})),
                 {% elsif arg.type.resolve <= String %}
                   # The outer gods bless my wretched soul that this does neither segfault nor leak
                   Anyolite::Macro.pointer_type({{arg}}, context: {{context}}).malloc(size: 1, value: {{arg.value}}.to_unsafe),
@@ -157,15 +157,15 @@ module Anyolite
       )
     end
 
-    macro get_raw_args(mrb, regular_args, context = nil)
-      args = Anyolite::Macro.generate_arg_tuple({{mrb}}, {{regular_args}}, context: {{context}})
+    macro get_raw_args(rb, regular_args, context = nil)
+      args = Anyolite::Macro.generate_arg_tuple({{rb}}, {{regular_args}}, context: {{context}})
       format_string = Anyolite::Macro.format_string({{regular_args}}, context: {{context}})
-      MrbInternal.mrb_get_args({{mrb}}, format_string, *args)
+      Anyolite::RbCore.rb_get_args({{rb}}, format_string, *args)
       args
     end
 
     # Converts Ruby values to Crystal values
-    macro convert_arg(mrb, arg, arg_type, context = nil)
+    macro convert_arg(rb, arg, arg_type, context = nil)
       {% if arg_type.stringify.includes?("->") || arg_type.stringify.includes?(" Proc(") %}
         {% puts "\e[33m> INFO: Proc types are not allowed as arguments.\e[0m" %}
         raise "Proc types are not allowed as arguments ({{debug_information.id}})"
@@ -176,17 +176,17 @@ module Anyolite
         # This is kind of cheating, but hey, it does its job
         # ...
         # Please don't judge me
-        Anyolite::Macro.convert_keyword_arg({{mrb}}, {{arg}}, {{arg_type}}, context: {{context}})
+        Anyolite::Macro.convert_keyword_arg({{rb}}, {{arg}}, {{arg_type}}, context: {{context}})
       {% elsif arg_type.is_a?(TypeDeclaration) %}
-        Anyolite::Macro.convert_arg({{mrb}}, {{arg}}, {{arg_type.type}}, context: {{context}})
+        Anyolite::Macro.convert_arg({{rb}}, {{arg}}, {{arg_type.type}}, context: {{context}})
       {% elsif context %}
-        Anyolite::Macro.convert_resolved_arg({{mrb}}, {{arg}}, {{context}}::{{arg_type.stringify.starts_with?("::") ? arg_type.stringify[2..-1].id : arg_type}}, {{arg_type}}, {{context}})
+        Anyolite::Macro.convert_resolved_arg({{rb}}, {{arg}}, {{context}}::{{arg_type.stringify.starts_with?("::") ? arg_type.stringify[2..-1].id : arg_type}}, {{arg_type}}, {{context}})
       {% else %}
-        Anyolite::Macro.convert_resolved_arg({{mrb}}, {{arg}}, {{arg_type}}, {{arg_type}})
+        Anyolite::Macro.convert_resolved_arg({{rb}}, {{arg}}, {{arg_type}}, {{arg_type}})
       {% end %}
     end
 
-    macro convert_resolved_arg(mrb, arg, arg_type, raw_arg_type, context = nil)
+    macro convert_resolved_arg(rb, arg, arg_type, raw_arg_type, context = nil)
       {% if arg_type.resolve? %}
         {% if arg_type.resolve <= Bool %}
           ({{arg}} != 0)
@@ -203,23 +203,23 @@ module Anyolite
         {% elsif arg_type.resolve <= String %}
           {{arg_type}}.new({{arg}})
         {% elsif arg_type.resolve <= Struct %}
-          Anyolite::Macro.convert_from_ruby_struct({{mrb}}, {{arg}}, {{arg_type}}).value.content
+          Anyolite::Macro.convert_from_ruby_struct({{rb}}, {{arg}}, {{arg_type}}).value.content
         {% else %}
-          Anyolite::Macro.convert_from_ruby_object({{mrb}}, {{arg}}, {{arg_type}}).value
+          Anyolite::Macro.convert_from_ruby_object({{rb}}, {{arg}}, {{arg_type}}).value
         {% end %}
       {% elsif context %}
         {% if context.names[0..-2].size > 0 %}
           {% new_context = context.names[0..-2].join("::").gsub(/(\:\:)+/, "::").id %}
-          Anyolite::Macro.convert_resolved_arg({{mrb}}, {{arg}}, {{new_context}}::{{raw_arg_type.stringify.starts_with?("::") ? raw_arg_type.stringify[2..-1].id : raw_arg_type}}, {{raw_arg_type}}, {{new_context}})
+          Anyolite::Macro.convert_resolved_arg({{rb}}, {{arg}}, {{new_context}}::{{raw_arg_type.stringify.starts_with?("::") ? raw_arg_type.stringify[2..-1].id : raw_arg_type}}, {{raw_arg_type}}, {{new_context}})
         {% else %}
-          Anyolite::Macro.convert_resolved_arg({{mrb}}, {{arg}}, {{raw_arg_type}}, {{raw_arg_type}})
+          Anyolite::Macro.convert_resolved_arg({{rb}}, {{arg}}, {{raw_arg_type}}, {{raw_arg_type}})
         {% end %}
       {% else %}
         {% raise "Could not resolve #{arg_type}, which is a #{arg_type.class_name}, in any meaningful way" %}
       {% end %}
     end
 
-    macro convert_keyword_arg(mrb, arg, arg_type, context = nil, type_vars = nil, type_var_names = nil, debug_information = nil)
+    macro convert_keyword_arg(rb, arg, arg_type, context = nil, type_vars = nil, type_var_names = nil, debug_information = nil)
       # TODO: Is it possible to put the message somewhere else... or at least CATCH the exception?
       {% if arg_type.stringify.includes?("->") || arg_type.stringify.includes?(" Proc(") %}
         {% puts "\e[33m> INFO: Proc types are not allowed as arguments (#{debug_information.id}).\e[0m" %}
@@ -229,7 +229,7 @@ module Anyolite
         raise "Pointer types are not allowed as arguments ({{debug_information.id}})"
       {% elsif type_var_names && type_var_names.includes?(arg_type.type) %}
         {% type_var_names.each_with_index { |element, index| result = index if element == arg_type.type } %}
-        Anyolite::Macro.convert_keyword_arg({{mrb}}, {{arg}}, {{type_vars[result]}}, context: {{context}}, debug_information: {{debug_information}})
+        Anyolite::Macro.convert_keyword_arg({{rb}}, {{arg}}, {{type_vars[result]}}, context: {{context}}, debug_information: {{debug_information}})
       {% elsif type_var_names %}
         {% magical_regex = /([\(\s\:])([A-Z]+)([\),\s])/ %}
         {% replacement_arg_type = arg_type.type.stringify.gsub(magical_regex, "\\1\#\\2\#\\3") %}
@@ -260,7 +260,7 @@ module Anyolite
           {% final_type_def = "#{arg_type.var} : #{final_split_types.join("").id}" %}
         {% end %}
 
-        Anyolite::Macro.convert_keyword_arg({{mrb}}, {{arg}}, {{final_type_def.id}}, context: {{context}}, debug_information: {{debug_information}})
+        Anyolite::Macro.convert_keyword_arg({{rb}}, {{arg}}, {{final_type_def.id}}, context: {{context}}, debug_information: {{debug_information}})
       {% elsif arg_type.is_a?(Call) %}
         {% raise "Received Call #{arg_type} instead of TypeDeclaration or TypeNode" %}
       {% elsif arg_type.is_a?(TypeDeclaration) %}
@@ -269,7 +269,7 @@ module Anyolite
             {{arg_type.value}}
           {% else %}
             # Should only happen if no default value was given
-            MrbInternal.mrb_raise_argument_error({{mrb}}, "Undefined argument #{{{arg}}} of {{arg_type}} in context {{context}}")
+            Anyolite::RbCore.rb_raise_argument_error({{rb}}, "Undefined argument #{{{arg}}} of {{arg_type}} in context {{context}}")
             # Code should jump to somewhere else before this point, but we want to have a NoReturn type here
             raise("Should not be reached")
           {% end %}
@@ -278,88 +278,88 @@ module Anyolite
           # However, when a union type component moves out of its context, it is not resolvable by its own anymore
           # This then leads to problems, so it is better to test for '|' instead of using the resolve.union? method
           {% if arg_type.type.stringify.includes?('|') %}
-            Anyolite::Macro.convert_keyword_arg({{mrb}}, {{arg}}, Union({{arg_type.type}}), context: {{context}}, debug_information: {{debug_information}})
+            Anyolite::Macro.convert_keyword_arg({{rb}}, {{arg}}, Union({{arg_type.type}}), context: {{context}}, debug_information: {{debug_information}})
           {% else %}
-            Anyolite::Macro.convert_keyword_arg({{mrb}}, {{arg}}, {{arg_type.type}}, context: {{context}}, debug_information: {{debug_information}})
+            Anyolite::Macro.convert_keyword_arg({{rb}}, {{arg}}, {{arg_type.type}}, context: {{context}}, debug_information: {{debug_information}})
           {% end %}
         end
       {% elsif context && !arg_type.stringify.starts_with?("Union") %}
-        Anyolite::Macro.convert_resolved_keyword_arg({{mrb}}, {{arg}}, {{context}}::{{arg_type.stringify.starts_with?("::") ? arg_type.stringify[2..-1].id : arg_type}}, {{arg_type}}, context: {{context}}, debug_information: {{debug_information}})
+        Anyolite::Macro.convert_resolved_keyword_arg({{rb}}, {{arg}}, {{context}}::{{arg_type.stringify.starts_with?("::") ? arg_type.stringify[2..-1].id : arg_type}}, {{arg_type}}, context: {{context}}, debug_information: {{debug_information}})
       {% else %}
-        Anyolite::Macro.convert_resolved_keyword_arg({{mrb}}, {{arg}}, {{arg_type}}, {{arg_type}}, context: {{context}}, debug_information: {{debug_information}})
+        Anyolite::Macro.convert_resolved_keyword_arg({{rb}}, {{arg}}, {{arg_type}}, {{arg_type}}, context: {{context}}, debug_information: {{debug_information}})
       {% end %}
     end
 
-    macro convert_resolved_keyword_arg(mrb, arg, arg_type, raw_arg_type, context = nil, debug_information = nil)
+    macro convert_resolved_keyword_arg(rb, arg, arg_type, raw_arg_type, context = nil, debug_information = nil)
       {% if arg_type.stringify.includes?('|') %}
         # Same as above, this sadly needs some uncanny magic
-        Anyolite::Macro.cast_to_union_value({{mrb}}, {{arg}}, {{arg_type.stringify[6..-2].split('|').map { |x| x.id }}}, context: {{context}})
+        Anyolite::Macro.cast_to_union_value({{rb}}, {{arg}}, {{arg_type.stringify[6..-2].split('|').map { |x| x.id }}}, context: {{context}})
       {% elsif arg_type.resolve? %}
         {% if arg_type.resolve <= Nil %}
-          Anyolite::RbCast.cast_to_nil({{mrb}}, {{arg}})
+          Anyolite::RbCast.cast_to_nil({{rb}}, {{arg}})
         {% elsif arg_type.resolve <= Bool %}
-          Anyolite::RbCast.cast_to_bool({{mrb}}, {{arg}})
+          Anyolite::RbCast.cast_to_bool({{rb}}, {{arg}})
         {% elsif arg_type.resolve == Number %}
-          Float64.new(Anyolite::RbCast.cast_to_float({{mrb}}, {{arg}}))
+          Float64.new(Anyolite::RbCast.cast_to_float({{rb}}, {{arg}}))
         {% elsif arg_type.resolve == Int %}
-          Int64.new(Anyolite::RbCast.cast_to_int({{mrb}}, {{arg}}))
+          Int64.new(Anyolite::RbCast.cast_to_int({{rb}}, {{arg}}))
         {% elsif arg_type.resolve <= Int %}
-          {{arg_type}}.new(Anyolite::RbCast.cast_to_int({{mrb}}, {{arg}}))
+          {{arg_type}}.new(Anyolite::RbCast.cast_to_int({{rb}}, {{arg}}))
         {% elsif arg_type.resolve == Float %}
-          Float64.new(Anyolite::RbCast.cast_to_float({{mrb}}, {{arg}}))
+          Float64.new(Anyolite::RbCast.cast_to_float({{rb}}, {{arg}}))
         {% elsif arg_type.resolve <= Float %}
-          {{arg_type}}.new(Anyolite::RbCast.cast_to_float({{mrb}}, {{arg}}))
+          {{arg_type}}.new(Anyolite::RbCast.cast_to_float({{rb}}, {{arg}}))
         {% elsif arg_type.resolve <= String %}
-          Anyolite::RbCast.cast_to_string({{mrb}}, {{arg}})
+          Anyolite::RbCast.cast_to_string({{rb}}, {{arg}})
         {% elsif arg_type.resolve <= Struct %}
-          Anyolite::Macro.convert_from_ruby_struct({{mrb}}, {{arg}}, {{arg_type}}).value.content
+          Anyolite::Macro.convert_from_ruby_struct({{rb}}, {{arg}}, {{arg_type}}).value.content
         {% elsif arg_type.resolve? %}
-          Anyolite::Macro.convert_from_ruby_object({{mrb}}, {{arg}}, {{arg_type}}).value
+          Anyolite::Macro.convert_from_ruby_object({{rb}}, {{arg}}, {{arg_type}}).value
         {% else %}
           {% raise "Could not resolve type #{arg_type}, which is a #{arg_type.class_name.id} (#{debug_information.id})" %}
         {% end %}
       {% elsif context %}
         {% if context.names[0..-2].size > 0 %}
           {% new_context = context.names[0..-2].join("::").gsub(/(\:\:)+/, "::").id %}
-          Anyolite::Macro.convert_resolved_keyword_arg({{mrb}}, {{arg}}, {{new_context}}::{{raw_arg_type.stringify.starts_with?("::") ? raw_arg_type.stringify[2..-1].id : raw_arg_type}}, {{raw_arg_type}}, {{new_context}}, debug_information: {{debug_information}})
+          Anyolite::Macro.convert_resolved_keyword_arg({{rb}}, {{arg}}, {{new_context}}::{{raw_arg_type.stringify.starts_with?("::") ? raw_arg_type.stringify[2..-1].id : raw_arg_type}}, {{raw_arg_type}}, {{new_context}}, debug_information: {{debug_information}})
         {% else %}
-          Anyolite::Macro.convert_resolved_keyword_arg({{mrb}}, {{arg}}, {{raw_arg_type}}, {{raw_arg_type}}, debug_information: {{debug_information}})
+          Anyolite::Macro.convert_resolved_keyword_arg({{rb}}, {{arg}}, {{raw_arg_type}}, {{raw_arg_type}}, debug_information: {{debug_information}})
         {% end %}
       {% else %}
         {% raise "Could not resolve type #{arg_type}, which is a #{arg_type.class_name.id} (#{debug_information.id})" %}
       {% end %}
     end
 
-    macro cast_to_union_value(mrb, value, types, context = nil)
+    macro cast_to_union_value(rb, value, types, context = nil)
       final_value = :invalid
 
       {% for type in types %}
         {% if type.resolve? %}
-          Anyolite::Macro.check_and_cast_union_type({{mrb}}, {{value}}, {{type}}, {{type}}, context: {{context}})
+          Anyolite::Macro.check_and_cast_union_type({{rb}}, {{value}}, {{type}}, {{type}}, context: {{context}})
         {% elsif context %}
-          Anyolite::Macro.check_and_cast_union_type({{mrb}}, {{value}}, {{context}}::{{type.stringify.starts_with?("::") ? type.stringify[2..-1].id : type}}, {{type}}, context: {{context}})
+          Anyolite::Macro.check_and_cast_union_type({{rb}}, {{value}}, {{context}}::{{type.stringify.starts_with?("::") ? type.stringify[2..-1].id : type}}, {{type}}, context: {{context}})
         {% else %}
           {% raise "Could not resolve type #{type}, which is a #{type.class_name}, in context #{context}" %}
         {% end %}
       {% end %}
       
       if final_value.is_a?(Symbol)
-        MrbInternal.mrb_raise_argument_error({{mrb}}, "Could not determine any value for #{{{value}}} with types {{types}} in context {{context}}")
+        Anyolite::RbCore.rb_raise_argument_error({{rb}}, "Could not determine any value for #{{{value}}} with types {{types}} in context {{context}}")
         raise("Should not be reached")
       else
         final_value
       end
     end
 
-    macro check_and_cast_union_type(mrb, value, type, raw_type, context = nil)
+    macro check_and_cast_union_type(rb, value, type, raw_type, context = nil)
       {% if type.resolve? %}
-        Anyolite::Macro.check_and_cast_resolved_union_type({{mrb}}, {{value}}, {{type}}, {{type}})
+        Anyolite::Macro.check_and_cast_resolved_union_type({{rb}}, {{value}}, {{type}}, {{type}})
       {% elsif context %}
         {% if context.names[0..-2].size > 0 %}
           {% new_context = context.names[0..-2].join("::").gsub(/(\:\:)+/, "::").id %}
-          Anyolite::Macro.check_and_cast_resolved_union_type({{mrb}}, {{value}}, {{new_context}}::{{raw_type.stringify.starts_with?("::") ? raw_type[2..-1] : raw_type}}, {{raw_type}}, {{new_context}})
+          Anyolite::Macro.check_and_cast_resolved_union_type({{rb}}, {{value}}, {{new_context}}::{{raw_type.stringify.starts_with?("::") ? raw_type[2..-1] : raw_type}}, {{raw_type}}, {{new_context}})
         {% else %}
-          Anyolite::Macro.check_and_cast_resolved_union_type({{mrb}}, {{value}}, {{raw_type}}, {{raw_type}})
+          Anyolite::Macro.check_and_cast_resolved_union_type({{rb}}, {{value}}, {{raw_type}}, {{raw_type}})
         {% end %}
       {% else %}
         {% raise "Could not resolve type #{type}, which is a #{type.class_name}" %}
@@ -368,82 +368,82 @@ module Anyolite
 
     # TODO: Some double checks could be omitted
 
-    macro check_and_cast_resolved_union_type(mrb, value, type, raw_type, context = nil)
+    macro check_and_cast_resolved_union_type(rb, value, type, raw_type, context = nil)
       {% if type.resolve <= Nil %}
         if Anyolite::RbCast.check_for_nil({{value}})
-          final_value = Anyolite::RbCast.cast_to_nil({{mrb}}, {{value}})
+          final_value = Anyolite::RbCast.cast_to_nil({{rb}}, {{value}})
         end
       {% elsif type.resolve <= Bool %}
         if Anyolite::RbCast.check_for_bool({{value}})
-          final_value = Anyolite::RbCast.cast_to_bool({{mrb}}, {{value}})
+          final_value = Anyolite::RbCast.cast_to_bool({{rb}}, {{value}})
         end
       {% elsif type.resolve == Number %}
         if Anyolite::RbCast.check_for_float({{value}})
-          final_value = Float64.new(Anyolite::RbCast.cast_to_float({{mrb}}, {{value}}))
+          final_value = Float64.new(Anyolite::RbCast.cast_to_float({{rb}}, {{value}}))
         end
       {% elsif type.resolve == Int %}
         if Anyolite::RbCast.check_for_fixnum({{value}})
-          final_value = Int64.new(Anyolite::RbCast.cast_to_int({{mrb}}, {{value}}))
+          final_value = Int64.new(Anyolite::RbCast.cast_to_int({{rb}}, {{value}}))
         end
       {% elsif type.resolve <= Int %}
         if Anyolite::RbCast.check_for_fixnum({{value}})
-          final_value = {{type}}.new(Anyolite::RbCast.cast_to_int({{mrb}}, {{value}}))
+          final_value = {{type}}.new(Anyolite::RbCast.cast_to_int({{rb}}, {{value}}))
         end
       {% elsif type.resolve == Float %}
         if Anyolite::RbCast.check_for_float({{value}})
-          final_value = Float64.new(Anyolite::RbCast.cast_to_float({{mrb}}, {{value}}))
+          final_value = Float64.new(Anyolite::RbCast.cast_to_float({{rb}}, {{value}}))
         end
       {% elsif type.resolve <= Float %}
         if Anyolite::RbCast.check_for_float({{value}})
-          final_value = {{type}}.new(Anyolite::RbCast.cast_to_float({{mrb}}, {{value}}))
+          final_value = {{type}}.new(Anyolite::RbCast.cast_to_float({{rb}}, {{value}}))
         end
       {% elsif type.resolve <= String %}
         if Anyolite::RbCast.check_for_string({{value}})
-          final_value = Anyolite::RbCast.cast_to_string({{mrb}}, {{value}})
+          final_value = Anyolite::RbCast.cast_to_string({{rb}}, {{value}})
         end
       {% elsif type.resolve <= Struct %}
-        if Anyolite::RbCast.check_for_data({{value}}) && Anyolite::RbCast.check_custom_type({{mrb}}, {{value}}, {{type}})
-          final_value = Anyolite::Macro.convert_from_ruby_struct({{mrb}}, {{value}}, {{type}}).value.content
+        if Anyolite::RbCast.check_for_data({{value}}) && Anyolite::RbCast.check_custom_type({{rb}}, {{value}}, {{type}})
+          final_value = Anyolite::Macro.convert_from_ruby_struct({{rb}}, {{value}}, {{type}}).value.content
         end
       {% elsif type.resolve? %}
-        if Anyolite::RbCast.check_for_data({{value}}) && Anyolite::RbCast.check_custom_type({{mrb}}, {{value}}, {{type}})
-          final_value = Anyolite::Macro.convert_from_ruby_object({{mrb}}, {{value}}, {{type}}).value
+        if Anyolite::RbCast.check_for_data({{value}}) && Anyolite::RbCast.check_custom_type({{rb}}, {{value}}, {{type}})
+          final_value = Anyolite::Macro.convert_from_ruby_object({{rb}}, {{value}}, {{type}}).value
         end
       {% else %}
         {% raise "Could not resolve type #{type}, which is a #{type.class_name}" %}
       {% end %}
     end
 
-    macro convert_from_ruby_object(mrb, obj, crystal_type)
-      if !Anyolite::RbCast.check_custom_type({{mrb}}, {{obj}}, {{crystal_type}})
-        obj_class = MrbInternal.get_class_of_obj({{mrb}}, {{obj}})
-        MrbInternal.mrb_raise_argument_error({{mrb}}, "Invalid data type #{obj_class} for object #{{{obj}}}:\n Should be #{{{crystal_type}}} -> Anyolite::RbClassCache.get({{crystal_type}}) instead.")
+    macro convert_from_ruby_object(rb, obj, crystal_type)
+      if !Anyolite::RbCast.check_custom_type({{rb}}, {{obj}}, {{crystal_type}})
+        obj_class = Anyolite::RbCore.get_class_of_obj({{rb}}, {{obj}})
+        Anyolite::RbCore.rb_raise_argument_error({{rb}}, "Invalid data type #{obj_class} for object #{{{obj}}}:\n Should be #{{{crystal_type}}} -> Anyolite::RbClassCache.get({{crystal_type}}) instead.")
       end
 
-      ptr = MrbInternal.get_data_ptr({{obj}})
+      ptr = Anyolite::RbCore.get_data_ptr({{obj}})
       ptr.as({{crystal_type}}*)
     end
 
-    macro convert_from_ruby_struct(mrb, obj, crystal_type)
-      if !Anyolite::RbCast.check_custom_type({{mrb}}, {{obj}}, {{crystal_type}})
-        obj_class = MrbInternal.get_class_of_obj({{mrb}}, {{obj}})
-        MrbInternal.mrb_raise_argument_error({{mrb}}, "Invalid data type #{obj_class} for object #{{{obj}}}:\n Should be #{{{crystal_type}}} -> Anyolite::RbClassCache.get({{crystal_type}}) instead.")
+    macro convert_from_ruby_struct(rb, obj, crystal_type)
+      if !Anyolite::RbCast.check_custom_type({{rb}}, {{obj}}, {{crystal_type}})
+        obj_class = Anyolite::RbCore.get_class_of_obj({{rb}}, {{obj}})
+        Anyolite::RbCore.rb_raise_argument_error({{rb}}, "Invalid data type #{obj_class} for object #{{{obj}}}:\n Should be #{{{crystal_type}}} -> Anyolite::RbClassCache.get({{crystal_type}}) instead.")
       end
       
-      ptr = MrbInternal.get_data_ptr({{obj}})
+      ptr = Anyolite::RbCore.get_data_ptr({{obj}})
       ptr.as(Anyolite::StructWrapper({{crystal_type}})*)
     end
 
-    macro call_and_return(mrb, proc, regular_args, converted_args, operator = "")
+    macro call_and_return(rb, proc, regular_args, converted_args, operator = "")
       {% if proc.stringify == "Anyolite::Empty" %}
         return_value = {{operator.id}}(*{{converted_args}})
       {% else %}
         return_value = {{proc}}{{operator.id}}(*{{converted_args}})
       {% end %}
-      Anyolite::RbCast.return_value({{mrb}}, return_value)
+      Anyolite::RbCast.return_value({{rb}}, return_value)
     end
 
-    macro call_and_return_keyword_method(mrb, proc, converted_regular_args, keyword_args, kw_args, operator = "", 
+    macro call_and_return_keyword_method(rb, proc, converted_regular_args, keyword_args, kw_args, operator = "", 
       empty_regular = false, context = nil, type_vars = nil, type_var_names = nil)
 
       {% if proc.stringify == "Anyolite::Empty" %}
@@ -454,7 +454,7 @@ module Anyolite
         {% if empty_regular %}
           {% c = 0 %}
           {% for keyword in keyword_args %}
-            {{keyword.var.id}}: Anyolite::Macro.convert_keyword_arg({{mrb}}, {{kw_args}}.values[{{c}}], {{keyword}}, context: {{context}}, 
+            {{keyword.var.id}}: Anyolite::Macro.convert_keyword_arg({{rb}}, {{kw_args}}.values[{{c}}], {{keyword}}, context: {{context}}, 
               type_vars: {{type_vars}}, type_var_names: {{type_var_names}}, debug_information: {{proc.stringify + " - " + keyword_args.stringify}}),
             {% c += 1 %}
           {% end %}
@@ -462,17 +462,17 @@ module Anyolite
           *{{converted_regular_args}},
           {% c = 0 %}
           {% for keyword in keyword_args %}
-            {{keyword.var.id}}: Anyolite::Macro.convert_keyword_arg({{mrb}}, {{kw_args}}.values[{{c}}], {{keyword}}, context: {{context}}}, 
+            {{keyword.var.id}}: Anyolite::Macro.convert_keyword_arg({{rb}}, {{kw_args}}.values[{{c}}], {{keyword}}, context: {{context}}}, 
               type_vars: {{type_vars}}, type_var_names: {{type_var_names}}, debug_information: {{proc.stringify + " - " + keyword_args.stringify}}),
             {% c += 1 %}
           {% end %}
         {% end %}
       )
 
-      Anyolite::RbCast.return_value({{mrb}}, return_value)
+      Anyolite::RbCast.return_value({{rb}}, return_value)
     end
 
-    macro call_and_return_instance_method(mrb, proc, converted_obj, converted_args, operator = "")
+    macro call_and_return_instance_method(rb, proc, converted_obj, converted_args, operator = "")
       if {{converted_obj}}.is_a?(Anyolite::StructWrapper)
         working_content = {{converted_obj}}.content
 
@@ -490,10 +490,10 @@ module Anyolite
           return_value = {{converted_obj}}.{{proc}}{{operator.id}}(*{{converted_args}})
         {% end %}
       end
-      Anyolite::RbCast.return_value({{mrb}}, return_value)
+      Anyolite::RbCast.return_value({{rb}}, return_value)
     end
 
-    macro call_and_return_keyword_instance_method(mrb, proc, converted_obj, converted_regular_args, keyword_args, kw_args, operator = "",
+    macro call_and_return_keyword_instance_method(rb, proc, converted_obj, converted_regular_args, keyword_args, kw_args, operator = "",
                                                   empty_regular = false, context = nil, type_vars = nil, type_var_names = nil)
 
       if {{converted_obj}}.is_a?(Anyolite::StructWrapper)
@@ -507,7 +507,7 @@ module Anyolite
           {% if empty_regular %}
             {% c = 0 %}
             {% for keyword in keyword_args %}
-              {{keyword.var.id}}: Anyolite::Macro.convert_keyword_arg({{mrb}}, {{kw_args}}.values[{{c}}], {{keyword}}, context: {{context}}, 
+              {{keyword.var.id}}: Anyolite::Macro.convert_keyword_arg({{rb}}, {{kw_args}}.values[{{c}}], {{keyword}}, context: {{context}}, 
                 type_vars: {{type_vars}}, type_var_names: {{type_var_names}}, debug_information: {{proc.stringify + " - " + keyword_args.stringify}}),
               {% c += 1 %}
             {% end %}
@@ -515,7 +515,7 @@ module Anyolite
             *{{converted_regular_args}},
             {% c = 0 %}
             {% for keyword in keyword_args %}
-              {{keyword.var.id}}: Anyolite::Macro.convert_keyword_arg({{mrb}}, {{kw_args}}.values[{{c}}], {{keyword}}, context: {{context}},
+              {{keyword.var.id}}: Anyolite::Macro.convert_keyword_arg({{rb}}, {{kw_args}}.values[{{c}}], {{keyword}}, context: {{context}},
                 type_vars: {{type_vars}}, type_var_names: {{type_var_names}}, debug_information: {{proc.stringify + " - " + keyword_args.stringify}}),
               {% c += 1 %}
             {% end %}
@@ -533,7 +533,7 @@ module Anyolite
           {% if empty_regular %}
             {% c = 0 %}
             {% for keyword in keyword_args %}
-              {{keyword.var.id}}: Anyolite::Macro.convert_keyword_arg({{mrb}}, {{kw_args}}.values[{{c}}], {{keyword}}, context: {{context}},
+              {{keyword.var.id}}: Anyolite::Macro.convert_keyword_arg({{rb}}, {{kw_args}}.values[{{c}}], {{keyword}}, context: {{context}},
                 type_vars: {{type_vars}}, type_var_names: {{type_var_names}}, debug_information: {{proc.stringify + " - " + keyword_args.stringify}}),
               {% c += 1 %}
             {% end %}
@@ -541,7 +541,7 @@ module Anyolite
             *{{converted_regular_args}},
             {% c = 0 %}
             {% for keyword in keyword_args %}
-              {{keyword.var.id}}: Anyolite::Macro.convert_keyword_arg({{mrb}}, {{kw_args}}.values[{{c}}], {{keyword}}, context: {{context}},
+              {{keyword.var.id}}: Anyolite::Macro.convert_keyword_arg({{rb}}, {{kw_args}}.values[{{c}}], {{keyword}}, context: {{context}},
                 type_vars: {{type_vars}}, type_var_names: {{type_var_names}}, debug_information: {{proc.stringify + " - " + keyword_args.stringify}}),
               {% c += 1 %}
             {% end %}
@@ -550,34 +550,34 @@ module Anyolite
 
       end
 
-      Anyolite::RbCast.return_value({{mrb}}, return_value)
+      Anyolite::RbCast.return_value({{rb}}, return_value)
     end
 
-    macro convert_args(mrb, args, regular_args, context)
+    macro convert_args(rb, args, regular_args, context)
       Tuple.new(
         {% c = 0 %}
         {% if regular_args %}
           {% for arg in regular_args %}
-            Anyolite::Macro.convert_arg({{mrb}}, {{args}}[{{c}}].value, {{arg}}, context: {{context}}),
+            Anyolite::Macro.convert_arg({{rb}}, {{args}}[{{c}}].value, {{arg}}, context: {{context}}),
             {% c += 1 %}
           {% end %}
         {% end %}
       )
     end
 
-    macro get_converted_args(mrb, regular_args, context)
-      args = Anyolite::Macro.generate_arg_tuple({{mrb}}, {{regular_args}}, context: {{context}})
+    macro get_converted_args(rb, regular_args, context)
+      args = Anyolite::Macro.generate_arg_tuple({{rb}}, {{regular_args}}, context: {{context}})
       format_string = Anyolite::Macro.format_string({{regular_args}}, context: {{context}})
       
-      MrbInternal.mrb_get_args({{mrb}}, format_string, *args)
+      Anyolite::RbCore.rb_get_args({{rb}}, format_string, *args)
 
-      Anyolite::Macro.convert_args({{mrb}}, args, {{regular_args}}, context: {{context}})
+      Anyolite::Macro.convert_args({{rb}}, args, {{regular_args}}, context: {{context}})
     end
 
     macro allocate_constructed_object(crystal_class, obj, new_obj)
       # Call initializer method if available
-      if new_obj.responds_to?(:mrb_initialize)
-        new_obj.mrb_initialize(mrb)
+      if new_obj.responds_to?(:rb_initialize)
+        new_obj.rb_initialize(rb)
       end
 
       # Allocate memory so we do not lose this object
@@ -589,7 +589,7 @@ module Anyolite
         puts "> S: {{crystal_class}}: #{new_obj_ptr.value.inspect}" if Anyolite::RbRefTable.option_active?(:logging)
 
         destructor = Anyolite::RbTypeCache.destructor_method({{crystal_class}})
-        MrbInternal.set_data_ptr_and_type({{obj}}, new_obj_ptr, Anyolite::RbTypeCache.register({{crystal_class}}, destructor))
+        Anyolite::RbCore.set_data_ptr_and_type({{obj}}, new_obj_ptr, Anyolite::RbTypeCache.register({{crystal_class}}, destructor))
       else
         new_obj_ptr = Pointer({{crystal_class}}).malloc(size: 1, value: {{new_obj}})
         Anyolite::RbRefTable.add(Anyolite::RbRefTable.get_object_id(new_obj_ptr.value), new_obj_ptr.as(Void*))
@@ -597,30 +597,30 @@ module Anyolite
         puts "> C: {{crystal_class}}: #{new_obj_ptr.value.inspect}" if Anyolite::RbRefTable.option_active?(:logging)
 
         destructor = Anyolite::RbTypeCache.destructor_method({{crystal_class}})
-        MrbInternal.set_data_ptr_and_type({{obj}}, new_obj_ptr, Anyolite::RbTypeCache.register({{crystal_class}}, destructor))
+        Anyolite::RbCore.set_data_ptr_and_type({{obj}}, new_obj_ptr, Anyolite::RbTypeCache.register({{crystal_class}}, destructor))
       end
     end
 
-    macro generate_keyword_argument_struct(mrb_state, keyword_args)
-      kw_names = Anyolite::Macro.generate_keyword_names({{mrb_state}}, {{keyword_args}})
-      kw_args = MrbInternal::KWArgs.new
+    macro generate_keyword_argument_struct(rb_interpreter, keyword_args)
+      kw_names = Anyolite::Macro.generate_keyword_names({{rb_interpreter}}, {{keyword_args}})
+      kw_args = Anyolite::RbCore::KWArgs.new
       kw_args.num = {{keyword_args.size}}
-      kw_args.values = Pointer(MrbInternal::MrbValue).malloc(size: {{keyword_args.size}})
+      kw_args.values = Pointer(Anyolite::RbCore::RbValue).malloc(size: {{keyword_args.size}})
       kw_args.table = kw_names
       kw_args.required = {{keyword_args.select { |i| !i.var }.size}}
-      kw_args.rest = Pointer(MrbInternal::MrbValue).malloc(size: 1)
+      kw_args.rest = Pointer(Anyolite::RbCore::RbValue).malloc(size: 1)
       kw_args
     end
 
-    macro generate_keyword_names(mrb_state, keyword_args)
+    macro generate_keyword_names(rb_interpreter, keyword_args)
       [
         {% for keyword in keyword_args %}
-          MrbInternal.convert_to_mrb_sym({{mrb_state}}, {{keyword.var.stringify}}),
+          Anyolite::RbCore.convert_to_rb_sym({{rb_interpreter}}, {{keyword.var.stringify}}),
         {% end %}
       ]
     end
 
-    macro wrap_module_function_with_args(mrb_state, under_module, name, proc, regular_args = nil, context = nil)
+    macro wrap_module_function_with_args(rb_interpreter, under_module, name, proc, regular_args = nil, context = nil)
       {% if regular_args.is_a?(ArrayLiteral) %}
         {% regular_arg_array = regular_args %}
       {% elsif regular_args == nil %}
@@ -635,15 +635,15 @@ module Anyolite
 
       {% proc_arg_array = Anyolite::Macro.put_args_in_array(regular_args) %}
 
-      wrapped_method = MrbFunc.new do |mrb, obj|
-        converted_args = Anyolite::Macro.get_converted_args(mrb, {{proc_arg_array}}, context: {{context}})
-        Anyolite::Macro.call_and_return(mrb, {{proc}}, {{proc_arg_array}}, converted_args)
+      wrapped_method = Anyolite::RbCore::RbFunc.new do |rb, obj|
+        converted_args = Anyolite::Macro.get_converted_args(rb, {{proc_arg_array}}, context: {{context}})
+        Anyolite::Macro.call_and_return(rb, {{proc}}, {{proc_arg_array}}, converted_args)
       end
 
-      {{mrb_state}}.define_module_function({{name}}, Anyolite::RbClassCache.get({{under_module}}), wrapped_method)
+      {{rb_interpreter}}.define_module_function({{name}}, Anyolite::RbClassCache.get({{under_module}}), wrapped_method)
     end
 
-    macro wrap_module_function_with_keyword_args(mrb_state, under_module, name, proc, keyword_args, regular_args = nil, operator = "", context = nil)
+    macro wrap_module_function_with_keyword_args(rb_interpreter, under_module, name, proc, keyword_args, regular_args = nil, operator = "", context = nil)
       {% if regular_args.is_a?(ArrayLiteral) %}
         {% regular_arg_array = regular_args %}
       {% elsif regular_args == nil %}
@@ -652,26 +652,26 @@ module Anyolite
         {% regular_arg_array = [regular_args] %}
       {% end %}
 
-      wrapped_method = MrbFunc.new do |mrb, obj|
-        regular_arg_tuple = Anyolite::Macro.generate_arg_tuple({{mrb_state}}, {{regular_arg_array}}, context: {{context}})
+      wrapped_method = Anyolite::RbCore::RbFunc.new do |rb, obj|
+        regular_arg_tuple = Anyolite::Macro.generate_arg_tuple({{rb_interpreter}}, {{regular_arg_array}}, context: {{context}})
         format_string = Anyolite::Macro.format_string({{regular_arg_array}}, context: {{context}}) + ":"
 
-        kw_args = Anyolite::Macro.generate_keyword_argument_struct({{mrb_state}}, {{keyword_args}})
-        MrbInternal.mrb_get_args(mrb, format_string, *regular_arg_tuple, pointerof(kw_args))
+        kw_args = Anyolite::Macro.generate_keyword_argument_struct({{rb_interpreter}}, {{keyword_args}})
+        Anyolite::RbCore.rb_get_args(rb, format_string, *regular_arg_tuple, pointerof(kw_args))
 
-        converted_regular_args = Anyolite::Macro.convert_args(mrb, regular_arg_tuple, {{regular_arg_array}}, context: {{context}})
+        converted_regular_args = Anyolite::Macro.convert_args(rb, regular_arg_tuple, {{regular_arg_array}}, context: {{context}})
 
         {% if !regular_arg_array || regular_arg_array.size == 0 %}
-          Anyolite::Macro.call_and_return_keyword_method(mrb, {{proc}}, converted_regular_args, {{keyword_args}}, kw_args, operator: {{operator}}, empty_regular: true, context: {{context}})
+          Anyolite::Macro.call_and_return_keyword_method(rb, {{proc}}, converted_regular_args, {{keyword_args}}, kw_args, operator: {{operator}}, empty_regular: true, context: {{context}})
         {% else %}
-          Anyolite::Macro.call_and_return_keyword_method(mrb, {{proc}}, converted_regular_args, {{keyword_args}}, kw_args, operator: {{operator}}, context: {{context}})
+          Anyolite::Macro.call_and_return_keyword_method(rb, {{proc}}, converted_regular_args, {{keyword_args}}, kw_args, operator: {{operator}}, context: {{context}})
         {% end %}
       end
 
-      {{mrb_state}}.define_module_function({{name}}, Anyolite::RbClassCache.get({{under_module}}), wrapped_method)
+      {{rb_interpreter}}.define_module_function({{name}}, Anyolite::RbClassCache.get({{under_module}}), wrapped_method)
     end
 
-    macro wrap_class_method_with_args(mrb_state, crystal_class, name, proc, regular_args = nil, operator = "", context = nil)
+    macro wrap_class_method_with_args(rb_interpreter, crystal_class, name, proc, regular_args = nil, operator = "", context = nil)
       {% if regular_args.is_a?(ArrayLiteral) %}
         {% regular_arg_array = regular_args %}
       {% elsif regular_args == nil %}
@@ -684,15 +684,15 @@ module Anyolite
       {% type_var_names_annotation = crystal_class.resolve.annotation(Anyolite::SpecifyGenericTypes) %}
       {% type_var_names = type_var_names_annotation ? type_var_names_annotation[0] : nil %}
 
-      wrapped_method = MrbFunc.new do |mrb, obj|
-        converted_args = Anyolite::Macro.get_converted_args(mrb, {{regular_arg_array}}, context: {{context}})
-        Anyolite::Macro.call_and_return(mrb, {{proc}}, {{regular_arg_array}}, converted_args, operator: {{operator}})
+      wrapped_method = Anyolite::RbCore::RbFunc.new do |rb, obj|
+        converted_args = Anyolite::Macro.get_converted_args(rb, {{regular_arg_array}}, context: {{context}})
+        Anyolite::Macro.call_and_return(rb, {{proc}}, {{regular_arg_array}}, converted_args, operator: {{operator}})
       end
       
-      {{mrb_state}}.define_class_method({{name}}, Anyolite::RbClassCache.get({{crystal_class}}), wrapped_method)
+      {{rb_interpreter}}.define_class_method({{name}}, Anyolite::RbClassCache.get({{crystal_class}}), wrapped_method)
     end
 
-    macro wrap_class_method_with_keyword_args(mrb_state, crystal_class, name, proc, keyword_args, regular_args = nil, operator = "", context = nil)
+    macro wrap_class_method_with_keyword_args(rb_interpreter, crystal_class, name, proc, keyword_args, regular_args = nil, operator = "", context = nil)
       {% if regular_args.is_a?(ArrayLiteral) %}
         {% regular_arg_array = regular_args %}
       {% elsif regular_args == nil %}
@@ -705,28 +705,28 @@ module Anyolite
       {% type_var_names_annotation = crystal_class.resolve.annotation(Anyolite::SpecifyGenericTypes) %}
       {% type_var_names = type_var_names_annotation ? type_var_names_annotation[0] : nil %}
 
-      wrapped_method = MrbFunc.new do |mrb, obj|
-        regular_arg_tuple = Anyolite::Macro.generate_arg_tuple({{mrb_state}}, {{regular_arg_array}}, context: {{context}})
+      wrapped_method = Anyolite::RbCore::RbFunc.new do |rb, obj|
+        regular_arg_tuple = Anyolite::Macro.generate_arg_tuple({{rb_interpreter}}, {{regular_arg_array}}, context: {{context}})
         format_string = Anyolite::Macro.format_string({{regular_arg_array}}, context: {{context}}) + ":"
 
-        kw_args = Anyolite::Macro.generate_keyword_argument_struct({{mrb_state}}, {{keyword_args}})
-        MrbInternal.mrb_get_args(mrb, format_string, *regular_arg_tuple, pointerof(kw_args))
+        kw_args = Anyolite::Macro.generate_keyword_argument_struct({{rb_interpreter}}, {{keyword_args}})
+        Anyolite::RbCore.rb_get_args(rb, format_string, *regular_arg_tuple, pointerof(kw_args))
 
-        converted_regular_args = Anyolite::Macro.convert_args(mrb, regular_arg_tuple, {{regular_arg_array}}, context: {{context}})
+        converted_regular_args = Anyolite::Macro.convert_args(rb, regular_arg_tuple, {{regular_arg_array}}, context: {{context}})
 
         {% if !regular_arg_array || regular_arg_array.size == 0 %}
-          Anyolite::Macro.call_and_return_keyword_method(mrb, {{proc}}, converted_regular_args, {{keyword_args}}, kw_args, operator: {{operator}}, 
+          Anyolite::Macro.call_and_return_keyword_method(rb, {{proc}}, converted_regular_args, {{keyword_args}}, kw_args, operator: {{operator}}, 
             empty_regular: true, context: {{context}}, type_vars: {{type_vars}}, type_var_names: {{type_var_names}})
         {% else %}
-          Anyolite::Macro.call_and_return_keyword_method(mrb, {{proc}}, converted_regular_args, {{keyword_args}}, kw_args, operator: {{operator}}, 
+          Anyolite::Macro.call_and_return_keyword_method(rb, {{proc}}, converted_regular_args, {{keyword_args}}, kw_args, operator: {{operator}}, 
             context: {{context}}, type_vars: {{type_vars}}, type_var_names: {{type_var_names}})
         {% end %}
       end
 
-      {{mrb_state}}.define_class_method({{name}}, Anyolite::RbClassCache.get({{crystal_class}}), wrapped_method)
+      {{rb_interpreter}}.define_class_method({{name}}, Anyolite::RbClassCache.get({{crystal_class}}), wrapped_method)
     end
 
-    macro wrap_instance_function_with_args(mrb_state, crystal_class, name, proc, regular_args = nil, operator = "", context = nil)
+    macro wrap_instance_function_with_args(rb_interpreter, crystal_class, name, proc, regular_args = nil, operator = "", context = nil)
       {% if regular_args.is_a?(ArrayLiteral) %}
         {% regular_arg_array = regular_args %}
       {% elsif regular_args == nil %}
@@ -739,22 +739,22 @@ module Anyolite
       {% type_var_names_annotation = crystal_class.resolve.annotation(Anyolite::SpecifyGenericTypes) %}
       {% type_var_names = type_var_names_annotation ? type_var_names_annotation[0] : nil %}
 
-      wrapped_method = MrbFunc.new do |mrb, obj|
-        converted_args = Anyolite::Macro.get_converted_args(mrb, {{regular_arg_array}}, context: {{context}})
+      wrapped_method = Anyolite::RbCore::RbFunc.new do |rb, obj|
+        converted_args = Anyolite::Macro.get_converted_args(rb, {{regular_arg_array}}, context: {{context}})
 
         if {{crystal_class}} <= Struct
-          converted_obj = Anyolite::Macro.convert_from_ruby_struct(mrb, obj, {{crystal_class}}).value
+          converted_obj = Anyolite::Macro.convert_from_ruby_struct(rb, obj, {{crystal_class}}).value
         else
-          converted_obj = Anyolite::Macro.convert_from_ruby_object(mrb, obj, {{crystal_class}}).value
+          converted_obj = Anyolite::Macro.convert_from_ruby_object(rb, obj, {{crystal_class}}).value
         end
 
-        Anyolite::Macro.call_and_return_instance_method(mrb, {{proc}}, converted_obj, converted_args, operator: {{operator}})
+        Anyolite::Macro.call_and_return_instance_method(rb, {{proc}}, converted_obj, converted_args, operator: {{operator}})
       end
 
-      {{mrb_state}}.define_method({{name}}, Anyolite::RbClassCache.get({{crystal_class}}), wrapped_method)
+      {{rb_interpreter}}.define_method({{name}}, Anyolite::RbClassCache.get({{crystal_class}}), wrapped_method)
     end
 
-    macro wrap_instance_function_with_keyword_args(mrb_state, crystal_class, name, proc, keyword_args, regular_args = nil, operator = "", context = nil)
+    macro wrap_instance_function_with_keyword_args(rb_interpreter, crystal_class, name, proc, keyword_args, regular_args = nil, operator = "", context = nil)
       {% if regular_args.is_a?(ArrayLiteral) %}
         {% regular_arg_array = regular_args %}
       {% elsif regular_args == nil %}
@@ -767,34 +767,34 @@ module Anyolite
       {% type_var_names_annotation = crystal_class.resolve.annotation(Anyolite::SpecifyGenericTypes) %}
       {% type_var_names = type_var_names_annotation ? type_var_names_annotation[0] : nil %}
 
-      wrapped_method = MrbFunc.new do |mrb, obj|
-        regular_arg_tuple = Anyolite::Macro.generate_arg_tuple({{mrb_state}}, {{regular_arg_array}}, context: {{context}})
+      wrapped_method = Anyolite::RbCore::RbFunc.new do |rb, obj|
+        regular_arg_tuple = Anyolite::Macro.generate_arg_tuple({{rb_interpreter}}, {{regular_arg_array}}, context: {{context}})
         format_string = Anyolite::Macro.format_string({{regular_arg_array}}, context: {{context}}) + ":"
 
-        kw_args = Anyolite::Macro.generate_keyword_argument_struct({{mrb_state}}, {{keyword_args}})
-        MrbInternal.mrb_get_args(mrb, format_string, *regular_arg_tuple, pointerof(kw_args))
+        kw_args = Anyolite::Macro.generate_keyword_argument_struct({{rb_interpreter}}, {{keyword_args}})
+        Anyolite::RbCore.rb_get_args(rb, format_string, *regular_arg_tuple, pointerof(kw_args))
 
-        converted_regular_args = Anyolite::Macro.convert_args(mrb, regular_arg_tuple, {{regular_arg_array}}, context: {{context}})
+        converted_regular_args = Anyolite::Macro.convert_args(rb, regular_arg_tuple, {{regular_arg_array}}, context: {{context}})
 
         if {{crystal_class}} <= Struct
-          converted_obj = Anyolite::Macro.convert_from_ruby_struct(mrb, obj, {{crystal_class}}).value
+          converted_obj = Anyolite::Macro.convert_from_ruby_struct(rb, obj, {{crystal_class}}).value
         else
-          converted_obj = Anyolite::Macro.convert_from_ruby_object(mrb, obj, {{crystal_class}}).value
+          converted_obj = Anyolite::Macro.convert_from_ruby_object(rb, obj, {{crystal_class}}).value
         end
 
         {% if !regular_arg_array || regular_arg_array.size == 0 %}
-          Anyolite::Macro.call_and_return_keyword_instance_method(mrb, {{proc}}, converted_obj, converted_regular_args, {{keyword_args}}, kw_args, operator: {{operator}}, 
+          Anyolite::Macro.call_and_return_keyword_instance_method(rb, {{proc}}, converted_obj, converted_regular_args, {{keyword_args}}, kw_args, operator: {{operator}}, 
             empty_regular: true, context: {{context}}, type_vars: {{type_vars}}, type_var_names: {{type_var_names}})
         {% else %}
-          Anyolite::Macro.call_and_return_keyword_instance_method(mrb, {{proc}}, converted_obj, converted_regular_args, {{keyword_args}}, kw_args, operator: {{operator}}, 
+          Anyolite::Macro.call_and_return_keyword_instance_method(rb, {{proc}}, converted_obj, converted_regular_args, {{keyword_args}}, kw_args, operator: {{operator}}, 
             context: {{context}}, type_vars: {{type_vars}}, type_var_names: {{type_var_names}})
         {% end %}
       end
 
-      {{mrb_state}}.define_method({{name}}, Anyolite::RbClassCache.get({{crystal_class}}), wrapped_method)
+      {{rb_interpreter}}.define_method({{name}}, Anyolite::RbClassCache.get({{crystal_class}}), wrapped_method)
     end
 
-    macro wrap_constructor_function_with_args(mrb_state, crystal_class, proc, regular_args = nil, operator = "", context = nil)
+    macro wrap_constructor_function_with_args(rb_interpreter, crystal_class, proc, regular_args = nil, operator = "", context = nil)
       {% if regular_args.is_a?(ArrayLiteral) %}
         {% regular_arg_array = regular_args %}
       {% elsif regular_args == nil %}
@@ -807,18 +807,18 @@ module Anyolite
       {% type_var_names_annotation = crystal_class.resolve.annotation(Anyolite::SpecifyGenericTypes) %}
       {% type_var_names = type_var_names_annotation ? type_var_names_annotation[0] : nil %}
 
-      wrapped_method = MrbFunc.new do |mrb, obj|
-        converted_args = Anyolite::Macro.get_converted_args(mrb, {{regular_arg_array}}, context: {{context}})
+      wrapped_method = Anyolite::RbCore::RbFunc.new do |rb, obj|
+        converted_args = Anyolite::Macro.get_converted_args(rb, {{regular_arg_array}}, context: {{context}})
         new_obj = {{proc}}{{operator.id}}(*converted_args)
 
         Anyolite::Macro.allocate_constructed_object({{crystal_class}}, obj, new_obj)
         obj
       end
 
-      {{mrb_state}}.define_method("initialize", Anyolite::RbClassCache.get({{crystal_class}}), wrapped_method)
+      {{rb_interpreter}}.define_method("initialize", Anyolite::RbClassCache.get({{crystal_class}}), wrapped_method)
     end
 
-    macro wrap_constructor_function_with_keyword_args(mrb_state, crystal_class, proc, keyword_args, regular_args = nil, operator = "", context = nil)
+    macro wrap_constructor_function_with_keyword_args(rb_interpreter, crystal_class, proc, keyword_args, regular_args = nil, operator = "", context = nil)
       {% if regular_args.is_a?(ArrayLiteral) %}
         {% regular_arg_array = regular_args %}
       {% elsif regular_args == nil %}
@@ -831,20 +831,20 @@ module Anyolite
       {% type_var_names_annotation = crystal_class.resolve.annotation(Anyolite::SpecifyGenericTypes) %}
       {% type_var_names = type_var_names_annotation ? type_var_names_annotation[0] : nil %}
 
-      wrapped_method = MrbFunc.new do |mrb, obj|
-        regular_arg_tuple = Anyolite::Macro.generate_arg_tuple({{mrb_state}}, {{regular_arg_array}}, context: {{context}})
+      wrapped_method = Anyolite::RbCore::RbFunc.new do |rb, obj|
+        regular_arg_tuple = Anyolite::Macro.generate_arg_tuple({{rb_interpreter}}, {{regular_arg_array}}, context: {{context}})
         format_string = Anyolite::Macro.format_string({{regular_arg_array}}, context: {{context}}) + ":"
 
-        kw_args = Anyolite::Macro.generate_keyword_argument_struct({{mrb_state}}, {{keyword_args}})
-        MrbInternal.mrb_get_args(mrb, format_string, *regular_arg_tuple, pointerof(kw_args))
+        kw_args = Anyolite::Macro.generate_keyword_argument_struct({{rb_interpreter}}, {{keyword_args}})
+        Anyolite::RbCore.rb_get_args(rb, format_string, *regular_arg_tuple, pointerof(kw_args))
 
-        converted_regular_args = Anyolite::Macro.convert_args(mrb, regular_arg_tuple, {{regular_arg_array}}, context: {{context}})
+        converted_regular_args = Anyolite::Macro.convert_args(rb, regular_arg_tuple, {{regular_arg_array}}, context: {{context}})
 
         {% if !regular_arg_array || regular_arg_array.size == 0 %}
           new_obj = {{proc}}{{operator.id}}(
             {% c = 0 %}
             {% for keyword in keyword_args %}
-              {{keyword.var.id}}: Anyolite::Macro.convert_keyword_arg(mrb, kw_args.values[{{c}}], {{keyword}}, context: {{context}}, 
+              {{keyword.var.id}}: Anyolite::Macro.convert_keyword_arg(rb, kw_args.values[{{c}}], {{keyword}}, context: {{context}}, 
                 type_vars: {{type_vars}}, type_var_names: {{type_var_names}}, debug_information: {{proc.stringify + " - " + keyword_args.stringify}}),
               {% c += 1 %}
             {% end %}
@@ -853,7 +853,7 @@ module Anyolite
           new_obj = {{proc}}{{operator.id}}(*converted_regular_args,
             {% c = 0 %}
             {% for keyword in keyword_args %}
-              {{keyword.var.id}}: Anyolite::Macro.convert_keyword_arg(mrb, kw_args.values[{{c}}], {{keyword}}, context: {{context}}, 
+              {{keyword.var.id}}: Anyolite::Macro.convert_keyword_arg(rb, kw_args.values[{{c}}], {{keyword}}, context: {{context}}, 
                 type_vars: {{type_vars}}, type_var_names: {{type_var_names}}, debug_information: {{proc.stringify + " - " + keyword_args.stringify}}),
               {% c += 1 %}
             {% end %}
@@ -864,10 +864,10 @@ module Anyolite
         obj
       end
 
-      {{mrb_state}}.define_method("initialize", Anyolite::RbClassCache.get({{crystal_class}}), wrapped_method)
+      {{rb_interpreter}}.define_method("initialize", Anyolite::RbClassCache.get({{crystal_class}}), wrapped_method)
     end
 
-    macro wrap_method_index(mrb_state, crystal_class, method_index, ruby_name,
+    macro wrap_method_index(rb_interpreter, crystal_class, method_index, ruby_name,
                             is_constructor = false, is_class_method = false,
                             operator = "", cut_name = nil,
                             without_keywords = false, added_keyword_args = nil,
@@ -909,11 +909,11 @@ module Anyolite
 
       {% if final_arg_array.empty? %}
         {% if is_class_method %}
-          Anyolite.wrap_class_method({{mrb_state}}, {{crystal_class}}, {{ruby_name}}, {{final_method_name}}, operator: {{final_operator}}, context: {{context}})
+          Anyolite.wrap_class_method({{rb_interpreter}}, {{crystal_class}}, {{ruby_name}}, {{final_method_name}}, operator: {{final_operator}}, context: {{context}})
         {% elsif is_constructor %}
-          Anyolite.wrap_constructor({{mrb_state}}, {{crystal_class}}, context: {{context}})
+          Anyolite.wrap_constructor({{rb_interpreter}}, {{crystal_class}}, context: {{context}})
         {% else %}
-          Anyolite.wrap_instance_method({{mrb_state}}, {{crystal_class}}, {{ruby_name}}, {{final_method_name}}, operator: {{final_operator}}, context: {{context}})
+          Anyolite.wrap_instance_method({{rb_interpreter}}, {{crystal_class}}, {{ruby_name}}, {{final_method_name}}, operator: {{final_operator}}, context: {{context}})
         {% end %}
 
       # A complicated check, but it is more stable than simply checking for colons
@@ -932,36 +932,36 @@ module Anyolite
 
           {% if keyword_arg_partition %}
             {% if is_class_method %}
-              Anyolite.wrap_class_method_with_keywords({{mrb_state}}, {{crystal_class}}, {{ruby_name}}, {{final_method_name}}, 
+              Anyolite.wrap_class_method_with_keywords({{rb_interpreter}}, {{crystal_class}}, {{ruby_name}}, {{final_method_name}}, 
                 {{keyword_arg_partition}}, regular_args: {{regular_arg_partition}}, operator: {{final_operator}}, context: {{context}})
             {% elsif is_constructor %}
-              Anyolite.wrap_constructor_with_keywords({{mrb_state}}, {{crystal_class}}, 
+              Anyolite.wrap_constructor_with_keywords({{rb_interpreter}}, {{crystal_class}}, 
                 {{keyword_arg_partition}}, regular_args: {{regular_arg_partition}}, operator: {{final_operator}}, context: {{context}})
             {% else %}
-              Anyolite.wrap_instance_method_with_keywords({{mrb_state}}, {{crystal_class}}, {{ruby_name}}, {{final_method_name}}, 
+              Anyolite.wrap_instance_method_with_keywords({{rb_interpreter}}, {{crystal_class}}, {{ruby_name}}, {{final_method_name}}, 
                 {{keyword_arg_partition}}, regular_args: {{regular_arg_partition}}, operator: {{final_operator}}, context: {{context}})
             {% end %}
           {% else %}
             {% if is_class_method %}
-              Anyolite.wrap_class_method({{mrb_state}}, {{crystal_class}}, {{ruby_name}}, {{final_method_name}}, 
+              Anyolite.wrap_class_method({{rb_interpreter}}, {{crystal_class}}, {{ruby_name}}, {{final_method_name}}, 
                 {{regular_arg_partition}}, operator: {{final_operator}}, context: {{context}})
             {% elsif is_constructor %}
-              Anyolite.wrap_constructor({{mrb_state}}, {{crystal_class}}, 
+              Anyolite.wrap_constructor({{rb_interpreter}}, {{crystal_class}}, 
                 {{regular_arg_partition}}, operator: {{final_operator}}, context: {{context}})
             {% else %}
-              Anyolite.wrap_instance_method({{mrb_state}}, {{crystal_class}}, {{ruby_name}}, {{final_method_name}}, 
+              Anyolite.wrap_instance_method({{rb_interpreter}}, {{crystal_class}}, {{ruby_name}}, {{final_method_name}}, 
                 {{regular_arg_partition}}, operator: {{final_operator}}, context: {{context}})
             {% end %}
           {% end %}
         {% else %}
           {% if is_class_method %}
-            Anyolite.wrap_class_method_with_keywords({{mrb_state}}, {{crystal_class}}, {{ruby_name}}, {{final_method_name}}, 
+            Anyolite.wrap_class_method_with_keywords({{rb_interpreter}}, {{crystal_class}}, {{ruby_name}}, {{final_method_name}}, 
               {{final_arg_array}}, operator: {{final_operator}}, context: {{context}})
           {% elsif is_constructor %}
-            Anyolite.wrap_constructor_with_keywords({{mrb_state}}, {{crystal_class}}, 
+            Anyolite.wrap_constructor_with_keywords({{rb_interpreter}}, {{crystal_class}}, 
               {{final_arg_array}}, operator: {{final_operator}}, context: {{context}})
           {% else %}
-            Anyolite.wrap_instance_method_with_keywords({{mrb_state}}, {{crystal_class}}, {{ruby_name}}, {{final_method_name}}, 
+            Anyolite.wrap_instance_method_with_keywords({{rb_interpreter}}, {{crystal_class}}, {{ruby_name}}, {{final_method_name}}, 
               {{final_arg_array}}, operator: {{final_operator}}, context: {{context}})
           {% end %}
         {% end %}
@@ -975,7 +975,7 @@ module Anyolite
       {% end %}
     end
 
-    macro wrap_all_instance_methods(mrb_state, crystal_class, exclusions, verbose, context = nil, use_enum_constructor = false)
+    macro wrap_all_instance_methods(rb_interpreter, crystal_class, exclusions, verbose, context = nil, use_enum_constructor = false)
       {% has_specialized_method = {} of String => Bool %}
 
       {% for method in crystal_class.resolve.methods %}
@@ -1037,8 +1037,8 @@ module Anyolite
         # Ignore private and protected methods (can't be called from outside, they'd need to be wrapped for this to work)
         {% if method.visibility != :public && method.name != "initialize" %}
           {% puts "--> Excluding #{crystal_class}::#{method.name} (Exclusion due to visibility)" if verbose %}
-        # Ignore mrb hooks, to_unsafe and finalize (unless specialized, but this is not recommended)
-        {% elsif (method.name.starts_with?("mrb_") || method.name == "finalize" || method.name == "to_unsafe") && !has_specialized_method[method.name.stringify] %}
+        # Ignore rb hooks, to_unsafe and finalize (unless specialized, but this is not recommended)
+        {% elsif (method.name.starts_with?("rb_") || method.name == "finalize" || method.name == "to_unsafe") && !has_specialized_method[method.name.stringify] %}
           {% puts "--> Excluding #{crystal_class}::#{method.name} (Exclusion by default)" if verbose %}
         # Exclude methods if given as arguments
         {% elsif exclusions.includes?(method.name.symbolize) || exclusions.includes?(method.name.stringify) %}
@@ -1054,15 +1054,15 @@ module Anyolite
         {% elsif method.name[-1..-1] =~ /\W/ %}
           {% operator = ruby_name %}
 
-          Anyolite::Macro.wrap_method_index({{mrb_state}}, {{crystal_class}}, {{index}}, "{{ruby_name}}", operator: "{{operator}}", without_keywords: -1, context: {{context}})
+          Anyolite::Macro.wrap_method_index({{rb_interpreter}}, {{crystal_class}}, {{index}}, "{{ruby_name}}", operator: "{{operator}}", without_keywords: -1, context: {{context}})
           {% how_many_times_wrapped[ruby_name.stringify] = how_many_times_wrapped[ruby_name.stringify] ? how_many_times_wrapped[ruby_name.stringify] + 1 : 1 %}
         # Handle constructors
         {% elsif method.name == "initialize" && use_enum_constructor == false %}
-          Anyolite::Macro.wrap_method_index({{mrb_state}}, {{crystal_class}}, {{index}}, "{{ruby_name}}", is_constructor: true, without_keywords: {{without_keywords}}, added_keyword_args: {{added_keyword_args}}, context: {{context}})
+          Anyolite::Macro.wrap_method_index({{rb_interpreter}}, {{crystal_class}}, {{index}}, "{{ruby_name}}", is_constructor: true, without_keywords: {{without_keywords}}, added_keyword_args: {{added_keyword_args}}, context: {{context}})
           {% how_many_times_wrapped[ruby_name.stringify] = how_many_times_wrapped[ruby_name.stringify] ? how_many_times_wrapped[ruby_name.stringify] + 1 : 1 %}
         # Handle other instance methods
         {% else %}
-          Anyolite::Macro.wrap_method_index({{mrb_state}}, {{crystal_class}}, {{index}}, "{{ruby_name}}", without_keywords: {{without_keywords}}, added_keyword_args: {{added_keyword_args}}, context: {{context}})
+          Anyolite::Macro.wrap_method_index({{rb_interpreter}}, {{crystal_class}}, {{index}}, "{{ruby_name}}", without_keywords: {{without_keywords}}, added_keyword_args: {{added_keyword_args}}, context: {{context}})
           {% how_many_times_wrapped[ruby_name.stringify] = how_many_times_wrapped[ruby_name.stringify] ? how_many_times_wrapped[ruby_name.stringify] + 1 : 1 %}
         {% end %}
 
@@ -1075,23 +1075,23 @@ module Anyolite
       # Make sure to add a default constructor if none was specified with Crystal
 
       {% if !how_many_times_wrapped["initialize"] && !use_enum_constructor %}
-        Anyolite::Macro.add_default_constructor({{mrb_state}}, {{crystal_class}}, {{verbose}})
+        Anyolite::Macro.add_default_constructor({{rb_interpreter}}, {{crystal_class}}, {{verbose}})
       {% elsif !how_many_times_wrapped["initialize"] && use_enum_constructor %}
-        Anyolite::Macro.add_enum_constructor({{mrb_state}}, {{crystal_class}}, {{verbose}})
+        Anyolite::Macro.add_enum_constructor({{rb_interpreter}}, {{crystal_class}}, {{verbose}})
       {% end %}
     end
 
-    macro add_default_constructor(mrb_state, crystal_class, verbose)
+    macro add_default_constructor(rb_interpreter, crystal_class, verbose)
       {% puts "> Adding constructor for #{crystal_class}\n\n" if verbose %}
-      Anyolite.wrap_constructor({{mrb_state}}, {{crystal_class}})
+      Anyolite.wrap_constructor({{rb_interpreter}}, {{crystal_class}})
     end
 
-    macro add_enum_constructor(mrb_state, crystal_class, verbose)
+    macro add_enum_constructor(rb_interpreter, crystal_class, verbose)
       {% puts "> Adding enum constructor for #{crystal_class}\n\n" if verbose %}
-      Anyolite.wrap_constructor({{mrb_state}}, {{crystal_class}}, [Int32])
+      Anyolite.wrap_constructor({{rb_interpreter}}, {{crystal_class}}, [Int32])
     end
 
-    macro wrap_all_class_methods(mrb_state, crystal_class, exclusions, verbose, context = nil)
+    macro wrap_all_class_methods(rb_interpreter, crystal_class, exclusions, verbose, context = nil)
       {% has_specialized_method = {} of String => Bool %}
 
       {% for method in crystal_class.resolve.class.methods %}
@@ -1169,11 +1169,11 @@ module Anyolite
         {% elsif method.name[-1..-1] =~ /\W/ %}
           {% operator = ruby_name %}
 
-          Anyolite::Macro.wrap_method_index({{mrb_state}}, {{crystal_class}}, {{index}}, "{{ruby_name}}", operator: "{{operator}}", is_class_method: true, without_keywords: -1, context: {{context}})
+          Anyolite::Macro.wrap_method_index({{rb_interpreter}}, {{crystal_class}}, {{index}}, "{{ruby_name}}", operator: "{{operator}}", is_class_method: true, without_keywords: -1, context: {{context}})
           {% how_many_times_wrapped[ruby_name.stringify] = how_many_times_wrapped[ruby_name.stringify] ? how_many_times_wrapped[ruby_name.stringify] + 1 : 1 %}
         # Handle other class methods
         {% else %}
-          Anyolite::Macro.wrap_method_index({{mrb_state}}, {{crystal_class}}, {{index}}, "{{ruby_name}}", is_class_method: true, without_keywords: {{without_keywords}}, added_keyword_args: {{added_keyword_args}}, context: {{context}})
+          Anyolite::Macro.wrap_method_index({{rb_interpreter}}, {{crystal_class}}, {{index}}, "{{ruby_name}}", is_class_method: true, without_keywords: {{without_keywords}}, added_keyword_args: {{added_keyword_args}}, context: {{context}})
           {% how_many_times_wrapped[ruby_name.stringify] = how_many_times_wrapped[ruby_name.stringify] ? how_many_times_wrapped[ruby_name.stringify] + 1 : 1 %}
         {% end %}
 
@@ -1184,7 +1184,7 @@ module Anyolite
       {% end %}
     end
 
-    macro wrap_all_constants(mrb_state, crystal_class, exclusions, verbose, context = nil)
+    macro wrap_all_constants(rb_interpreter, crystal_class, exclusions, verbose, context = nil)
       # TODO: Is the context needed here?
 
       # NOTE: This check is necessary due to https://github.com/crystal-lang/crystal/issues/5757
@@ -1209,30 +1209,30 @@ module Anyolite
           {% elsif annotation_exclude_im %}
             {% puts "--> Excluding #{crystal_class}::#{constant} (Exclusion annotation)" if verbose %}
           {% else %}
-            Anyolite::Macro.wrap_constant_or_class({{mrb_state}}, {{crystal_class}}, "{{ruby_name}}", {{constant}}, {{verbose}})
+            Anyolite::Macro.wrap_constant_or_class({{rb_interpreter}}, {{crystal_class}}, "{{ruby_name}}", {{constant}}, {{verbose}})
           {% end %}
           {% puts "" if verbose %}
         {% end %}
       {% end %}
     end
 
-    macro wrap_constant_or_class(mrb_state, under_class_or_module, ruby_name, value, verbose = false)
+    macro wrap_constant_or_class(rb_interpreter, under_class_or_module, ruby_name, value, verbose = false)
       {% actual_constant = under_class_or_module.resolve.constant(value.id) %}
       {% if actual_constant.is_a?(TypeNode) %}
         {% if actual_constant.module? %}
-          Anyolite.wrap_module_with_methods({{mrb_state}}, {{actual_constant}}, under: {{under_class_or_module}}, verbose: {{verbose}})
+          Anyolite.wrap_module_with_methods({{rb_interpreter}}, {{actual_constant}}, under: {{under_class_or_module}}, verbose: {{verbose}})
         {% elsif actual_constant.class? || actual_constant.struct? %}
-          Anyolite.wrap_class_with_methods({{mrb_state}}, {{actual_constant}}, under: {{under_class_or_module}}, verbose: {{verbose}})
+          Anyolite.wrap_class_with_methods({{rb_interpreter}}, {{actual_constant}}, under: {{under_class_or_module}}, verbose: {{verbose}})
         {% elsif actual_constant.union? %}
           {% puts "\e[31m> WARNING: Wrapping of unions not supported, thus skipping #{actual_constant}\e[0m" %}
         {% elsif actual_constant < Enum %}
-          Anyolite.wrap_class_with_methods({{mrb_state}}, {{actual_constant}}, under: {{under_class_or_module}}, use_enum_constructor: true, verbose: {{verbose}})
+          Anyolite.wrap_class_with_methods({{rb_interpreter}}, {{actual_constant}}, under: {{under_class_or_module}}, use_enum_constructor: true, verbose: {{verbose}})
         {% else %}
           # Could be an alias, just try the default case
-          Anyolite.wrap_class_with_methods({{mrb_state}}, {{actual_constant}}, under: {{under_class_or_module}}, verbose: {{verbose}})
+          Anyolite.wrap_class_with_methods({{rb_interpreter}}, {{actual_constant}}, under: {{under_class_or_module}}, verbose: {{verbose}})
         {% end %}
       {% else %}
-        Anyolite.wrap_constant_under_class({{mrb_state}}, {{under_class_or_module}}, {{ruby_name}}, {{under_class_or_module}}::{{value}})
+        Anyolite.wrap_constant_under_class({{rb_interpreter}}, {{under_class_or_module}}, {{ruby_name}}, {{under_class_or_module}}::{{value}})
       {% end %}
     end
   end

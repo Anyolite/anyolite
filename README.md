@@ -96,10 +96,10 @@ Now, you want to wrap this class in Ruby. All you need to do is to execute the f
 ```crystal
 require "anyolite"
 
-Anyolite::RbInterpreter.create do |mrb|
-  Anyolite.wrap(mrb, TestModule)
+Anyolite::RbInterpreter.create do |rb|
+  Anyolite.wrap(rb, TestModule)
 
-  mrb.load_script_from_file("examples/hp_example.rb")
+  rb.load_script_from_file("examples/hp_example.rb")
 end
 ```
 
@@ -156,7 +156,7 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 
 * [X] Rename `MrbWrap` to `Anyolite`
 * [X] Rename `MrbMacro` to `Anyolite::Macro`
-* [ ] Rename `mrb` and `mruby` in the code to `rb` and `ruby`
+* [X] Rename `mrb` and `mruby` in the code to `rb` and `ruby`
 * [ ] Rework configurations for the Rakefile into a class
 
 #### Usability

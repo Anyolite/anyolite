@@ -1,56 +1,56 @@
 module Anyolite
   # Wrapper for an mruby state reference
   class RbInterpreter
-    @mrb_ptr : MrbInternal::MrbState*
+    @rb_ptr : RbCore::State*
 
     def self.create
-      mrb = self.new
-      yield mrb
-      mrb.close
+      rb = self.new
+      yield rb
+      rb.close
     end
 
     def initialize
-      @mrb_ptr = MrbInternal.mrb_open
+      @rb_ptr = RbCore.rb_open
     end
 
     def close
-      MrbInternal.mrb_close(@mrb_ptr)
+      RbCore.rb_close(@rb_ptr)
     end
 
     def to_unsafe
-      return @mrb_ptr
+      return @rb_ptr
     end
 
     def execute_script_line(str : String)
-      MrbInternal.execute_script_line(@mrb_ptr, str)
+      RbCore.execute_script_line(@rb_ptr, str)
     end
 
     def load_script_from_file(filename : String)
-      MrbInternal.load_script_from_file(@mrb_ptr, filename)
+      RbCore.load_script_from_file(@rb_ptr, filename)
     end
 
     # TODO: Use internal mruby arg count in future versions
-    def define_method(name : String, c : RbClass | RbModule, proc : MrbFunc)
+    def define_method(name : String, c : RbClass | RbModule, proc : RbCore::RbFunc)
       if c.is_a?(RbModule)
         raise "Tried to define method #{name} for RbModule #{c}"
       else
-        MrbInternal.mrb_define_method(@mrb_ptr, c, name, proc, 1)
+        RbCore.rb_define_method(@rb_ptr, c, name, proc, 1)
       end
     end
 
-    def define_module_function(name : String, mod : RbModule | RbClass, proc : MrbFunc)
+    def define_module_function(name : String, mod : RbModule | RbClass, proc : RbCore::RbFunc)
       if mod.is_a?(RbModule)
-        MrbInternal.mrb_define_module_function(@mrb_ptr, mod, name, proc, 1)
+        RbCore.rb_define_module_function(@rb_ptr, mod, name, proc, 1)
       else
-        MrbInternal.mrb_define_class_method(@mrb_ptr, mod, name, proc, 1)
+        RbCore.rb_define_class_method(@rb_ptr, mod, name, proc, 1)
       end
     end
 
-    def define_class_method(name : String, c : RbClass | RbModule, proc : MrbFunc)
+    def define_class_method(name : String, c : RbClass | RbModule, proc : RbCore::RbFunc)
       if c.is_a?(RbModule)
-        MrbInternal.mrb_define_module_function(@mrb_ptr, c, name, proc, 1)
+        RbCore.rb_define_module_function(@rb_ptr, c, name, proc, 1)
       else
-        MrbInternal.mrb_define_class_method(@mrb_ptr, c, name, proc, 1)
+        RbCore.rb_define_class_method(@rb_ptr, c, name, proc, 1)
       end
     end
   end

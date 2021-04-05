@@ -63,8 +63,8 @@ module Anyolite
 
     # TODO: If a struct wrapper is given here, call the struct methods instead of the wrapper methods
     def self.get_object_id(value)
-      if value.responds_to?(:mrb_ref_id)
-        value.mrb_ref_id.to_u64
+      if value.responds_to?(:rb_ref_id)
+        value.rb_ref_id.to_u64
       elsif value.responds_to?(:object_id)
         value.object_id.to_u64
       else

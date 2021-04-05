@@ -3,12 +3,12 @@ module Anyolite
   module RbClassCache
     @@cache = {} of String => RbClass | RbModule
 
-    def self.register(crystal_class : Class, mrb_class : RbClass)
-      @@cache[crystal_class.name] = mrb_class
+    def self.register(crystal_class : Class, rb_class : RbClass)
+      @@cache[crystal_class.name] = rb_class
     end
 
-    def self.register(crystal_module : Class, mrb_module : RbModule)
-      @@cache[crystal_module.name] = mrb_module
+    def self.register(crystal_module : Class, rb_module : RbModule)
+      @@cache[crystal_module.name] = rb_module
     end
 
     def self.get(n : Nil)

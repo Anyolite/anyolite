@@ -10,7 +10,7 @@ module SomeModule
     property value : Int32 = -123
     property test : Test = Test.new(-234)
 
-    def mrb_initialize(mrb)
+    def rb_initialize(rb)
       puts "Struct initialized!"
     end
   end
@@ -132,7 +132,7 @@ module SomeModule
     end
 
     # Gets called in mruby
-    def mrb_initialize(mrb)
+    def rb_initialize(rb)
       puts "Object registered in mruby"
     end
 
@@ -234,7 +234,7 @@ module SomeModule
     end
 
     # Gets called in mruby unless program crashes
-    def mrb_finalize(mrb)
+    def rb_finalize(rb)
       puts "Mruby destructor called for value #{@x}"
     end
   end
@@ -250,19 +250,19 @@ end
 
 # Anyolite::RbRefTable.set_option(:logging)
 
-Anyolite::RbInterpreter.create do |mrb|
-  Anyolite.wrap_module(mrb, SomeModule, "TestModule")
-  Anyolite.wrap_module_function_with_keywords(mrb, SomeModule, "test_method", SomeModule.test_method, [int : Int32 = 19, str : String])
-  Anyolite.wrap_constant(mrb, SomeModule, "SOME_CONSTANT", "Smile! 😊")
+Anyolite::RbInterpreter.create do |rb|
+  Anyolite.wrap_module(rb, SomeModule, "TestModule")
+  Anyolite.wrap_module_function_with_keywords(rb, SomeModule, "test_method", SomeModule.test_method, [int : Int32 = 19, str : String])
+  Anyolite.wrap_constant(rb, SomeModule, "SOME_CONSTANT", "Smile! 😊")
 
-  Anyolite.wrap(mrb, SomeModule::Bla, under: SomeModule, verbose: true)
+  Anyolite.wrap(rb, SomeModule::Bla, under: SomeModule, verbose: true)
 
-  Anyolite.wrap(mrb, SomeModule::TestStruct, under: SomeModule, verbose: true)
+  Anyolite.wrap(rb, SomeModule::TestStruct, under: SomeModule, verbose: true)
 
-  Anyolite.wrap(mrb, SomeModule::Test, under: SomeModule, instance_method_exclusions: [:add], verbose: true)
-  Anyolite.wrap_instance_method(mrb, SomeModule::Test, "add", add, [SomeModule::Test])
+  Anyolite.wrap(rb, SomeModule::Test, under: SomeModule, instance_method_exclusions: [:add], verbose: true)
+  Anyolite.wrap_instance_method(rb, SomeModule::Test, "add", add, [SomeModule::Test])
 
-  mrb.load_script_from_file("examples/test.rb")
+  rb.load_script_from_file("examples/test.rb")
 end
 
 module TestModule
@@ -296,10 +296,10 @@ Anyolite::RbRefTable.reset
 
 puts "------------------------------"
 
-Anyolite::RbInterpreter.create do |mrb|
-  Anyolite.wrap(mrb, TestModule)
+Anyolite::RbInterpreter.create do |rb|
+  Anyolite.wrap(rb, TestModule)
 
-  mrb.load_script_from_file("examples/hp_example.rb")
+  rb.load_script_from_file("examples/hp_example.rb")
 end
 
 puts "Reference table: #{Anyolite::RbRefTable.inspect}"
