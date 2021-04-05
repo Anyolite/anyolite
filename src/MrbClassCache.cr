@@ -1,12 +1,12 @@
 # Cache for mruby class and module references
 module MrbClassCache
-  @@cache = {} of String => MrbClass | MrbModule
+  @@cache = {} of String => Anyolite::RbClass | Anyolite::RbModule
 
-  def self.register(crystal_class : Class, mrb_class : MrbClass)
+  def self.register(crystal_class : Class, mrb_class : Anyolite::RbClass)
     @@cache[crystal_class.name] = mrb_class
   end
 
-  def self.register(crystal_module : Class, mrb_module : MrbModule)
+  def self.register(crystal_module : Class, mrb_module : Anyolite::RbModule)
     @@cache[crystal_module.name] = mrb_module
   end
 
@@ -14,7 +14,7 @@ module MrbClassCache
     nil
   end
 
-  def self.get(ruby_module : MrbModule)
+  def self.get(ruby_module : Anyolite::RbModule)
     ruby_module
   end
 

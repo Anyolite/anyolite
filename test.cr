@@ -250,7 +250,7 @@ end
 
 # MrbRefTable.set_option(:logging)
 
-MrbState.create do |mrb|
+Anyolite::RbInterpreter.create do |mrb|
   Anyolite.wrap_module(mrb, SomeModule, "TestModule")
   Anyolite.wrap_module_function_with_keywords(mrb, SomeModule, "test_method", SomeModule.test_method, [int : Int32 = 19, str : String])
   Anyolite.wrap_constant(mrb, SomeModule, "SOME_CONSTANT", "Smile! 😊")
@@ -296,7 +296,7 @@ MrbRefTable.reset
 
 puts "------------------------------"
 
-MrbState.create do |mrb|
+Anyolite::RbInterpreter.create do |mrb|
   Anyolite.wrap(mrb, TestModule)
 
   mrb.load_script_from_file("examples/hp_example.rb")

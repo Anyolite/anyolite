@@ -1,12 +1,12 @@
 require "./MrbInternal.cr"
 
-require "./MrbState.cr"
-require "./MrbClass.cr"
+require "./RbInterpreter.cr"
+require "./RbClass.cr"
 require "./MrbCast.cr"
 require "./MrbMacro.cr"
 require "./MrbClassCache.cr"
 require "./MrbTypeCache.cr"
-require "./MrbModule.cr"
+require "./RbModule.cr"
 require "./MrbRefTable.cr"
 
 # Alias for the mruby function pointers.
@@ -60,13 +60,13 @@ module Anyolite
   # Wraps a Crystal class directly into an mruby class.
   #
   # The Crystal `Class` *crystal_class* will be integrated into the `MrbState` *mrb_state*,
-  # with *name* as its new designation, returning an `MrbClass`.
+  # with *name* as its new designation, returning an `Anyolite::RbClass`.
   #
-  # To inherit from another mruby class, specify an `MrbClass` as a *superclass*.
+  # To inherit from another mruby class, specify an `Anyolite::RbClass` as a *superclass*.
   #
-  # Each class can be defined in a specifiy module by setting *under* to a `MrbModule`.
+  # Each class can be defined in a specifiy module by setting *under* to a `Anyolite::RbModule`.
   macro wrap_class(mrb_state, crystal_class, name, under = nil, superclass = nil)
-    new_class = MrbClass.new({{mrb_state}}, {{name}}, under: MrbClassCache.get({{under}}), superclass: MrbClassCache.get({{superclass}}))
+    new_class = Anyolite::RbClass.new({{mrb_state}}, {{name}}, under: MrbClassCache.get({{under}}), superclass: MrbClassCache.get({{superclass}}))
     MrbInternal.set_instance_tt_as_data(new_class)
     MrbClassCache.register({{crystal_class}}, new_class)
     MrbClassCache.get({{crystal_class}})
@@ -75,11 +75,11 @@ module Anyolite
   # Wraps a Crystal module into an mruby module.
   #
   # The module *crystal_module* will be integrated into the `MrbState` *mrb_state*,
-  # with *name* as its new designation, returning an `MrbModule`.
+  # with *name* as its new designation, returning an `Anyolite::RbModule`.
   #
   # The parent module can be specified with the module argument *under*.
   macro wrap_module(mrb_state, crystal_module, name, under = nil)
-    new_module = MrbModule.new({{mrb_state}}, {{name}}, under: MrbClassCache.get({{under}}))
+    new_module = Anyolite::RbModule.new({{mrb_state}}, {{name}}, under: MrbClassCache.get({{under}}))
     MrbClassCache.register({{crystal_module}}, new_module)
     MrbClassCache.get({{crystal_module}})
   end

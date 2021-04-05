@@ -96,7 +96,7 @@ Now, you want to wrap this class in Ruby. All you need to do is to execute the f
 ```crystal
 require "anyolite"
 
-MrbState.create do |mrb|
+Anyolite::RbInterpreter.create do |mrb|
   Anyolite.wrap(mrb, TestModule)
 
   mrb.load_script_from_file("examples/hp_example.rb")
