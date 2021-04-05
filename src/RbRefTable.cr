@@ -9,9 +9,16 @@ module Anyolite
     @@content = {} of UInt64 => Tuple(Void*, Int64)
 
     @@options = {
+      # Log every change in the reference table
       :logging                      => false,
+      
+      # Display warning messages
       :warnings                     => true,
+      
+      # Throw an exception if any warning occurs
       :pedantic                     => true,
+      
+      # If true, values with same object IDs can overwrite each other
       :replace_conflicting_pointers => false,
     }
 
