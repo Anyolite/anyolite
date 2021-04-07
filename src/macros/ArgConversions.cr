@@ -15,10 +15,7 @@ module Anyolite
       {% elsif arg_type.is_a?(Generic) && arg_type.name.stringify.gsub(/(\:\:)+/, "") == "Pointer" %}
         {% puts "\e[33m> INFO: Pointer types are not allowed as arguments.\e[0m" %}
         raise "Pointer types are not allowed as arguments ({{debug_information.id}})"
-      {% elsif arg_type.stringify.includes?('|') %}
-        # This is kind of cheating, but hey, it does its job
-        # ...
-        # Please don't judge me
+      {% elsif arg_type.is_a?(TypeDeclaration) && arg_type.type.is_a?(Union) %}
         Anyolite::Macro.convert_keyword_arg({{rb}}, {{arg}}, {{arg_type}}, context: {{context}})
       {% elsif arg_type.is_a?(TypeDeclaration) %}
         Anyolite::Macro.convert_arg({{rb}}, {{arg}}, {{arg_type.type}}, context: {{context}})
@@ -117,15 +114,13 @@ module Anyolite
             raise("Should not be reached")
           {% end %}
         else
-          # Yes, this is not the elegant way
-          # However, when a union type component moves out of its context, it is not resolvable by its own anymore
-          # This then leads to problems, so it is better to test for '|' instead of using the resolve.union? method
-          {% if arg_type.type.stringify.includes?('|') %}
+          {% if arg_type.type.is_a?(Union) %}
             Anyolite::Macro.convert_keyword_arg({{rb}}, {{arg}}, Union({{arg_type.type}}), context: {{context}}, debug_information: {{debug_information}})
           {% else %}
             Anyolite::Macro.convert_keyword_arg({{rb}}, {{arg}}, {{arg_type.type}}, context: {{context}}, debug_information: {{debug_information}})
           {% end %}
         end
+      # TODO: Check if this might need some improvement
       {% elsif context && !arg_type.stringify.starts_with?("Union") %}
         Anyolite::Macro.convert_resolved_keyword_arg({{rb}}, {{arg}}, {{context}}::{{arg_type.stringify.starts_with?("::") ? arg_type.stringify[2..-1].id : arg_type}}, {{arg_type}}, context: {{context}}, debug_information: {{debug_information}})
       {% else %}
@@ -134,8 +129,8 @@ module Anyolite
     end
 
     macro convert_resolved_keyword_arg(rb, arg, arg_type, raw_arg_type, context = nil, debug_information = nil)
-      {% if arg_type.stringify.includes?('|') %}
-        # Same as above, this sadly needs some uncanny magic
+      {% if arg_type.stringify.starts_with?("Union") %}
+        # This sadly needs some uncanny magic
         Anyolite::Macro.cast_to_union_value({{rb}}, {{arg}}, {{arg_type.stringify[6..-2].split('|').map { |x| x.id }}}, context: {{context}})
       {% elsif arg_type.resolve? %}
         {% if arg_type.resolve <= Nil %}

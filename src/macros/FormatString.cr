@@ -11,14 +11,14 @@ module Anyolite
     end
 
     macro format_char(arg, optional_values = false, context = nil)
-      {% if arg.stringify.includes?('|') %}
-        {% if optional_values != true && arg.stringify.includes?('|') %}
-          "|o"
-        {% else %}
-          "o"
-        {% end %}
-      {% elsif arg.is_a?(TypeDeclaration) %}
-        {% if optional_values != true && arg.value %}
+      {% if arg.is_a?(TypeDeclaration) %}
+        {% if arg.type.is_a?(Union) %}
+          {% if optional_values != true %}
+            "|o"
+          {% else %}
+            "o"
+          {% end %}
+        {% elsif optional_values != true && arg.value %}
           "|" + Anyolite::Macro.format_char({{arg.type}}, optional_values: true, context: {{context}})
         {% else %}
           Anyolite::Macro.format_char({{arg.type}}, optional_values: {{optional_values}}, context: {{context}})

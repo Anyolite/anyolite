@@ -168,6 +168,7 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 
 * Warning message when a reference table with values is reset
 * Added pedantic setting for reference table (default)
+* More reliable internal checks for union arguments
 
 #### Usability
 

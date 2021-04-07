@@ -222,6 +222,11 @@ module SomeModule
       raise "This should not be wrapped"
     end
 
+    # TODO: Make this work
+    # def array_test(arg : Test | Array(String | Test))
+    #   "Arg is #{arg}"
+    # end
+
     private def private_method
     end
 

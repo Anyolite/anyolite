@@ -1,10 +1,12 @@
 module Anyolite
   module Macro
     macro type_in_ruby(type, context = nil)
-      {% if type.stringify.includes?('|') %}
-        Anyolite::RbCore::RbValue
-      {% elsif type.is_a?(TypeDeclaration) %}
-        Anyolite::Macro.type_in_ruby({{type.type}})
+      {% if type.is_a?(TypeDeclaration) %}
+        {% if type.type.is_a?(Union) %}
+          Anyolite::RbCore::RbValue
+        {% else %}
+          Anyolite::Macro.type_in_ruby({{type.type}})
+        {% end %}
       {% elsif context %}
         Anyolite::Macro.resolve_type_in_ruby({{context}}::{{type.stringify.starts_with?("::") ? type.stringify[2..-1].id  : type}}, {{type}}, {{context}})
       {% else %}
@@ -39,10 +41,12 @@ module Anyolite
     end
 
     macro pointer_type(type, context = nil)
-      {% if type.stringify.includes?('|') %}
-        Pointer(Anyolite::RbCore::RbValue)
-      {% elsif type.is_a?(TypeDeclaration) %}
-        Anyolite::Macro.pointer_type({{type.type}}, context: {{context}})
+      {% if type.is_a?(TypeDeclaration) %}
+        {% if type.type.is_a?(Union) %}
+          Pointer(Anyolite::RbCore::RbValue)
+        {% else %}
+          Anyolite::Macro.pointer_type({{type.type}}, context: {{context}})
+        {% end %}
       {% elsif context %}
         Anyolite::Macro.resolve_pointer_type({{context}}::{{type.stringify.starts_with?("::") ? type.stringify[2..-1].id : type}}, {{type}}, {{context}})
       {% else %}

@@ -6,7 +6,7 @@ module Anyolite
           {% for arg in args %}
             {% if arg.is_a?(TypeDeclaration) %}
               {% if arg.value %}
-                {% if arg.type.stringify.includes?('|') %}
+                {% if arg.type.is_a?(Union) %}
                   # This does work, but I'm a bit surprised
                   Anyolite::Macro.pointer_type({{arg}}, context: {{context}}).malloc(size: 1, value: Anyolite::RbCast.return_value({{rb}}, {{arg.value}})),
                 {% elsif arg.type.resolve <= String %}
