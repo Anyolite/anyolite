@@ -1,1 +1,1 @@
-raise "Ruby is currently not supported for Anyolite."
+# Ruby is currently not supported, so this will do nothing
