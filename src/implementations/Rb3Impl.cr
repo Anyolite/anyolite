@@ -1,1 +1,1 @@
-{% raise "Ruby is currently not supported for Anyolite." %}
+raise "Ruby is currently not supported for Anyolite."
