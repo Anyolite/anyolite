@@ -2,6 +2,36 @@
 
 ## Releases
 
+### Version 0.9.0
+
+#### Features
+
+* Additional compatibility layer between Anyolite and mruby
+* More configuration options
+
+#### Breaking changes
+
+* Renamed `MrbWrap` to `Anyolite`
+* Renamed `MrbMacro` to `Anyolite::Macro`
+* Renamed `mrb` and `mruby` in the code to `rb` and `ruby`
+* Reworked configurations for the Rakefile into a class
+* Dropped support for mruby 2
+
+#### Safety
+
+* Warning message when a reference table with values is reset
+* Added pedantic setting for reference table (default)
+* More reliable internal checks for union arguments
+
+#### Usability
+
+* Split macro source file into smaller parts
+* Update documentation to new code
+
+#### Bugfixes
+
+* Enums are now correctly tracked in the reference table
+
 ### Version 0.8.1
 
 #### Usability
