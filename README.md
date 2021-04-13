@@ -153,8 +153,6 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 
 * Additional compatibility layer between Anyolite and mruby
 * More configuration options
-* [ ] Support for arrays (might be pushed to a later release)
-* [ ] Support for hashes (might be pushed to a later release)
 
 #### Breaking changes
 
@@ -186,6 +184,8 @@ Currently, the way its features are going to be implemented is not yet determine
 so it will probably take some time before it will be released.
 
 * [ ] Options for inherited and/or inheriting classes
+* [ ] Support for arrays
+* [ ] Support for hashes
 
 ### Version 1.0.0
 
