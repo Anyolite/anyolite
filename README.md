@@ -149,6 +149,10 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 
 ### Version 0.9.1
 
+#### Usability
+
+* [ ] Allow for a wrapped function to return nil by default
+
 #### Bugfixes
 
 * [ ] Fixed broken documentation
