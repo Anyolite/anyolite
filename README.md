@@ -163,10 +163,13 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 This version is planned to be the last feature release before 1.0.0.
 Currently, the way its features are going to be implemented is not yet determined,
 so it will probably take some time before it will be released.
+Some of the features might not even make the release.
 
 * [ ] Options for inherited and/or inheriting classes
 * [ ] Support for arrays
 * [ ] Support for hashes
+* [ ] Support for procs
+* [ ] Support for pointers
 
 ### Version 1.0.0
 
@@ -181,5 +184,3 @@ so it will probably take some time before it will be released.
 
 * [ ] Splat argument and/or arbitrary keyword passing
 * [ ] Method in mruby to determine owner of object
-* [ ] Support for procs and/or pointers
-
