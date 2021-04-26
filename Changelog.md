@@ -2,6 +2,16 @@
 
 ## Releases
 
+### Version 0.9.1
+
+#### Usability
+
+* Allow for a wrapped function to return nil by default
+
+#### Bugfixes
+
+* Fixed broken documentation
+
 ### Version 0.9.0
 
 #### Features

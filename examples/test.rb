@@ -94,3 +94,6 @@ same_as_a = TestModule::Test.new(x: a.x)
 
 puts "Are a and b equal? #{a == b}"
 puts "Are a and same_as_a equal? #{a == same_as_a}"
+
+puts a.uint_test(arg: 123)
+puts a.noreturn_test.class

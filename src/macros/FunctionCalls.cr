@@ -1,16 +1,21 @@
 module Anyolite
   module Macro
-    macro call_and_return(rb, proc, regular_args, converted_args, operator = "")
+    macro call_and_return(rb, proc, regular_args, converted_args, operator = "", return_nil = false)
       {% if proc.stringify == "Anyolite::Empty" %}
         return_value = {{operator.id}}(*{{converted_args}})
       {% else %}
         return_value = {{proc}}{{operator.id}}(*{{converted_args}})
       {% end %}
-      Anyolite::RbCast.return_value({{rb}}, return_value)
+
+      {% if return_nil %}
+        Anyolite::RbCast.return_nil
+      {% else %}
+        Anyolite::RbCast.return_value({{rb}}, return_value)
+      {% end %}
     end
 
     macro call_and_return_keyword_method(rb, proc, converted_regular_args, keyword_args, kw_args, operator = "", 
-      empty_regular = false, context = nil, type_vars = nil, type_var_names = nil)
+      empty_regular = false, context = nil, type_vars = nil, type_var_names = nil, return_nil = false)
 
       {% if proc.stringify == "Anyolite::Empty" %}
         return_value = {{operator.id}}(
@@ -35,10 +40,14 @@ module Anyolite
         {% end %}
       )
 
-      Anyolite::RbCast.return_value({{rb}}, return_value)
+      {% if return_nil %}
+        Anyolite::RbCast.return_nil
+      {% else %}
+        Anyolite::RbCast.return_value({{rb}}, return_value)
+      {% end %}
     end
 
-    macro call_and_return_instance_method(rb, proc, converted_obj, converted_args, operator = "")
+    macro call_and_return_instance_method(rb, proc, converted_obj, converted_args, operator = "", return_nil = false)
       if {{converted_obj}}.is_a?(Anyolite::StructWrapper)
         working_content = {{converted_obj}}.content
 
@@ -56,11 +65,16 @@ module Anyolite
           return_value = {{converted_obj}}.{{proc}}{{operator.id}}(*{{converted_args}})
         {% end %}
       end
-      Anyolite::RbCast.return_value({{rb}}, return_value)
+
+      {% if return_nil %}
+        Anyolite::RbCast.return_nil
+      {% else %}
+        Anyolite::RbCast.return_value({{rb}}, return_value)
+      {% end %}
     end
 
     macro call_and_return_keyword_instance_method(rb, proc, converted_obj, converted_regular_args, keyword_args, kw_args, operator = "",
-                                                  empty_regular = false, context = nil, type_vars = nil, type_var_names = nil)
+                                                  empty_regular = false, context = nil, type_vars = nil, type_var_names = nil, return_nil = false)
 
       if {{converted_obj}}.is_a?(Anyolite::StructWrapper)
         working_content = {{converted_obj}}.content
@@ -116,7 +130,11 @@ module Anyolite
 
       end
 
-      Anyolite::RbCast.return_value({{rb}}, return_value)
+      {% if return_nil %}
+        Anyolite::RbCast.return_nil
+      {% else %}
+        Anyolite::RbCast.return_value({{rb}}, return_value)
+      {% end %}
     end
   end
 end

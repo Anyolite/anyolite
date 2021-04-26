@@ -1,6 +1,6 @@
 module Anyolite
   module Macro
-    macro wrap_module_function_with_args(rb_interpreter, under_module, name, proc, regular_args = nil, context = nil)
+    macro wrap_module_function_with_args(rb_interpreter, under_module, name, proc, regular_args = nil, context = nil, return_nil = nil)
       {% if regular_args.is_a?(ArrayLiteral) %}
         {% regular_arg_array = regular_args %}
       {% elsif regular_args == nil %}
@@ -17,13 +17,13 @@ module Anyolite
 
       wrapped_method = Anyolite::RbCore::RbFunc.new do |rb, obj|
         converted_args = Anyolite::Macro.get_converted_args(rb, {{proc_arg_array}}, context: {{context}})
-        Anyolite::Macro.call_and_return(rb, {{proc}}, {{proc_arg_array}}, converted_args)
+        Anyolite::Macro.call_and_return(rb, {{proc}}, {{proc_arg_array}}, converted_args, return_nil: {{return_nil}})
       end
 
       {{rb_interpreter}}.define_module_function({{name}}, Anyolite::RbClassCache.get({{under_module}}), wrapped_method)
     end
 
-    macro wrap_module_function_with_keyword_args(rb_interpreter, under_module, name, proc, keyword_args, regular_args = nil, operator = "", context = nil)
+    macro wrap_module_function_with_keyword_args(rb_interpreter, under_module, name, proc, keyword_args, regular_args = nil, operator = "", context = nil, return_nil = nil)
       {% if regular_args.is_a?(ArrayLiteral) %}
         {% regular_arg_array = regular_args %}
       {% elsif regular_args == nil %}
@@ -42,16 +42,16 @@ module Anyolite
         converted_regular_args = Anyolite::Macro.convert_args(rb, regular_arg_tuple, {{regular_arg_array}}, context: {{context}})
 
         {% if !regular_arg_array || regular_arg_array.size == 0 %}
-          Anyolite::Macro.call_and_return_keyword_method(rb, {{proc}}, converted_regular_args, {{keyword_args}}, kw_args, operator: {{operator}}, empty_regular: true, context: {{context}})
+          Anyolite::Macro.call_and_return_keyword_method(rb, {{proc}}, converted_regular_args, {{keyword_args}}, kw_args, operator: {{operator}}, empty_regular: true, context: {{context}}, return_nil: {{return_nil}})
         {% else %}
-          Anyolite::Macro.call_and_return_keyword_method(rb, {{proc}}, converted_regular_args, {{keyword_args}}, kw_args, operator: {{operator}}, context: {{context}})
+          Anyolite::Macro.call_and_return_keyword_method(rb, {{proc}}, converted_regular_args, {{keyword_args}}, kw_args, operator: {{operator}}, context: {{context}}, return_nil: {{return_nil}})
         {% end %}
       end
 
       {{rb_interpreter}}.define_module_function({{name}}, Anyolite::RbClassCache.get({{under_module}}), wrapped_method)
     end
 
-    macro wrap_class_method_with_args(rb_interpreter, crystal_class, name, proc, regular_args = nil, operator = "", context = nil)
+    macro wrap_class_method_with_args(rb_interpreter, crystal_class, name, proc, regular_args = nil, operator = "", context = nil, return_nil = nil)
       {% if regular_args.is_a?(ArrayLiteral) %}
         {% regular_arg_array = regular_args %}
       {% elsif regular_args == nil %}
@@ -66,13 +66,13 @@ module Anyolite
 
       wrapped_method = Anyolite::RbCore::RbFunc.new do |rb, obj|
         converted_args = Anyolite::Macro.get_converted_args(rb, {{regular_arg_array}}, context: {{context}})
-        Anyolite::Macro.call_and_return(rb, {{proc}}, {{regular_arg_array}}, converted_args, operator: {{operator}})
+        Anyolite::Macro.call_and_return(rb, {{proc}}, {{regular_arg_array}}, converted_args, operator: {{operator}}, return_nil: {{return_nil}})
       end
       
       {{rb_interpreter}}.define_class_method({{name}}, Anyolite::RbClassCache.get({{crystal_class}}), wrapped_method)
     end
 
-    macro wrap_class_method_with_keyword_args(rb_interpreter, crystal_class, name, proc, keyword_args, regular_args = nil, operator = "", context = nil)
+    macro wrap_class_method_with_keyword_args(rb_interpreter, crystal_class, name, proc, keyword_args, regular_args = nil, operator = "", context = nil, return_nil = nil)
       {% if regular_args.is_a?(ArrayLiteral) %}
         {% regular_arg_array = regular_args %}
       {% elsif regular_args == nil %}
@@ -96,17 +96,17 @@ module Anyolite
 
         {% if !regular_arg_array || regular_arg_array.size == 0 %}
           Anyolite::Macro.call_and_return_keyword_method(rb, {{proc}}, converted_regular_args, {{keyword_args}}, kw_args, operator: {{operator}}, 
-            empty_regular: true, context: {{context}}, type_vars: {{type_vars}}, type_var_names: {{type_var_names}})
+            empty_regular: true, context: {{context}}, type_vars: {{type_vars}}, type_var_names: {{type_var_names}}, return_nil: {{return_nil}})
         {% else %}
           Anyolite::Macro.call_and_return_keyword_method(rb, {{proc}}, converted_regular_args, {{keyword_args}}, kw_args, operator: {{operator}}, 
-            context: {{context}}, type_vars: {{type_vars}}, type_var_names: {{type_var_names}})
+            context: {{context}}, type_vars: {{type_vars}}, type_var_names: {{type_var_names}}), return_nil: {{return_nil}}
         {% end %}
       end
 
       {{rb_interpreter}}.define_class_method({{name}}, Anyolite::RbClassCache.get({{crystal_class}}), wrapped_method)
     end
 
-    macro wrap_instance_function_with_args(rb_interpreter, crystal_class, name, proc, regular_args = nil, operator = "", context = nil)
+    macro wrap_instance_function_with_args(rb_interpreter, crystal_class, name, proc, regular_args = nil, operator = "", context = nil, return_nil = nil)
       {% if regular_args.is_a?(ArrayLiteral) %}
         {% regular_arg_array = regular_args %}
       {% elsif regular_args == nil %}
@@ -128,13 +128,13 @@ module Anyolite
           converted_obj = Anyolite::Macro.convert_from_ruby_object(rb, obj, {{crystal_class}}).value
         end
 
-        Anyolite::Macro.call_and_return_instance_method(rb, {{proc}}, converted_obj, converted_args, operator: {{operator}})
+        Anyolite::Macro.call_and_return_instance_method(rb, {{proc}}, converted_obj, converted_args, operator: {{operator}}, return_nil: {{return_nil}})
       end
 
       {{rb_interpreter}}.define_method({{name}}, Anyolite::RbClassCache.get({{crystal_class}}), wrapped_method)
     end
 
-    macro wrap_instance_function_with_keyword_args(rb_interpreter, crystal_class, name, proc, keyword_args, regular_args = nil, operator = "", context = nil)
+    macro wrap_instance_function_with_keyword_args(rb_interpreter, crystal_class, name, proc, keyword_args, regular_args = nil, operator = "", context = nil, return_nil = nil)
       {% if regular_args.is_a?(ArrayLiteral) %}
         {% regular_arg_array = regular_args %}
       {% elsif regular_args == nil %}
@@ -164,10 +164,10 @@ module Anyolite
 
         {% if !regular_arg_array || regular_arg_array.size == 0 %}
           Anyolite::Macro.call_and_return_keyword_instance_method(rb, {{proc}}, converted_obj, converted_regular_args, {{keyword_args}}, kw_args, operator: {{operator}}, 
-            empty_regular: true, context: {{context}}, type_vars: {{type_vars}}, type_var_names: {{type_var_names}})
+            empty_regular: true, context: {{context}}, type_vars: {{type_vars}}, type_var_names: {{type_var_names}}, return_nil: {{return_nil}})
         {% else %}
           Anyolite::Macro.call_and_return_keyword_instance_method(rb, {{proc}}, converted_obj, converted_regular_args, {{keyword_args}}, kw_args, operator: {{operator}}, 
-            context: {{context}}, type_vars: {{type_vars}}, type_var_names: {{type_var_names}})
+            context: {{context}}, type_vars: {{type_vars}}, type_var_names: {{type_var_names}}, return_nil: {{return_nil}})
         {% end %}
       end
 

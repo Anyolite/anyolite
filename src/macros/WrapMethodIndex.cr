@@ -4,7 +4,7 @@ module Anyolite
                             is_constructor = false, is_class_method = false,
                             operator = "", cut_name = nil,
                             without_keywords = false, added_keyword_args = nil,
-                            context = nil)
+                            context = nil, return_nil = false)
 
       {% if is_class_method %}
         {% method = crystal_class.resolve.class.methods[method_index] %}
@@ -42,11 +42,12 @@ module Anyolite
 
       {% if final_arg_array.empty? %}
         {% if is_class_method %}
-          Anyolite.wrap_class_method({{rb_interpreter}}, {{crystal_class}}, {{ruby_name}}, {{final_method_name}}, operator: {{final_operator}}, context: {{context}})
+          Anyolite.wrap_class_method({{rb_interpreter}}, {{crystal_class}}, {{ruby_name}}, {{final_method_name}}, operator: {{final_operator}}, context: {{context}}, return_nil: {{return_nil}})
         {% elsif is_constructor %}
+          # Do not ever let a constructor return nil (for now)
           Anyolite.wrap_constructor({{rb_interpreter}}, {{crystal_class}}, context: {{context}})
         {% else %}
-          Anyolite.wrap_instance_method({{rb_interpreter}}, {{crystal_class}}, {{ruby_name}}, {{final_method_name}}, operator: {{final_operator}}, context: {{context}})
+          Anyolite.wrap_instance_method({{rb_interpreter}}, {{crystal_class}}, {{ruby_name}}, {{final_method_name}}, operator: {{final_operator}}, context: {{context}}, return_nil: {{return_nil}})
         {% end %}
 
       # A complicated check, but it is more stable than simply checking for colons
@@ -66,36 +67,36 @@ module Anyolite
           {% if keyword_arg_partition %}
             {% if is_class_method %}
               Anyolite.wrap_class_method_with_keywords({{rb_interpreter}}, {{crystal_class}}, {{ruby_name}}, {{final_method_name}}, 
-                {{keyword_arg_partition}}, regular_args: {{regular_arg_partition}}, operator: {{final_operator}}, context: {{context}})
+                {{keyword_arg_partition}}, regular_args: {{regular_arg_partition}}, operator: {{final_operator}}, context: {{context}}, return_nil: {{return_nil}})
             {% elsif is_constructor %}
               Anyolite.wrap_constructor_with_keywords({{rb_interpreter}}, {{crystal_class}}, 
                 {{keyword_arg_partition}}, regular_args: {{regular_arg_partition}}, operator: {{final_operator}}, context: {{context}})
             {% else %}
               Anyolite.wrap_instance_method_with_keywords({{rb_interpreter}}, {{crystal_class}}, {{ruby_name}}, {{final_method_name}}, 
-                {{keyword_arg_partition}}, regular_args: {{regular_arg_partition}}, operator: {{final_operator}}, context: {{context}})
+                {{keyword_arg_partition}}, regular_args: {{regular_arg_partition}}, operator: {{final_operator}}, context: {{context}}, return_nil: {{return_nil}})
             {% end %}
           {% else %}
             {% if is_class_method %}
               Anyolite.wrap_class_method({{rb_interpreter}}, {{crystal_class}}, {{ruby_name}}, {{final_method_name}}, 
-                {{regular_arg_partition}}, operator: {{final_operator}}, context: {{context}})
+                {{regular_arg_partition}}, operator: {{final_operator}}, context: {{context}}, return_nil: {{return_nil}})
             {% elsif is_constructor %}
               Anyolite.wrap_constructor({{rb_interpreter}}, {{crystal_class}}, 
                 {{regular_arg_partition}}, operator: {{final_operator}}, context: {{context}})
             {% else %}
               Anyolite.wrap_instance_method({{rb_interpreter}}, {{crystal_class}}, {{ruby_name}}, {{final_method_name}}, 
-                {{regular_arg_partition}}, operator: {{final_operator}}, context: {{context}})
+                {{regular_arg_partition}}, operator: {{final_operator}}, context: {{context}}, return_nil: {{return_nil}})
             {% end %}
           {% end %}
         {% else %}
           {% if is_class_method %}
             Anyolite.wrap_class_method_with_keywords({{rb_interpreter}}, {{crystal_class}}, {{ruby_name}}, {{final_method_name}}, 
-              {{final_arg_array}}, operator: {{final_operator}}, context: {{context}})
+              {{final_arg_array}}, operator: {{final_operator}}, context: {{context}}, return_nil: {{return_nil}})
           {% elsif is_constructor %}
             Anyolite.wrap_constructor_with_keywords({{rb_interpreter}}, {{crystal_class}}, 
               {{final_arg_array}}, operator: {{final_operator}}, context: {{context}})
           {% else %}
             Anyolite.wrap_instance_method_with_keywords({{rb_interpreter}}, {{crystal_class}}, {{ruby_name}}, {{final_method_name}}, 
-              {{final_arg_array}}, operator: {{final_operator}}, context: {{context}})
+              {{final_arg_array}}, operator: {{final_operator}}, context: {{context}}, return_nil: {{return_nil}})
           {% end %}
         {% end %}
 

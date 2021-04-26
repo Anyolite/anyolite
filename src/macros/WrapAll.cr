@@ -31,6 +31,9 @@ module Anyolite
         {% all_annotations_without_keywords_im = crystal_class.resolve.annotations(Anyolite::WrapWithoutKeywordsInstanceMethod) %}
         {% annotation_without_keyword_im = all_annotations_without_keywords_im.find { |element| element[0].id.stringify == method.name.stringify } %}
 
+        {% all_annotations_return_nil_im = crystal_class.resolve.annotations(Anyolite::ReturnNilInstanceMethod) %}
+        {% annotation_return_nil_im = all_annotations_return_nil_im.find { |element| element[0].id.stringify == method.name.stringify } %}
+
         {% if method.annotation(Anyolite::Rename) %}
           {% ruby_name = method.annotation(Anyolite::Rename)[0].id %}
         {% elsif annotation_rename_im && method.name.stringify == annotation_rename_im[0].stringify %}
@@ -57,6 +60,11 @@ module Anyolite
           {% without_keywords = annotation_without_keyword_im[1] ? annotation_without_keyword_im[1] : -1 %}
         {% end %}
 
+        {% return_nil = false %}
+        {% if method.annotation(Anyolite::ReturnNil) || (annotation_return_nil_im) %}
+          {% return_nil = true %}
+        {% end %}
+
         {% puts "> Processing instance method #{crystal_class}::#{method.name} to #{ruby_name}\n--> Args: #{method.args}" if verbose %}
         
         # Ignore private and protected methods (can't be called from outside, they'd need to be wrapped for this to work)
@@ -79,15 +87,15 @@ module Anyolite
         {% elsif method.name[-1..-1] =~ /\W/ %}
           {% operator = ruby_name %}
 
-          Anyolite::Macro.wrap_method_index({{rb_interpreter}}, {{crystal_class}}, {{index}}, "{{ruby_name}}", operator: "{{operator}}", without_keywords: -1, context: {{context}})
+          Anyolite::Macro.wrap_method_index({{rb_interpreter}}, {{crystal_class}}, {{index}}, "{{ruby_name}}", operator: "{{operator}}", without_keywords: -1, context: {{context}}, return_nil: {{return_nil}})
           {% how_many_times_wrapped[ruby_name.stringify] = how_many_times_wrapped[ruby_name.stringify] ? how_many_times_wrapped[ruby_name.stringify] + 1 : 1 %}
         # Handle constructors
         {% elsif method.name == "initialize" && use_enum_constructor == false %}
-          Anyolite::Macro.wrap_method_index({{rb_interpreter}}, {{crystal_class}}, {{index}}, "{{ruby_name}}", is_constructor: true, without_keywords: {{without_keywords}}, added_keyword_args: {{added_keyword_args}}, context: {{context}})
+          Anyolite::Macro.wrap_method_index({{rb_interpreter}}, {{crystal_class}}, {{index}}, "{{ruby_name}}", is_constructor: true, without_keywords: {{without_keywords}}, added_keyword_args: {{added_keyword_args}}, context: {{context}}, return_nil: {{return_nil}})
           {% how_many_times_wrapped[ruby_name.stringify] = how_many_times_wrapped[ruby_name.stringify] ? how_many_times_wrapped[ruby_name.stringify] + 1 : 1 %}
         # Handle other instance methods
         {% else %}
-          Anyolite::Macro.wrap_method_index({{rb_interpreter}}, {{crystal_class}}, {{index}}, "{{ruby_name}}", without_keywords: {{without_keywords}}, added_keyword_args: {{added_keyword_args}}, context: {{context}})
+          Anyolite::Macro.wrap_method_index({{rb_interpreter}}, {{crystal_class}}, {{index}}, "{{ruby_name}}", without_keywords: {{without_keywords}}, added_keyword_args: {{added_keyword_args}}, context: {{context}}, return_nil: {{return_nil}})
           {% how_many_times_wrapped[ruby_name.stringify] = how_many_times_wrapped[ruby_name.stringify] ? how_many_times_wrapped[ruby_name.stringify] + 1 : 1 %}
         {% end %}
 
@@ -138,6 +146,9 @@ module Anyolite
         {% all_annotations_without_keywords_im = crystal_class.resolve.annotations(Anyolite::WrapWithoutKeywordsClassMethod) %}
         {% annotation_without_keyword_im = all_annotations_without_keywords_im.find { |element| element[0].id.stringify == method.name.stringify } %}
 
+        {% all_annotations_return_nil_im = crystal_class.resolve.annotations(Anyolite::ReturnNilClassMethod) %}
+        {% annotation_return_nil_im = all_annotations_return_nil_im.find { |element| element[0].id.stringify == method.name.stringify } %}
+
         {% if method.annotation(Anyolite::Rename) %}
           {% ruby_name = method.annotation(Anyolite::Rename)[0].id %}
         {% elsif annotation_rename_im && method.name.stringify == annotation_rename_im[0].stringify %}
@@ -164,6 +175,11 @@ module Anyolite
           {% without_keywords = annotation_without_keyword_im[1] ? annotation_without_keyword_im[1] : -1 %}
         {% end %}
 
+        {% return_nil = false %}
+        {% if method.annotation(Anyolite::ReturnNil) || (annotation_return_nil_im) %}
+          {% return_nil = true %}
+        {% end %}
+
         {% puts "> Processing class method #{crystal_class}::#{method.name} to #{ruby_name}\n--> Args: #{method.args}" if verbose %}
         
         # Ignore private and protected methods (can't be called from outside, they'd need to be wrapped for this to work)
@@ -184,11 +200,11 @@ module Anyolite
         {% elsif method.name[-1..-1] =~ /\W/ %}
           {% operator = ruby_name %}
 
-          Anyolite::Macro.wrap_method_index({{rb_interpreter}}, {{crystal_class}}, {{index}}, "{{ruby_name}}", operator: "{{operator}}", is_class_method: true, without_keywords: -1, context: {{context}})
+          Anyolite::Macro.wrap_method_index({{rb_interpreter}}, {{crystal_class}}, {{index}}, "{{ruby_name}}", operator: "{{operator}}", is_class_method: true, without_keywords: -1, context: {{context}}, return_nil: {{return_nil}})
           {% how_many_times_wrapped[ruby_name.stringify] = how_many_times_wrapped[ruby_name.stringify] ? how_many_times_wrapped[ruby_name.stringify] + 1 : 1 %}
         # Handle other class methods
         {% else %}
-          Anyolite::Macro.wrap_method_index({{rb_interpreter}}, {{crystal_class}}, {{index}}, "{{ruby_name}}", is_class_method: true, without_keywords: {{without_keywords}}, added_keyword_args: {{added_keyword_args}}, context: {{context}})
+          Anyolite::Macro.wrap_method_index({{rb_interpreter}}, {{crystal_class}}, {{index}}, "{{ruby_name}}", is_class_method: true, without_keywords: {{without_keywords}}, added_keyword_args: {{added_keyword_args}}, context: {{context}}, return_nil: {{return_nil}})
           {% how_many_times_wrapped[ruby_name.stringify] = how_many_times_wrapped[ruby_name.stringify] ? how_many_times_wrapped[ruby_name.stringify] + 1 : 1 %}
         {% end %}
 

@@ -109,8 +109,9 @@ module Anyolite
   #
   # The value *operator* will append the specified `String`
   # to the final name and *context* can give the function a `Path` for resolving types correctly.
-  macro wrap_module_function(rb_interpreter, under_module, name, proc, proc_args = nil, operator = "", context = nil)
-    Anyolite::Macro.wrap_module_function_with_args({{rb_interpreter}}, {{under_module}}, {{name}}, {{proc}}, {{proc_args}}, operator: {{operator}}, context: {{context}})
+  # The value *return_nil* will override any returned value with `nil`.
+  macro wrap_module_function(rb_interpreter, under_module, name, proc, proc_args = nil, operator = "", context = nil, return_nil = false)
+    Anyolite::Macro.wrap_module_function_with_args({{rb_interpreter}}, {{under_module}}, {{name}}, {{proc}}, {{proc_args}}, operator: {{operator}}, context: {{context}}, return_nil: {{return_nil}})
   end
 
   # Wraps a module function into mruby, using keyword arguments.
@@ -122,8 +123,9 @@ module Anyolite
   #
   # The value *operator* will append the specified `String`
   # to the final name and *context* can give the function a `Path` for resolving types correctly.
-  macro wrap_module_function_with_keywords(rb_interpreter, under_module, name, proc, keyword_args, regular_args = nil, operator = "", context = nil)
-    Anyolite::Macro.wrap_module_function_with_keyword_args({{rb_interpreter}}, {{under_module}}, {{name}}, {{proc}}, {{keyword_args}}, {{regular_args}}, operator: {{operator}}, context: {{context}})
+  # The value *return_nil* will override any returned value with `nil`.
+  macro wrap_module_function_with_keywords(rb_interpreter, under_module, name, proc, keyword_args, regular_args = nil, operator = "", context = nil, return_nil = false)
+    Anyolite::Macro.wrap_module_function_with_keyword_args({{rb_interpreter}}, {{under_module}}, {{name}}, {{proc}}, {{keyword_args}}, {{regular_args}}, operator: {{operator}}, context: {{context}}, return_nil: {{return_nil}})
   end
 
   # Wraps a class method into mruby.
@@ -135,8 +137,9 @@ module Anyolite
   #
   # The value *operator* will append the specified `String`
   # to the final name and *context* can give the function a `Path` for resolving types correctly.
-  macro wrap_class_method(rb_interpreter, crystal_class, name, proc, proc_args = nil, operator = "", context = nil)
-    Anyolite::Macro.wrap_class_method_with_args({{rb_interpreter}}, {{crystal_class}}, {{name}}, {{proc}}, {{proc_args}}, operator: {{operator}}, context: {{context}})
+  # The value *return_nil* will override any returned value with `nil`.
+  macro wrap_class_method(rb_interpreter, crystal_class, name, proc, proc_args = nil, operator = "", context = nil, return_nil = false)
+    Anyolite::Macro.wrap_class_method_with_args({{rb_interpreter}}, {{crystal_class}}, {{name}}, {{proc}}, {{proc_args}}, operator: {{operator}}, context: {{context}}, return_nil: {{return_nil}})
   end
 
   # Wraps a class method into mruby, using keyword arguments.
@@ -148,8 +151,9 @@ module Anyolite
   #
   # The value *operator* will append the specified `String`
   # to the final name and *context* can give the function a `Path` for resolving types correctly.
-  macro wrap_class_method_with_keywords(rb_interpreter, crystal_class, name, proc, keyword_args, regular_args = nil, operator = "", context = nil)
-    Anyolite::Macro.wrap_class_method_with_keyword_args({{rb_interpreter}}, {{crystal_class}}, {{name}}, {{proc}}, {{keyword_args}}, {{regular_args}}, operator: {{operator}}, context: {{context}})
+  # The value *return_nil* will override any returned value with `nil`.
+  macro wrap_class_method_with_keywords(rb_interpreter, crystal_class, name, proc, keyword_args, regular_args = nil, operator = "", context = nil, return_nil = false)
+    Anyolite::Macro.wrap_class_method_with_keyword_args({{rb_interpreter}}, {{crystal_class}}, {{name}}, {{proc}}, {{keyword_args}}, {{regular_args}}, operator: {{operator}}, context: {{context}}, return_nil: {{return_nil}})
   end
 
   # Wraps an instance method into mruby.
@@ -161,8 +165,9 @@ module Anyolite
   #
   # The value *operator* will append the specified `String`
   # to the final name and *context* can give the function a `Path` for resolving types correctly.
-  macro wrap_instance_method(rb_interpreter, crystal_class, name, proc, proc_args = nil, operator = "", context = nil)
-    Anyolite::Macro.wrap_instance_function_with_args({{rb_interpreter}}, {{crystal_class}}, {{name}}, {{proc}}, {{proc_args}}, operator: {{operator}}, context: {{context}})
+  # The value *return_nil* will override any returned value with `nil`.
+  macro wrap_instance_method(rb_interpreter, crystal_class, name, proc, proc_args = nil, operator = "", context = nil, return_nil = false)
+    Anyolite::Macro.wrap_instance_function_with_args({{rb_interpreter}}, {{crystal_class}}, {{name}}, {{proc}}, {{proc_args}}, operator: {{operator}}, context: {{context}}, return_nil: {{return_nil}})
   end
 
   # Wraps an instance method into mruby, using keyword arguments.
@@ -174,8 +179,9 @@ module Anyolite
   #
   # The value *operator* will append the specified `String`
   # to the final name and *context* can give the function a `Path` for resolving types correctly.
-  macro wrap_instance_method_with_keywords(rb_interpreter, crystal_class, name, proc, keyword_args, regular_args = nil, operator = "", context = nil)
-    Anyolite::Macro.wrap_instance_function_with_keyword_args({{rb_interpreter}}, {{crystal_class}}, {{name}}, {{proc}}, {{keyword_args}}, {{regular_args}}, operator: {{operator}}, context: {{context}})
+  # The value *return_nil* will override any returned value with `nil`.
+  macro wrap_instance_method_with_keywords(rb_interpreter, crystal_class, name, proc, keyword_args, regular_args = nil, operator = "", context = nil, return_nil = false)
+    Anyolite::Macro.wrap_instance_function_with_keyword_args({{rb_interpreter}}, {{crystal_class}}, {{name}}, {{proc}}, {{keyword_args}}, {{regular_args}}, operator: {{operator}}, context: {{context}}, return_nil: {{return_nil}})
   end
 
   # Wraps a setter into mruby.
@@ -299,6 +305,15 @@ module Anyolite
   # The optional seconds argument limits the number of arguments to wrap as positional
   # arguments (`-1` for all arguments).
   annotation WrapWithoutKeywordsClassMethod; end
+
+  # Lets the function always return `nil`.
+  annotation ReturnNil; end
+
+  # Lets the instance method given as the first argument always return `nil`.
+  annotation ReturnNilInstanceMethod; end
+
+  # Lets the class method given as the first argument always return `nil`.
+  annotation ReturnNilClassMethod; end
 
   # Specifies the generic type names for the following class as its argument,
   # in form of an `Array` of their names.

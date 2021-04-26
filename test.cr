@@ -164,6 +164,16 @@ module SomeModule
       ret = self + other
     end
 
+    def uint_test(arg : UInt8)
+      arg.to_s
+    end
+
+    @[Anyolite::ReturnNil]
+    def noreturn_test
+      puts "This will still be executed."
+      [1]
+    end
+
     def overload_test(arg : Int32 | String | Bool | Nil | Float32 | Test | TestEnum | GenericTest(Int32, Int32) = "Default String")
       if arg.is_a?(Test)
         puts "Test: A test object with x = #{arg.x}"
