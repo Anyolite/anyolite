@@ -1,0 +1,1299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="generator" content="Crystal Docs 1.0.0">
+<meta name="crystal_docs.project_version" content="0.9.1">
+<meta name="crystal_docs.project_name" content="anyolite">
+
+
+
+<link href="../css/style.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="../js/doc.js"></script>
+
+  <meta name="repository-name" content="anyolite">
+  <title>Anyolite::Macro - anyolite 0.9.1</title>
+  <script type="text/javascript">
+    CrystalDocs.base_path = "../";
+  </script>
+</head>
+<body>
+
+<svg class="hidden">
+  <symbol id="octicon-link" viewBox="0 0 16 16">
+    <path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path>
+  </symbol>
+</svg>
+<div class="sidebar">
+  <div class="sidebar-header">
+    <div class="search-box">
+      <input type="search" class="search-input" placeholder="Search..." spellcheck="false" aria-label="Search">
+    </div>
+
+    <div class="project-summary">
+      <h1 class="project-name">
+        <a href="../index.html">
+          anyolite
+        </a>
+      </h1>
+
+      <span class="project-version">
+        0.9.1
+      </span>
+    </div>
+  </div>
+
+  <div class="search-results hidden">
+    <ul class="search-list"></ul>
+  </div>
+
+  <div class="types-list">
+    <ul>
+  
+  <li class="parent open current" data-id="anyolite/Anyolite" data-name="anyolite">
+      <a href="../Anyolite.html">Anyolite</a>
+      
+        <ul>
+  
+  <li class=" " data-id="anyolite/Anyolite/Empty" data-name="anyolite::empty">
+      <a href="../Anyolite/Empty.html">Empty</a>
+      
+    </li>
+  
+  <li class=" " data-id="anyolite/Anyolite/Exclude" data-name="anyolite::exclude">
+      <a href="../Anyolite/Exclude.html">Exclude</a>
+      
+    </li>
+  
+  <li class=" " data-id="anyolite/Anyolite/ExcludeClassMethod" data-name="anyolite::excludeclassmethod">
+      <a href="../Anyolite/ExcludeClassMethod.html">ExcludeClassMethod</a>
+      
+    </li>
+  
+  <li class=" " data-id="anyolite/Anyolite/ExcludeConstant" data-name="anyolite::excludeconstant">
+      <a href="../Anyolite/ExcludeConstant.html">ExcludeConstant</a>
+      
+    </li>
+  
+  <li class=" " data-id="anyolite/Anyolite/ExcludeInstanceMethod" data-name="anyolite::excludeinstancemethod">
+      <a href="../Anyolite/ExcludeInstanceMethod.html">ExcludeInstanceMethod</a>
+      
+    </li>
+  
+  <li class=" current" data-id="anyolite/Anyolite/Macro" data-name="anyolite::macro">
+      <a href="../Anyolite/Macro.html">Macro</a>
+      
+    </li>
+  
+  <li class=" " data-id="anyolite/Anyolite/RbCast" data-name="anyolite::rbcast">
+      <a href="../Anyolite/RbCast.html">RbCast</a>
+      
+    </li>
+  
+  <li class=" " data-id="anyolite/Anyolite/RbClass" data-name="anyolite::rbclass">
+      <a href="../Anyolite/RbClass.html">RbClass</a>
+      
+    </li>
+  
+  <li class=" " data-id="anyolite/Anyolite/RbClassCache" data-name="anyolite::rbclasscache">
+      <a href="../Anyolite/RbClassCache.html">RbClassCache</a>
+      
+    </li>
+  
+  <li class=" " data-id="anyolite/Anyolite/RbInterpreter" data-name="anyolite::rbinterpreter">
+      <a href="../Anyolite/RbInterpreter.html">RbInterpreter</a>
+      
+    </li>
+  
+  <li class=" " data-id="anyolite/Anyolite/RbModule" data-name="anyolite::rbmodule">
+      <a href="../Anyolite/RbModule.html">RbModule</a>
+      
+    </li>
+  
+  <li class=" " data-id="anyolite/Anyolite/RbRefTable" data-name="anyolite::rbreftable">
+      <a href="../Anyolite/RbRefTable.html">RbRefTable</a>
+      
+    </li>
+  
+  <li class=" " data-id="anyolite/Anyolite/RbTypeCache" data-name="anyolite::rbtypecache">
+      <a href="../Anyolite/RbTypeCache.html">RbTypeCache</a>
+      
+    </li>
+  
+  <li class=" " data-id="anyolite/Anyolite/Rename" data-name="anyolite::rename">
+      <a href="../Anyolite/Rename.html">Rename</a>
+      
+    </li>
+  
+  <li class=" " data-id="anyolite/Anyolite/RenameClass" data-name="anyolite::renameclass">
+      <a href="../Anyolite/RenameClass.html">RenameClass</a>
+      
+    </li>
+  
+  <li class=" " data-id="anyolite/Anyolite/RenameClassMethod" data-name="anyolite::renameclassmethod">
+      <a href="../Anyolite/RenameClassMethod.html">RenameClassMethod</a>
+      
+    </li>
+  
+  <li class=" " data-id="anyolite/Anyolite/RenameConstant" data-name="anyolite::renameconstant">
+      <a href="../Anyolite/RenameConstant.html">RenameConstant</a>
+      
+    </li>
+  
+  <li class=" " data-id="anyolite/Anyolite/RenameInstanceMethod" data-name="anyolite::renameinstancemethod">
+      <a href="../Anyolite/RenameInstanceMethod.html">RenameInstanceMethod</a>
+      
+    </li>
+  
+  <li class=" " data-id="anyolite/Anyolite/RenameModule" data-name="anyolite::renamemodule">
+      <a href="../Anyolite/RenameModule.html">RenameModule</a>
+      
+    </li>
+  
+  <li class=" " data-id="anyolite/Anyolite/ReturnNil" data-name="anyolite::returnnil">
+      <a href="../Anyolite/ReturnNil.html">ReturnNil</a>
+      
+    </li>
+  
+  <li class=" " data-id="anyolite/Anyolite/ReturnNilClassMethod" data-name="anyolite::returnnilclassmethod">
+      <a href="../Anyolite/ReturnNilClassMethod.html">ReturnNilClassMethod</a>
+      
+    </li>
+  
+  <li class=" " data-id="anyolite/Anyolite/ReturnNilInstanceMethod" data-name="anyolite::returnnilinstancemethod">
+      <a href="../Anyolite/ReturnNilInstanceMethod.html">ReturnNilInstanceMethod</a>
+      
+    </li>
+  
+  <li class=" " data-id="anyolite/Anyolite/Specialize" data-name="anyolite::specialize">
+      <a href="../Anyolite/Specialize.html">Specialize</a>
+      
+    </li>
+  
+  <li class=" " data-id="anyolite/Anyolite/SpecializeClassMethod" data-name="anyolite::specializeclassmethod">
+      <a href="../Anyolite/SpecializeClassMethod.html">SpecializeClassMethod</a>
+      
+    </li>
+  
+  <li class=" " data-id="anyolite/Anyolite/SpecializeInstanceMethod" data-name="anyolite::specializeinstancemethod">
+      <a href="../Anyolite/SpecializeInstanceMethod.html">SpecializeInstanceMethod</a>
+      
+    </li>
+  
+  <li class=" " data-id="anyolite/Anyolite/SpecifyGenericTypes" data-name="anyolite::specifygenerictypes">
+      <a href="../Anyolite/SpecifyGenericTypes.html">SpecifyGenericTypes</a>
+      
+    </li>
+  
+  <li class=" " data-id="anyolite/Anyolite/StructWrapper" data-name="anyolite::structwrapper(t)">
+      <a href="../Anyolite/StructWrapper.html">StructWrapper</a>
+      
+    </li>
+  
+  <li class=" " data-id="anyolite/Anyolite/Undefined" data-name="anyolite::undefined">
+      <a href="../Anyolite/Undefined.html">Undefined</a>
+      
+    </li>
+  
+  <li class=" " data-id="anyolite/Anyolite/WrapWithoutKeywords" data-name="anyolite::wrapwithoutkeywords">
+      <a href="../Anyolite/WrapWithoutKeywords.html">WrapWithoutKeywords</a>
+      
+    </li>
+  
+  <li class=" " data-id="anyolite/Anyolite/WrapWithoutKeywordsClassMethod" data-name="anyolite::wrapwithoutkeywordsclassmethod">
+      <a href="../Anyolite/WrapWithoutKeywordsClassMethod.html">WrapWithoutKeywordsClassMethod</a>
+      
+    </li>
+  
+  <li class=" " data-id="anyolite/Anyolite/WrapWithoutKeywordsInstanceMethod" data-name="anyolite::wrapwithoutkeywordsinstancemethod">
+      <a href="../Anyolite/WrapWithoutKeywordsInstanceMethod.html">WrapWithoutKeywordsInstanceMethod</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+</ul>
+
+  </div>
+</div>
+
+
+<div class="main-content">
+<h1 class="type-name">
+
+  <span class="kind">module</span> Anyolite::Macro
+
+</h1>
+
+
+
+
+
+  <h2>
+    <a id="overview" class="anchor" href="#overview">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Overview
+  </h2>
+
+  <p>Helper methods which should not be used for trivial cases in the final version</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <h2>
+    <a id="defined-in" class="anchor" href="#defined-in">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Defined in:
+  </h2>
+  
+    
+      <a href="https://github.com/Anyolite/anyolite/blob/v0.9.1/src/Macro.cr#L3" target="_blank">
+        Macro.cr
+      </a>
+    
+    <br/>
+  
+    
+      <a href="https://github.com/Anyolite/anyolite/blob/v0.9.1/src/macros/ArgConversions.cr#L2" target="_blank">
+        macros/ArgConversions.cr
+      </a>
+    
+    <br/>
+  
+    
+      <a href="https://github.com/Anyolite/anyolite/blob/v0.9.1/src/macros/ArgTuples.cr#L2" target="_blank">
+        macros/ArgTuples.cr
+      </a>
+    
+    <br/>
+  
+    
+      <a href="https://github.com/Anyolite/anyolite/blob/v0.9.1/src/macros/FormatString.cr#L2" target="_blank">
+        macros/FormatString.cr
+      </a>
+    
+    <br/>
+  
+    
+      <a href="https://github.com/Anyolite/anyolite/blob/v0.9.1/src/macros/FunctionCalls.cr#L2" target="_blank">
+        macros/FunctionCalls.cr
+      </a>
+    
+    <br/>
+  
+    
+      <a href="https://github.com/Anyolite/anyolite/blob/v0.9.1/src/macros/FunctionGenerators.cr#L2" target="_blank">
+        macros/FunctionGenerators.cr
+      </a>
+    
+    <br/>
+  
+    
+      <a href="https://github.com/Anyolite/anyolite/blob/v0.9.1/src/macros/ObjectAllocations.cr#L2" target="_blank">
+        macros/ObjectAllocations.cr
+      </a>
+    
+    <br/>
+  
+    
+      <a href="https://github.com/Anyolite/anyolite/blob/v0.9.1/src/macros/RubyConversions.cr#L2" target="_blank">
+        macros/RubyConversions.cr
+      </a>
+    
+    <br/>
+  
+    
+      <a href="https://github.com/Anyolite/anyolite/blob/v0.9.1/src/macros/RubyTypes.cr#L2" target="_blank">
+        macros/RubyTypes.cr
+      </a>
+    
+    <br/>
+  
+    
+      <a href="https://github.com/Anyolite/anyolite/blob/v0.9.1/src/macros/UnionCasts.cr#L2" target="_blank">
+        macros/UnionCasts.cr
+      </a>
+    
+    <br/>
+  
+    
+      <a href="https://github.com/Anyolite/anyolite/blob/v0.9.1/src/macros/WrapAll.cr#L2" target="_blank">
+        macros/WrapAll.cr
+      </a>
+    
+    <br/>
+  
+    
+      <a href="https://github.com/Anyolite/anyolite/blob/v0.9.1/src/macros/WrapMethodIndex.cr#L2" target="_blank">
+        macros/WrapMethodIndex.cr
+      </a>
+    
+    <br/>
+  
+    
+      <a href="https://github.com/Anyolite/anyolite/blob/v0.9.1/src/macros/Wrappers.cr#L2" target="_blank">
+        macros/Wrappers.cr
+      </a>
+    
+    <br/>
+  
+
+
+
+
+
+
+
+
+
+
+
+  <h2>
+    <a id="macro-summary" class="anchor" href="#macro-summary">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Macro Summary
+  </h2>
+  <ul class="list-summary">
+    
+      <li class="entry-summary">
+        <a href="#add_default_constructor(rb_interpreter,crystal_class,verbose)-macro" class="signature"><strong>add_default_constructor</strong>(rb_interpreter, crystal_class, verbose)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#add_enum_constructor(rb_interpreter,crystal_class,verbose)-macro" class="signature"><strong>add_enum_constructor</strong>(rb_interpreter, crystal_class, verbose)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#allocate_constructed_object(crystal_class,obj,new_obj)-macro" class="signature"><strong>allocate_constructed_object</strong>(crystal_class, obj, new_obj)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#call_and_return(rb,proc,regular_args,converted_args,operator=&quot;&quot;,return_nil=false)-macro" class="signature"><strong>call_and_return</strong>(rb, proc, regular_args, converted_args, operator = <span class="s">&quot;&quot;</span>, return_nil = <span class="n">false</span>)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#call_and_return_instance_method(rb,proc,converted_obj,converted_args,operator=&quot;&quot;,return_nil=false)-macro" class="signature"><strong>call_and_return_instance_method</strong>(rb, proc, converted_obj, converted_args, operator = <span class="s">&quot;&quot;</span>, return_nil = <span class="n">false</span>)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#call_and_return_keyword_instance_method(rb,proc,converted_obj,converted_regular_args,keyword_args,kw_args,operator=&quot;&quot;,empty_regular=false,context=nil,type_vars=nil,type_var_names=nil,return_nil=false)-macro" class="signature"><strong>call_and_return_keyword_instance_method</strong>(rb, proc, converted_obj, converted_regular_args, keyword_args, kw_args, operator = <span class="s">&quot;&quot;</span>, empty_regular = <span class="n">false</span>, context = <span class="n">nil</span>, type_vars = <span class="n">nil</span>, type_var_names = <span class="n">nil</span>, return_nil = <span class="n">false</span>)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#call_and_return_keyword_method(rb,proc,converted_regular_args,keyword_args,kw_args,operator=&quot;&quot;,empty_regular=false,context=nil,type_vars=nil,type_var_names=nil,return_nil=false)-macro" class="signature"><strong>call_and_return_keyword_method</strong>(rb, proc, converted_regular_args, keyword_args, kw_args, operator = <span class="s">&quot;&quot;</span>, empty_regular = <span class="n">false</span>, context = <span class="n">nil</span>, type_vars = <span class="n">nil</span>, type_var_names = <span class="n">nil</span>, return_nil = <span class="n">false</span>)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#cast_to_union_value(rb,value,types,context=nil)-macro" class="signature"><strong>cast_to_union_value</strong>(rb, value, types, context = <span class="n">nil</span>)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#check_and_cast_resolved_union_type(rb,value,type,raw_type,context=nil)-macro" class="signature"><strong>check_and_cast_resolved_union_type</strong>(rb, value, type, raw_type, context = <span class="n">nil</span>)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#check_and_cast_union_type(rb,value,type,raw_type,context=nil)-macro" class="signature"><strong>check_and_cast_union_type</strong>(rb, value, type, raw_type, context = <span class="n">nil</span>)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#convert_arg(rb,arg,arg_type,context=nil)-macro" class="signature"><strong>convert_arg</strong>(rb, arg, arg_type, context = <span class="n">nil</span>)</a>
+        
+          <div class="summary"><p>Converts Ruby values to Crystal values</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#convert_args(rb,args,regular_args,context)-macro" class="signature"><strong>convert_args</strong>(rb, args, regular_args, context)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#convert_from_ruby_object(rb,obj,crystal_type)-macro" class="signature"><strong>convert_from_ruby_object</strong>(rb, obj, crystal_type)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#convert_from_ruby_struct(rb,obj,crystal_type)-macro" class="signature"><strong>convert_from_ruby_struct</strong>(rb, obj, crystal_type)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#convert_keyword_arg(rb,arg,arg_type,context=nil,type_vars=nil,type_var_names=nil,debug_information=nil)-macro" class="signature"><strong>convert_keyword_arg</strong>(rb, arg, arg_type, context = <span class="n">nil</span>, type_vars = <span class="n">nil</span>, type_var_names = <span class="n">nil</span>, debug_information = <span class="n">nil</span>)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#convert_resolved_arg(rb,arg,arg_type,raw_arg_type,context=nil)-macro" class="signature"><strong>convert_resolved_arg</strong>(rb, arg, arg_type, raw_arg_type, context = <span class="n">nil</span>)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#convert_resolved_keyword_arg(rb,arg,arg_type,raw_arg_type,context=nil,debug_information=nil)-macro" class="signature"><strong>convert_resolved_keyword_arg</strong>(rb, arg, arg_type, raw_arg_type, context = <span class="n">nil</span>, debug_information = <span class="n">nil</span>)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#format_char(arg,optional_values=false,context=nil)-macro" class="signature"><strong>format_char</strong>(arg, optional_values = <span class="n">false</span>, context = <span class="n">nil</span>)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#format_string(args,context=nil)-macro" class="signature"><strong>format_string</strong>(args, context = <span class="n">nil</span>)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#generate_arg_tuple(rb,args,context=nil)-macro" class="signature"><strong>generate_arg_tuple</strong>(rb, args, context = <span class="n">nil</span>)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#generate_keyword_argument_struct(rb_interpreter,keyword_args)-macro" class="signature"><strong>generate_keyword_argument_struct</strong>(rb_interpreter, keyword_args)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#generate_keyword_names(rb_interpreter,keyword_args)-macro" class="signature"><strong>generate_keyword_names</strong>(rb_interpreter, keyword_args)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#get_converted_args(rb,regular_args,context)-macro" class="signature"><strong>get_converted_args</strong>(rb, regular_args, context)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#get_raw_args(rb,regular_args,context=nil)-macro" class="signature"><strong>get_raw_args</strong>(rb, regular_args, context = <span class="n">nil</span>)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#pointer_type(type,context=nil)-macro" class="signature"><strong>pointer_type</strong>(type, context = <span class="n">nil</span>)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#resolve_format_char(arg,raw_arg,context=nil)-macro" class="signature"><strong>resolve_format_char</strong>(arg, raw_arg, context = <span class="n">nil</span>)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#resolve_pointer_type(type,raw_type,context=nil)-macro" class="signature"><strong>resolve_pointer_type</strong>(type, raw_type, context = <span class="n">nil</span>)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#resolve_type_in_ruby(type,raw_type,context=nil)-macro" class="signature"><strong>resolve_type_in_ruby</strong>(type, raw_type, context = <span class="n">nil</span>)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#type_in_ruby(type,context=nil)-macro" class="signature"><strong>type_in_ruby</strong>(type, context = <span class="n">nil</span>)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#wrap_all_class_methods(rb_interpreter,crystal_class,exclusions,verbose,context=nil)-macro" class="signature"><strong>wrap_all_class_methods</strong>(rb_interpreter, crystal_class, exclusions, verbose, context = <span class="n">nil</span>)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#wrap_all_constants(rb_interpreter,crystal_class,exclusions,verbose,context=nil)-macro" class="signature"><strong>wrap_all_constants</strong>(rb_interpreter, crystal_class, exclusions, verbose, context = <span class="n">nil</span>)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#wrap_all_instance_methods(rb_interpreter,crystal_class,exclusions,verbose,context=nil,use_enum_constructor=false)-macro" class="signature"><strong>wrap_all_instance_methods</strong>(rb_interpreter, crystal_class, exclusions, verbose, context = <span class="n">nil</span>, use_enum_constructor = <span class="n">false</span>)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#wrap_class_method_with_args(rb_interpreter,crystal_class,name,proc,regular_args=nil,operator=&quot;&quot;,context=nil,return_nil=nil)-macro" class="signature"><strong>wrap_class_method_with_args</strong>(rb_interpreter, crystal_class, name, proc, regular_args = <span class="n">nil</span>, operator = <span class="s">&quot;&quot;</span>, context = <span class="n">nil</span>, return_nil = <span class="n">nil</span>)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#wrap_class_method_with_keyword_args(rb_interpreter,crystal_class,name,proc,keyword_args,regular_args=nil,operator=&quot;&quot;,context=nil,return_nil=nil)-macro" class="signature"><strong>wrap_class_method_with_keyword_args</strong>(rb_interpreter, crystal_class, name, proc, keyword_args, regular_args = <span class="n">nil</span>, operator = <span class="s">&quot;&quot;</span>, context = <span class="n">nil</span>, return_nil = <span class="n">nil</span>)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#wrap_constant_or_class(rb_interpreter,under_class_or_module,ruby_name,value,verbose=false)-macro" class="signature"><strong>wrap_constant_or_class</strong>(rb_interpreter, under_class_or_module, ruby_name, value, verbose = <span class="n">false</span>)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#wrap_constructor_function_with_args(rb_interpreter,crystal_class,proc,regular_args=nil,operator=&quot;&quot;,context=nil)-macro" class="signature"><strong>wrap_constructor_function_with_args</strong>(rb_interpreter, crystal_class, proc, regular_args = <span class="n">nil</span>, operator = <span class="s">&quot;&quot;</span>, context = <span class="n">nil</span>)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#wrap_constructor_function_with_keyword_args(rb_interpreter,crystal_class,proc,keyword_args,regular_args=nil,operator=&quot;&quot;,context=nil)-macro" class="signature"><strong>wrap_constructor_function_with_keyword_args</strong>(rb_interpreter, crystal_class, proc, keyword_args, regular_args = <span class="n">nil</span>, operator = <span class="s">&quot;&quot;</span>, context = <span class="n">nil</span>)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#wrap_instance_function_with_args(rb_interpreter,crystal_class,name,proc,regular_args=nil,operator=&quot;&quot;,context=nil,return_nil=nil)-macro" class="signature"><strong>wrap_instance_function_with_args</strong>(rb_interpreter, crystal_class, name, proc, regular_args = <span class="n">nil</span>, operator = <span class="s">&quot;&quot;</span>, context = <span class="n">nil</span>, return_nil = <span class="n">nil</span>)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#wrap_instance_function_with_keyword_args(rb_interpreter,crystal_class,name,proc,keyword_args,regular_args=nil,operator=&quot;&quot;,context=nil,return_nil=nil)-macro" class="signature"><strong>wrap_instance_function_with_keyword_args</strong>(rb_interpreter, crystal_class, name, proc, keyword_args, regular_args = <span class="n">nil</span>, operator = <span class="s">&quot;&quot;</span>, context = <span class="n">nil</span>, return_nil = <span class="n">nil</span>)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#wrap_method_index(rb_interpreter,crystal_class,method_index,ruby_name,is_constructor=false,is_class_method=false,operator=&quot;&quot;,cut_name=nil,without_keywords=false,added_keyword_args=nil,context=nil,return_nil=false)-macro" class="signature"><strong>wrap_method_index</strong>(rb_interpreter, crystal_class, method_index, ruby_name, is_constructor = <span class="n">false</span>, is_class_method = <span class="n">false</span>, operator = <span class="s">&quot;&quot;</span>, cut_name = <span class="n">nil</span>, without_keywords = <span class="n">false</span>, added_keyword_args = <span class="n">nil</span>, context = <span class="n">nil</span>, return_nil = <span class="n">false</span>)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#wrap_module_function_with_args(rb_interpreter,under_module,name,proc,regular_args=nil,context=nil,return_nil=nil)-macro" class="signature"><strong>wrap_module_function_with_args</strong>(rb_interpreter, under_module, name, proc, regular_args = <span class="n">nil</span>, context = <span class="n">nil</span>, return_nil = <span class="n">nil</span>)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#wrap_module_function_with_keyword_args(rb_interpreter,under_module,name,proc,keyword_args,regular_args=nil,operator=&quot;&quot;,context=nil,return_nil=nil)-macro" class="signature"><strong>wrap_module_function_with_keyword_args</strong>(rb_interpreter, under_module, name, proc, keyword_args, regular_args = <span class="n">nil</span>, operator = <span class="s">&quot;&quot;</span>, context = <span class="n">nil</span>, return_nil = <span class="n">nil</span>)</a>
+        
+      </li>
+    
+  </ul>
+
+
+
+<div class="methods-inherited">
+  
+</div>
+
+
+
+
+
+
+
+
+  <h2>
+    <a id="macro-detail" class="anchor" href="#macro-detail">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Macro Detail
+  </h2>
+  
+    <div class="entry-detail" id="add_default_constructor(rb_interpreter,crystal_class,verbose)-macro">
+      <div class="signature">
+        
+        macro <strong>add_default_constructor</strong>(rb_interpreter, crystal_class, verbose)
+
+        <a class="method-permalink" href="#add_default_constructor(rb_interpreter,crystal_class,verbose)-macro">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.9.1/src/macros/FunctionGenerators.cr#L3" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="add_enum_constructor(rb_interpreter,crystal_class,verbose)-macro">
+      <div class="signature">
+        
+        macro <strong>add_enum_constructor</strong>(rb_interpreter, crystal_class, verbose)
+
+        <a class="method-permalink" href="#add_enum_constructor(rb_interpreter,crystal_class,verbose)-macro">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.9.1/src/macros/FunctionGenerators.cr#L8" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="allocate_constructed_object(crystal_class,obj,new_obj)-macro">
+      <div class="signature">
+        
+        macro <strong>allocate_constructed_object</strong>(crystal_class, obj, new_obj)
+
+        <a class="method-permalink" href="#allocate_constructed_object(crystal_class,obj,new_obj)-macro">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.9.1/src/macros/ObjectAllocations.cr#L3" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="call_and_return(rb,proc,regular_args,converted_args,operator=&amp;quot;&amp;quot;,return_nil=false)-macro">
+      <div class="signature">
+        
+        macro <strong>call_and_return</strong>(rb, proc, regular_args, converted_args, operator = <span class="s">&quot;&quot;</span>, return_nil = <span class="n">false</span>)
+
+        <a class="method-permalink" href="#call_and_return(rb,proc,regular_args,converted_args,operator=&quot;&quot;,return_nil=false)-macro">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.9.1/src/macros/FunctionCalls.cr#L3" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="call_and_return_instance_method(rb,proc,converted_obj,converted_args,operator=&amp;quot;&amp;quot;,return_nil=false)-macro">
+      <div class="signature">
+        
+        macro <strong>call_and_return_instance_method</strong>(rb, proc, converted_obj, converted_args, operator = <span class="s">&quot;&quot;</span>, return_nil = <span class="n">false</span>)
+
+        <a class="method-permalink" href="#call_and_return_instance_method(rb,proc,converted_obj,converted_args,operator=&quot;&quot;,return_nil=false)-macro">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.9.1/src/macros/FunctionCalls.cr#L50" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="call_and_return_keyword_instance_method(rb,proc,converted_obj,converted_regular_args,keyword_args,kw_args,operator=&amp;quot;&amp;quot;,empty_regular=false,context=nil,type_vars=nil,type_var_names=nil,return_nil=false)-macro">
+      <div class="signature">
+        
+        macro <strong>call_and_return_keyword_instance_method</strong>(rb, proc, converted_obj, converted_regular_args, keyword_args, kw_args, operator = <span class="s">&quot;&quot;</span>, empty_regular = <span class="n">false</span>, context = <span class="n">nil</span>, type_vars = <span class="n">nil</span>, type_var_names = <span class="n">nil</span>, return_nil = <span class="n">false</span>)
+
+        <a class="method-permalink" href="#call_and_return_keyword_instance_method(rb,proc,converted_obj,converted_regular_args,keyword_args,kw_args,operator=&quot;&quot;,empty_regular=false,context=nil,type_vars=nil,type_var_names=nil,return_nil=false)-macro">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.9.1/src/macros/FunctionCalls.cr#L76" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="call_and_return_keyword_method(rb,proc,converted_regular_args,keyword_args,kw_args,operator=&amp;quot;&amp;quot;,empty_regular=false,context=nil,type_vars=nil,type_var_names=nil,return_nil=false)-macro">
+      <div class="signature">
+        
+        macro <strong>call_and_return_keyword_method</strong>(rb, proc, converted_regular_args, keyword_args, kw_args, operator = <span class="s">&quot;&quot;</span>, empty_regular = <span class="n">false</span>, context = <span class="n">nil</span>, type_vars = <span class="n">nil</span>, type_var_names = <span class="n">nil</span>, return_nil = <span class="n">false</span>)
+
+        <a class="method-permalink" href="#call_and_return_keyword_method(rb,proc,converted_regular_args,keyword_args,kw_args,operator=&quot;&quot;,empty_regular=false,context=nil,type_vars=nil,type_var_names=nil,return_nil=false)-macro">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.9.1/src/macros/FunctionCalls.cr#L17" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="cast_to_union_value(rb,value,types,context=nil)-macro">
+      <div class="signature">
+        
+        macro <strong>cast_to_union_value</strong>(rb, value, types, context = <span class="n">nil</span>)
+
+        <a class="method-permalink" href="#cast_to_union_value(rb,value,types,context=nil)-macro">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.9.1/src/macros/UnionCasts.cr#L3" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="check_and_cast_resolved_union_type(rb,value,type,raw_type,context=nil)-macro">
+      <div class="signature">
+        
+        macro <strong>check_and_cast_resolved_union_type</strong>(rb, value, type, raw_type, context = <span class="n">nil</span>)
+
+        <a class="method-permalink" href="#check_and_cast_resolved_union_type(rb,value,type,raw_type,context=nil)-macro">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.9.1/src/macros/UnionCasts.cr#L41" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="check_and_cast_union_type(rb,value,type,raw_type,context=nil)-macro">
+      <div class="signature">
+        
+        macro <strong>check_and_cast_union_type</strong>(rb, value, type, raw_type, context = <span class="n">nil</span>)
+
+        <a class="method-permalink" href="#check_and_cast_union_type(rb,value,type,raw_type,context=nil)-macro">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.9.1/src/macros/UnionCasts.cr#L24" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="convert_arg(rb,arg,arg_type,context=nil)-macro">
+      <div class="signature">
+        
+        macro <strong>convert_arg</strong>(rb, arg, arg_type, context = <span class="n">nil</span>)
+
+        <a class="method-permalink" href="#convert_arg(rb,arg,arg_type,context=nil)-macro">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Converts Ruby values to Crystal values</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.9.1/src/macros/ArgConversions.cr#L11" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="convert_args(rb,args,regular_args,context)-macro">
+      <div class="signature">
+        
+        macro <strong>convert_args</strong>(rb, args, regular_args, context)
+
+        <a class="method-permalink" href="#convert_args(rb,args,regular_args,context)-macro">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.9.1/src/macros/ArgConversions.cr#L171" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="convert_from_ruby_object(rb,obj,crystal_type)-macro">
+      <div class="signature">
+        
+        macro <strong>convert_from_ruby_object</strong>(rb, obj, crystal_type)
+
+        <a class="method-permalink" href="#convert_from_ruby_object(rb,obj,crystal_type)-macro">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.9.1/src/macros/RubyConversions.cr#L3" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="convert_from_ruby_struct(rb,obj,crystal_type)-macro">
+      <div class="signature">
+        
+        macro <strong>convert_from_ruby_struct</strong>(rb, obj, crystal_type)
+
+        <a class="method-permalink" href="#convert_from_ruby_struct(rb,obj,crystal_type)-macro">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.9.1/src/macros/RubyConversions.cr#L13" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="convert_keyword_arg(rb,arg,arg_type,context=nil,type_vars=nil,type_var_names=nil,debug_information=nil)-macro">
+      <div class="signature">
+        
+        macro <strong>convert_keyword_arg</strong>(rb, arg, arg_type, context = <span class="n">nil</span>, type_vars = <span class="n">nil</span>, type_var_names = <span class="n">nil</span>, debug_information = <span class="n">nil</span>)
+
+        <a class="method-permalink" href="#convert_keyword_arg(rb,arg,arg_type,context=nil,type_vars=nil,type_var_names=nil,debug_information=nil)-macro">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.9.1/src/macros/ArgConversions.cr#L62" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="convert_resolved_arg(rb,arg,arg_type,raw_arg_type,context=nil)-macro">
+      <div class="signature">
+        
+        macro <strong>convert_resolved_arg</strong>(rb, arg, arg_type, raw_arg_type, context = <span class="n">nil</span>)
+
+        <a class="method-permalink" href="#convert_resolved_arg(rb,arg,arg_type,raw_arg_type,context=nil)-macro">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.9.1/src/macros/ArgConversions.cr#L29" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="convert_resolved_keyword_arg(rb,arg,arg_type,raw_arg_type,context=nil,debug_information=nil)-macro">
+      <div class="signature">
+        
+        macro <strong>convert_resolved_keyword_arg</strong>(rb, arg, arg_type, raw_arg_type, context = <span class="n">nil</span>, debug_information = <span class="n">nil</span>)
+
+        <a class="method-permalink" href="#convert_resolved_keyword_arg(rb,arg,arg_type,raw_arg_type,context=nil,debug_information=nil)-macro">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.9.1/src/macros/ArgConversions.cr#L131" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="format_char(arg,optional_values=false,context=nil)-macro">
+      <div class="signature">
+        
+        macro <strong>format_char</strong>(arg, optional_values = <span class="n">false</span>, context = <span class="n">nil</span>)
+
+        <a class="method-permalink" href="#format_char(arg,optional_values=false,context=nil)-macro">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.9.1/src/macros/FormatString.cr#L13" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="format_string(args,context=nil)-macro">
+      <div class="signature">
+        
+        macro <strong>format_string</strong>(args, context = <span class="n">nil</span>)
+
+        <a class="method-permalink" href="#format_string(args,context=nil)-macro">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.9.1/src/macros/FormatString.cr#L3" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="generate_arg_tuple(rb,args,context=nil)-macro">
+      <div class="signature">
+        
+        macro <strong>generate_arg_tuple</strong>(rb, args, context = <span class="n">nil</span>)
+
+        <a class="method-permalink" href="#generate_arg_tuple(rb,args,context=nil)-macro">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.9.1/src/macros/ArgTuples.cr#L3" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="generate_keyword_argument_struct(rb_interpreter,keyword_args)-macro">
+      <div class="signature">
+        
+        macro <strong>generate_keyword_argument_struct</strong>(rb_interpreter, keyword_args)
+
+        <a class="method-permalink" href="#generate_keyword_argument_struct(rb_interpreter,keyword_args)-macro">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.9.1/src/macros/ArgTuples.cr#L29" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="generate_keyword_names(rb_interpreter,keyword_args)-macro">
+      <div class="signature">
+        
+        macro <strong>generate_keyword_names</strong>(rb_interpreter, keyword_args)
+
+        <a class="method-permalink" href="#generate_keyword_names(rb_interpreter,keyword_args)-macro">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.9.1/src/macros/ArgTuples.cr#L40" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="get_converted_args(rb,regular_args,context)-macro">
+      <div class="signature">
+        
+        macro <strong>get_converted_args</strong>(rb, regular_args, context)
+
+        <a class="method-permalink" href="#get_converted_args(rb,regular_args,context)-macro">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.9.1/src/macros/ArgConversions.cr#L183" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="get_raw_args(rb,regular_args,context=nil)-macro">
+      <div class="signature">
+        
+        macro <strong>get_raw_args</strong>(rb, regular_args, context = <span class="n">nil</span>)
+
+        <a class="method-permalink" href="#get_raw_args(rb,regular_args,context=nil)-macro">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.9.1/src/macros/ArgConversions.cr#L3" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="pointer_type(type,context=nil)-macro">
+      <div class="signature">
+        
+        macro <strong>pointer_type</strong>(type, context = <span class="n">nil</span>)
+
+        <a class="method-permalink" href="#pointer_type(type,context=nil)-macro">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.9.1/src/macros/RubyTypes.cr#L43" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="resolve_format_char(arg,raw_arg,context=nil)-macro">
+      <div class="signature">
+        
+        macro <strong>resolve_format_char</strong>(arg, raw_arg, context = <span class="n">nil</span>)
+
+        <a class="method-permalink" href="#resolve_format_char(arg,raw_arg,context=nil)-macro">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.9.1/src/macros/FormatString.cr#L33" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="resolve_pointer_type(type,raw_type,context=nil)-macro">
+      <div class="signature">
+        
+        macro <strong>resolve_pointer_type</strong>(type, raw_type, context = <span class="n">nil</span>)
+
+        <a class="method-permalink" href="#resolve_pointer_type(type,raw_type,context=nil)-macro">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.9.1/src/macros/RubyTypes.cr#L57" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="resolve_type_in_ruby(type,raw_type,context=nil)-macro">
+      <div class="signature">
+        
+        macro <strong>resolve_type_in_ruby</strong>(type, raw_type, context = <span class="n">nil</span>)
+
+        <a class="method-permalink" href="#resolve_type_in_ruby(type,raw_type,context=nil)-macro">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.9.1/src/macros/RubyTypes.cr#L17" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="type_in_ruby(type,context=nil)-macro">
+      <div class="signature">
+        
+        macro <strong>type_in_ruby</strong>(type, context = <span class="n">nil</span>)
+
+        <a class="method-permalink" href="#type_in_ruby(type,context=nil)-macro">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.9.1/src/macros/RubyTypes.cr#L3" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="wrap_all_class_methods(rb_interpreter,crystal_class,exclusions,verbose,context=nil)-macro">
+      <div class="signature">
+        
+        macro <strong>wrap_all_class_methods</strong>(rb_interpreter, crystal_class, exclusions, verbose, context = <span class="n">nil</span>)
+
+        <a class="method-permalink" href="#wrap_all_class_methods(rb_interpreter,crystal_class,exclusions,verbose,context=nil)-macro">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.9.1/src/macros/WrapAll.cr#L117" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="wrap_all_constants(rb_interpreter,crystal_class,exclusions,verbose,context=nil)-macro">
+      <div class="signature">
+        
+        macro <strong>wrap_all_constants</strong>(rb_interpreter, crystal_class, exclusions, verbose, context = <span class="n">nil</span>)
+
+        <a class="method-permalink" href="#wrap_all_constants(rb_interpreter,crystal_class,exclusions,verbose,context=nil)-macro">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.9.1/src/macros/WrapAll.cr#L218" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="wrap_all_instance_methods(rb_interpreter,crystal_class,exclusions,verbose,context=nil,use_enum_constructor=false)-macro">
+      <div class="signature">
+        
+        macro <strong>wrap_all_instance_methods</strong>(rb_interpreter, crystal_class, exclusions, verbose, context = <span class="n">nil</span>, use_enum_constructor = <span class="n">false</span>)
+
+        <a class="method-permalink" href="#wrap_all_instance_methods(rb_interpreter,crystal_class,exclusions,verbose,context=nil,use_enum_constructor=false)-macro">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.9.1/src/macros/WrapAll.cr#L3" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="wrap_class_method_with_args(rb_interpreter,crystal_class,name,proc,regular_args=nil,operator=&amp;quot;&amp;quot;,context=nil,return_nil=nil)-macro">
+      <div class="signature">
+        
+        macro <strong>wrap_class_method_with_args</strong>(rb_interpreter, crystal_class, name, proc, regular_args = <span class="n">nil</span>, operator = <span class="s">&quot;&quot;</span>, context = <span class="n">nil</span>, return_nil = <span class="n">nil</span>)
+
+        <a class="method-permalink" href="#wrap_class_method_with_args(rb_interpreter,crystal_class,name,proc,regular_args=nil,operator=&quot;&quot;,context=nil,return_nil=nil)-macro">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.9.1/src/macros/Wrappers.cr#L54" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="wrap_class_method_with_keyword_args(rb_interpreter,crystal_class,name,proc,keyword_args,regular_args=nil,operator=&amp;quot;&amp;quot;,context=nil,return_nil=nil)-macro">
+      <div class="signature">
+        
+        macro <strong>wrap_class_method_with_keyword_args</strong>(rb_interpreter, crystal_class, name, proc, keyword_args, regular_args = <span class="n">nil</span>, operator = <span class="s">&quot;&quot;</span>, context = <span class="n">nil</span>, return_nil = <span class="n">nil</span>)
+
+        <a class="method-permalink" href="#wrap_class_method_with_keyword_args(rb_interpreter,crystal_class,name,proc,keyword_args,regular_args=nil,operator=&quot;&quot;,context=nil,return_nil=nil)-macro">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.9.1/src/macros/Wrappers.cr#L75" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="wrap_constant_or_class(rb_interpreter,under_class_or_module,ruby_name,value,verbose=false)-macro">
+      <div class="signature">
+        
+        macro <strong>wrap_constant_or_class</strong>(rb_interpreter, under_class_or_module, ruby_name, value, verbose = <span class="n">false</span>)
+
+        <a class="method-permalink" href="#wrap_constant_or_class(rb_interpreter,under_class_or_module,ruby_name,value,verbose=false)-macro">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.9.1/src/macros/Wrappers.cr#L250" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="wrap_constructor_function_with_args(rb_interpreter,crystal_class,proc,regular_args=nil,operator=&amp;quot;&amp;quot;,context=nil)-macro">
+      <div class="signature">
+        
+        macro <strong>wrap_constructor_function_with_args</strong>(rb_interpreter, crystal_class, proc, regular_args = <span class="n">nil</span>, operator = <span class="s">&quot;&quot;</span>, context = <span class="n">nil</span>)
+
+        <a class="method-permalink" href="#wrap_constructor_function_with_args(rb_interpreter,crystal_class,proc,regular_args=nil,operator=&quot;&quot;,context=nil)-macro">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.9.1/src/macros/Wrappers.cr#L177" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="wrap_constructor_function_with_keyword_args(rb_interpreter,crystal_class,proc,keyword_args,regular_args=nil,operator=&amp;quot;&amp;quot;,context=nil)-macro">
+      <div class="signature">
+        
+        macro <strong>wrap_constructor_function_with_keyword_args</strong>(rb_interpreter, crystal_class, proc, keyword_args, regular_args = <span class="n">nil</span>, operator = <span class="s">&quot;&quot;</span>, context = <span class="n">nil</span>)
+
+        <a class="method-permalink" href="#wrap_constructor_function_with_keyword_args(rb_interpreter,crystal_class,proc,keyword_args,regular_args=nil,operator=&quot;&quot;,context=nil)-macro">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.9.1/src/macros/Wrappers.cr#L201" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="wrap_instance_function_with_args(rb_interpreter,crystal_class,name,proc,regular_args=nil,operator=&amp;quot;&amp;quot;,context=nil,return_nil=nil)-macro">
+      <div class="signature">
+        
+        macro <strong>wrap_instance_function_with_args</strong>(rb_interpreter, crystal_class, name, proc, regular_args = <span class="n">nil</span>, operator = <span class="s">&quot;&quot;</span>, context = <span class="n">nil</span>, return_nil = <span class="n">nil</span>)
+
+        <a class="method-permalink" href="#wrap_instance_function_with_args(rb_interpreter,crystal_class,name,proc,regular_args=nil,operator=&quot;&quot;,context=nil,return_nil=nil)-macro">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.9.1/src/macros/Wrappers.cr#L109" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="wrap_instance_function_with_keyword_args(rb_interpreter,crystal_class,name,proc,keyword_args,regular_args=nil,operator=&amp;quot;&amp;quot;,context=nil,return_nil=nil)-macro">
+      <div class="signature">
+        
+        macro <strong>wrap_instance_function_with_keyword_args</strong>(rb_interpreter, crystal_class, name, proc, keyword_args, regular_args = <span class="n">nil</span>, operator = <span class="s">&quot;&quot;</span>, context = <span class="n">nil</span>, return_nil = <span class="n">nil</span>)
+
+        <a class="method-permalink" href="#wrap_instance_function_with_keyword_args(rb_interpreter,crystal_class,name,proc,keyword_args,regular_args=nil,operator=&quot;&quot;,context=nil,return_nil=nil)-macro">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.9.1/src/macros/Wrappers.cr#L137" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="wrap_method_index(rb_interpreter,crystal_class,method_index,ruby_name,is_constructor=false,is_class_method=false,operator=&amp;quot;&amp;quot;,cut_name=nil,without_keywords=false,added_keyword_args=nil,context=nil,return_nil=false)-macro">
+      <div class="signature">
+        
+        macro <strong>wrap_method_index</strong>(rb_interpreter, crystal_class, method_index, ruby_name, is_constructor = <span class="n">false</span>, is_class_method = <span class="n">false</span>, operator = <span class="s">&quot;&quot;</span>, cut_name = <span class="n">nil</span>, without_keywords = <span class="n">false</span>, added_keyword_args = <span class="n">nil</span>, context = <span class="n">nil</span>, return_nil = <span class="n">false</span>)
+
+        <a class="method-permalink" href="#wrap_method_index(rb_interpreter,crystal_class,method_index,ruby_name,is_constructor=false,is_class_method=false,operator=&quot;&quot;,cut_name=nil,without_keywords=false,added_keyword_args=nil,context=nil,return_nil=false)-macro">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.9.1/src/macros/WrapMethodIndex.cr#L3" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="wrap_module_function_with_args(rb_interpreter,under_module,name,proc,regular_args=nil,context=nil,return_nil=nil)-macro">
+      <div class="signature">
+        
+        macro <strong>wrap_module_function_with_args</strong>(rb_interpreter, under_module, name, proc, regular_args = <span class="n">nil</span>, context = <span class="n">nil</span>, return_nil = <span class="n">nil</span>)
+
+        <a class="method-permalink" href="#wrap_module_function_with_args(rb_interpreter,under_module,name,proc,regular_args=nil,context=nil,return_nil=nil)-macro">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.9.1/src/macros/Wrappers.cr#L3" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="wrap_module_function_with_keyword_args(rb_interpreter,under_module,name,proc,keyword_args,regular_args=nil,operator=&amp;quot;&amp;quot;,context=nil,return_nil=nil)-macro">
+      <div class="signature">
+        
+        macro <strong>wrap_module_function_with_keyword_args</strong>(rb_interpreter, under_module, name, proc, keyword_args, regular_args = <span class="n">nil</span>, operator = <span class="s">&quot;&quot;</span>, context = <span class="n">nil</span>, return_nil = <span class="n">nil</span>)
+
+        <a class="method-permalink" href="#wrap_module_function_with_keyword_args(rb_interpreter,under_module,name,proc,keyword_args,regular_args=nil,operator=&quot;&quot;,context=nil,return_nil=nil)-macro">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.9.1/src/macros/Wrappers.cr#L26" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+
+
+</div>
+
+</body>
+</html>
