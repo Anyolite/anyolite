@@ -97,3 +97,10 @@ puts "Are a and same_as_a equal? #{a == same_as_a}"
 
 puts a.uint_test(arg: 123)
 puts a.noreturn_test.class
+
+def dummy(value)
+  value.x += 1000
+  value.x * 2
+end
+
+puts a.block_test {|value| dummy(value)}
