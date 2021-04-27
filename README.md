@@ -125,9 +125,24 @@ More features will be added in the future.
 
 # Limitations
 
+## Hard limitations
+
+These limitations can not be circumvented using other methods.
+It might be possible to remove them in future versions, but for
+now they are potential roadblocks.
+
 * Currently, Anyolite does not work on Windows due to Crystal compiler bugs
 * Anyolite is only compatible with mruby 3 at the current time
+
+## Soft limitations
+
+The limitations here do not have a trivial solution (yet), but with some tricks and
+tools from Anyolite it should technically be possible to circumvent them. If one
+of these does definitely not work, but you need them to, please feel free to open an issue.
+
 * Arrays and hashes are not directly supported
+* Pointers are not directly supported
+* Procs and block arguments are not directly supported
 * Symbols do not work due to their compiletime nature in Crystal
 * Splat arguments and arbitrary keywords are not possible due to their reliance on symbols
 * Keywords will always be given to functions, even if optional (then with default values)
