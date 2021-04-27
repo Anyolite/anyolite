@@ -4,7 +4,8 @@ module Anyolite
                             is_constructor = false, is_class_method = false,
                             operator = "", cut_name = nil,
                             without_keywords = false, added_keyword_args = nil,
-                            context = nil, return_nil = false)
+                            context = nil, return_nil = false,
+                            accepts_block_arg = false)
 
       {% if is_class_method %}
         {% method = crystal_class.resolve.class.methods[method_index] %}
@@ -39,6 +40,8 @@ module Anyolite
       {% end %}
 
       {% final_arg_array = added_keyword_args ? added_keyword_args : method.args %}
+
+      # TODO: Make something with block args
 
       {% if final_arg_array.empty? %}
         {% if is_class_method %}

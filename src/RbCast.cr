@@ -124,6 +124,8 @@ module Anyolite
       RbCore.check_rb_data(value) != 0
     end
 
+    # TODO: Put ruby class name into string instead of internal value... value
+
     def self.cast_to_nil(rb : RbCore::State*, value : RbCore::RbValue)
       if RbCast.check_for_nil(value)
         nil

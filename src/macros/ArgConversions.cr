@@ -60,7 +60,6 @@ module Anyolite
     end
 
     macro convert_keyword_arg(rb, arg, arg_type, context = nil, type_vars = nil, type_var_names = nil, debug_information = nil)
-      # TODO: Is it possible to put the message somewhere else... or at least CATCH the exception?
       {% if arg_type.stringify.includes?("->") || arg_type.stringify.includes?(" Proc(") %}
         {% puts "\e[33m> INFO: Proc types are not allowed as arguments (#{debug_information.id}).\e[0m" %}
         raise "Proc types are not allowed as arguments ({{debug_information.id}})"

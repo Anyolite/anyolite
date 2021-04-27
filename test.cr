@@ -237,6 +237,7 @@ module SomeModule
     #   "Arg is #{arg}"
     # end
 
+    # TODO: Make this also work
     @[Anyolite::Exclude]
     def block_test(&block)
       return_value = yield self

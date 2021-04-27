@@ -149,6 +149,21 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 
 ### Version 0.10.0
 
+#### Features
+
+* [ ] Basic support for block arguments
+
+#### Breaking changes
+
+* [ ] Rename `convert_arg` to something better
+* [ ] Rename `convert_keyword_arg` to something better
+
+#### Usability
+
+* [ ] Better error messages when casting incompatible values
+
+### Version 0.11.0
+
 This version is planned to be the last feature release before 1.0.0.
 Currently, the way its features are going to be implemented is not yet determined,
 so it will probably take some time before it will be released.
