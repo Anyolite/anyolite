@@ -178,6 +178,10 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 
 * [ ] Better error messages when casting incompatible values
 
+#### Bugfixes
+
+* [X] Fixed reference table throwing an error when increasing counter
+
 ### Version 0.11.0
 
 This version is planned to be the last feature release before 1.0.0.
