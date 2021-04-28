@@ -11,6 +11,11 @@ module Anyolite
       return @@cache[crystal_class.name]
     end
 
+    def self.register_custom_destructor(crystal_class : Class, destructor : Proc(RbCore::State*, Void*, Void))
+      new_type = RbCore::RbDataType.new(struct_name: crystal_class.name, dfree: destructor)
+      Pointer(RbCore::RbDataType).malloc(size: 1, value: new_type)
+    end
+
     macro destructor_method(crystal_class)
       ->(rb_state : Anyolite::RbCore::State*, ptr : Void*) {
         if {{crystal_class}} <= Struct || {{crystal_class}} <= Enum

@@ -98,6 +98,9 @@ puts "Are a and same_as_a equal? #{a == same_as_a}"
 puts a.uint_test(arg: 123)
 puts a.noreturn_test.class
 
+puts a.overload_cheat_test(12334)
+puts a.overload_cheat_test("Something")
+
 result = a.block_test do |value| 
   value.x += 1000
   value.x * 2

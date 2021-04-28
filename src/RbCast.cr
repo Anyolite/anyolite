@@ -86,6 +86,42 @@ module Anyolite
       return new_ruby_object
     end
 
+    # Weak reference passing methods
+    # NOTE: These are highly untested and might still be unstable or might even leak memory
+
+    def self.pass_value(rb : RbCore::State*, value : Nil | Bool | Int | Float | String)
+      self.return_value(rb, value)
+    end
+
+    def self.pass_value(rb : RbCore::State*, value : Struct | Enum)
+      ruby_class = RbClassCache.get(typeof(value))
+
+      destructor = ->(rb_state : Anyolite::RbCore::State*, ptr : Void*) {}
+
+      ptr = Pointer(typeof(value)).malloc(size: 1, value: value)
+
+      new_ruby_object = RbCore.new_empty_object(rb, ruby_class, ptr.as(Void*), RbTypeCache.register_custom_destructor(typeof(value), destructor))
+
+      struct_wrapper = Macro.convert_from_ruby_struct(rb, new_ruby_object, typeof(value))
+      struct_wrapper.value = StructWrapper(typeof(value)).new(value)
+      
+      return new_ruby_object
+    end
+
+    def self.pass_value(rb : RbCore::State*, value : Object)
+      ruby_class = RbClassCache.get(typeof(value))
+
+      destructor = ->(rb_state : Anyolite::RbCore::State*, ptr : Void*) {}
+
+      ptr = Pointer(typeof(value)).malloc(size: 1, value: value)
+
+      new_ruby_object = RbCore.new_empty_object(rb, ruby_class, ptr.as(Void*), RbTypeCache.register_custom_destructor(typeof(value), destructor))
+
+      Macro.convert_from_ruby_object(rb, new_ruby_object, typeof(value)).value = value
+
+      return new_ruby_object
+    end
+
     # Class check methods
 
     def self.check_for_undef(value : RbCore::RbValue)

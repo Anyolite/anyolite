@@ -239,7 +239,8 @@ module SomeModule
 
     # TODO: Make this also work
     @[Anyolite::Exclude]
-    def block_test(&block)
+    #@[Anyolite::AddBlockArgs(1, Int32)]
+    def block_test
       return_value = yield self
       return_value.to_s
     end
@@ -253,6 +254,17 @@ module SomeModule
 
     def method_with_various_args
       puts "No args"
+    end
+
+    @[Anyolite::Specialize([arg : Int | String])]
+    @[Anyolite::WrapWithoutKeywords]
+    def overload_cheat_test(arg : Int)
+      "This was an int"
+    end
+
+    @[Anyolite::Exclude]
+    def overload_cheat_test(arg : String)
+      "This was a string"
     end
 
     # Gets called in mruby unless program crashes
@@ -292,7 +304,10 @@ Anyolite::RbInterpreter.create do |rb|
 
     converted_obj = Anyolite::Macro.convert_from_ruby_object(rb, obj, SomeModule::Test).value
 
-    crystal_return_value = converted_obj.block_test {Anyolite::Macro.convert_keyword_arg(rb, Anyolite::RbCore.rb_yield(rb, block_ptr.value, obj), Int32)}
+    crystal_return_value = converted_obj.block_test do |passed_value|
+      yield_value = Anyolite::RbCore.rb_yield(rb, block_ptr.value, Anyolite::RbCast.pass_value(rb, passed_value))
+      Anyolite::Macro.convert_keyword_arg(rb, yield_value, Int32)
+    end
 
     Anyolite::RbCast.return_value(rb, crystal_return_value)
   end
