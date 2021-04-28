@@ -144,6 +144,7 @@ of these does definitely not work, but you need them to, please feel free to ope
 * Pointers are not directly supported
 * Procs and block arguments are not directly supported
 * Symbols do not work due to their compiletime nature in Crystal
+* Only one function with the same name can be wrapped
 * Splat arguments and arbitrary keywords are not possible due to their reliance on symbols
 * Keywords will always be given to functions, even if optional (then with default values)
 * Non-keyword function arguments are always set to their default values before receiving their final values
