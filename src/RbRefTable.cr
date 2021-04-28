@@ -30,9 +30,9 @@ module Anyolite
       puts "> Added reference #{identification} -> #{value}" if option_active?(:logging)
       if @@content[identification]?
         if value != @@content[identification][0]
-          puts "WARNING: Value #{identification} replaced pointers (#{value} vs #{@@content[identification][0]})." if option_active?(:warnings)
-          raise "Corrupted reference table" if option_active?(:pedantic)
           if option_active?(:replace_conflicting_pointers)
+            puts "WARNING: Value #{identification} replaced pointers (#{value} vs #{@@content[identification][0]})." if option_active?(:warnings)
+            raise "Corrupted reference table" if option_active?(:pedantic)
             @@content[identification] = {value, @@content[identification][1] + 1}
           else
             @@content[identification] = {@@content[identification][0], @@content[identification][1] + 1}

@@ -101,9 +101,13 @@ puts a.noreturn_test.class
 puts a.overload_cheat_test(12334)
 puts a.overload_cheat_test("Something")
 
+carrier = nil
+
 result = a.block_test do |value| 
+  carrier = value
   value.x += 1000
   value.x * 2
 end
 
 puts result
+puts carrier.x
