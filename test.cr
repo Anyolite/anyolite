@@ -237,12 +237,23 @@ module SomeModule
     #   "Arg is #{arg}"
     # end
 
-    # TODO: Make this also work
-    @[Anyolite::Exclude]
     @[Anyolite::AddBlockArg(1, Int32)]
     def block_test
       return_value = yield self
       return_value.to_s
+    end
+
+    # TODO: Find a way to make the 'types' obsolete here
+    @[Anyolite::AddBlockArg(2, types : String | Int32)]
+    def block_test_2
+      return_value = yield 1, 2
+      return_value.to_s
+    end
+
+    @[Anyolite::AddBlockArg(2, String)]
+    def self.block_test_3(arg : String)
+      return_value = yield "Hello", "There"
+      arg.to_s + ": " + return_value.to_s
     end
 
     private def private_method
@@ -295,25 +306,6 @@ Anyolite::RbInterpreter.create do |rb|
 
   Anyolite.wrap(rb, SomeModule::Test, under: SomeModule, instance_method_exclusions: [:add], verbose: true)
   Anyolite.wrap_instance_method(rb, SomeModule::Test, "add", add, [SomeModule::Test])
-
-  # ===== A basic example on how to wrap a block function which can be sent to an object
-  # TODO: Provide a simpler way on how to do this
-  wrapper_func = Anyolite::RbCore::RbFunc.new do |rb, obj|
-    block_ptr = Pointer(Anyolite::RbCore::RbValue).malloc(size: 1)
-    Anyolite::RbCore.rb_get_args(rb, "&", block_ptr)
-
-    converted_obj = Anyolite::Macro.convert_from_ruby_object(rb, obj, SomeModule::Test).value
-
-    crystal_return_value = converted_obj.block_test do |passed_value|
-      yield_value = Anyolite::RbCore.rb_yield(rb, block_ptr.value, Anyolite::RbCast.return_value(rb, passed_value))
-      Anyolite::Macro.convert_keyword_arg(rb, yield_value, Int32)
-    end
-
-    Anyolite::RbCast.return_value(rb, crystal_return_value)
-  end
-
-  rb.define_method("block_test", Anyolite::RbClassCache.get(SomeModule::Test), wrapper_func)
-  # ===== End of example
 
   rb.load_script_from_file("examples/test.rb")
 end

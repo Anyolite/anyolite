@@ -93,6 +93,7 @@ module Anyolite
     fun rb_get_args = mrb_get_args(rb : State*, format : LibC::Char*, ...) : RbInt
 
     fun rb_yield = mrb_yield(rb : State*, value : RbValue, arg : RbValue) : RbValue
+    fun rb_yield_argv = mrb_yield_argv(rb : State*, value : RbValue, argc : RbInt, argv : RbValue*) : RbValue
 
     fun get_nil_value : RbValue
     fun get_false_value : RbValue

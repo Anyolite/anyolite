@@ -111,3 +111,20 @@ end
 
 puts result
 puts carrier.x
+
+other_result = a.block_test_2 do |x, y|
+  "#{x} #{y}"
+end
+
+other_result_2 = a.block_test_2 do |x, y|
+  x + y
+end
+
+puts other_result
+puts other_result_2
+
+other_result_3 = TestModule::Test.block_test_3(arg: "They said") do |x, y|
+  "#{x}, #{y}"
+end
+
+puts other_result_3

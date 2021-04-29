@@ -142,7 +142,7 @@ of these does definitely not work, but you need them to, please feel free to ope
 
 * Arrays and hashes are not directly supported
 * Pointers are not directly supported
-* Procs and block arguments are not directly supported
+* Procs as arguments are not directly supported (block arguments are, however)
 * Symbols do not work due to their compiletime nature in Crystal
 * Only one function with the same name can be wrapped
 * Splat arguments and arbitrary keywords are not possible due to their reliance on symbols
@@ -167,7 +167,7 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 
 #### Features
 
-* [ ] Basic support for block arguments
+* [X] Support for block arguments
 
 #### Breaking changes
 
