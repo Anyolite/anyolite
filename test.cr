@@ -239,7 +239,7 @@ module SomeModule
 
     # TODO: Make this also work
     @[Anyolite::Exclude]
-    #@[Anyolite::AddBlockArgs(1, Int32)]
+    @[Anyolite::AddBlockArg(1, Int32)]
     def block_test
       return_value = yield self
       return_value.to_s

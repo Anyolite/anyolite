@@ -1,6 +1,6 @@
 module Anyolite
   module Macro
-    macro wrap_module_function_with_args(rb_interpreter, under_module, name, proc, regular_args = nil, context = nil, return_nil = nil)
+    macro wrap_module_function_with_args(rb_interpreter, under_module, name, proc, regular_args = nil, context = nil, return_nil = nil, block_arg_number = nil, block_return_type = nil)
       {% if regular_args.is_a?(ArrayLiteral) %}
         {% regular_arg_array = regular_args %}
       {% elsif regular_args == nil %}
@@ -23,7 +23,7 @@ module Anyolite
       {{rb_interpreter}}.define_module_function({{name}}, Anyolite::RbClassCache.get({{under_module}}), wrapped_method)
     end
 
-    macro wrap_module_function_with_keyword_args(rb_interpreter, under_module, name, proc, keyword_args, regular_args = nil, operator = "", context = nil, return_nil = nil)
+    macro wrap_module_function_with_keyword_args(rb_interpreter, under_module, name, proc, keyword_args, regular_args = nil, operator = "", context = nil, return_nil = nil, block_arg_number = nil, block_return_type = nil)
       {% if regular_args.is_a?(ArrayLiteral) %}
         {% regular_arg_array = regular_args %}
       {% elsif regular_args == nil %}
@@ -51,7 +51,7 @@ module Anyolite
       {{rb_interpreter}}.define_module_function({{name}}, Anyolite::RbClassCache.get({{under_module}}), wrapped_method)
     end
 
-    macro wrap_class_method_with_args(rb_interpreter, crystal_class, name, proc, regular_args = nil, operator = "", context = nil, return_nil = nil)
+    macro wrap_class_method_with_args(rb_interpreter, crystal_class, name, proc, regular_args = nil, operator = "", context = nil, return_nil = nil, block_arg_number = nil, block_return_type = nil)
       {% if regular_args.is_a?(ArrayLiteral) %}
         {% regular_arg_array = regular_args %}
       {% elsif regular_args == nil %}
@@ -72,7 +72,7 @@ module Anyolite
       {{rb_interpreter}}.define_class_method({{name}}, Anyolite::RbClassCache.get({{crystal_class}}), wrapped_method)
     end
 
-    macro wrap_class_method_with_keyword_args(rb_interpreter, crystal_class, name, proc, keyword_args, regular_args = nil, operator = "", context = nil, return_nil = nil)
+    macro wrap_class_method_with_keyword_args(rb_interpreter, crystal_class, name, proc, keyword_args, regular_args = nil, operator = "", context = nil, return_nil = nil, block_arg_number = nil, block_return_type = nil)
       {% if regular_args.is_a?(ArrayLiteral) %}
         {% regular_arg_array = regular_args %}
       {% elsif regular_args == nil %}
@@ -106,7 +106,7 @@ module Anyolite
       {{rb_interpreter}}.define_class_method({{name}}, Anyolite::RbClassCache.get({{crystal_class}}), wrapped_method)
     end
 
-    macro wrap_instance_function_with_args(rb_interpreter, crystal_class, name, proc, regular_args = nil, operator = "", context = nil, return_nil = nil)
+    macro wrap_instance_function_with_args(rb_interpreter, crystal_class, name, proc, regular_args = nil, operator = "", context = nil, return_nil = nil, block_arg_number = nil, block_return_type = nil)
       {% if regular_args.is_a?(ArrayLiteral) %}
         {% regular_arg_array = regular_args %}
       {% elsif regular_args == nil %}
@@ -134,7 +134,7 @@ module Anyolite
       {{rb_interpreter}}.define_method({{name}}, Anyolite::RbClassCache.get({{crystal_class}}), wrapped_method)
     end
 
-    macro wrap_instance_function_with_keyword_args(rb_interpreter, crystal_class, name, proc, keyword_args, regular_args = nil, operator = "", context = nil, return_nil = nil)
+    macro wrap_instance_function_with_keyword_args(rb_interpreter, crystal_class, name, proc, keyword_args, regular_args = nil, operator = "", context = nil, return_nil = nil, block_arg_number = nil, block_return_type = nil)
       {% if regular_args.is_a?(ArrayLiteral) %}
         {% regular_arg_array = regular_args %}
       {% elsif regular_args == nil %}
@@ -174,7 +174,7 @@ module Anyolite
       {{rb_interpreter}}.define_method({{name}}, Anyolite::RbClassCache.get({{crystal_class}}), wrapped_method)
     end
 
-    macro wrap_constructor_function_with_args(rb_interpreter, crystal_class, proc, regular_args = nil, operator = "", context = nil)
+    macro wrap_constructor_function_with_args(rb_interpreter, crystal_class, proc, regular_args = nil, operator = "", context = nil, block_arg_number = nil, block_return_type = nil)
       {% if regular_args.is_a?(ArrayLiteral) %}
         {% regular_arg_array = regular_args %}
       {% elsif regular_args == nil %}
@@ -198,7 +198,7 @@ module Anyolite
       {{rb_interpreter}}.define_method("initialize", Anyolite::RbClassCache.get({{crystal_class}}), wrapped_method)
     end
 
-    macro wrap_constructor_function_with_keyword_args(rb_interpreter, crystal_class, proc, keyword_args, regular_args = nil, operator = "", context = nil)
+    macro wrap_constructor_function_with_keyword_args(rb_interpreter, crystal_class, proc, keyword_args, regular_args = nil, operator = "", context = nil, block_arg_number = nil, block_return_type = nil)
       {% if regular_args.is_a?(ArrayLiteral) %}
         {% regular_arg_array = regular_args %}
       {% elsif regular_args == nil %}
