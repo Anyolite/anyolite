@@ -168,6 +168,7 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 #### Features
 
 * [X] Support for block arguments
+* [ ] Option for required block arguments
 
 #### Breaking changes
 
@@ -181,6 +182,7 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 #### Bugfixes
 
 * [X] Fixed reference table throwing an error when increasing counter
+* [ ] Avoid segfault when giving no block to block functions
 
 ### Version 0.11.0
 
