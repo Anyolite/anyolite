@@ -187,6 +187,7 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 
 * [X] Fixed reference table throwing an error when increasing counter
 * [ ] Avoid segfault when giving no block to block functions
+* [ ] Call rb_finalize only if reference counter is going to be 0
 
 ### Version 0.11.0
 
