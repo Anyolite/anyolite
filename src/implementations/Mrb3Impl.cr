@@ -95,6 +95,10 @@ module Anyolite
     fun rb_yield = mrb_yield(rb : State*, value : RbValue, arg : RbValue) : RbValue
     fun rb_yield_argv = mrb_yield_argv(rb : State*, value : RbValue, argc : RbInt, argv : RbValue*) : RbValue
 
+    fun rb_ary_ref = mrb_ary_ref(rb : State*, value : RbValue, pos : RbInt) : RbValue
+    fun rb_ary_entry = mrb_ary_entry(value : RbValue, offset : RbInt) : RbValue
+    fun array_length(value : RbValue) : LibC::SizeT
+
     fun get_nil_value : RbValue
     fun get_false_value : RbValue
     fun get_true_value : RbValue

@@ -128,3 +128,5 @@ other_result_3 = TestModule::Test.block_test_3(arg: "They said") do |x, y|
 end
 
 puts other_result_3
+
+puts "Array result: #{a.array_test([1, 2, "Hello"])}"
