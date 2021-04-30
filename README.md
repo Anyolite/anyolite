@@ -170,8 +170,7 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 * [X] Support for block arguments
 * [ ] Support for array arguments
 * [ ] Support for hash arguments
-* [X] Support for returned arrays
-* [ ] Support for returned hashes
+* [X] Support for symbols, arrays and hashes as returned values
 * [ ] Option for required block arguments
 
 #### Breaking changes

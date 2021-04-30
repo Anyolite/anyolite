@@ -52,6 +52,13 @@ extern mrb_value get_string_value(mrb_state* mrb, char* value) {
 
 }
 
+extern mrb_value get_symbol_value_of_string(mrb_state* mrb, char* value) {
+
+    mrb_sym sym = mrb_intern(mrb, value, strlen(value));
+    return mrb_symbol_value(sym);
+
+}
+
 extern int check_mrb_fixnum(mrb_value value) {
 
     return mrb_integer_p(value);

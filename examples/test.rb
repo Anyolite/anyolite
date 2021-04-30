@@ -130,3 +130,5 @@ end
 puts other_result_3
 
 puts "Array result: #{a.array_test([1, 2, "Hello"])}"
+
+puts "Hash result: #{a.hash_return_test}"

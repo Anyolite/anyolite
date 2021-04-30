@@ -257,6 +257,10 @@ module SomeModule
       arg.to_s + ": " + return_value.to_s
     end
 
+    def hash_return_test
+      {:hello => "Nice", :world => "to see you!", 3 => 15, "test😊" => :very_long_test_😊_symbol}
+    end
+
     private def private_method
     end
 

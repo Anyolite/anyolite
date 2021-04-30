@@ -41,6 +41,25 @@ module Anyolite
       return RbCore.rb_ary_new_from_values(rb, array_size, array_values)
     end
 
+    def self.return_symbol(rb, value)
+      return RbCore.get_symbol_value_of_string(rb, value.to_s)
+    end
+
+    def self.return_hash(rb, value)
+      hash_size = value.size
+
+      rb_hash = RbCore.rb_hash_new(rb)
+
+      value.each do |index, element|
+        rb_element = self.return_value(rb, element)
+        rb_key = self.return_value(rb, index)
+
+        RbCore.rb_hash_set(rb, rb_hash, rb_key, rb_element)
+      end
+
+      return rb_hash
+    end
+
     # Implicit return methods
 
     def self.return_value(rb : RbCore::State*, value : Nil)
@@ -63,8 +82,16 @@ module Anyolite
       self.return_string(rb, value)
     end
 
+    def self.return_value(rb : RbCore::State*, value : Symbol)
+      self.return_symbol(rb, value)
+    end
+
     def self.return_value(rb : RbCore::State*, value : Array)
       self.return_array(rb, value)
+    end
+
+    def self.return_value(rb : RbCore::State*, value : Hash)
+      self.return_hash(rb, value)
     end
 
     def self.return_value(rb : RbCore::State*, value : Struct | Enum)

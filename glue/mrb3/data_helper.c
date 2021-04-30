@@ -2,6 +2,8 @@
 #include <mruby/class.h>
 #include <mruby/data.h>
 #include <mruby/array.h>
+#include <mruby/string.h>
+#include <string.h>
 
 extern const mrb_data_type* data_type(mrb_value value) {
 
@@ -42,7 +44,7 @@ extern struct RClass* get_class_of_obj(mrb_state* mrb, mrb_value object) {
 
 extern mrb_sym convert_to_mrb_sym(mrb_state* mrb, const char* str) {
 
-    return mrb_intern_check_cstr(mrb, str);
+    return mrb_intern(mrb, str, strlen(str));
 
 }
 

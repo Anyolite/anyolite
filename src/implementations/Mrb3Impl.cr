@@ -101,6 +101,9 @@ module Anyolite
 
     fun rb_ary_new_from_values = mrb_ary_new_from_values(rb : State*, size : RbInt, values : RbValue*) : RbValue
 
+    fun rb_hash_new = mrb_hash_new(rb : State*) : RbValue
+    fun rb_hash_set = mrb_hash_set(rb : State*, hash : RbValue, key : RbValue, value : RbValue)
+
     fun get_nil_value : RbValue
     fun get_false_value : RbValue
     fun get_true_value : RbValue
@@ -128,6 +131,7 @@ module Anyolite
     fun rb_str_to_csts = mrb_str_to_cstr(rb : State*, value : RbValue) : LibC::Char*
 
     fun convert_to_rb_sym = convert_to_mrb_sym(rb : State*, value : LibC::Char*) : RbSymbol
+    fun get_symbol_value_of_string(rb : State*, value : LibC::Char*) : RbValue
 
     # Base class, not to be confused with `get_class_of_obj`
     fun get_object_class(rb : State*) : RClass*
