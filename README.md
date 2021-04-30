@@ -168,6 +168,10 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 #### Features
 
 * [X] Support for block arguments
+* [ ] Support for array arguments
+* [ ] Support for hash arguments
+* [ ] Support for returned arrays
+* [ ] Support for returned hashes
 * [ ] Option for required block arguments
 
 #### Breaking changes
@@ -193,8 +197,6 @@ so it will probably take some time before it will be released.
 Some of the features might not even make the release.
 
 * [ ] Options for inherited and/or inheriting classes
-* [ ] Support for arrays
-* [ ] Support for hashes
 * [ ] Support for procs
 * [ ] Support for pointers
 
