@@ -31,6 +31,16 @@ module Anyolite
       return RbCore.get_string_value(rb, value)
     end
 
+    def self.return_array(rb, value)
+      array_size = value.size
+
+      array_values = Pointer(RbCore::RbValue).malloc(size: array_size) do |i|
+        self.return_value(rb, value[i])
+      end
+
+      return RbCore.rb_ary_new_from_values(rb, array_size, array_values)
+    end
+
     # Implicit return methods
 
     def self.return_value(rb : RbCore::State*, value : Nil)
@@ -51,6 +61,10 @@ module Anyolite
 
     def self.return_value(rb : RbCore::State*, value : String)
       self.return_string(rb, value)
+    end
+
+    def self.return_value(rb : RbCore::State*, value : Array)
+      self.return_array(rb, value)
     end
 
     def self.return_value(rb : RbCore::State*, value : Struct | Enum)
@@ -154,6 +168,14 @@ module Anyolite
 
     def self.check_for_string(value : RbCore::RbValue)
       RbCore.check_rb_string(value) != 0
+    end
+
+    def self.check_for_array(value : RbCore::RbValue)
+      RbCore.check_rb_array(value) != 0
+    end
+
+    def self.check_for_hash(value : RbCore::RbValue)
+      RbCore.check_rb_hash(value) != 0
     end
 
     def self.check_for_data(value : RbCore::RbValue)

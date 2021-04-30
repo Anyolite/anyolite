@@ -94,6 +94,18 @@ extern int check_mrb_string(mrb_value value) {
 
 }
 
+extern int check_mrb_array(mrb_value value) {   
+
+    return mrb_array_p(value);
+
+}
+
+extern int check_mrb_hash(mrb_value value) {
+
+    return mrb_hash_p(value);
+
+}
+
 extern int check_mrb_data(mrb_value value) {
 
     return mrb_data_p(value);

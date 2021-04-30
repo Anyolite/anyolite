@@ -235,7 +235,7 @@ module SomeModule
     # TODO: Make this work
     @[Anyolite::Exclude]
     def array_test(arg : Array(String | Int32))
-     "Arg is #{arg}"
+      arg.map{|element| element.to_s * 2}
     end
 
     @[Anyolite::AddBlockArg(1, Int32)]

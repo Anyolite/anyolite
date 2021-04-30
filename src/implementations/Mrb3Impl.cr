@@ -99,6 +99,8 @@ module Anyolite
     fun rb_ary_entry = mrb_ary_entry(value : RbValue, offset : RbInt) : RbValue
     fun array_length(value : RbValue) : LibC::SizeT
 
+    fun rb_ary_new_from_values = mrb_ary_new_from_values(rb : State*, size : RbInt, values : RbValue*) : RbValue
+
     fun get_nil_value : RbValue
     fun get_false_value : RbValue
     fun get_true_value : RbValue
@@ -114,6 +116,8 @@ module Anyolite
     fun check_rb_nil = check_mrb_nil(value : RbValue) : LibC::Int
     fun check_rb_undef = check_mrb_undef(value : RbValue) : LibC::Int
     fun check_rb_string = check_mrb_string(value : RbValue) : LibC::Int
+    fun check_rb_array = check_mrb_array(value : RbValue) : LibC::Int
+    fun check_rb_hash = check_mrb_hash(value : RbValue) : LibC::Int
     fun check_rb_data = check_mrb_data(value : RbValue) : LibC::Int
 
     fun get_rb_fixnum = get_mrb_fixnum(value : RbValue) : RbInt 
