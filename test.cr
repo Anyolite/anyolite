@@ -244,8 +244,7 @@ module SomeModule
       return_value.to_s
     end
 
-    # TODO: Find a way to make the 'types' obsolete here
-    @[Anyolite::AddBlockArg(2, types : String | Int32)]
+    @[Anyolite::AddBlockArg(2, String | Int32)]
     def block_test_2
       return_value = yield 1, 2
       return_value.to_s
@@ -322,7 +321,7 @@ Anyolite::RbInterpreter.create do |rb|
 
     array_size = Anyolite::RbCore.array_length(array_ptr.value)
     converted_array = Array(Int32 | String).new(size: array_size) do |i|
-      Anyolite::Macro.convert_keyword_arg(rb, Anyolite::RbCore.rb_ary_entry(array_ptr.value, i), types : Int32 | String)
+      Anyolite::Macro.convert_keyword_arg(rb, Anyolite::RbCore.rb_ary_entry(array_ptr.value, i), Int32 | String)
     end
 
     crystal_return_value = converted_obj.array_test(converted_array)

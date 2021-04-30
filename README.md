@@ -181,7 +181,7 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 #### Usability
 
 * [ ] Better error messages when casting incompatible values
-* [ ] Added dummy argument parsing to convert type calls into actual types
+* [X] Added dummy argument parsing to convert type calls into actual types
 
 #### Bugfixes
 

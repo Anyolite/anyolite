@@ -101,7 +101,7 @@ module Anyolite
 
         Anyolite::Macro.convert_keyword_arg({{rb}}, {{arg}}, {{final_type_def.id}}, context: {{context}}, debug_information: {{debug_information}})
       {% elsif arg_type.is_a?(Call) %}
-        {% raise "Received Call #{arg_type} instead of TypeDeclaration or TypeNode" %}
+        Anyolite::Macro.convert_keyword_arg({{rb}}, {{arg}}, dummy_arg : {{arg_type}}, context: {{context}}, debug_information: {{debug_information}})
       {% elsif arg_type.is_a?(TypeDeclaration) %}
         if Anyolite::RbCast.is_undef?({{arg}})
           {% if arg_type.value || arg_type.value == false || arg_type.value == nil %}
