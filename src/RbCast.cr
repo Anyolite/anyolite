@@ -35,7 +35,7 @@ module Anyolite
       array_size = value.size
 
       array_values = Pointer(RbCore::RbValue).malloc(size: array_size) do |i|
-        self.return_value(rb, value[i])
+        RbCast.return_value(rb, value[i])
       end
 
       return RbCore.rb_ary_new_from_values(rb, array_size, array_values)
@@ -51,8 +51,8 @@ module Anyolite
       rb_hash = RbCore.rb_hash_new(rb)
 
       value.each do |index, element|
-        rb_element = self.return_value(rb, element)
-        rb_key = self.return_value(rb, index)
+        rb_element = RbCast.return_value(rb, element)
+        rb_key = RbCast.return_value(rb, index)
 
         RbCore.rb_hash_set(rb, rb_hash, rb_key, rb_element)
       end
@@ -63,39 +63,39 @@ module Anyolite
     # Implicit return methods
 
     def self.return_value(rb : RbCore::State*, value : Nil)
-      self.return_nil
+      RbCast.return_nil
     end
 
     def self.return_value(rb : RbCore::State*, value : Bool)
-      value ? self.return_true : return_false
+      value ? RbCast.return_true : return_false
     end
 
     def self.return_value(rb : RbCore::State*, value : Int)
-      self.return_fixnum(value)
+      RbCast.return_fixnum(value)
     end
 
     def self.return_value(rb : RbCore::State*, value : Float)
-      self.return_float(rb, value)
+      RbCast.return_float(rb, value)
     end
 
     def self.return_value(rb : RbCore::State*, value : Char)
-      self.return_string(rb, value.to_s)
+      RbCast.return_string(rb, value.to_s)
     end
 
     def self.return_value(rb : RbCore::State*, value : String)
-      self.return_string(rb, value)
+      RbCast.return_string(rb, value)
     end
 
     def self.return_value(rb : RbCore::State*, value : Symbol)
-      self.return_symbol(rb, value)
+      RbCast.return_symbol(rb, value)
     end
 
     def self.return_value(rb : RbCore::State*, value : Array)
-      self.return_array(rb, value)
+      RbCast.return_array(rb, value)
     end
 
     def self.return_value(rb : RbCore::State*, value : Hash)
-      self.return_hash(rb, value)
+      RbCast.return_hash(rb, value)
     end
 
     def self.return_value(rb : RbCore::State*, value : Struct | Enum)
@@ -213,14 +213,22 @@ module Anyolite
       RbCore.check_rb_data(value) != 0
     end
 
-    # TODO: Put ruby class name into string instead of internal value... value
+    def self.casting_error(rb, value, crystal_class, rescue_value)
+      rb_inspect_string = RbCore.rb_inspect(rb, value)
+      rb_class = RbCore.get_class_of_obj(rb, value)
+      
+      class_name = String.new(RbCore.rb_class_name(rb, rb_class))
+
+      value_debug = RbCast.cast_to_string(rb, rb_inspect_string)
+      RbCore.rb_raise_argument_error(rb, "Could not cast value #{value_debug} of class #{class_name} to #{crystal_class}.")
+      rescue_value
+    end
 
     def self.cast_to_nil(rb : RbCore::State*, value : RbCore::RbValue)
       if RbCast.check_for_nil(value)
         nil
       else
-        RbCore.rb_raise_argument_error(rb, "Could not cast #{value} to Nil.")
-        nil
+        RbCast.casting_error(rb, value, Nil, nil)
       end
     end
 
@@ -230,8 +238,7 @@ module Anyolite
       elsif RbCast.check_for_false(value)
         false
       else
-        RbCore.rb_raise_argument_error(rb, "Could not cast #{value} to Bool.")
-        false
+        RbCast.casting_error(rb, value, Bool, false)
       end
     end
 
@@ -239,8 +246,7 @@ module Anyolite
       if RbCast.check_for_fixnum(value)
         RbCore.get_rb_fixnum(value)
       else
-        RbCore.rb_raise_argument_error(rb, "Could not cast #{value} to Int.")
-        0
+        RbCast.casting_error(rb, value, Int, 0)
       end
     end
 
@@ -250,8 +256,7 @@ module Anyolite
       elsif RbCast.check_for_fixnum(value)
         RbCore.get_rb_fixnum(value).to_f
       else
-        RbCore.rb_raise_argument_error(rb, "Could not cast #{value} to Float.")
-        0.0
+        RbCast.casting_error(rb, value, Float, 0.0)
       end
     end
 
@@ -260,14 +265,12 @@ module Anyolite
         str = String.new(RbCore.get_rb_string(rb, value))
         # TODO: Maybe also exclude longer strings to avoid confusion?
         if str.empty?
-          RbCore.rb_raise_argument_error(rb, "Could not cast #{value} to Char.")
-          '\0'
+          RbCast.casting_error(rb, value, Char, '\0')
         else
           str[0]
         end
       else
-        RbCore.rb_raise_argument_error(rb, "Could not cast #{value} to Char.")
-        '\0'
+        RbCast.casting_error(rb, value, Char, '\0')
       end
     end
 
@@ -276,8 +279,7 @@ module Anyolite
       if RbCast.check_for_string(value)
         String.new(RbCore.get_rb_string(rb, value))
       else
-        RbCore.rb_raise_argument_error(rb, "Could not cast #{value} to String.")
-        ""
+        RbCast.casting_error(rb, value, String, "")
       end
     end
 

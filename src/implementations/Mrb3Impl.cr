@@ -136,6 +136,12 @@ module Anyolite
     # Base class, not to be confused with `get_class_of_obj`
     fun get_object_class(rb : State*) : RClass*
 
+    fun rb_obj_inspect = mrb_obj_inspect(rb : State*, value : RbValue) : RbValue
+    fun rb_any_to_s = mrb_any_to_s(rb : State*, value : RbValue) : RbValue
+    fun rb_inspect = mrb_inspect(rb : State*, value : RbValue) : RbValue
+
+    fun rb_class_name = mrb_class_name(rb : State*, class_ptr : RClass*) : LibC::Char*
+
     fun data_type(value : RbValue) : RbDataType*
     fun rb_data_get_ptr = mrb_data_get_ptr(rb : State*, obj : RbValue, type : RbDataType*) : Void*
     fun set_instance_tt_as_data(ruby_class : RClass*) : Void

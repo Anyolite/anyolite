@@ -180,7 +180,7 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 
 #### Usability
 
-* [ ] Better error messages when casting incompatible values
+* [X] Better error messages when casting incompatible values
 * [X] Added dummy argument parsing to convert type calls into actual types
 * [X] More intelligent conversions (Char <-> String, Int -> Float)
 * [ ] Option to convert Ruby symbols into strings (in hashes) if possible
