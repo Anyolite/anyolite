@@ -21,6 +21,12 @@ module Anyolite
           format_string = Anyolite::Macro.format_string({{regular_args}}, context: {{context}}) + "&"
           
           Anyolite::RbCore.rb_get_args(rb, format_string, *args, block_ptr)
+
+          if Anyolite::RbCast.check_for_nil(block_ptr.value)
+            Anyolite::RbCore.rb_raise_argument_error(rb, "No block given.")
+            Anyolite::RbCast.return_nil
+          end
+
           converted_args = Anyolite::Macro.convert_args(rb, args, {{regular_args}}, context: {{context}})
         {% else %}
           block_ptr = nil
@@ -50,6 +56,11 @@ module Anyolite
           format_string = Anyolite::Macro.format_string({{regular_arg_array}}, context: {{context}}) + ":&"
           kw_args = Anyolite::Macro.generate_keyword_argument_struct({{rb_interpreter}}, {{keyword_args}})
           Anyolite::RbCore.rb_get_args(rb, format_string, *regular_arg_tuple, pointerof(kw_args), block_ptr)
+
+          if Anyolite::RbCast.check_for_nil(block_ptr.value)
+            Anyolite::RbCore.rb_raise_argument_error(rb, "No block given.")
+            Anyolite::RbCast.return_nil
+          end
         {% else %}
           block_ptr = nil
           format_string = Anyolite::Macro.format_string({{regular_arg_array}}, context: {{context}}) + ":"
@@ -89,6 +100,12 @@ module Anyolite
           format_string = Anyolite::Macro.format_string({{regular_args}}, context: {{context}}) + "&"
           
           Anyolite::RbCore.rb_get_args(rb, format_string, *args, block_ptr)
+
+          if Anyolite::RbCast.check_for_nil(block_ptr.value)
+            Anyolite::RbCore.rb_raise_argument_error(rb, "No block given.")
+            Anyolite::RbCast.return_nil
+          end
+
           converted_args = Anyolite::Macro.convert_args(rb, args, {{regular_args}}, context: {{context}})
         {% else %}
           block_ptr = nil
@@ -122,6 +139,11 @@ module Anyolite
           format_string = Anyolite::Macro.format_string({{regular_arg_array}}, context: {{context}}) + ":&"
           kw_args = Anyolite::Macro.generate_keyword_argument_struct({{rb_interpreter}}, {{keyword_args}})
           Anyolite::RbCore.rb_get_args(rb, format_string, *regular_arg_tuple, pointerof(kw_args), block_ptr)
+
+          if Anyolite::RbCast.check_for_nil(block_ptr.value)
+            Anyolite::RbCore.rb_raise_argument_error(rb, "No block given.")
+            Anyolite::RbCast.return_nil
+          end
         {% else %}
           block_ptr = nil
           format_string = Anyolite::Macro.format_string({{regular_arg_array}}, context: {{context}}) + ":"
@@ -163,6 +185,12 @@ module Anyolite
           format_string = Anyolite::Macro.format_string({{regular_args}}, context: {{context}}) + "&"
           
           Anyolite::RbCore.rb_get_args(rb, format_string, *args, block_ptr)
+
+          if Anyolite::RbCast.check_for_nil(block_ptr.value)
+            Anyolite::RbCore.rb_raise_argument_error(rb, "No block given.")
+            Anyolite::RbCast.return_nil
+          end
+
           converted_args = Anyolite::Macro.convert_args(rb, args, {{regular_args}}, context: {{context}})
         {% else %}
           block_ptr = nil
@@ -204,6 +232,11 @@ module Anyolite
           format_string = Anyolite::Macro.format_string({{regular_arg_array}}, context: {{context}}) + ":&"
           kw_args = Anyolite::Macro.generate_keyword_argument_struct({{rb_interpreter}}, {{keyword_args}})
           Anyolite::RbCore.rb_get_args(rb, format_string, *regular_arg_tuple, pointerof(kw_args), block_ptr)
+
+          if Anyolite::RbCast.check_for_nil(block_ptr.value)
+            Anyolite::RbCore.rb_raise_argument_error(rb, "No block given.")
+            Anyolite::RbCast.return_nil
+          end
         {% else %}
           block_ptr = nil
           format_string = Anyolite::Macro.format_string({{regular_arg_array}}, context: {{context}}) + ":"
@@ -252,8 +285,6 @@ module Anyolite
       {% type_var_names_annotation = crystal_class.resolve.annotation(Anyolite::SpecifyGenericTypes) %}
       {% type_var_names = type_var_names_annotation ? type_var_names_annotation[0] : nil %}
 
-      # TODO: Implement blocks
-
       wrapped_method = Anyolite::RbCore::RbFunc.new do |rb, obj|
         {% if block_arg_number %}
           block_ptr = Pointer(Anyolite::RbCore::RbValue).malloc(size: 1)
@@ -261,6 +292,12 @@ module Anyolite
           format_string = Anyolite::Macro.format_string({{regular_args}}, context: {{context}}) + "&"
           
           Anyolite::RbCore.rb_get_args(rb, format_string, *args, block_ptr)
+
+          if Anyolite::RbCast.check_for_nil(block_ptr.value)
+            Anyolite::RbCore.rb_raise_argument_error(rb, "No block given.")
+            Anyolite::RbCast.return_nil
+          end
+
           converted_args = Anyolite::Macro.convert_args(rb, args, {{regular_args}}, context: {{context}})
         {% else %}
           block_ptr = nil
@@ -311,9 +348,7 @@ module Anyolite
       {% type_vars = crystal_class.resolve.type_vars %}
       {% type_var_names_annotation = crystal_class.resolve.annotation(Anyolite::SpecifyGenericTypes) %}
       {% type_var_names = type_var_names_annotation ? type_var_names_annotation[0] : nil %}
-
-      # TODO: Implement blocks
-
+      
       wrapped_method = Anyolite::RbCore::RbFunc.new do |rb, obj|
         regular_arg_tuple = Anyolite::Macro.generate_arg_tuple({{rb_interpreter}}, {{regular_arg_array}}, context: {{context}})
 
@@ -322,6 +357,11 @@ module Anyolite
           format_string = Anyolite::Macro.format_string({{regular_arg_array}}, context: {{context}}) + ":&"
           kw_args = Anyolite::Macro.generate_keyword_argument_struct({{rb_interpreter}}, {{keyword_args}})
           Anyolite::RbCore.rb_get_args(rb, format_string, *regular_arg_tuple, pointerof(kw_args), block_ptr)
+
+          if Anyolite::RbCast.check_for_nil(block_ptr.value)
+            Anyolite::RbCore.rb_raise_argument_error(rb, "No block given.")
+            Anyolite::RbCast.return_nil
+          end
         {% else %}
           block_ptr = nil
           format_string = Anyolite::Macro.format_string({{regular_arg_array}}, context: {{context}}) + ":"
