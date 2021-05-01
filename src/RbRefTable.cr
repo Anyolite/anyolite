@@ -63,6 +63,10 @@ module Anyolite
       return @@content[identification]?
     end
 
+    def self.may_delete?(identification)
+      @@content[identification][1] <= 1
+    end
+
     def self.inspect
       @@content.inspect
     end

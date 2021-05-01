@@ -189,7 +189,7 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 
 * [X] Fixed reference table throwing an error when increasing counter
 * [ ] Avoid segfault when giving no block to block functions
-* [ ] Call rb_finalize only if reference counter is going to be 0
+* [X] Call rb_finalize only if reference counter is going to be 0
 
 ### Version 0.11.0
 
@@ -217,3 +217,4 @@ Some of the features might not even make the release.
 * [ ] Method in mruby to determine owner of object
 * [ ] Caching of RbValues in the reference table to avoid duplicate objects
 * [ ] Option for required/optional block arguments
+* [ ] Convert macro body variables to fresh variables

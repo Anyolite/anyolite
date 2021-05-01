@@ -20,21 +20,27 @@ module Anyolite
       ->(rb_state : Anyolite::RbCore::State*, ptr : Void*) {
         if {{crystal_class}} <= Struct || {{crystal_class}} <= Enum
           crystal_ptr = ptr.as(Anyolite::StructWrapper({{crystal_class}})*)
+          obj_id = Anyolite::RbRefTable.get_object_id(crystal_ptr.value)
 
           # Call optional mruby callback
           if (crystal_value = crystal_ptr.value.content).responds_to?(:rb_finalize)
-            crystal_value.rb_finalize(rb_state)
+            if Anyolite::RbRefTable.may_delete?(obj_id)
+              crystal_value.rb_finalize(rb_state)
+            end
           end
         else
           crystal_ptr = ptr.as({{crystal_class}}*)
+          obj_id = Anyolite::RbRefTable.get_object_id(crystal_ptr.value)
 
           if (crystal_value = crystal_ptr.value).responds_to?(:rb_finalize)
-            crystal_value.rb_finalize(rb_state)
+            if Anyolite::RbRefTable.may_delete?(obj_id)
+              crystal_value.rb_finalize(rb_state)
+            end
           end
         end
 
         # Delete the Crystal reference to this object
-        Anyolite::RbRefTable.delete(Anyolite::RbRefTable.get_object_id(crystal_ptr.value))
+        Anyolite::RbRefTable.delete(obj_id)
       }
     end
   end
