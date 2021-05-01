@@ -40,6 +40,8 @@ module Anyolite
           Float64.new({{arg}})
         {% elsif arg_type.resolve <= Float %}
           {{arg_type}}.new({{arg}})
+        {% elsif arg_type.resolve <= Char %}
+          ({{arg}}.size > 0 ? {{arg_type}}.new({{arg}}[0] : '\0')
         {% elsif arg_type.resolve <= String %}
           {{arg_type}}.new({{arg}})
         {% elsif arg_type.resolve <= Struct || arg_type.resolve <= Enum %}
@@ -146,6 +148,8 @@ module Anyolite
           Float64.new(Anyolite::RbCast.cast_to_float({{rb}}, {{arg}}))
         {% elsif arg_type.resolve <= Float %}
           {{arg_type}}.new(Anyolite::RbCast.cast_to_float({{rb}}, {{arg}}))
+        {% elsif arg_type.resolve <= Char %}
+          Anyolite::RbCast.cast_to_char({{rb}}, {{arg}})
         {% elsif arg_type.resolve <= String %}
           Anyolite::RbCast.cast_to_string({{rb}}, {{arg}})
         {% elsif arg_type.resolve <= Struct || arg_type.resolve <= Enum %}

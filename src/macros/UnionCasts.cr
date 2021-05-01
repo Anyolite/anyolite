@@ -67,6 +67,10 @@ module Anyolite
         if Anyolite::RbCast.check_for_float({{value}})
           final_value = {{type}}.new(Anyolite::RbCast.cast_to_float({{rb}}, {{value}}))
         end
+      {% elsif type.resolve <= Char %}
+        if Anyolite::RbCast.check_for_string({{value}})
+          final_value = Anyolite::RbCast.cast_to_char({{rb}}, {{value}})
+        end
       {% elsif type.resolve <= String %}
         if Anyolite::RbCast.check_for_string({{value}})
           final_value = Anyolite::RbCast.cast_to_string({{rb}}, {{value}})

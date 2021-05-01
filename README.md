@@ -171,7 +171,7 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 * [ ] Support for array arguments
 * [ ] Support for hash arguments
 * [X] Support for symbols, arrays and hashes as returned values
-* [ ] Option for required block arguments
+* [X] Support for chars
 
 #### Breaking changes
 
@@ -182,6 +182,8 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 
 * [ ] Better error messages when casting incompatible values
 * [X] Added dummy argument parsing to convert type calls into actual types
+* [X] More intelligent conversions (Char <-> String, Int -> Float)
+* [ ] Option to convert Ruby symbols into strings in hashes if possible
 
 #### Bugfixes
 
@@ -213,3 +215,5 @@ Some of the features might not even make the release.
 
 * [ ] Splat argument and/or arbitrary keyword passing
 * [ ] Method in mruby to determine owner of object
+* [ ] Caching of RbValues in the reference table to avoid duplicate objects
+* [ ] Option for required/optional block arguments

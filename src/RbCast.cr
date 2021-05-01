@@ -78,6 +78,10 @@ module Anyolite
       self.return_float(rb, value)
     end
 
+    def self.return_value(rb : RbCore::State*, value : Char)
+      self.return_string(rb, value.to_s)
+    end
+
     def self.return_value(rb : RbCore::State*, value : String)
       self.return_string(rb, value)
     end
@@ -243,12 +247,31 @@ module Anyolite
     def self.cast_to_float(rb : RbCore::State*, value : RbCore::RbValue)
       if RbCast.check_for_float(value)
         RbCore.get_rb_float(value)
+      elsif RbCast.check_for_fixnum(value)
+        RbCore.get_rb_fixnum(value).to_f
       else
         RbCore.rb_raise_argument_error(rb, "Could not cast #{value} to Float.")
         0.0
       end
     end
 
+    def self.cast_to_char(rb : RbCore::State*, value : RbCore::RbValue)
+      if RbCast.check_for_string(value)
+        str = String.new(RbCore.get_rb_string(rb, value))
+        # TODO: Maybe also exclude longer strings to avoid confusion?
+        if str.empty?
+          RbCore.rb_raise_argument_error(rb, "Could not cast #{value} to Char.")
+          '\0'
+        else
+          str[0]
+        end
+      else
+        RbCore.rb_raise_argument_error(rb, "Could not cast #{value} to Char.")
+        '\0'
+      end
+    end
+
+    # TODO: Maybe add an option for implicit casts?
     def self.cast_to_string(rb : RbCore::State*, value : RbCore::RbValue)
       if RbCast.check_for_string(value)
         String.new(RbCore.get_rb_string(rb, value))

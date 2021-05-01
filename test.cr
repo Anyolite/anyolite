@@ -282,6 +282,14 @@ module SomeModule
       "This was a string"
     end
 
+    def float_test(arg : Float)
+      arg
+    end
+
+    def char_test(arg : Char)
+      arg
+    end
+
     # Gets called in mruby unless program crashes
     def rb_finalize(rb)
       puts "Mruby destructor called for value #{@x}"
