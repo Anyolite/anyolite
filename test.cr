@@ -233,9 +233,12 @@ module SomeModule
     end
 
     # TODO: Make this work
-    @[Anyolite::Exclude]
-    def array_test(arg : Array(String | Int32))
-      arg.map{|element| element.to_s * 2}
+    def array_test(arg : Array(String | Int32) | String)
+      if arg.is_a?(String)
+        [arg]
+      else
+        arg.map{|element| element.to_s * 2}
+      end
     end
 
     @[Anyolite::AddBlockArg(1, Int32)]
@@ -319,24 +322,24 @@ Anyolite::RbInterpreter.create do |rb|
   Anyolite.wrap(rb, SomeModule::Test, under: SomeModule, instance_method_exclusions: [:add], verbose: true)
   Anyolite.wrap_instance_method(rb, SomeModule::Test, "add", add, [SomeModule::Test])
 
-  # ===== A basic example on how to wrap an array argument function
-  # TODO: Include this in the actual wrapper macros
-  wrapper_func = Anyolite::RbCore::RbFunc.new do |rb, obj|
-    array_ptr = Pointer(Anyolite::RbCore::RbValue).malloc(size: 1)
-    Anyolite::RbCore.rb_get_args(rb, "A", array_ptr)
+  # # ===== A basic example on how to wrap an array argument function
+  # # TODO: Include this in the actual wrapper macros
+  # wrapper_func = Anyolite::RbCore::RbFunc.new do |rb, obj|
+  #   array_ptr = Pointer(Anyolite::RbCore::RbValue).malloc(size: 1)
+  #   Anyolite::RbCore.rb_get_args(rb, "A", array_ptr)
 
-    converted_obj = Anyolite::Macro.convert_from_ruby_object(rb, obj, SomeModule::Test).value
+  #   converted_obj = Anyolite::Macro.convert_from_ruby_object(rb, obj, SomeModule::Test).value
 
-    array_size = Anyolite::RbCore.array_length(array_ptr.value)
-    converted_array = Array(Int32 | String).new(size: array_size) do |i|
-      Anyolite::Macro.convert_keyword_arg(rb, Anyolite::RbCore.rb_ary_entry(array_ptr.value, i), Int32 | String)
-    end
+  #   array_size = Anyolite::RbCore.array_length(array_ptr.value)
+  #   converted_array = Array(Int32 | String).new(size: array_size) do |i|
+  #     Anyolite::Macro.convert_keyword_arg(rb, Anyolite::RbCore.rb_ary_entry(array_ptr.value, i), Int32 | String)
+  #   end
 
-    crystal_return_value = converted_obj.array_test(converted_array)
-    Anyolite::RbCast.return_value(rb, crystal_return_value)
-  end
+  #   crystal_return_value = converted_obj.array_test(converted_array)
+  #   Anyolite::RbCast.return_value(rb, crystal_return_value)
+  # end
 
-  rb.define_method("array_test", Anyolite::RbClassCache.get(SomeModule::Test), wrapper_func)
+  # rb.define_method("array_test", Anyolite::RbClassCache.get(SomeModule::Test), wrapper_func)
   # ===== End of example
 
   rb.load_script_from_file("examples/test.rb")

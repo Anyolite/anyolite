@@ -129,7 +129,8 @@ end
 
 puts other_result_3
 
-puts "Array result: #{a.array_test([1, 2, "Hello"])}"
+puts "Array result: #{a.array_test(arg: [1, 2, "Hello"])}"
+puts "Other array result: #{a.array_test(arg: "Not an array")}"
 
 puts "Hash result: #{a.hash_return_test}"
 

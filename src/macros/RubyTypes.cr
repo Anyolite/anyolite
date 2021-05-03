@@ -25,6 +25,8 @@ module Anyolite
         {% elsif type.resolve <= String %}
           # Should actually never occur due to special handling before this function
           Pointer(LibC::Char)
+        {% elsif type.resolve <= Array %}
+          Anyolite::RbCore::RbValue
         {% else %}
           Anyolite::RbCore::RbValue
         {% end %}
@@ -64,6 +66,8 @@ module Anyolite
           Pointer(Anyolite::RbCore::RbFloat)
         {% elsif type.resolve <= String %}
           Pointer(LibC::Char*)
+        {% elsif type.resolve <= Array %}
+          Pointer(Anyolite::RbCore::RbValue)
         {% else %}
           Pointer(Anyolite::RbCore::RbValue)
         {% end %}

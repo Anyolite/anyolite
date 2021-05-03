@@ -168,7 +168,7 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 #### Features
 
 * [X] Support for block arguments
-* [ ] Support for array arguments
+* [X] Support for array arguments
 * [ ] Support for hash arguments
 * [X] Support for symbols, arrays and hashes as returned values
 * [X] Support for chars
@@ -189,6 +189,7 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 
 * [X] Fixed reference table throwing an error when increasing counter
 * [X] Call rb_finalize only if reference counter is going to be 0
+* [X] Fixed union type parsing
 
 ### Version 0.11.0
 

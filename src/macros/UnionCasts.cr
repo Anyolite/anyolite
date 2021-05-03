@@ -27,9 +27,9 @@ module Anyolite
       {% elsif context %}
         {% if context.names[0..-2].size > 0 %}
           {% new_context = context.names[0..-2].join("::").gsub(/(\:\:)+/, "::").id %}
-          Anyolite::Macro.check_and_cast_resolved_union_type({{rb}}, {{value}}, {{new_context}}::{{raw_type.stringify.starts_with?("::") ? raw_type[2..-1] : raw_type}}, {{raw_type}}, {{new_context}})
+          Anyolite::Macro.check_and_cast_union_type({{rb}}, {{value}}, {{new_context}}::{{raw_type.stringify.starts_with?("::") ? raw_type[2..-1] : raw_type}}, {{raw_type}}, {{new_context}})
         {% else %}
-          Anyolite::Macro.check_and_cast_resolved_union_type({{rb}}, {{value}}, {{raw_type}}, {{raw_type}})
+          Anyolite::Macro.check_and_cast_union_type({{rb}}, {{value}}, {{raw_type}}, {{raw_type}})
         {% end %}
       {% else %}
         {% raise "Could not resolve type #{type}, which is a #{type.class_name}" %}
@@ -74,6 +74,14 @@ module Anyolite
       {% elsif type.resolve <= String %}
         if Anyolite::RbCast.check_for_string({{value}})
           final_value = Anyolite::RbCast.cast_to_string({{rb}}, {{value}})
+        end
+      {% elsif type.resolve <= Array %}
+        if Anyolite::RbCast.check_for_array({{value}})
+          array_size = Anyolite::RbCore.array_length({{value}})
+          converted_array = Array({{type.type_vars[0]}}).new(size: array_size) do |i|
+            Anyolite::Macro.convert_keyword_arg({{rb}}, Anyolite::RbCore.rb_ary_entry({{value}}, i), {{type.type_vars[0]}})
+          end
+          final_value = converted_array
         end
       {% elsif type.resolve <= Struct || type.resolve <= Enum %}
         if Anyolite::RbCast.check_for_data({{value}}) && Anyolite::RbCast.check_custom_type({{rb}}, {{value}}, {{type}})

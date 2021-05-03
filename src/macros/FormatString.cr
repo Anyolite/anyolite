@@ -40,6 +40,8 @@ module Anyolite
           "f"
         {% elsif arg.resolve <= String %}
           "z"
+        {% elsif arg.resolve <= Array %}
+          "A"
         {% else %}
           "o"
         {% end %}

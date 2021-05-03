@@ -44,6 +44,12 @@ module Anyolite
           ({{arg}}.size > 0 ? {{arg_type}}.new({{arg}}[0] : '\0')
         {% elsif arg_type.resolve <= String %}
           {{arg_type}}.new({{arg}})
+        {% elsif arg_type.resolve <= Array %}
+          array_size = Anyolite::RbCore.array_length({{arg}})
+          converted_array = Array({{arg_type.type_vars[0]}}).new(size: array_size) do |i|
+            Anyolite::Macro.convert_keyword_arg({{rb}}, Anyolite::RbCore.rb_ary_entry({{arg}}, i), {{arg_type.type_vars[0]}})
+          end
+          converted_array
         {% elsif arg_type.resolve <= Struct || arg_type.resolve <= Enum %}
           Anyolite::Macro.convert_from_ruby_struct({{rb}}, {{arg}}, {{arg_type}}).value.content
         {% else %}
@@ -96,7 +102,7 @@ module Anyolite
         {% end %}
 
         {% if arg_type.value %}
-        {% final_type_def = "#{arg_type.var} : #{final_split_types.join("").id} = #{arg_type.value}" %}
+          {% final_type_def = "#{arg_type.var} : #{final_split_types.join("").id} = #{arg_type.value}" %}
         {% else %}
           {% final_type_def = "#{arg_type.var} : #{final_split_types.join("").id}" %}
         {% end %}
@@ -132,7 +138,15 @@ module Anyolite
     macro convert_resolved_keyword_arg(rb, arg, arg_type, raw_arg_type, context = nil, debug_information = nil)
       {% if arg_type.stringify.starts_with?("Union") %}
         # This sadly needs some uncanny magic
-        Anyolite::Macro.cast_to_union_value({{rb}}, {{arg}}, {{arg_type.stringify[6..-2].split('|').map { |x| x.id }}}, context: {{context}})
+        {% char_parser = "" %}
+        {% brace_counter = 0 %}
+        {% for c in arg_type.stringify[6..-2].chars %}
+          {% brace_counter += 1 if c == '(' %}
+          {% brace_counter -= 1 if c == ')' %}
+          {% char_parser += (brace_counter == 0 && c == '|' ? ',' : c) %}
+        {% end %}
+
+        Anyolite::Macro.cast_to_union_value({{rb}}, {{arg}}, {{"[#{char_parser.id}]".id}}, context: {{context}})
       {% elsif arg_type.resolve? %}
         {% if arg_type.resolve <= Nil %}
           Anyolite::RbCast.cast_to_nil({{rb}}, {{arg}})
@@ -152,6 +166,12 @@ module Anyolite
           Anyolite::RbCast.cast_to_char({{rb}}, {{arg}})
         {% elsif arg_type.resolve <= String %}
           Anyolite::RbCast.cast_to_string({{rb}}, {{arg}})
+        {% elsif arg_type.resolve <= Array %}
+          array_size = Anyolite::RbCore.array_length({{arg}})
+          converted_array = Array({{arg_type.type_vars[0]}}).new(size: array_size) do |i|
+            Anyolite::Macro.convert_keyword_arg({{rb}}, Anyolite::RbCore.rb_ary_entry({{arg}}, i), {{arg_type.type_vars[0]}})
+          end
+          converted_array
         {% elsif arg_type.resolve <= Struct || arg_type.resolve <= Enum %}
           Anyolite::Macro.convert_from_ruby_struct({{rb}}, {{arg}}, {{arg_type}}).value.content
         {% elsif arg_type.resolve? %}
