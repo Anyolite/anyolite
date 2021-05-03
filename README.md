@@ -191,6 +191,7 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 * [X] Fixed reference table throwing an error when increasing counter
 * [X] Call rb_finalize only if reference counter is going to be 0
 * [X] Fixed union type parsing
+* [X] Removed possible error when casting unions
 
 ### Version 0.11.0
 

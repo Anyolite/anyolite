@@ -103,6 +103,9 @@ module Anyolite
 
     fun rb_hash_new = mrb_hash_new(rb : State*) : RbValue
     fun rb_hash_set = mrb_hash_set(rb : State*, hash : RbValue, key : RbValue, value : RbValue)
+    fun rb_hash_get = mrb_hash_get(rb : State*, hash : RbValue, key : RbValue) : RbValue
+    fun rb_hash_keys = mrb_hash_keys(rb : State*, hash : RbValue) : RbValue
+    fun rb_hash_size = mrb_hash_size(rb : State*, hash : RbValue) : RbInt
 
     fun get_nil_value : RbValue
     fun get_false_value : RbValue

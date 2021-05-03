@@ -14,7 +14,9 @@ module Anyolite
       {% end %}
       
       if final_value.is_a?(Symbol)
-        Anyolite::RbCore.rb_raise_argument_error({{rb}}, "Could not determine any value for #{{{value}}} with types {{types}} in context {{context}}")
+        # TODO: Better value description
+        Anyolite::RbCast.casting_error({{rb}}, {{value}}, "{{types}}", nil)
+        #Anyolite::RbCore.rb_raise_argument_error({{rb}}, "Could not determine any value for #{{{value}}} with types {{types}} in context {{context}}")
         raise("Should not be reached")
       else
         final_value

@@ -167,6 +167,7 @@ module Anyolite
         {% elsif arg_type.resolve <= String %}
           Anyolite::RbCast.cast_to_string({{rb}}, {{arg}})
         {% elsif arg_type.resolve <= Array %}
+          # TODO: Make a macro out of this
           array_size = Anyolite::RbCore.array_length({{arg}})
           converted_array = Array({{arg_type.type_vars[0]}}).new(size: array_size) do |i|
             Anyolite::Macro.convert_keyword_arg({{rb}}, Anyolite::RbCore.rb_ary_entry({{arg}}, i), {{arg_type.type_vars[0]}})

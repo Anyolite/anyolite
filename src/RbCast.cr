@@ -60,45 +60,7 @@ module Anyolite
       return rb_hash
     end
 
-    # Implicit return methods
-
-    def self.return_value(rb : RbCore::State*, value : Nil)
-      RbCast.return_nil
-    end
-
-    def self.return_value(rb : RbCore::State*, value : Bool)
-      value ? RbCast.return_true : return_false
-    end
-
-    def self.return_value(rb : RbCore::State*, value : Int)
-      RbCast.return_fixnum(value)
-    end
-
-    def self.return_value(rb : RbCore::State*, value : Float)
-      RbCast.return_float(rb, value)
-    end
-
-    def self.return_value(rb : RbCore::State*, value : Char)
-      RbCast.return_string(rb, value.to_s)
-    end
-
-    def self.return_value(rb : RbCore::State*, value : String)
-      RbCast.return_string(rb, value)
-    end
-
-    def self.return_value(rb : RbCore::State*, value : Symbol)
-      RbCast.return_symbol(rb, value)
-    end
-
-    def self.return_value(rb : RbCore::State*, value : Array)
-      RbCast.return_array(rb, value)
-    end
-
-    def self.return_value(rb : RbCore::State*, value : Hash)
-      RbCast.return_hash(rb, value)
-    end
-
-    def self.return_value(rb : RbCore::State*, value : Struct | Enum)
+    def self.return_struct_or_enum(rb : RbCore::State*, value : Struct | Enum)
       ruby_class = RbClassCache.get(typeof(value))
 
       destructor = RbTypeCache.destructor_method(typeof(value))
@@ -115,7 +77,7 @@ module Anyolite
       return new_ruby_object
     end
 
-    def self.return_value(rb : RbCore::State*, value : Object)
+    def self.return_object(rb : RbCore::State*, value : Object)
       ruby_class = RbClassCache.get(typeof(value))
 
       destructor = RbTypeCache.destructor_method(typeof(value))
@@ -131,14 +93,36 @@ module Anyolite
       return new_ruby_object
     end
 
+    def self.return_value(rb : RbCore::State*, value : Object)
+      if value.is_a?(Nil)
+        RbCast.return_nil
+      elsif value.is_a?(Bool)
+        value ? RbCast.return_true : return_false
+      elsif value.is_a?(Int)
+        RbCast.return_fixnum(value)
+      elsif value.is_a?(Float)
+        RbCast.return_float(rb, value)
+      elsif value.is_a?(Char)
+        RbCast.return_string(rb, value.to_s)
+      elsif value.is_a?(String)
+        RbCast.return_string(rb, value)
+      elsif value.is_a?(Symbol)
+        RbCast.return_symbol(rb, value)
+      elsif value.is_a?(Array)
+        RbCast.return_array(rb, value)
+      elsif value.is_a?(Hash)
+        RbCast.return_hash(rb, value)
+      elsif value.is_a?(Struct) || value.is_a?(Enum)
+        RbCast.return_struct_or_enum(rb, value)
+      else
+        RbCast.return_object(rb, value)
+      end
+    end
+
     # Weak reference passing methods
     # NOTE: These are highly untested and might still be unstable or might even leak memory
 
-    def self.pass_value(rb : RbCore::State*, value : Nil | Bool | Int | Float | String)
-      self.return_value(rb, value)
-    end
-
-    def self.pass_value(rb : RbCore::State*, value : Struct | Enum)
+    def self.pass_struct_or_enum(rb : RbCore::State*, value : Struct | Enum)
       ruby_class = RbClassCache.get(typeof(value))
 
       destructor = ->(rb_state : Anyolite::RbCore::State*, ptr : Void*) {}
@@ -153,7 +137,7 @@ module Anyolite
       return new_ruby_object
     end
 
-    def self.pass_value(rb : RbCore::State*, value : Object)
+    def self.pass_object(rb : RbCore::State*, value : Object)
       ruby_class = RbClassCache.get(typeof(value))
 
       destructor = ->(rb_state : Anyolite::RbCore::State*, ptr : Void*) {}
@@ -165,6 +149,32 @@ module Anyolite
       Macro.convert_from_ruby_object(rb, new_ruby_object, typeof(value)).value = value
 
       return new_ruby_object
+    end
+
+    def self.pass_value(rb : RbCore::State*, value : Object)
+      if value.is_a?(Nil)
+        RbCast.return_nil
+      elsif value.is_a?(Bool)
+        value ? RbCast.return_true : return_false
+      elsif value.is_a?(Int)
+        RbCast.return_fixnum(value)
+      elsif value.is_a?(Float)
+        RbCast.return_float(rb, value)
+      elsif value.is_a?(Char)
+        RbCast.return_string(rb, value.to_s)
+      elsif value.is_a?(String)
+        RbCast.return_string(rb, value)
+      elsif value.is_a?(Symbol)
+        RbCast.return_symbol(rb, value)
+      elsif value.is_a?(Array)
+        RbCast.return_array(rb, value)
+      elsif value.is_a?(Hash)
+        RbCast.return_hash(rb, value)
+      elsif value.is_a?(Struct) || value.is_a?(Enum)
+        RbCast.pass_struct_or_enum(rb, value)
+      else
+        RbCast.pass_object(rb, value)
+      end
     end
 
     # Class check methods
