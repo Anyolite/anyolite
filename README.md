@@ -140,7 +140,7 @@ The limitations here do not have a trivial solution (yet), but with some tricks 
 tools from Anyolite it should technically be possible to circumvent them. If one
 of these does definitely not work, but you need them to, please feel free to open an issue.
 
-* Arrays and hashes are not directly supported
+* Hashes are not directly supported
 * Pointers are not directly supported
 * Procs as arguments are not directly supported (block arguments are, however)
 * Symbols do not work due to their compiletime nature in Crystal
@@ -149,6 +149,7 @@ of these does definitely not work, but you need them to, please feel free to ope
 * Keywords will always be given to functions, even if optional (then with default values)
 * Non-keyword function arguments are always set to their default values before receiving their final values
 * Default arguments need to be specialized with their full class and module path in order to work
+* Some union and generic types need to be specialized with their full path
 * Private constants need to be excluded in order to prevent errors
 
 # Why this name?
