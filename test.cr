@@ -344,7 +344,7 @@ end
 
 module TestModule
   class Entity
-    property hp : Int32 = 0
+    property hp : Int32
 
     def initialize(@hp : Int32)
     end

@@ -67,9 +67,9 @@ Imagine a Crystal class for a really bad RPG:
 ```crystal
 module TestModule
   class Entity
-    property hp : Int32 = 0
+    property hp : Int32
 
-    def initialize(@hp)
+    def initialize(@hp : Int32)
     end
 
     def damage(diff : Int32)
