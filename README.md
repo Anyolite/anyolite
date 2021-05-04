@@ -164,6 +164,12 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 
 ## Upcoming releases
 
+### Version 0.10.1
+
+#### Usability
+
+* [ ] Updated documentation to new features from 0.10.0
+
 ### Version 0.11.0
 
 This version is planned to be the last feature release before 1.0.0.
