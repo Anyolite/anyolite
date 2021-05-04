@@ -203,8 +203,6 @@ so it will probably take some time before it will be released.
 Some of the features might not even make the release.
 
 * [ ] Options for inherited and/or inheriting classes
-* [ ] Support for procs
-* [ ] Support for pointers
 
 ### Version 1.0.0
 
