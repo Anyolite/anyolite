@@ -17,7 +17,7 @@ module Anyolite
 
       {% if block_arg_number == 0 %}
           yield_value = Anyolite::RbCore.rb_yield({{rb}}, {{block_ptr}}.value, Anyolite::RbCast.return_nil)
-          Anyolite::Macro.convert_keyword_arg({{rb}}, yield_value, {{block_return_type}})
+          Anyolite::Macro.convert_from_ruby_to_crystal({{rb}}, yield_value, {{block_return_type}})
         end
       {% elsif block_arg_number %}
           block_arg_array = [
@@ -26,7 +26,7 @@ module Anyolite
             {% end %}
           ]
           yield_value = Anyolite::RbCore.rb_yield_argv({{rb}}, {{block_ptr}}.value, {{block_arg_number}}, block_arg_array)
-          Anyolite::Macro.convert_keyword_arg({{rb}}, yield_value, {{block_return_type}})
+          Anyolite::Macro.convert_from_ruby_to_crystal({{rb}}, yield_value, {{block_return_type}})
         end
       {% end %}
 
@@ -55,7 +55,7 @@ module Anyolite
         {% if empty_regular %}
           {% c = 0 %}
           {% for keyword in keyword_args %}
-            {{keyword.var.id}}: Anyolite::Macro.convert_keyword_arg({{rb}}, {{kw_args}}.values[{{c}}], {{keyword}}, context: {{context}}, 
+            {{keyword.var.id}}: Anyolite::Macro.convert_from_ruby_to_crystal({{rb}}, {{kw_args}}.values[{{c}}], {{keyword}}, context: {{context}}, 
               type_vars: {{type_vars}}, type_var_names: {{type_var_names}}, debug_information: {{proc.stringify + " - " + keyword_args.stringify}}),
             {% c += 1 %}
           {% end %}
@@ -63,7 +63,7 @@ module Anyolite
           *{{converted_regular_args}},
           {% c = 0 %}
           {% for keyword in keyword_args %}
-            {{keyword.var.id}}: Anyolite::Macro.convert_keyword_arg({{rb}}, {{kw_args}}.values[{{c}}], {{keyword}}, context: {{context}}}, 
+            {{keyword.var.id}}: Anyolite::Macro.convert_from_ruby_to_crystal({{rb}}, {{kw_args}}.values[{{c}}], {{keyword}}, context: {{context}}}, 
               type_vars: {{type_vars}}, type_var_names: {{type_var_names}}, debug_information: {{proc.stringify + " - " + keyword_args.stringify}}),
             {% c += 1 %}
           {% end %}
@@ -72,7 +72,7 @@ module Anyolite
 
       {% if block_arg_number == 0 %}
           yield_value = Anyolite::RbCore.rb_yield({{rb}}, {{block_ptr}}.value, Anyolite::RbCast.return_nil)
-          Anyolite::Macro.convert_keyword_arg({{rb}}, yield_value, {{block_return_type}})
+          Anyolite::Macro.convert_from_ruby_to_crystal({{rb}}, yield_value, {{block_return_type}})
         end
       {% elsif block_arg_number %}
           block_arg_array = [
@@ -81,7 +81,7 @@ module Anyolite
             {% end %}
           ]
           yield_value = Anyolite::RbCore.rb_yield_argv({{rb}}, {{block_ptr}}.value, {{block_arg_number}}, block_arg_array)
-          Anyolite::Macro.convert_keyword_arg({{rb}}, yield_value, {{block_return_type}})
+          Anyolite::Macro.convert_from_ruby_to_crystal({{rb}}, yield_value, {{block_return_type}})
         end
       {% end %}
 
@@ -112,7 +112,7 @@ module Anyolite
 
         {% if block_arg_number == 0 %}
             yield_value = Anyolite::RbCore.rb_yield({{rb}}, {{block_ptr}}.value, Anyolite::RbCast.return_nil)
-            Anyolite::Macro.convert_keyword_arg({{rb}}, yield_value, {{block_return_type}})
+            Anyolite::Macro.convert_from_ruby_to_crystal({{rb}}, yield_value, {{block_return_type}})
           end
         {% elsif block_arg_number %}
             block_arg_array = [
@@ -121,7 +121,7 @@ module Anyolite
               {% end %}
             ]
             yield_value = Anyolite::RbCore.rb_yield_argv({{rb}}, {{block_ptr}}.value, {{block_arg_number}}, block_arg_array)
-            Anyolite::Macro.convert_keyword_arg({{rb}}, yield_value, {{block_return_type}})
+            Anyolite::Macro.convert_from_ruby_to_crystal({{rb}}, yield_value, {{block_return_type}})
           end
         {% end %}
 
@@ -135,7 +135,7 @@ module Anyolite
 
         {% if block_arg_number == 0 %}
             yield_value = Anyolite::RbCore.rb_yield({{rb}}, {{block_ptr}}.value, Anyolite::RbCast.return_nil)
-            Anyolite::Macro.convert_keyword_arg({{rb}}, yield_value, {{block_return_type}})
+            Anyolite::Macro.convert_from_ruby_to_crystal({{rb}}, yield_value, {{block_return_type}})
           end
         {% elsif block_arg_number %}
             block_arg_array = [
@@ -144,7 +144,7 @@ module Anyolite
               {% end %}
             ]
             yield_value = Anyolite::RbCore.rb_yield_argv({{rb}}, {{block_ptr}}.value, {{block_arg_number}}, block_arg_array)
-            Anyolite::Macro.convert_keyword_arg({{rb}}, yield_value, {{block_return_type}})
+            Anyolite::Macro.convert_from_ruby_to_crystal({{rb}}, yield_value, {{block_return_type}})
           end
         {% end %}
       end
@@ -177,7 +177,7 @@ module Anyolite
           {% if empty_regular %}
             {% c = 0 %}
             {% for keyword in keyword_args %}
-              {{keyword.var.id}}: Anyolite::Macro.convert_keyword_arg({{rb}}, {{kw_args}}.values[{{c}}], {{keyword}}, context: {{context}}, 
+              {{keyword.var.id}}: Anyolite::Macro.convert_from_ruby_to_crystal({{rb}}, {{kw_args}}.values[{{c}}], {{keyword}}, context: {{context}}, 
                 type_vars: {{type_vars}}, type_var_names: {{type_var_names}}, debug_information: {{proc.stringify + " - " + keyword_args.stringify}}),
               {% c += 1 %}
             {% end %}
@@ -185,7 +185,7 @@ module Anyolite
             *{{converted_regular_args}},
             {% c = 0 %}
             {% for keyword in keyword_args %}
-              {{keyword.var.id}}: Anyolite::Macro.convert_keyword_arg({{rb}}, {{kw_args}}.values[{{c}}], {{keyword}}, context: {{context}},
+              {{keyword.var.id}}: Anyolite::Macro.convert_from_ruby_to_crystal({{rb}}, {{kw_args}}.values[{{c}}], {{keyword}}, context: {{context}},
                 type_vars: {{type_vars}}, type_var_names: {{type_var_names}}, debug_information: {{proc.stringify + " - " + keyword_args.stringify}}),
               {% c += 1 %}
             {% end %}
@@ -194,7 +194,7 @@ module Anyolite
 
         {% if block_arg_number == 0 %}
             yield_value = Anyolite::RbCore.rb_yield({{rb}}, {{block_ptr}}.value, Anyolite::RbCast.return_nil)
-            Anyolite::Macro.convert_keyword_arg({{rb}}, yield_value, {{block_return_type}})
+            Anyolite::Macro.convert_from_ruby_to_crystal({{rb}}, yield_value, {{block_return_type}})
           end
         {% elsif block_arg_number %}
             block_arg_array = [
@@ -203,7 +203,7 @@ module Anyolite
               {% end %}
             ]
             yield_value = Anyolite::RbCore.rb_yield_argv({{rb}}, {{block_ptr}}.value, {{block_arg_number}}, block_arg_array)
-            Anyolite::Macro.convert_keyword_arg({{rb}}, yield_value, {{block_return_type}})
+            Anyolite::Macro.convert_from_ruby_to_crystal({{rb}}, yield_value, {{block_return_type}})
           end
         {% end %}
 
@@ -218,7 +218,7 @@ module Anyolite
           {% if empty_regular %}
             {% c = 0 %}
             {% for keyword in keyword_args %}
-              {{keyword.var.id}}: Anyolite::Macro.convert_keyword_arg({{rb}}, {{kw_args}}.values[{{c}}], {{keyword}}, context: {{context}},
+              {{keyword.var.id}}: Anyolite::Macro.convert_from_ruby_to_crystal({{rb}}, {{kw_args}}.values[{{c}}], {{keyword}}, context: {{context}},
                 type_vars: {{type_vars}}, type_var_names: {{type_var_names}}, debug_information: {{proc.stringify + " - " + keyword_args.stringify}}),
               {% c += 1 %}
             {% end %}
@@ -226,7 +226,7 @@ module Anyolite
             *{{converted_regular_args}},
             {% c = 0 %}
             {% for keyword in keyword_args %}
-              {{keyword.var.id}}: Anyolite::Macro.convert_keyword_arg({{rb}}, {{kw_args}}.values[{{c}}], {{keyword}}, context: {{context}},
+              {{keyword.var.id}}: Anyolite::Macro.convert_from_ruby_to_crystal({{rb}}, {{kw_args}}.values[{{c}}], {{keyword}}, context: {{context}},
                 type_vars: {{type_vars}}, type_var_names: {{type_var_names}}, debug_information: {{proc.stringify + " - " + keyword_args.stringify}}),
               {% c += 1 %}
             {% end %}
@@ -235,7 +235,7 @@ module Anyolite
 
         {% if block_arg_number == 0 %}
             yield_value = Anyolite::RbCore.rb_yield({{rb}}, {{block_ptr}}.value, Anyolite::RbCast.return_nil)
-            Anyolite::Macro.convert_keyword_arg({{rb}}, yield_value, {{block_return_type}})
+            Anyolite::Macro.convert_from_ruby_to_crystal({{rb}}, yield_value, {{block_return_type}})
           end
         {% elsif block_arg_number %}
             block_arg_array = [
@@ -244,7 +244,7 @@ module Anyolite
               {% end %}
             ]
             yield_value = Anyolite::RbCore.rb_yield_argv({{rb}}, {{block_ptr}}.value, {{block_arg_number}}, block_arg_array)
-            Anyolite::Macro.convert_keyword_arg({{rb}}, yield_value, {{block_return_type}})
+            Anyolite::Macro.convert_from_ruby_to_crystal({{rb}}, yield_value, {{block_return_type}})
           end
         {% end %}
       end

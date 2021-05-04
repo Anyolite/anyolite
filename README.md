@@ -176,8 +176,10 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 
 #### Breaking changes
 
-* [ ] Rename `convert_arg` to something better
-* [ ] Rename `convert_keyword_arg` to something better
+* [X] Rename `convert_arg` to `convert_regular_arg`
+* [X] Rename `convert_keyword_arg` to `convert_from_ruby_to_crystal`
+* [X] Rename `convert_resolved_arg` to `resolve_regular_arg`
+* [X] Rename `convert_resolved_keyword_arg` to `resolve_from_ruby_to_crystal`
 
 #### Usability
 
