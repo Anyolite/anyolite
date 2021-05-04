@@ -164,37 +164,6 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 
 ## Upcoming releases
 
-### Version 0.10.0
-
-#### Features
-
-* [X] Support for block arguments
-* [X] Support for array arguments
-* [X] Support for hash arguments
-* [X] Support for symbols, arrays and hashes as returned values
-* [X] Support for chars
-* [X] Experimental (unsafe) casting of pointers to integers and back
-
-#### Breaking changes
-
-* [X] Rename `convert_arg` to `convert_regular_arg`
-* [X] Rename `convert_keyword_arg` to `convert_from_ruby_to_crystal`
-* [X] Rename `convert_resolved_arg` to `resolve_regular_arg`
-* [X] Rename `convert_resolved_keyword_arg` to `resolve_from_ruby_to_crystal`
-
-#### Usability
-
-* [X] Better error messages when casting incompatible values
-* [X] Added dummy argument parsing to convert type calls into actual types
-* [X] More intelligent conversions (Char <-> String, Int -> Float, Symbol -> String)
-
-#### Bugfixes
-
-* [X] Fixed reference table throwing an error when increasing counter
-* [X] Call rb_finalize only if reference counter is going to be 0
-* [X] Fixed union type parsing
-* [X] Removed possible error when casting unions
-
 ### Version 0.11.0
 
 This version is planned to be the last feature release before 1.0.0.

@@ -2,6 +2,37 @@
 
 ## Releases
 
+### Version 0.10.0
+
+#### Features
+
+* Support for block arguments
+* Support for array arguments
+* Support for hash arguments
+* Support for symbols, arrays and hashes as returned values
+* Support for chars
+* Experimental (unsafe) casting of pointers to integers and back
+
+#### Breaking changes
+
+* Rename `convert_arg` to `convert_regular_arg`
+* Rename `convert_keyword_arg` to `convert_from_ruby_to_crystal`
+* Rename `convert_resolved_arg` to `resolve_regular_arg`
+* Rename `convert_resolved_keyword_arg` to `resolve_from_ruby_to_crystal`
+
+#### Usability
+
+* Better error messages when casting incompatible values
+* Added dummy argument parsing to convert type calls into actual types
+* More intelligent conversions (Char <-> String, Int -> Float, Symbol -> String)
+
+#### Bugfixes
+
+* Fixed reference table throwing an error when increasing counter
+* Call rb_finalize only if reference counter is going to be 0
+* Fixed union type parsing
+* Removed possible error when casting unions
+
 ### Version 0.9.1
 
 #### Usability
