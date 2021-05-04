@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="generator" content="Crystal Docs 1.0.0">
-<meta name="crystal_docs.project_version" content="0.9.1">
+<meta name="crystal_docs.project_version" content="0.10.0">
 <meta name="crystal_docs.project_name" content="anyolite">
 
 
@@ -13,7 +13,7 @@
 <script type="text/javascript" src="../js/doc.js"></script>
 
   <meta name="repository-name" content="anyolite">
-  <title>Anyolite::RbCast - anyolite 0.9.1</title>
+  <title>Anyolite::RbCast - anyolite 0.10.0</title>
   <script type="text/javascript">
     CrystalDocs.base_path = "../";
   </script>
@@ -39,7 +39,7 @@
       </h1>
 
       <span class="project-version">
-        0.9.1
+        0.10.0
       </span>
     </div>
   </div>
@@ -55,6 +55,21 @@
       <a href="../Anyolite.html">Anyolite</a>
       
         <ul>
+  
+  <li class=" " data-id="anyolite/Anyolite/AddBlockArg" data-name="anyolite::addblockarg">
+      <a href="../Anyolite/AddBlockArg.html">AddBlockArg</a>
+      
+    </li>
+  
+  <li class=" " data-id="anyolite/Anyolite/AddBlockArgClassMethod" data-name="anyolite::addblockargclassmethod">
+      <a href="../Anyolite/AddBlockArgClassMethod.html">AddBlockArgClassMethod</a>
+      
+    </li>
+  
+  <li class=" " data-id="anyolite/Anyolite/AddBlockArgInstanceMethod" data-name="anyolite::addblockarginstancemethod">
+      <a href="../Anyolite/AddBlockArgInstanceMethod.html">AddBlockArgInstanceMethod</a>
+      
+    </li>
   
   <li class=" " data-id="anyolite/Anyolite/Empty" data-name="anyolite::empty">
       <a href="../Anyolite/Empty.html">Empty</a>
@@ -267,7 +282,7 @@
   </h2>
   
     
-      <a href="https://github.com/Anyolite/anyolite/blob/v0.9.1/src/RbCast.cr#L3" target="_blank">
+      <a href="https://github.com/Anyolite/anyolite/blob/v0.10.0/src/RbCast.cr#L3" target="_blank">
         RbCast.cr
       </a>
     
@@ -296,6 +311,11 @@
       </li>
     
       <li class="entry-summary">
+        <a href="#cast_to_char(rb:Pointer(RbCore::State),value:RbCore::RbValue)-class-method" class="signature"><strong>.cast_to_char</strong>(rb : Pointer(RbCore::State), value : RbCore::RbValue)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
         <a href="#cast_to_float(rb:Pointer(RbCore::State),value:RbCore::RbValue)-class-method" class="signature"><strong>.cast_to_float</strong>(rb : Pointer(RbCore::State), value : RbCore::RbValue)</a>
         
       </li>
@@ -312,6 +332,18 @@
     
       <li class="entry-summary">
         <a href="#cast_to_string(rb:Pointer(RbCore::State),value:RbCore::RbValue)-class-method" class="signature"><strong>.cast_to_string</strong>(rb : Pointer(RbCore::State), value : RbCore::RbValue)</a>
+        
+          <div class="summary"><p><span class="flag orange">TODO</span>  Maybe add an option for implicit casts?</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#casting_error(rb,value,crystal_class,rescue_value)-class-method" class="signature"><strong>.casting_error</strong>(rb, value, crystal_class, rescue_value)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#check_for_array(value:RbCore::RbValue)-class-method" class="signature"><strong>.check_for_array</strong>(value : RbCore::RbValue)</a>
         
       </li>
     
@@ -341,12 +373,22 @@
       </li>
     
       <li class="entry-summary">
+        <a href="#check_for_hash(value:RbCore::RbValue)-class-method" class="signature"><strong>.check_for_hash</strong>(value : RbCore::RbValue)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
         <a href="#check_for_nil(value:RbCore::RbValue)-class-method" class="signature"><strong>.check_for_nil</strong>(value : RbCore::RbValue)</a>
         
       </li>
     
       <li class="entry-summary">
         <a href="#check_for_string(value:RbCore::RbValue)-class-method" class="signature"><strong>.check_for_string</strong>(value : RbCore::RbValue)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#check_for_symbol(value:RbCore::RbValue)-class-method" class="signature"><strong>.check_for_symbol</strong>(value : RbCore::RbValue)</a>
         
       </li>
     
@@ -362,6 +404,26 @@
     
       <li class="entry-summary">
         <a href="#is_undef?(value)-class-method" class="signature"><strong>.is_undef?</strong>(value)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#pass_object(rb:Pointer(RbCore::State),value:Object)-class-method" class="signature"><strong>.pass_object</strong>(rb : Pointer(RbCore::State), value : Object)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#pass_struct_or_enum(rb:Pointer(RbCore::State),value:Struct%7CEnum)-class-method" class="signature"><strong>.pass_struct_or_enum</strong>(rb : Pointer(RbCore::State), value : Struct | Enum)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#pass_value(rb:Pointer(RbCore::State),value:Object)-class-method" class="signature"><strong>.pass_value</strong>(rb : Pointer(RbCore::State), value : Object)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#return_array(rb,value)-class-method" class="signature"><strong>.return_array</strong>(rb, value)</a>
         
       </li>
     
@@ -386,12 +448,32 @@
       </li>
     
       <li class="entry-summary">
+        <a href="#return_hash(rb,value)-class-method" class="signature"><strong>.return_hash</strong>(rb, value)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
         <a href="#return_nil-class-method" class="signature"><strong>.return_nil</strong></a>
         
       </li>
     
       <li class="entry-summary">
+        <a href="#return_object(rb:Pointer(RbCore::State),value:Object)-class-method" class="signature"><strong>.return_object</strong>(rb : Pointer(RbCore::State), value : Object)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
         <a href="#return_string(rb,value)-class-method" class="signature"><strong>.return_string</strong>(rb, value)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#return_struct_or_enum(rb:Pointer(RbCore::State),value:Struct%7CEnum)-class-method" class="signature"><strong>.return_struct_or_enum</strong>(rb : Pointer(RbCore::State), value : Struct | Enum)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#return_symbol(rb,value)-class-method" class="signature"><strong>.return_symbol</strong>(rb, value)</a>
         
       </li>
     
@@ -402,36 +484,6 @@
     
       <li class="entry-summary">
         <a href="#return_value(rb:Pointer(RbCore::State),value:Object)-class-method" class="signature"><strong>.return_value</strong>(rb : Pointer(RbCore::State), value : Object)</a>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#return_value(rb:Pointer(RbCore::State),value:Struct%7CEnum)-class-method" class="signature"><strong>.return_value</strong>(rb : Pointer(RbCore::State), value : Struct | Enum)</a>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#return_value(rb:Pointer(RbCore::State),value:String)-class-method" class="signature"><strong>.return_value</strong>(rb : Pointer(RbCore::State), value : String)</a>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#return_value(rb:Pointer(RbCore::State),value:Float)-class-method" class="signature"><strong>.return_value</strong>(rb : Pointer(RbCore::State), value : Float)</a>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#return_value(rb:Pointer(RbCore::State),value:Int)-class-method" class="signature"><strong>.return_value</strong>(rb : Pointer(RbCore::State), value : Int)</a>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#return_value(rb:Pointer(RbCore::State),value:Bool)-class-method" class="signature"><strong>.return_value</strong>(rb : Pointer(RbCore::State), value : Bool)</a>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#return_value(rb:Pointer(RbCore::State),value:Nil)-class-method" class="signature"><strong>.return_value</strong>(rb : Pointer(RbCore::State), value : Nil)</a>
         
       </li>
     
@@ -487,7 +539,23 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/Anyolite/anyolite/blob/v0.9.1/src/RbCast.cr#L136" target="_blank">View source</a>]
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.10.0/src/RbCast.cr#L253" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="cast_to_char(rb:Pointer(RbCore::State),value:RbCore::RbValue)-class-method">
+      <div class="signature">
+        
+        def self.<strong>cast_to_char</strong>(rb : Pointer(RbCore::State), value : RbCore::RbValue)
+
+        <a class="method-permalink" href="#cast_to_char(rb:Pointer(RbCore::State),value:RbCore::RbValue)-class-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.10.0/src/RbCast.cr#L281" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -503,7 +571,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/Anyolite/anyolite/blob/v0.9.1/src/RbCast.cr#L156" target="_blank">View source</a>]
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.10.0/src/RbCast.cr#L271" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -519,7 +587,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/Anyolite/anyolite/blob/v0.9.1/src/RbCast.cr#L147" target="_blank">View source</a>]
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.10.0/src/RbCast.cr#L263" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -535,7 +603,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/Anyolite/anyolite/blob/v0.9.1/src/RbCast.cr#L127" target="_blank">View source</a>]
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.10.0/src/RbCast.cr#L245" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -548,10 +616,47 @@
         <a class="method-permalink" href="#cast_to_string(rb:Pointer(RbCore::State),value:RbCore::RbValue)-class-method">#</a>
       </div>
       
+        <div class="doc">
+          
+          <p><span class="flag orange">TODO</span>  Maybe add an option for implicit casts?</p>
+        </div>
+      
       <br/>
       <div>
         
-          [<a href="https://github.com/Anyolite/anyolite/blob/v0.9.1/src/RbCast.cr#L165" target="_blank">View source</a>]
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.10.0/src/RbCast.cr#L296" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="casting_error(rb,value,crystal_class,rescue_value)-class-method">
+      <div class="signature">
+        
+        def self.<strong>casting_error</strong>(rb, value, crystal_class, rescue_value)
+
+        <a class="method-permalink" href="#casting_error(rb,value,crystal_class,rescue_value)-class-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.10.0/src/RbCast.cr#L234" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="check_for_array(value:RbCore::RbValue)-class-method">
+      <div class="signature">
+        
+        def self.<strong>check_for_array</strong>(value : RbCore::RbValue)
+
+        <a class="method-permalink" href="#check_for_array(value:RbCore::RbValue)-class-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.10.0/src/RbCast.cr#L222" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -567,7 +672,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/Anyolite/anyolite/blob/v0.9.1/src/RbCast.cr#L107" target="_blank">View source</a>]
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.10.0/src/RbCast.cr#L202" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -583,7 +688,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/Anyolite/anyolite/blob/v0.9.1/src/RbCast.cr#L123" target="_blank">View source</a>]
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.10.0/src/RbCast.cr#L230" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -599,7 +704,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/Anyolite/anyolite/blob/v0.9.1/src/RbCast.cr#L103" target="_blank">View source</a>]
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.10.0/src/RbCast.cr#L198" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -615,7 +720,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/Anyolite/anyolite/blob/v0.9.1/src/RbCast.cr#L111" target="_blank">View source</a>]
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.10.0/src/RbCast.cr#L206" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -631,7 +736,23 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/Anyolite/anyolite/blob/v0.9.1/src/RbCast.cr#L115" target="_blank">View source</a>]
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.10.0/src/RbCast.cr#L210" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="check_for_hash(value:RbCore::RbValue)-class-method">
+      <div class="signature">
+        
+        def self.<strong>check_for_hash</strong>(value : RbCore::RbValue)
+
+        <a class="method-permalink" href="#check_for_hash(value:RbCore::RbValue)-class-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.10.0/src/RbCast.cr#L226" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -647,7 +768,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/Anyolite/anyolite/blob/v0.9.1/src/RbCast.cr#L95" target="_blank">View source</a>]
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.10.0/src/RbCast.cr#L190" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -663,7 +784,23 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/Anyolite/anyolite/blob/v0.9.1/src/RbCast.cr#L119" target="_blank">View source</a>]
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.10.0/src/RbCast.cr#L214" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="check_for_symbol(value:RbCore::RbValue)-class-method">
+      <div class="signature">
+        
+        def self.<strong>check_for_symbol</strong>(value : RbCore::RbValue)
+
+        <a class="method-permalink" href="#check_for_symbol(value:RbCore::RbValue)-class-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.10.0/src/RbCast.cr#L218" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -679,7 +816,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/Anyolite/anyolite/blob/v0.9.1/src/RbCast.cr#L99" target="_blank">View source</a>]
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.10.0/src/RbCast.cr#L194" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -695,7 +832,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/Anyolite/anyolite/blob/v0.9.1/src/RbCast.cr#L91" target="_blank">View source</a>]
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.10.0/src/RbCast.cr#L186" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -711,7 +848,71 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/Anyolite/anyolite/blob/v0.9.1/src/RbCast.cr#L178" target="_blank">View source</a>]
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.10.0/src/RbCast.cr#L310" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="pass_object(rb:Pointer(RbCore::State),value:Object)-class-method">
+      <div class="signature">
+        
+        def self.<strong>pass_object</strong>(rb : Pointer(RbCore::State), value : Object)
+
+        <a class="method-permalink" href="#pass_object(rb:Pointer(RbCore::State),value:Object)-class-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.10.0/src/RbCast.cr#L144" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="pass_struct_or_enum(rb:Pointer(RbCore::State),value:Struct|Enum)-class-method">
+      <div class="signature">
+        
+        def self.<strong>pass_struct_or_enum</strong>(rb : Pointer(RbCore::State), value : Struct | Enum)
+
+        <a class="method-permalink" href="#pass_struct_or_enum(rb:Pointer(RbCore::State),value:Struct%7CEnum)-class-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.10.0/src/RbCast.cr#L129" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="pass_value(rb:Pointer(RbCore::State),value:Object)-class-method">
+      <div class="signature">
+        
+        def self.<strong>pass_value</strong>(rb : Pointer(RbCore::State), value : Object)
+
+        <a class="method-permalink" href="#pass_value(rb:Pointer(RbCore::State),value:Object)-class-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.10.0/src/RbCast.cr#L158" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="return_array(rb,value)-class-method">
+      <div class="signature">
+        
+        def self.<strong>return_array</strong>(rb, value)
+
+        <a class="method-permalink" href="#return_array(rb,value)-class-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.10.0/src/RbCast.cr#L34" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -727,7 +928,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/Anyolite/anyolite/blob/v0.9.1/src/RbCast.cr#L22" target="_blank">View source</a>]
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.10.0/src/RbCast.cr#L22" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -743,7 +944,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/Anyolite/anyolite/blob/v0.9.1/src/RbCast.cr#L14" target="_blank">View source</a>]
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.10.0/src/RbCast.cr#L14" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -759,7 +960,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/Anyolite/anyolite/blob/v0.9.1/src/RbCast.cr#L18" target="_blank">View source</a>]
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.10.0/src/RbCast.cr#L18" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -775,7 +976,23 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/Anyolite/anyolite/blob/v0.9.1/src/RbCast.cr#L26" target="_blank">View source</a>]
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.10.0/src/RbCast.cr#L26" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="return_hash(rb,value)-class-method">
+      <div class="signature">
+        
+        def self.<strong>return_hash</strong>(rb, value)
+
+        <a class="method-permalink" href="#return_hash(rb,value)-class-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.10.0/src/RbCast.cr#L48" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -791,7 +1008,23 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/Anyolite/anyolite/blob/v0.9.1/src/RbCast.cr#L6" target="_blank">View source</a>]
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.10.0/src/RbCast.cr#L6" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="return_object(rb:Pointer(RbCore::State),value:Object)-class-method">
+      <div class="signature">
+        
+        def self.<strong>return_object</strong>(rb : Pointer(RbCore::State), value : Object)
+
+        <a class="method-permalink" href="#return_object(rb:Pointer(RbCore::State),value:Object)-class-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.10.0/src/RbCast.cr#L82" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -807,7 +1040,39 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/Anyolite/anyolite/blob/v0.9.1/src/RbCast.cr#L30" target="_blank">View source</a>]
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.10.0/src/RbCast.cr#L30" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="return_struct_or_enum(rb:Pointer(RbCore::State),value:Struct|Enum)-class-method">
+      <div class="signature">
+        
+        def self.<strong>return_struct_or_enum</strong>(rb : Pointer(RbCore::State), value : Struct | Enum)
+
+        <a class="method-permalink" href="#return_struct_or_enum(rb:Pointer(RbCore::State),value:Struct%7CEnum)-class-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.10.0/src/RbCast.cr#L63" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="return_symbol(rb,value)-class-method">
+      <div class="signature">
+        
+        def self.<strong>return_symbol</strong>(rb, value)
+
+        <a class="method-permalink" href="#return_symbol(rb,value)-class-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.10.0/src/RbCast.cr#L44" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -823,7 +1088,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/Anyolite/anyolite/blob/v0.9.1/src/RbCast.cr#L10" target="_blank">View source</a>]
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.10.0/src/RbCast.cr#L10" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -839,103 +1104,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/Anyolite/anyolite/blob/v0.9.1/src/RbCast.cr#L73" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="return_value(rb:Pointer(RbCore::State),value:Struct|Enum)-class-method">
-      <div class="signature">
-        
-        def self.<strong>return_value</strong>(rb : Pointer(RbCore::State), value : Struct | Enum)
-
-        <a class="method-permalink" href="#return_value(rb:Pointer(RbCore::State),value:Struct%7CEnum)-class-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/Anyolite/anyolite/blob/v0.9.1/src/RbCast.cr#L56" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="return_value(rb:Pointer(RbCore::State),value:String)-class-method">
-      <div class="signature">
-        
-        def self.<strong>return_value</strong>(rb : Pointer(RbCore::State), value : String)
-
-        <a class="method-permalink" href="#return_value(rb:Pointer(RbCore::State),value:String)-class-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/Anyolite/anyolite/blob/v0.9.1/src/RbCast.cr#L52" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="return_value(rb:Pointer(RbCore::State),value:Float)-class-method">
-      <div class="signature">
-        
-        def self.<strong>return_value</strong>(rb : Pointer(RbCore::State), value : Float)
-
-        <a class="method-permalink" href="#return_value(rb:Pointer(RbCore::State),value:Float)-class-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/Anyolite/anyolite/blob/v0.9.1/src/RbCast.cr#L48" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="return_value(rb:Pointer(RbCore::State),value:Int)-class-method">
-      <div class="signature">
-        
-        def self.<strong>return_value</strong>(rb : Pointer(RbCore::State), value : Int)
-
-        <a class="method-permalink" href="#return_value(rb:Pointer(RbCore::State),value:Int)-class-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/Anyolite/anyolite/blob/v0.9.1/src/RbCast.cr#L44" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="return_value(rb:Pointer(RbCore::State),value:Bool)-class-method">
-      <div class="signature">
-        
-        def self.<strong>return_value</strong>(rb : Pointer(RbCore::State), value : Bool)
-
-        <a class="method-permalink" href="#return_value(rb:Pointer(RbCore::State),value:Bool)-class-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/Anyolite/anyolite/blob/v0.9.1/src/RbCast.cr#L40" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="return_value(rb:Pointer(RbCore::State),value:Nil)-class-method">
-      <div class="signature">
-        
-        def self.<strong>return_value</strong>(rb : Pointer(RbCore::State), value : Nil)
-
-        <a class="method-permalink" href="#return_value(rb:Pointer(RbCore::State),value:Nil)-class-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/Anyolite/anyolite/blob/v0.9.1/src/RbCast.cr#L36" target="_blank">View source</a>]
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.10.0/src/RbCast.cr#L98" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -965,7 +1134,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/Anyolite/anyolite/blob/v0.9.1/src/RbCast.cr#L174" target="_blank">View source</a>]
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.10.0/src/RbCast.cr#L306" target="_blank">View source</a>]
         
       </div>
     </div>

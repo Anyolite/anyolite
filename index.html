@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="generator" content="Crystal Docs 1.0.0">
-<meta name="crystal_docs.project_version" content="0.9.1">
+<meta name="crystal_docs.project_version" content="0.10.0">
 <meta name="crystal_docs.project_name" content="anyolite">
 
 
@@ -13,7 +13,7 @@
 <script type="text/javascript" src="js/doc.js"></script>
 
   <meta name="repository-name" content="anyolite">
-  <title>anyolite 0.9.1</title>
+  <title>anyolite 0.10.0</title>
   <script type="text/javascript">
   CrystalDocs.base_path = "";
   </script>
@@ -39,7 +39,7 @@
       </h1>
 
       <span class="project-version">
-        0.9.1
+        0.10.0
       </span>
     </div>
   </div>
@@ -55,6 +55,21 @@
       <a href="Anyolite.html">Anyolite</a>
       
         <ul>
+  
+  <li class=" " data-id="anyolite/Anyolite/AddBlockArg" data-name="anyolite::addblockarg">
+      <a href="Anyolite/AddBlockArg.html">AddBlockArg</a>
+      
+    </li>
+  
+  <li class=" " data-id="anyolite/Anyolite/AddBlockArgClassMethod" data-name="anyolite::addblockargclassmethod">
+      <a href="Anyolite/AddBlockArgClassMethod.html">AddBlockArgClassMethod</a>
+      
+    </li>
+  
+  <li class=" " data-id="anyolite/Anyolite/AddBlockArgInstanceMethod" data-name="anyolite::addblockarginstancemethod">
+      <a href="Anyolite/AddBlockArgInstanceMethod.html">AddBlockArgInstanceMethod</a>
+      
+    </li>
   
   <li class=" " data-id="anyolite/Anyolite/Empty" data-name="anyolite::empty">
       <a href="Anyolite/Empty.html">Empty</a>
@@ -255,7 +270,7 @@ This way, mruby can be used as a scripting language to Crystal projects, with th
   </svg>
 </a>Features</h1>
 
-<ul><li>Bindings to an mruby interpreter</li><li>Wrapping of nearly arbitrary Crystal classes and methods to mruby</li><li>Easy syntax without unnecessary boilerplate code</li><li>Simple system to prevent garbage collector conflicts</li><li>Support for keyword arguments and default values</li><li>Objects, structs, enums and unions as function arguments and return values are completely valid</li><li>Methods and constants can be excluded, modified or renamed with annotations</li></ul>
+<ul><li>Bindings to an mruby interpreter</li><li>Wrapping of nearly arbitrary Crystal classes and methods to mruby</li><li>Easy syntax without unnecessary boilerplate code</li><li>Simple system to prevent garbage collector conflicts</li><li>Support for keyword arguments and default values</li><li>Objects, arrays, hashes, structs, enums and unions as function arguments and return values are completely valid</li><li>Block arguments can also be wrapped</li><li>Methods and constants can be excluded, modified or renamed with annotations</li></ul>
 
 <h1><a id="prerequisites" class="anchor" href="#prerequisites">
   <svg class="octicon-link" aria-hidden="true">
@@ -300,9 +315,9 @@ which allows for changing multiple options when installing the shard. Possible o
 
 <pre><code class="language-crystal"><span class="k">module</span> <span class="t">TestModule</span>
   <span class="k">class</span> <span class="t">Entity</span>
-    property hp : <span class="t">Int32</span> <span class="o">=</span> <span class="n">0</span>
+    property hp : <span class="t">Int32</span>
 
-    <span class="k">def</span> <span class="m">initialize</span>(@hp)
+    <span class="k">def</span> <span class="m">initialize</span>(@hp : <span class="t">Int32</span>)
     <span class="k">end</span>
 
     <span class="k">def</span> <span class="m">damage</span>(diff : <span class="t">Int32</span>)
@@ -357,7 +372,29 @@ More features will be added in the future.</p>
   </svg>
 </a>Limitations</h1>
 
-<ul><li>Currently, Anyolite does not work on Windows due to Crystal compiler bugs</li><li>Anyolite is only compatible with mruby 3 at the current time</li><li>Arrays and hashes are not directly supported</li><li>Symbols do not work due to their compiletime nature in Crystal</li><li>Splat arguments and arbitrary keywords are not possible due to their reliance on symbols</li><li>Keywords will always be given to functions, even if optional (then with default values)</li><li>Non-keyword function arguments are always set to their default values before receiving their final values</li><li>Default arguments need to be specialized with their full class and module path in order to work</li><li>Private constants need to be excluded in order to prevent errors</li></ul>
+<h2><a id="hard-limitations" class="anchor" href="#hard-limitations">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Hard limitations</h2>
+
+<p>These limitations can not be circumvented using other methods.
+It might be possible to remove them in future versions, but for
+now they are potential roadblocks.</p>
+
+<ul><li>Currently, Anyolite does not work on Windows due to Crystal compiler bugs</li><li>Anyolite is only compatible with mruby 3 at the current time</li></ul>
+
+<h2><a id="soft-limitations" class="anchor" href="#soft-limitations">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Soft limitations</h2>
+
+<p>The limitations here do not have a trivial solution (yet), but with some tricks and
+tools from Anyolite it should technically be possible to circumvent them. If one
+of these does definitely not work, but you need them to, please feel free to open an issue.</p>
+
+<ul><li>Pointers are technically supported but unsafe</li><li>Procs as arguments are not directly supported (block arguments are, however)</li><li>Symbols do not work due to their compiletime nature in Crystal</li><li>Only one function with the same name can be wrapped</li><li>Splat arguments and arbitrary keywords are not possible due to their reliance on symbols</li><li>Keywords will always be given to functions, even if optional (then with default values)</li><li>Non-keyword function arguments are always set to their default values before receiving their final values</li><li>Default arguments need to be specialized with their full class and module path in order to work</li><li>Some union and generic types need to be specialized with their full path</li><li>Private constants need to be excluded in order to prevent errors</li></ul>
 
 <h1><a id="why-this-name" class="anchor" href="#why-this-name">
   <svg class="octicon-link" aria-hidden="true">
@@ -383,18 +420,18 @@ More features will be added in the future.</p>
   </svg>
 </a>Upcoming releases</h2>
 
-<h3><a id="version-0.10.0" class="anchor" href="#version-0.10.0">
+<h3><a id="version-0.11.0" class="anchor" href="#version-0.11.0">
   <svg class="octicon-link" aria-hidden="true">
     <use href="#octicon-link"/>
   </svg>
-</a>Version 0.10.0</h3>
+</a>Version 0.11.0</h3>
 
 <p>This version is planned to be the last feature release before 1.0.0.
 Currently, the way its features are going to be implemented is not yet determined,
 so it will probably take some time before it will be released.
 Some of the features might not even make the release.</p>
 
-<ul><li>[ ] Options for inherited and/or inheriting classes</li><li>[ ] Support for arrays</li><li>[ ] Support for hashes</li><li>[ ] Support for procs</li><li>[ ] Support for pointers</li></ul>
+<ul><li>[ ] Options for inherited and/or inheriting classes</li></ul>
 
 <h3><a id="version-1.0.0" class="anchor" href="#version-1.0.0">
   <svg class="octicon-link" aria-hidden="true">
@@ -410,7 +447,7 @@ Some of the features might not even make the release.</p>
   </svg>
 </a>Future ideas (might not actually be possible to implement)</h3>
 
-<ul><li>[ ] Splat argument and/or arbitrary keyword passing</li><li>[ ] Method in mruby to determine owner of object</li></ul>
+<ul><li>[ ] Splat argument and/or arbitrary keyword passing</li><li>[ ] Method in mruby to determine owner of object</li><li>[ ] Caching of RbValues in the reference table to avoid duplicate objects</li><li>[ ] Storing of pure ruby objects (and procs?) in GC-safe containers</li><li>[ ] Controlled passing of pointers to ruby using the reference table</li><li>[ ] Option for required/optional block arguments</li><li>[ ] Convert macro body variables to fresh variables</li><li>[ ] Resolve context even in generic type union arguments</li></ul>
 </div>
 </body>
 </html>
