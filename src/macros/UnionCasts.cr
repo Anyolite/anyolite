@@ -62,11 +62,11 @@ module Anyolite
           final_value = {{type}}.new(Anyolite::RbCast.cast_to_int({{rb}}, {{value}}))
         end
       {% elsif type.resolve == Float %}
-        if Anyolite::RbCast.check_for_float({{value}})
+        if Anyolite::RbCast.check_for_float({{value}}) || Anyolite::RbCast.check_for_fixnum({{value}})
           final_value = Float64.new(Anyolite::RbCast.cast_to_float({{rb}}, {{value}}))
         end
       {% elsif type.resolve <= Float %}
-        if Anyolite::RbCast.check_for_float({{value}})
+        if Anyolite::RbCast.check_for_float({{value}}) || Anyolite::RbCast.check_for_fixnum({{value}})
           final_value = {{type}}.new(Anyolite::RbCast.cast_to_float({{rb}}, {{value}}))
         end
       {% elsif type.resolve <= Char %}
@@ -74,7 +74,7 @@ module Anyolite
           final_value = Anyolite::RbCast.cast_to_char({{rb}}, {{value}})
         end
       {% elsif type.resolve <= String %}
-        if Anyolite::RbCast.check_for_string({{value}})
+        if Anyolite::RbCast.check_for_string({{value}}) || Anyolite::RbCast.check_for_symbol({{value}})
           final_value = Anyolite::RbCast.cast_to_string({{rb}}, {{value}})
         end
       {% elsif type.resolve <= Array %}

@@ -122,6 +122,7 @@ module Anyolite
     fun check_rb_nil = check_mrb_nil(value : RbValue) : LibC::Int
     fun check_rb_undef = check_mrb_undef(value : RbValue) : LibC::Int
     fun check_rb_string = check_mrb_string(value : RbValue) : LibC::Int
+    fun check_rb_symbol = check_mrb_symbol(value : RbValue) : LibC::Int
     fun check_rb_array = check_mrb_array(value : RbValue) : LibC::Int
     fun check_rb_hash = check_mrb_hash(value : RbValue) : LibC::Int
     fun check_rb_data = check_mrb_data(value : RbValue) : LibC::Int

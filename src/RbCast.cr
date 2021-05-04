@@ -213,6 +213,10 @@ module Anyolite
       RbCore.check_rb_string(value) != 0
     end
 
+    def self.check_for_symbol(value : RbCore::RbValue)
+      RbCore.check_rb_symbol(value) != 0
+    end
+
     def self.check_for_array(value : RbCore::RbValue)
       RbCore.check_rb_array(value) != 0
     end
@@ -290,6 +294,8 @@ module Anyolite
     def self.cast_to_string(rb : RbCore::State*, value : RbCore::RbValue)
       if RbCast.check_for_string(value)
         String.new(RbCore.get_rb_string(rb, value))
+      elsif RbCast.check_for_symbol(value)
+        String.new(RbCore.get_rb_string(rb, RbCore.rb_inspect(rb, value)))
       else
         RbCast.casting_error(rb, value, String, "")
       end

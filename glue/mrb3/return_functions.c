@@ -101,6 +101,12 @@ extern int check_mrb_string(mrb_value value) {
 
 }
 
+extern int check_mrb_symbol(mrb_value value) {
+
+    return mrb_symbol_p(value);
+
+}
+
 extern int check_mrb_array(mrb_value value) {   
 
     return mrb_array_p(value);

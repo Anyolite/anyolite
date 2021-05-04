@@ -138,7 +138,7 @@ puts a.float_test(arg: 3)
 puts a.char_test(arg: "🌈")
 
 
-test_hash = {"Hello" => "World", "Test" => b, 12334 => "A number", 999 => a}
+test_hash = {"Hello" => "World", "Test" => b, 12334 => "A number", 999 => a, :test_symbol => "The symbol should become a string"}
 
 a.hash_test(test_hash).each do |key, value|
   puts "Ruby: #{key} -> #{value.is_a?(TestModule::Test) ? "Test with x = #{value.x}" : value}"
