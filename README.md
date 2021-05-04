@@ -23,7 +23,8 @@ This project is currently in active development, so please report any bugs or mi
 * Easy syntax without unnecessary boilerplate code
 * Simple system to prevent garbage collector conflicts
 * Support for keyword arguments and default values
-* Objects, structs, enums and unions as function arguments and return values are completely valid
+* Objects, arrays, hashes, structs, enums and unions as function arguments and return values are completely valid
+* Block arguments can also be wrapped
 * Methods and constants can be excluded, modified or renamed with annotations
 
 # Prerequisites
@@ -140,7 +141,6 @@ The limitations here do not have a trivial solution (yet), but with some tricks 
 tools from Anyolite it should technically be possible to circumvent them. If one
 of these does definitely not work, but you need them to, please feel free to open an issue.
 
-* Hashes are not directly supported
 * Pointers are not directly supported
 * Procs as arguments are not directly supported (block arguments are, however)
 * Symbols do not work due to their compiletime nature in Crystal
@@ -170,7 +170,7 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 
 * [X] Support for block arguments
 * [X] Support for array arguments
-* [ ] Support for hash arguments
+* [X] Support for hash arguments
 * [X] Support for symbols, arrays and hashes as returned values
 * [X] Support for chars
 
@@ -219,3 +219,4 @@ Some of the features might not even make the release.
 * [ ] Caching of RbValues in the reference table to avoid duplicate objects
 * [ ] Option for required/optional block arguments
 * [ ] Convert macro body variables to fresh variables
+* [ ] Resolve context even in generic type union arguments
