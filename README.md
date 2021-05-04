@@ -141,7 +141,7 @@ The limitations here do not have a trivial solution (yet), but with some tricks 
 tools from Anyolite it should technically be possible to circumvent them. If one
 of these does definitely not work, but you need them to, please feel free to open an issue.
 
-* Pointers are not directly supported
+* Pointers are technically supported but unsafe
 * Procs as arguments are not directly supported (block arguments are, however)
 * Symbols do not work due to their compiletime nature in Crystal
 * Only one function with the same name can be wrapped
