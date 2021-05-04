@@ -12,9 +12,6 @@ module Anyolite
       {% if arg_type.stringify.includes?("->") || arg_type.stringify.includes?(" Proc(") %}
         {% puts "\e[33m> INFO: Proc types are not allowed as arguments.\e[0m" %}
         raise "Proc types are not allowed as arguments ({{debug_information.id}})"
-      {% elsif arg_type.is_a?(Generic) && arg_type.name.stringify.gsub(/(\:\:)+/, "") == "Pointer" %}
-        {% puts "\e[33m> INFO: Pointer types are not allowed as arguments.\e[0m" %}
-        raise "Pointer types are not allowed as arguments ({{debug_information.id}})"
       {% elsif arg_type.is_a?(TypeDeclaration) && arg_type.type.is_a?(Union) %}
         Anyolite::Macro.convert_from_ruby_to_crystal({{rb}}, {{arg}}, {{arg_type}}, context: {{context}})
       {% elsif arg_type.is_a?(TypeDeclaration) %}
@@ -64,6 +61,8 @@ module Anyolite
           end
 
           converted_hash
+        {% elsif arg_type.resolve <= Pointer %}
+          {{arg_type}}.new(address: UInt64.new({{arg}}))
         {% elsif arg_type.resolve <= Struct || arg_type.resolve <= Enum %}
           Anyolite::Macro.convert_from_ruby_struct({{rb}}, {{arg}}, {{arg_type}}).value.content
         {% else %}
@@ -85,9 +84,6 @@ module Anyolite
       {% if arg_type.stringify.includes?("->") || arg_type.stringify.includes?(" Proc(") %}
         {% puts "\e[33m> INFO: Proc types are not allowed as arguments (#{debug_information.id}).\e[0m" %}
         raise "Proc types are not allowed as arguments ({{debug_information.id}})"
-      {% elsif arg_type.is_a?(Generic) && arg_type.name.stringify.gsub(/(\:\:)+/, "") == "Pointer" %}
-        {% puts "\e[33m> INFO: Pointer types are not allowed as arguments (#{debug_information.id}).\e[0m" %}
-        raise "Pointer types are not allowed as arguments ({{debug_information.id}})"
       {% elsif type_var_names && type_var_names.includes?(arg_type.type) %}
         {% type_var_names.each_with_index { |element, index| result = index if element == arg_type.type } %}
         Anyolite::Macro.convert_from_ruby_to_crystal({{rb}}, {{arg}}, {{type_vars[result]}}, context: {{context}}, debug_information: {{debug_information}})
@@ -201,6 +197,8 @@ module Anyolite
           end
 
           converted_hash
+        {% elsif arg_type.resolve <= Pointer %}
+          {{arg_type}}.new(address: Anyolite::RbCast.cast_to_int({{rb}}, {{arg}}))
         {% elsif arg_type.resolve <= Struct || arg_type.resolve <= Enum %}
           Anyolite::Macro.convert_from_ruby_struct({{rb}}, {{arg}}, {{arg_type}}).value.content
         {% elsif arg_type.resolve? %}

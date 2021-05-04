@@ -99,7 +99,7 @@ module Anyolite
       if value.is_a?(Nil)
         RbCast.return_nil
       elsif value.is_a?(Bool)
-        value ? RbCast.return_true : return_false
+        value ? RbCast.return_true : RbCast.return_false
       elsif value.is_a?(Int)
         RbCast.return_fixnum(value)
       elsif value.is_a?(Float)
@@ -114,6 +114,8 @@ module Anyolite
         RbCast.return_array(rb, value)
       elsif value.is_a?(Hash)
         RbCast.return_hash(rb, value)
+      elsif value.is_a?(Pointer)
+        RbCast.return_fixnum(value.address)
       elsif value.is_a?(Struct) || value.is_a?(Enum)
         RbCast.return_struct_or_enum(rb, value)
       else

@@ -142,3 +142,8 @@ test_hash = {"Hello" => "World", "Test" => b, 12334 => "A number", 999 => a, :te
 a.hash_test(arg: test_hash).each do |key, value|
   puts "Ruby: #{key} -> #{value.is_a?(TestModule::Test) ? "Test with x = #{value.x}" : value.is_a?(TestModule::Test::TestEnum) ? value.value : value}"
 end
+
+a.x = 1001
+
+ptr = a.ptr_return_test
+puts a.ptr_arg_test(arg: ptr)

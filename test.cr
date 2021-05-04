@@ -300,6 +300,14 @@ module SomeModule
       arg
     end
 
+    def ptr_return_test
+      pointerof(@x)
+    end
+
+    def ptr_arg_test(arg : Pointer(Int32))
+      arg.value
+    end
+
     # Gets called in mruby unless program crashes
     def rb_finalize(rb)
       puts "Mruby destructor called for value #{@x}"

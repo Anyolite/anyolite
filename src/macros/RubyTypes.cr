@@ -18,7 +18,7 @@ module Anyolite
       {% if type.resolve? %}
         {% if type.resolve <= Bool %}
           Anyolite::RbCore::RbBool
-        {% elsif type.resolve <= Int %}
+        {% elsif type.resolve <= Int || type.resolve <= Pointer %}
           Anyolite::RbCore::RbInt
         {% elsif type.resolve <= Float %}
           Anyolite::RbCore::RbFloat
@@ -60,7 +60,7 @@ module Anyolite
       {% if type.resolve? %}
         {% if type.resolve <= Bool %}
           Pointer(Anyolite::RbCore::RbBool)
-        {% elsif type.resolve <= Int %}
+        {% elsif type.resolve <= Int || type.resolve <= Pointer %}
           Pointer(Anyolite::RbCore::RbInt)
         {% elsif type.resolve <= Float || type.resolve == Number %}
           Pointer(Anyolite::RbCore::RbFloat)

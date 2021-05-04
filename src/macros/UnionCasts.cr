@@ -101,6 +101,10 @@ module Anyolite
 
           final_value = converted_hash
         end
+      {% elsif type.resolve <= Pointer %}
+        if Anyolite::RbCast.check_for_fixnum({{value}})
+          final_value = {{type}}.new(address: Anyolite::RbCast.cast_to_int({{rb}}, {{value}}))
+        end
       {% elsif type.resolve <= Struct || type.resolve <= Enum %}
         if Anyolite::RbCast.check_for_data({{value}}) && Anyolite::RbCast.check_custom_type({{rb}}, {{value}}, {{type}})
           final_value = Anyolite::Macro.convert_from_ruby_struct({{rb}}, {{value}}, {{type}}).value.content

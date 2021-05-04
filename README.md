@@ -173,6 +173,7 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 * [X] Support for hash arguments
 * [X] Support for symbols, arrays and hashes as returned values
 * [X] Support for chars
+* [X] Experimental (unsafe) casting of pointers to integers and back
 
 #### Breaking changes
 
@@ -219,6 +220,8 @@ Some of the features might not even make the release.
 * [ ] Splat argument and/or arbitrary keyword passing
 * [ ] Method in mruby to determine owner of object
 * [ ] Caching of RbValues in the reference table to avoid duplicate objects
+* [ ] Storing of pure ruby objects (and procs?) in GC-safe containers
+* [ ] Controlled passing of pointers to ruby using the reference table
 * [ ] Option for required/optional block arguments
 * [ ] Convert macro body variables to fresh variables
 * [ ] Resolve context even in generic type union arguments
