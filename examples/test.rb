@@ -137,6 +137,7 @@ puts "Hash result: #{a.hash_return_test}"
 puts a.float_test(arg: 3)
 puts a.char_test(arg: "🌈")
 
+
 test_hash = {"Hello" => "World", "Test" => b, 12334 => "A number", 999 => a}
 
 a.hash_test(test_hash).each do |key, value|

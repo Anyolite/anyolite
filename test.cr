@@ -242,7 +242,7 @@ module SomeModule
 
     # TODO: Make it work
     @[Anyolite::Exclude]
-    def hash_test(arg : Hash(String | Int32, String | Test))
+    def hash_test(arg : Hash(String | Int32, String | Test | UnderTest | TestEnum))
       arg.each do |key, value|
         puts "Crystal: #{key} -> #{value.is_a?(Test) ? "Test with x = #{value.x}" : value}"
       end
@@ -344,12 +344,12 @@ Anyolite::RbInterpreter.create do |rb|
     all_rb_hash_keys = Anyolite::RbCore.rb_hash_keys(rb, hash_ptr.value)
     all_converted_hash_keys = Anyolite::Macro.convert_keyword_arg(rb, all_rb_hash_keys, Array(String | Int32))
 
-    converted_hash = Hash(String | Int32, String | SomeModule::Test).new(initial_capacity: hash_size)
+    converted_hash = Hash(String | Int32, String | SomeModule::Test | SomeModule::Test::UnderTest | SomeModule::Test::TestEnum).new(initial_capacity: hash_size)
     all_converted_hash_keys.each_with_index do |key, i|
       # TODO: Catch symbols
       rb_key = Anyolite::RbCore.rb_ary_entry(all_rb_hash_keys, i)
       rb_value = Anyolite::RbCore.rb_hash_get(rb, hash_ptr.value, rb_key)
-      converted_hash[key] = Anyolite::Macro.convert_keyword_arg(rb, rb_value, String | SomeModule::Test)
+      converted_hash[key] = Anyolite::Macro.convert_keyword_arg(rb, rb_value, String | SomeModule::Test | SomeModule::Test::UnderTest | SomeModule::Test::TestEnum)
     end
 
     crystal_return_value = converted_obj.hash_test(arg: converted_hash)

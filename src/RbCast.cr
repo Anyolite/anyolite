@@ -61,15 +61,17 @@ module Anyolite
     end
 
     def self.return_struct_or_enum(rb : RbCore::State*, value : Struct | Enum)
-      ruby_class = RbClassCache.get(typeof(value))
+      ruby_class = RbClassCache.get(value.class)
 
       destructor = RbTypeCache.destructor_method(typeof(value))
 
       ptr = Pointer(typeof(value)).malloc(size: 1, value: value)
 
-      new_ruby_object = RbCore.new_empty_object(rb, ruby_class, ptr.as(Void*), RbTypeCache.register(typeof(value), destructor))
+      new_ruby_object = RbCore.new_empty_object(rb, ruby_class, ptr.as(Void*), RbTypeCache.register(value.class, destructor))
 
-      struct_wrapper = Macro.convert_from_ruby_struct(rb, new_ruby_object, typeof(value))
+      ptr = Anyolite::RbCore.get_data_ptr(new_ruby_object)
+      struct_wrapper = ptr.as(Anyolite::StructWrapper(typeof(value))*)
+
       struct_wrapper.value = StructWrapper(typeof(value)).new(value)
 
       RbRefTable.add(RbRefTable.get_object_id(struct_wrapper.value), ptr.as(Void*))
@@ -78,15 +80,15 @@ module Anyolite
     end
 
     def self.return_object(rb : RbCore::State*, value : Object)
-      ruby_class = RbClassCache.get(typeof(value))
+      ruby_class = RbClassCache.get(value.class)
 
       destructor = RbTypeCache.destructor_method(typeof(value))
 
       ptr = Pointer(typeof(value)).malloc(size: 1, value: value)
 
-      new_ruby_object = RbCore.new_empty_object(rb, ruby_class, ptr.as(Void*), RbTypeCache.register(typeof(value), destructor))
+      new_ruby_object = RbCore.new_empty_object(rb, ruby_class, ptr.as(Void*), RbTypeCache.register(value.class, destructor))
 
-      Macro.convert_from_ruby_object(rb, new_ruby_object, typeof(value)).value = value
+      Anyolite::RbCore.get_data_ptr(new_ruby_object).as(typeof(value)*).value = value
 
       RbRefTable.add(RbRefTable.get_object_id(value), ptr.as(Void*))
 
@@ -123,7 +125,7 @@ module Anyolite
     # NOTE: These are highly untested and might still be unstable or might even leak memory
 
     def self.pass_struct_or_enum(rb : RbCore::State*, value : Struct | Enum)
-      ruby_class = RbClassCache.get(typeof(value))
+      ruby_class = RbClassCache.get(value.class)
 
       destructor = ->(rb_state : Anyolite::RbCore::State*, ptr : Void*) {}
 
@@ -138,7 +140,7 @@ module Anyolite
     end
 
     def self.pass_object(rb : RbCore::State*, value : Object)
-      ruby_class = RbClassCache.get(typeof(value))
+      ruby_class = RbClassCache.get(value.class)
 
       destructor = ->(rb_state : Anyolite::RbCore::State*, ptr : Void*) {}
 
