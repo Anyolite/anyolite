@@ -137,9 +137,8 @@ puts "Hash result: #{a.hash_return_test}"
 puts a.float_test(arg: 3)
 puts a.char_test(arg: "🌈")
 
-
-test_hash = {"Hello" => "World", "Test" => b, 12334 => "A number", 999 => a, :test_symbol => "The symbol should become a string"}
+test_hash = {"Hello" => "World", "Test" => b, 12334 => "A number", 999 => a, :test_symbol => "The symbol should become a string", :enum => TestModule::Test::TestEnum::Three}
 
 a.hash_test(test_hash).each do |key, value|
-  puts "Ruby: #{key} -> #{value.is_a?(TestModule::Test) ? "Test with x = #{value.x}" : value}"
+  puts "Ruby: #{key} -> #{value.is_a?(TestModule::Test) ? "Test with x = #{value.x}" : value.is_a?(TestModule::Test::TestEnum) ? value.value : value}"
 end
