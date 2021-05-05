@@ -413,20 +413,20 @@ module Anyolite
       {{rb_interpreter}}.define_method("initialize", Anyolite::RbClassCache.get({{crystal_class}}), wrapped_method)
     end
 
-    macro wrap_constant_or_class(rb_interpreter, under_class_or_module, ruby_name, value, verbose = false)
+    macro wrap_constant_or_class(rb_interpreter, under_class_or_module, ruby_name, value, overwrite = false, verbose = false)
       {% actual_constant = under_class_or_module.resolve.constant(value.id) %}
       {% if actual_constant.is_a?(TypeNode) %}
         {% if actual_constant.module? %}
-          Anyolite.wrap_module_with_methods({{rb_interpreter}}, {{actual_constant}}, under: {{under_class_or_module}}, verbose: {{verbose}})
+          Anyolite.wrap_module_with_methods({{rb_interpreter}}, {{actual_constant}}, under: {{under_class_or_module}}, overwrite: {{overwrite}}, verbose: {{verbose}})
         {% elsif actual_constant.class? || actual_constant.struct? %}
-          Anyolite.wrap_class_with_methods({{rb_interpreter}}, {{actual_constant}}, under: {{under_class_or_module}}, verbose: {{verbose}})
+          Anyolite.wrap_class_with_methods({{rb_interpreter}}, {{actual_constant}}, under: {{under_class_or_module}}, overwrite: {{overwrite}}, verbose: {{verbose}})
         {% elsif actual_constant.union? %}
           {% puts "\e[31m> WARNING: Wrapping of unions not supported, thus skipping #{actual_constant}\e[0m" %}
         {% elsif actual_constant < Enum %}
-          Anyolite.wrap_class_with_methods({{rb_interpreter}}, {{actual_constant}}, under: {{under_class_or_module}}, use_enum_constructor: true, verbose: {{verbose}})
+          Anyolite.wrap_class_with_methods({{rb_interpreter}}, {{actual_constant}}, under: {{under_class_or_module}}, use_enum_constructor: true, overwrite: {{overwrite}}, verbose: {{verbose}})
         {% else %}
           # Could be an alias, just try the default case
-          Anyolite.wrap_class_with_methods({{rb_interpreter}}, {{actual_constant}}, under: {{under_class_or_module}}, verbose: {{verbose}})
+          Anyolite.wrap_class_with_methods({{rb_interpreter}}, {{actual_constant}}, under: {{under_class_or_module}}, overwrite: {{overwrite}}, verbose: {{verbose}})
         {% end %}
       {% else %}
         Anyolite.wrap_constant_under_class({{rb_interpreter}}, {{under_class_or_module}}, {{ruby_name}}, {{under_class_or_module}}::{{value}})

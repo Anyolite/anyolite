@@ -251,7 +251,7 @@ module Anyolite
       {% end %}
     end
 
-    macro wrap_all_constants(rb_interpreter, crystal_class, exclusions, verbose, context = nil)
+    macro wrap_all_constants(rb_interpreter, crystal_class, exclusions, verbose = false, overwrite = false, context = nil)
       # TODO: Is the context needed here?
 
       # NOTE: This check is necessary due to https://github.com/crystal-lang/crystal/issues/5757
@@ -276,7 +276,7 @@ module Anyolite
           {% elsif annotation_exclude_im %}
             {% puts "--> Excluding #{crystal_class}::#{constant} (Exclusion annotation)" if verbose %}
           {% else %}
-            Anyolite::Macro.wrap_constant_or_class({{rb_interpreter}}, {{crystal_class}}, "{{ruby_name}}", {{constant}}, {{verbose}})
+            Anyolite::Macro.wrap_constant_or_class({{rb_interpreter}}, {{crystal_class}}, "{{ruby_name}}", {{constant}}, overwrite: {{overwrite}}, verbose: {{verbose}})
           {% end %}
           {% puts "" if verbose %}
         {% end %}

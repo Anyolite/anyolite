@@ -342,6 +342,7 @@ module Anyolite
                                 constant_exclusions = [] of String | Symbol,
                                 use_enum_constructor = false,
                                 wrap_superclass = true,
+                                overwrite = false,
                                 verbose = false)
 
     {% if verbose %}
@@ -367,12 +368,14 @@ module Anyolite
         {% superclass = nil %}
       {% end %}
 
-      Anyolite.wrap_class({{rb_interpreter}}, {{resolved_class}}, {{actual_name}}, under: {{under}}, superclass: {{superclass}})
+      if {{overwrite}} || !Anyolite::RbClassCache.check({{resolved_class}}) 
+        Anyolite.wrap_class({{rb_interpreter}}, {{resolved_class}}, {{actual_name}}, under: {{under}}, superclass: {{superclass}})
 
-      Anyolite::Macro.wrap_all_instance_methods({{rb_interpreter}}, {{crystal_class}}, {{instance_method_exclusions}}, 
-        {{verbose}}, context: {{new_context}}, use_enum_constructor: {{use_enum_constructor}})
-      Anyolite::Macro.wrap_all_class_methods({{rb_interpreter}}, {{crystal_class}}, {{class_method_exclusions}}, {{verbose}}, context: {{new_context}})
-      Anyolite::Macro.wrap_all_constants({{rb_interpreter}}, {{crystal_class}}, {{constant_exclusions}}, {{verbose}}, context: {{new_context}})
+        Anyolite::Macro.wrap_all_instance_methods({{rb_interpreter}}, {{crystal_class}}, {{instance_method_exclusions}}, 
+          verbose: {{verbose}}, context: {{new_context}}, use_enum_constructor: {{use_enum_constructor}})
+        Anyolite::Macro.wrap_all_class_methods({{rb_interpreter}}, {{crystal_class}}, {{class_method_exclusions}}, verbose: {{verbose}}, context: {{new_context}})
+        Anyolite::Macro.wrap_all_constants({{rb_interpreter}}, {{crystal_class}}, {{constant_exclusions}}, verbose: {{verbose}}, context: {{new_context}})
+      end
     {% end %}
   end
 
@@ -388,6 +391,7 @@ module Anyolite
   macro wrap_module_with_methods(rb_interpreter, crystal_module, under = nil,
                                  class_method_exclusions = [] of String | Symbol,
                                  constant_exclusions = [] of String | Symbol,
+                                 overwrite = false,
                                  verbose = false)
 
     {% if verbose %}
@@ -402,10 +406,12 @@ module Anyolite
       {% actual_name = crystal_module.names.last.stringify %}
     {% end %}
 
-    Anyolite.wrap_module({{rb_interpreter}}, {{crystal_module.resolve}}, {{actual_name}}, under: {{under}})
+    if {{overwrite}} || !Anyolite::RbClassCache.check({{crystal_module.resolve}}) 
+      Anyolite.wrap_module({{rb_interpreter}}, {{crystal_module.resolve}}, {{actual_name}}, under: {{under}})
 
-    Anyolite::Macro.wrap_all_class_methods({{rb_interpreter}}, {{crystal_module}}, {{class_method_exclusions}}, {{verbose}}, context: {{new_context}})
-    Anyolite::Macro.wrap_all_constants({{rb_interpreter}}, {{crystal_module}}, {{constant_exclusions}}, {{verbose}}, context: {{new_context}})
+      Anyolite::Macro.wrap_all_class_methods({{rb_interpreter}}, {{crystal_module}}, {{class_method_exclusions}}, verbose: {{verbose}}, context: {{new_context}})
+      Anyolite::Macro.wrap_all_constants({{rb_interpreter}}, {{crystal_module}}, {{constant_exclusions}}, verbose: {{verbose}}, overwrite: {{overwrite}}, context: {{new_context}})
+    end
   end
 
   # Wraps a whole class or module structure under a module into mruby.
@@ -422,6 +428,7 @@ module Anyolite
              instance_method_exclusions = [] of String | Symbol,
              class_method_exclusions = [] of String | Symbol,
              constant_exclusions = [] of String | Symbol,
+             overwrite = false,
              verbose = false)
     
     {% if !crystal_module_or_class.is_a?(Path) %}
@@ -430,6 +437,7 @@ module Anyolite
       Anyolite.wrap_module_with_methods({{rb_interpreter}}, {{crystal_module_or_class}}, under: {{under}},
         class_method_exclusions: {{class_method_exclusions}},
         constant_exclusions: {{constant_exclusions}},
+        overwrite: {{overwrite}},
         verbose: {{verbose}}
       )
     {% elsif crystal_module_or_class.resolve.class? || crystal_module_or_class.resolve.struct? %}
@@ -437,6 +445,7 @@ module Anyolite
         instance_method_exclusions: {{instance_method_exclusions}},
         class_method_exclusions: {{class_method_exclusions}},
         constant_exclusions: {{constant_exclusions}},
+        overwrite: {{overwrite}},
         verbose: {{verbose}}
       )
     {% elsif crystal_module_or_class.resolve.union? %}
@@ -447,6 +456,7 @@ module Anyolite
         class_method_exclusions: {{class_method_exclusions}},
         constant_exclusions: {{constant_exclusions}},
         use_enum_constructor: true,
+        overwrite: {{overwrite}},
         verbose: {{verbose}}
       )
     {% elsif crystal_module_or_class.resolve.is_a?(TypeNode) %}
@@ -454,6 +464,7 @@ module Anyolite
         instance_method_exclusions: {{instance_method_exclusions}},
         class_method_exclusions: {{class_method_exclusions}},
         constant_exclusions: {{constant_exclusions}},
+        overwrite: {{overwrite}},
         verbose: {{verbose}}
       )
     {% else %}

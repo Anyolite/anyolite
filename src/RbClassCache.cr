@@ -26,5 +26,13 @@ module Anyolite
         raise "Uncached class or module: #{crystal_class}"
       end
     end
+
+    def self.check(crystal_class : Class | RbModule | Nil)
+      if crystal_class.is_a?(Class)
+        @@cache[crystal_class.name]?
+      else
+        crystal_class
+      end
+    end
   end
 end
