@@ -371,16 +371,14 @@ module Anyolite
       {% if superclass %}
         if !Anyolite::RbClassCache.check({{superclass.resolve}})
           puts "Note: Superclass {{superclass}} to {{resolved_class}} was not wrapped before. Trying to find it..."
-          needs_more_iterations.push("{{superclass}}")
+          needs_more_iterations.push("{{superclass}}") if needs_more_iterations
         else
       {% else %}
         if false
 
         else
       {% end %}
-        if !needs_more_iterations.empty?
-
-        elsif {{overwrite}} || !Anyolite::RbClassCache.check({{resolved_class}}) 
+        if {{overwrite}} || !Anyolite::RbClassCache.check({{resolved_class}}) 
           Anyolite.wrap_class({{rb_interpreter}}, {{resolved_class}}, {{actual_name}}, under: {{under}}, superclass: {{superclass}})
 
           Anyolite::Macro.wrap_all_instance_methods({{rb_interpreter}}, {{crystal_class}}, {{instance_method_exclusions}}, 

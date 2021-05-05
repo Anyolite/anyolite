@@ -169,7 +169,8 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 #### Features
 
 * [X] Superclass hierarchies will be transferred to Ruby
-* [ ] Superclasses will be prematurely wrapped if required
+* [X] Wrapping will skip classes if their superclass was not yet wrapped
+* [X] `Anyolite.wrap` will run multiple tries to ensure superclasses being wrapped first
 * [X] Classes will only be wrapped twice with `overwrite: true` option
 
 #### Usability
