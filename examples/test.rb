@@ -147,3 +147,30 @@ a.x = 1001
 
 ptr = a.ptr_return_test
 puts a.ptr_arg_test(arg: ptr)
+
+class InheritedTest < TestModule::Test
+  def initialize(x: 0, z: "")
+    super(x: x)
+    @y = x * 2
+    @z = z
+  end
+end
+
+class InheritedContentTest < TestModule::Test::ContentTest
+  def initialize(content, another_content)
+    super(content: content)
+    @another_content = another_content
+  end
+
+  def overloaded_content
+    content
+  end
+end
+
+iit = InheritedContentTest.new(InheritedTest.new(x: 123, z: "Hello"), InheritedTest.new(x: 999, z: "World"))
+
+# NOTE: This works, but only for methods directly inherited from Test
+# Overloading is therefore possible, but the other content will be cut
+# Overwriting the original content will most likely result in a segmentation fault
+# TODO: Try to prevent this or throw an exception
+puts iit.overloaded_content.x

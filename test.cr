@@ -308,6 +308,16 @@ module SomeModule
       arg.value
     end
 
+    class ContentTest
+      def initialize(content : SomeModule::Test)
+        @content = content
+      end
+
+      def content
+        @content
+      end
+    end
+
     # Gets called in mruby unless program crashes
     def rb_finalize(rb)
       puts "Mruby destructor called for value #{@x}"
