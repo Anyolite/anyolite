@@ -3,8 +3,13 @@ module Anyolite
   class RbClass
     @class_ptr : RbCore::RClass*
 
-    def initialize(@rb : RbInterpreter, @name : String, superclass : RbClass | Nil = nil, @under : RbModule | RbClass | Nil = nil)
-      actual_superclass = superclass ? superclass : RbCore.get_object_class(@rb)
+    def initialize(@rb : RbInterpreter, @name : String, superclass : RbModule | RbClass | Nil = nil, @under : RbModule | RbClass | Nil = nil)
+      if superclass.is_a?(RbModule)
+        raise "Super class #{superclass} of #{@name} is a RbModule."
+      end
+
+      actual_superclass = superclass ? superclass.to_unsafe : RbCore.get_object_class(@rb)
+
       if mod = @under
         @class_ptr = RbCore.rb_define_class_under(@rb, mod, @name, actual_superclass)
       else

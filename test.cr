@@ -308,13 +308,33 @@ module SomeModule
       arg.value
     end
 
+    class TestChild < Test
+      property y : String
+      
+      def initialize(x : Int32 = 0)
+        super(x: x)
+        @y = x.to_s
+      end
+    end
+
     class ContentTest
-      def initialize(content : SomeModule::Test)
+      def initialize(content : Array(SomeModule::Test))
         @content = content
       end
 
       def content
         @content
+      end
+    end
+
+    class NewContentTest < ContentTest
+      def initialize(content : Array(SomeModule::Test), more_content : Array(SomeModule::Test))
+        super(content: content)
+        @more_content = more_content
+      end
+
+      def more_content
+        @more_content
       end
     end
 

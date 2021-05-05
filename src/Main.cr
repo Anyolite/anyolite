@@ -341,6 +341,7 @@ module Anyolite
                                 class_method_exclusions = [] of String | Symbol,
                                 constant_exclusions = [] of String | Symbol,
                                 use_enum_constructor = false,
+                                wrap_superclass = true,
                                 verbose = false)
 
     {% if verbose %}
@@ -360,7 +361,13 @@ module Anyolite
         {% actual_name = crystal_class.names.last.stringify %}
       {% end %}
 
-      Anyolite.wrap_class({{rb_interpreter}}, {{resolved_class}}, {{actual_name}}, under: {{under}})
+      {% if wrap_superclass %}
+        {% superclass = [Reference, Object, Struct, Enum].includes?(resolved_class.superclass) ? nil : resolved_class.superclass %}
+      {% else %}
+        {% superclass = nil %}
+      {% end %}
+
+      Anyolite.wrap_class({{rb_interpreter}}, {{resolved_class}}, {{actual_name}}, under: {{under}}, superclass: {{superclass}})
 
       Anyolite::Macro.wrap_all_instance_methods({{rb_interpreter}}, {{crystal_class}}, {{instance_method_exclusions}}, 
         {{verbose}}, context: {{new_context}}, use_enum_constructor: {{use_enum_constructor}})

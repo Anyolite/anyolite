@@ -164,20 +164,33 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 
 ## Upcoming releases
 
-### Version 0.10.1
+### Version 0.11.0
+
+#### Features
+
+* [X] Superclass hierarchies will be transferred to Ruby
+* [ ] Superclasses will be prematurely wrapped if required
+* [ ] Classes will only be wrapped twice with `overwrite: true` option
 
 #### Usability
 
-* [ ] Updated documentation to new features from 0.10.0
+* [ ] Updated documentation to new features from 0.10.0 and 0.11.0
 
-### Version 0.11.0
+### Version 0.12.0
 
-This version is planned to be the last feature release before 1.0.0.
-Currently, the way its features are going to be implemented is not yet determined,
-so it will probably take some time before it will be released.
-Some of the features might not even make the release.
+Plans for this versions are not finalized. It might not come at all or only
+in the far future, depending on the ability to implement the features.
 
-* [ ] Options for inherited and/or inheriting classes
+The general premise of this update would be to allow storing of Ruby objects
+with internal structures unable to be directly converted into Crystal objects,
+using a special cache and Ruby GC manipulation.
+
+#### Features
+
+* [ ] Caching of RbValues in the reference table to avoid duplicate objects
+* [ ] Storing of pure ruby objects (and procs?) in GC-safe containers
+* [ ] Controlled passing of pointers to ruby using the reference table
+* [ ] Option for required/optional block arguments
 
 ### Version 1.0.0
 
@@ -192,9 +205,5 @@ Some of the features might not even make the release.
 
 * [ ] Splat argument and/or arbitrary keyword passing
 * [ ] Method in mruby to determine owner of object
-* [ ] Caching of RbValues in the reference table to avoid duplicate objects
-* [ ] Storing of pure ruby objects (and procs?) in GC-safe containers
-* [ ] Controlled passing of pointers to ruby using the reference table
-* [ ] Option for required/optional block arguments
 * [ ] Convert macro body variables to fresh variables
 * [ ] Resolve context even in generic type union arguments
