@@ -369,22 +369,25 @@ module Anyolite
       {% end %}
 
       {% if superclass %}
-      if !Anyolite::RbClassCache.check({{superclass.resolve}})
-        puts "Note: Superclass {{superclass}} to {{resolved_class}} was not wrapped before. Trying to find it..."
-        needs_more_iterations.push("{{superclass}}")
-      end
+        if !Anyolite::RbClassCache.check({{superclass.resolve}})
+          puts "Note: Superclass {{superclass}} to {{resolved_class}} was not wrapped before. Trying to find it..."
+          needs_more_iterations.push("{{superclass}}")
+        else
+      {% else %}
+        if false
+
+        else
       {% end %}
+        if !needs_more_iterations.empty?
 
-      # TODO: Skip further methods only if a problem was found here
-      if !needs_more_iterations.empty?
+        elsif {{overwrite}} || !Anyolite::RbClassCache.check({{resolved_class}}) 
+          Anyolite.wrap_class({{rb_interpreter}}, {{resolved_class}}, {{actual_name}}, under: {{under}}, superclass: {{superclass}})
 
-      elsif {{overwrite}} || !Anyolite::RbClassCache.check({{resolved_class}}) 
-        Anyolite.wrap_class({{rb_interpreter}}, {{resolved_class}}, {{actual_name}}, under: {{under}}, superclass: {{superclass}})
-
-        Anyolite::Macro.wrap_all_instance_methods({{rb_interpreter}}, {{crystal_class}}, {{instance_method_exclusions}}, 
-          verbose: {{verbose}}, context: {{new_context}}, use_enum_constructor: {{use_enum_constructor}})
-        Anyolite::Macro.wrap_all_class_methods({{rb_interpreter}}, {{crystal_class}}, {{class_method_exclusions}}, verbose: {{verbose}}, context: {{new_context}})
-        Anyolite::Macro.wrap_all_constants({{rb_interpreter}}, {{crystal_class}}, {{constant_exclusions}}, verbose: {{verbose}}, context: {{new_context}})
+          Anyolite::Macro.wrap_all_instance_methods({{rb_interpreter}}, {{crystal_class}}, {{instance_method_exclusions}}, 
+            verbose: {{verbose}}, context: {{new_context}}, use_enum_constructor: {{use_enum_constructor}})
+          Anyolite::Macro.wrap_all_class_methods({{rb_interpreter}}, {{crystal_class}}, {{class_method_exclusions}}, verbose: {{verbose}}, context: {{new_context}})
+          Anyolite::Macro.wrap_all_constants({{rb_interpreter}}, {{crystal_class}}, {{constant_exclusions}}, verbose: {{verbose}}, context: {{new_context}})
+        end
       end
     {% end %}
   end
