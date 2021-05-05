@@ -365,7 +365,6 @@ Anyolite::RbInterpreter.create do |rb|
   Anyolite.wrap(rb, SomeModule::TestStruct, under: SomeModule, verbose: true)
 
   Anyolite.wrap(rb, SomeModule::Test, under: SomeModule, instance_method_exclusions: [:add], verbose: true)
-  Anyolite.wrap(rb, SomeModule::Test::TestChild, under: SomeModule::Test, instance_method_exclusions: [:add], verbose: true)
   
   Anyolite.wrap_instance_method(rb, SomeModule::Test, "add", add, [SomeModule::Test])
 
