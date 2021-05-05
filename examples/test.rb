@@ -175,4 +175,5 @@ mt = TestModule::Test::NewContentTest.new(content: [TestModule::Test::TestChild.
 # Overwriting the original content will most likely result in a segmentation fault
 # TODO: Try to prevent this or throw an exception
 puts it.overloaded_content[1].x
+puts mt.more_content[0].x
 puts mt.more_content[1].x
