@@ -368,7 +368,17 @@ module Anyolite
         {% superclass = nil %}
       {% end %}
 
-      if {{overwrite}} || !Anyolite::RbClassCache.check({{resolved_class}}) 
+      {% if superclass %}
+      if !Anyolite::RbClassCache.check({{superclass.resolve}})
+        puts "Note: Superclass {{superclass}} to {{resolved_class}} was not wrapped before. Trying to find it..."
+        needs_more_iterations.push("{{superclass}}")
+      end
+      {% end %}
+
+      # TODO: Skip further methods only if a problem was found here
+      if !needs_more_iterations.empty?
+
+      elsif {{overwrite}} || !Anyolite::RbClassCache.check({{resolved_class}}) 
         Anyolite.wrap_class({{rb_interpreter}}, {{resolved_class}}, {{actual_name}}, under: {{under}}, superclass: {{superclass}})
 
         Anyolite::Macro.wrap_all_instance_methods({{rb_interpreter}}, {{crystal_class}}, {{instance_method_exclusions}}, 
@@ -430,45 +440,60 @@ module Anyolite
              constant_exclusions = [] of String | Symbol,
              overwrite = false,
              verbose = false)
-    
-    {% if !crystal_module_or_class.is_a?(Path) %}
-      {% puts "\e[31m> WARNING: Object #{crystal_module_or_class} of #{crystal_module_or_class.class_name.id} is neither a class nor module, so it will be skipped\e[0m" %}
-    {% elsif crystal_module_or_class.resolve.module? %}
-      Anyolite.wrap_module_with_methods({{rb_interpreter}}, {{crystal_module_or_class}}, under: {{under}},
-        class_method_exclusions: {{class_method_exclusions}},
-        constant_exclusions: {{constant_exclusions}},
-        overwrite: {{overwrite}},
-        verbose: {{verbose}}
-      )
-    {% elsif crystal_module_or_class.resolve.class? || crystal_module_or_class.resolve.struct? %}
-      Anyolite.wrap_class_with_methods({{rb_interpreter}}, {{crystal_module_or_class}}, under: {{under}},
-        instance_method_exclusions: {{instance_method_exclusions}},
-        class_method_exclusions: {{class_method_exclusions}},
-        constant_exclusions: {{constant_exclusions}},
-        overwrite: {{overwrite}},
-        verbose: {{verbose}}
-      )
-    {% elsif crystal_module_or_class.resolve.union? %}
-      {% puts "\e[31m> WARNING: Wrapping of unions not supported, thus skipping #{crystal_module_or_class}\e[0m" %}
-    {% elsif crystal_module_or_class.resolve < Enum %}
-      Anyolite.wrap_class_with_methods({{rb_interpreter}}, {{crystal_module_or_class}}, under: {{under}},
-        instance_method_exclusions: {{instance_method_exclusions}},
-        class_method_exclusions: {{class_method_exclusions}},
-        constant_exclusions: {{constant_exclusions}},
-        use_enum_constructor: true,
-        overwrite: {{overwrite}},
-        verbose: {{verbose}}
-      )
-    {% elsif crystal_module_or_class.resolve.is_a?(TypeNode) %}
-      Anyolite.wrap_class_with_methods({{rb_interpreter}}, {{crystal_module_or_class}}, under: {{under}},
-        instance_method_exclusions: {{instance_method_exclusions}},
-        class_method_exclusions: {{class_method_exclusions}},
-        constant_exclusions: {{constant_exclusions}},
-        overwrite: {{overwrite}},
-        verbose: {{verbose}}
-      )
-    {% else %}
-      {% puts "\e[31m> WARNING: Could not resolve #{crystal_module_or_class}, so it will be skipped\e[0m" %}
-    {% end %}
+
+    needs_more_iterations = [] of String
+    previous_iterations = [] of String
+    first_run = true
+
+    while first_run || !needs_more_iterations.empty?
+      previous_iterations = needs_more_iterations
+      needs_more_iterations = [] of String
+
+      {% if !crystal_module_or_class.is_a?(Path) %}
+        {% puts "\e[31m> WARNING: Object #{crystal_module_or_class} of #{crystal_module_or_class.class_name.id} is neither a class nor module, so it will be skipped\e[0m" %}
+      {% elsif crystal_module_or_class.resolve.module? %}
+        Anyolite.wrap_module_with_methods({{rb_interpreter}}, {{crystal_module_or_class}}, under: {{under}},
+          class_method_exclusions: {{class_method_exclusions}},
+          constant_exclusions: {{constant_exclusions}},
+          overwrite: {{overwrite}},
+          verbose: {{verbose}}
+        )
+      {% elsif crystal_module_or_class.resolve.class? || crystal_module_or_class.resolve.struct? %}
+        Anyolite.wrap_class_with_methods({{rb_interpreter}}, {{crystal_module_or_class}}, under: {{under}},
+          instance_method_exclusions: {{instance_method_exclusions}},
+          class_method_exclusions: {{class_method_exclusions}},
+          constant_exclusions: {{constant_exclusions}},
+          overwrite: {{overwrite}},
+          verbose: {{verbose}}
+        )
+      {% elsif crystal_module_or_class.resolve.union? %}
+        {% puts "\e[31m> WARNING: Wrapping of unions not supported, thus skipping #{crystal_module_or_class}\e[0m" %}
+      {% elsif crystal_module_or_class.resolve < Enum %}
+        Anyolite.wrap_class_with_methods({{rb_interpreter}}, {{crystal_module_or_class}}, under: {{under}},
+          instance_method_exclusions: {{instance_method_exclusions}},
+          class_method_exclusions: {{class_method_exclusions}},
+          constant_exclusions: {{constant_exclusions}},
+          use_enum_constructor: true,
+          overwrite: {{overwrite}},
+          verbose: {{verbose}}
+        )
+      {% elsif crystal_module_or_class.resolve.is_a?(TypeNode) %}
+        Anyolite.wrap_class_with_methods({{rb_interpreter}}, {{crystal_module_or_class}}, under: {{under}},
+          instance_method_exclusions: {{instance_method_exclusions}},
+          class_method_exclusions: {{class_method_exclusions}},
+          constant_exclusions: {{constant_exclusions}},
+          overwrite: {{overwrite}},
+          verbose: {{verbose}}
+        )
+      {% else %}
+        {% puts "\e[31m> WARNING: Could not resolve #{crystal_module_or_class}, so it will be skipped\e[0m" %}
+      {% end %}
+
+      first_run = false
+
+      if !needs_more_iterations.empty? && needs_more_iterations == previous_iterations
+        raise "Could not wrap the following classes: #{needs_more_iterations.inspect}"
+      end
+    end
   end
 end
