@@ -61,38 +61,35 @@ module Anyolite
     end
 
     def self.return_struct_or_enum(rb : RbCore::State*, value : Struct | Enum)
+      # NOTE: Equal structs do not have the same object IDs, so they are not cached
       ruby_class = RbClassCache.get(value.class)
 
       destructor = RbTypeCache.destructor_method(typeof(value))
 
-      ptr = Pointer(typeof(value)).malloc(size: 1, value: value)
-
+      ptr = Pointer(Anyolite::StructWrapper(typeof(value))).malloc(size: 1, value: StructWrapper(typeof(value)).new(value))
       new_ruby_object = RbCore.new_empty_object(rb, ruby_class, ptr.as(Void*), RbTypeCache.register(value.class, destructor))
 
-      ptr = Anyolite::RbCore.get_data_ptr(new_ruby_object)
-      struct_wrapper = ptr.as(Anyolite::StructWrapper(typeof(value))*)
-
-      struct_wrapper.value = StructWrapper(typeof(value)).new(value)
-
-      RbRefTable.add(RbRefTable.get_object_id(struct_wrapper.value), ptr.as(Void*))
+      RbRefTable.add(RbRefTable.get_object_id(ptr.value), ptr.as(Void*), new_ruby_object)
 
       return new_ruby_object
     end
 
     def self.return_object(rb : RbCore::State*, value : Object)
       ruby_class = RbClassCache.get(value.class)
+      value_id = RbRefTable.get_object_id(value)
 
-      destructor = RbTypeCache.destructor_method(typeof(value))
+      if RbRefTable.is_registered?(value_id)
+        return RbRefTable.get_rb_value(value_id)
+      else
+        destructor = RbTypeCache.destructor_method(typeof(value))
 
-      ptr = Pointer(typeof(value)).malloc(size: 1, value: value)
+        ptr = Pointer(typeof(value)).malloc(size: 1, value: value)
+        new_ruby_object = RbCore.new_empty_object(rb, ruby_class, ptr.as(Void*), RbTypeCache.register(value.class, destructor))
 
-      new_ruby_object = RbCore.new_empty_object(rb, ruby_class, ptr.as(Void*), RbTypeCache.register(value.class, destructor))
+        RbRefTable.add(value_id, ptr.as(Void*), new_ruby_object)
 
-      Anyolite::RbCore.get_data_ptr(new_ruby_object).as(typeof(value)*).value = value
-
-      RbRefTable.add(RbRefTable.get_object_id(value), ptr.as(Void*))
-
-      return new_ruby_object
+        return new_ruby_object
+      end
     end
 
     def self.return_value(rb : RbCore::State*, value : Object)

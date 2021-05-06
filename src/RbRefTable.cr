@@ -1,12 +1,14 @@
 module Anyolite
   # This is a very simple approach to generate artificial references to the wrapped objects.
   # Therefore, the GC won't delete the wrapped objects until necessary.
-  # Note that this is currently one-directional, so mruby might still delete Crystal objects generated from Crystal itself.
   # Furthermore, this is only possible as a module due to C closure limitations.
   #
   # TODO: Add compilation option for ignoring entry checks
+  # TODO: Put the hash value union into a struct
   module RbRefTable
-    @@content = {} of UInt64 => Tuple(Void*, Int64)
+    @@content = {} of UInt64 => Tuple(Void*, Int64, RbCore::RbValue | Nil)
+
+    @@current_interpreter : RbInterpreter | Nil = nil
 
     @@options = {
       # Log every change in the reference table
@@ -26,32 +28,60 @@ module Anyolite
       return @@content[identification][0]
     end
 
-    def self.add(identification, value)
+    def self.get_rb_value(identification)
+      if rb_value = @@content[identification][2]
+        return rb_value
+      else
+        raise "No ruby value given for object id #{identification}."
+      end
+    end
+
+    def self.set_current_interpreter(interpreter : RbInterpreter)
+      if @@current_interpreter
+        puts "WARNING: One interpreter was already registered and will be overwritten!" if option_active?(:warnings)
+        raise "Current interpreter was overwritten." if option_active?(:pedantic)
+      else
+        @@current_interpreter = interpreter
+      end
+    end
+
+    def self.get_current_interpreter
+      if @@current_interpreter
+        @@current_interpreter
+      else
+        raise "No interpreter instance available."
+      end
+    end
+
+    def self.add(identification, value, rb_value)
+      # TODO: Clean this up a bit
       puts "> Added reference #{identification} -> #{value}" if option_active?(:logging)
       if @@content[identification]?
         if value != @@content[identification][0]
           if option_active?(:replace_conflicting_pointers)
             puts "WARNING: Value #{identification} replaced pointers (#{value} vs #{@@content[identification][0]})." if option_active?(:warnings)
             raise "Corrupted reference table" if option_active?(:pedantic)
-            @@content[identification] = {value, @@content[identification][1] + 1}
+            @@content[identification] = {value, @@content[identification][1] + 1, rb_value}
           else
-            @@content[identification] = {@@content[identification][0], @@content[identification][1] + 1}
+            if rb_value == @@content[identification][2]
+              @@content[identification] = {@@content[identification][0], @@content[identification][1] + 1, rb_value}
+            else
+              puts "WARNING: Ruby value for #{identification} got updated." if option_active?(:warnings)
+              raise "Corrupted reference table" if option_active?(:pedantic)
+            end
           end
         else
-          @@content[identification] = {value, @@content[identification][1] + 1}
+          @@content[identification] = {value, @@content[identification][1] + 1, rb_value}
         end
       else
-        @@content[identification] = {value, 1i64}
+        @@content[identification] = {value, 1i64, rb_value}
       end
     end
 
     def self.delete(identification)
       puts "> Removed reference #{identification}" if option_active?(:logging)
       if @@content[identification]?
-        @@content[identification] = {@@content[identification][0], @@content[identification][1] - 1}
-        if @@content[identification][1] <= 0
-          @@content.delete(identification)
-        end
+        @@content.delete(identification)
       else
         puts "WARNING: Tried to remove unregistered object #{identification} from reference table." if option_active?(:warnings)
         raise "Corrupted reference table" if option_active?(:pedantic)
@@ -77,6 +107,8 @@ module Anyolite
         raise "Corrupted reference table" if option_active?(:pedantic)
       end
       @@content.clear
+
+      @@current_interpreter = nil
     end
 
     # TODO: If a struct wrapper is given here, call the struct methods instead of the wrapper methods

@@ -172,27 +172,30 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 * [X] Wrapping will skip classes if their superclass was not yet wrapped
 * [X] `Anyolite.wrap` will run multiple tries to ensure superclasses being wrapped first
 * [X] Classes will only be wrapped twice with `overwrite: true` option
-* [ ] Objects may check whether they are an mruby object
+* [X] Objects may check whether they are created in mruby
 * [ ] Ability to call mruby methods for mruby objects from Crystal by their name
+* [X] Caching of RbValues in the reference table to avoid duplicate objects
+* [ ] Storing of pure ruby objects (and procs?) in GC-safe containers
+
+#### Breaking changes
+
+* [X] Reference table now has a reference to the interpreter
+* [X] Interpreter and reference table operate together now
 
 #### Usability
 
 * [ ] Updated documentation to new features from 0.10.0 and 0.11.0
 * [ ] If nil is expected, cast everything to it without exceptions
+* [X] Simplified internal object casting
 
 ### Version 0.12.0
 
 Plans for this versions are not finalized. It might not come at all or only
-in the far future, depending on the ability to implement the features.
-
-The general premise of this update would be to allow storing of Ruby objects
-with internal structures unable to be directly converted into Crystal objects,
-using a special cache and Ruby GC manipulation.
+in the far future, depending on the ability to implement the features. Also,
+its feature list is subject to change.
 
 #### Features
 
-* [ ] Caching of RbValues in the reference table to avoid duplicate objects
-* [ ] Storing of pure ruby objects (and procs?) in GC-safe containers
 * [ ] Controlled passing of pointers to ruby using the reference table
 * [ ] Option for required/optional block arguments
 

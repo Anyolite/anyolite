@@ -144,6 +144,9 @@ module Anyolite
     fun rb_any_to_s = mrb_any_to_s(rb : State*, value : RbValue) : RbValue
     fun rb_inspect = mrb_inspect(rb : State*, value : RbValue) : RbValue
 
+    fun rb_gc_register = mrb_gc_register(rb : State*, value : RbValue) : Void
+    fun rb_gc_unregister = mrb_gc_unregister(rb : State*, value : RbValue) : Void
+
     fun rb_class_name = mrb_class_name(rb : State*, class_ptr : RClass*) : LibC::Char*
 
     fun data_type(value : RbValue) : RbDataType*

@@ -48,8 +48,27 @@ module Anyolite
     end
   end
 
+  # Class to contain Ruby values in a GC-protected container
+  class RbRef
+    @content : RbCore::RbValue
+
+    def initialize(content : RbCore::RbValue)
+      @content = content
+      RbCore.rb_gc_register(RbRefTable.current_interpreter, content)
+    end
+
+    def finalize
+      RbCore.rb_gc_unregister(RbRefTable.current_interpreter, content)
+    end
+  end
+
   # Undefined mruby value.
   Undef = Undefined.new
+
+  # Checks whether *value* is referenced in the current reference table.
+  macro referenced_in_ruby?(value)
+    !!Anyolite::RbRefTable.is_registered?(Anyolite::RbRefTable.get_object_id({{value}}))
+  end
 
   # Wraps a Crystal class directly into an mruby class.
   #

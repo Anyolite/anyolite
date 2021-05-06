@@ -300,6 +300,10 @@ module SomeModule
       arg
     end
 
+    def am_i_in_ruby?
+      Anyolite.referenced_in_ruby?(self)
+    end
+
     def ptr_return_test
       pointerof(@x)
     end
@@ -397,8 +401,8 @@ module TestModule
   end
 end
 
-puts "Reference table: #{Anyolite::RbRefTable.inspect}"
-Anyolite::RbRefTable.reset
+#puts "Reference table: #{Anyolite::RbRefTable.inspect}"
+#Anyolite::RbRefTable.reset
 
 puts "------------------------------"
 

@@ -1,5 +1,6 @@
 module Anyolite
   # Wrapper for an mruby state reference
+  # NOTE: Do not create more than one at a time!
   class RbInterpreter
     @rb_ptr : RbCore::State*
 
@@ -11,10 +12,12 @@ module Anyolite
 
     def initialize
       @rb_ptr = RbCore.rb_open
+      RbRefTable.set_current_interpreter(self)
     end
 
     def close
       RbCore.rb_close(@rb_ptr)
+      RbRefTable.reset
     end
 
     def to_unsafe
