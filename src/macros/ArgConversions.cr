@@ -27,7 +27,7 @@ module Anyolite
       {% if arg_type.resolve? %}
         {% if arg_type.resolve <= Nil %}
           nil
-        {% if arg_type.resolve <= Bool %}
+        {% elsif arg_type.resolve <= Bool %}
           ({{arg}} != 0)
         {% elsif arg_type.resolve == Number %}
           Float64.new({{arg}})
