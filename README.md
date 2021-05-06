@@ -176,6 +176,7 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 #### Usability
 
 * [ ] Updated documentation to new features from 0.10.0 and 0.11.0
+* [ ] If nil is expected, cast everything to it without exceptions
 
 ### Version 0.12.0
 
