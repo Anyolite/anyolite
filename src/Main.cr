@@ -76,7 +76,7 @@ module Anyolite
 
   # TODO: Is it possible to add block args to the two methods below?
   
-  # Calls the Ruby method with `String` *name* for the Crystal object *value* and the
+  # Calls the Ruby method with `String` or `Symbol` *name* for the Crystal object *value* and the
   # arguments *args* as an `Array` of castable Crystal values (`nil` for none).
   # 
   # If *cast_to* is set to a `Class` or similar, it will automatically cast
@@ -84,10 +84,14 @@ module Anyolite
   # a `RbRef` value containing the result.
   #
   # If needed, *context* can be set to a `Path` in order to specify *cast_to*.
-  macro call_rb_method_of_object(name, value, args, cast_to = nil, context = nil)
+  macro call_rb_method_of_object(value, name, args, cast_to = nil, context = nil)
+    if !{{name}}.is_a?(Symbol) && !{{name}}.is_a?(String)
+      raise "Given name {{name}} is neither a String nor a Symbol."
+    end
+    
     %rb = Anyolite::RbRefTable.get_current_interpreter
     %obj = Anyolite::RbCast.return_value(%rb.to_unsafe, {{value}})
-    %name = Anyolite::RbCore.convert_to_rb_sym(%rb, {{name}})
+    %name = Anyolite::RbCore.convert_to_rb_sym(%rb, {{name}}.to_s)
 
     {% if args %}
       %argc = {{args}}.size
@@ -108,7 +112,7 @@ module Anyolite
     {% end %}
   end
 
-  # Calls the Ruby method with `String` *name* for `self` and the
+  # Calls the Ruby method with `String` or `Symbol` *name* for `self` and the
   # arguments *args* as an `Array` of castable Crystal values (`nil` for none).
   # 
   # If *cast_to* is set to a `Class` or similar, it will automatically cast
@@ -117,7 +121,7 @@ module Anyolite
   #
   # If needed, *context* can be set to a `Path` in order to specify *cast_to*.
   macro call_rb_method(name, args = nil, cast_to = nil, context = nil)
-    Anyolite.call_rb_method_of_object({{name}}, self, {{args}}, cast_to: {{cast_to}}, context: {{context}})
+    Anyolite.call_rb_method_of_object(self, {{name}}, {{args}}, cast_to: {{cast_to}}, context: {{context}})
   end
 
   # Wraps a Crystal class directly into an mruby class.

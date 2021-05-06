@@ -305,7 +305,7 @@ module SomeModule
     end
 
     def call_test
-      result = Anyolite.call_rb_method("method_only_in_ruby", ["Hello", 3], cast_to: String)
+      result = Anyolite.call_rb_method(:method_only_in_ruby, ["Hello", 3], cast_to: String)
       puts result
     end
 
