@@ -240,7 +240,9 @@ module Anyolite
     end
 
     def self.cast_to_nil(rb : RbCore::State*, value : RbCore::RbValue)
-      if RbCast.check_for_nil(value)
+      # NOTE: If a nil class is expected, there is no point in rejecting objects
+      # TODO: Maybe add an option for this
+      if RbCast.check_for_nil(value) || true
         nil
       else
         RbCast.casting_error(rb, value, Nil, nil)

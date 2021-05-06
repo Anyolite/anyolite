@@ -181,11 +181,12 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 
 * [X] Reference table now has a reference to the interpreter
 * [X] Interpreter and reference table operate together now
+* [X] Reference table system was reworked completely
 
 #### Usability
 
 * [ ] Updated documentation to new features from 0.10.0 and 0.11.0
-* [ ] If nil is expected, cast everything to it without exceptions
+* [X] If nil is expected, cast everything to it without exceptions
 * [X] Simplified internal object casting
 
 ### Version 0.12.0

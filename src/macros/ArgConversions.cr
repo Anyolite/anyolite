@@ -25,6 +25,8 @@ module Anyolite
 
     macro resolve_regular_arg(rb, arg, arg_type, raw_arg_type, context = nil)
       {% if arg_type.resolve? %}
+        {% if arg_type.resolve <= Nil %}
+          nil
         {% if arg_type.resolve <= Bool %}
           ({{arg}} != 0)
         {% elsif arg_type.resolve == Number %}
