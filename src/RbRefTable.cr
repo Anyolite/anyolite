@@ -45,9 +45,9 @@ module Anyolite
       end
     end
 
-    def self.get_current_interpreter
-      if @@current_interpreter
-        @@current_interpreter
+    def self.get_current_interpreter : RbInterpreter
+      if c = @@current_interpreter
+        c
       else
         raise "No interpreter instance available."
       end

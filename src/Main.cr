@@ -50,15 +50,19 @@ module Anyolite
 
   # Class to contain Ruby values in a GC-protected container
   class RbRef
-    @content : RbCore::RbValue
+    @value : RbCore::RbValue
 
-    def initialize(content : RbCore::RbValue)
-      @content = content
-      RbCore.rb_gc_register(RbRefTable.current_interpreter, content)
+    def initialize(value : RbCore::RbValue)
+      @value = value
+      RbCore.rb_gc_register(RbRefTable.get_current_interpreter, value)
+    end
+
+    def value
+      @value
     end
 
     def finalize
-      RbCore.rb_gc_unregister(RbRefTable.current_interpreter, content)
+      RbCore.rb_gc_unregister(RbRefTable.get_current_interpreter, value)
     end
   end
 
@@ -68,6 +72,52 @@ module Anyolite
   # Checks whether *value* is referenced in the current reference table.
   macro referenced_in_ruby?(value)
     !!Anyolite::RbRefTable.is_registered?(Anyolite::RbRefTable.get_object_id({{value}}))
+  end
+
+  # TODO: Is it possible to add block args to the two methods below?
+  
+  # Calls the Ruby method with `String` *name* for the Crystal object *value* and the
+  # arguments *args* as an `Array` of castable Crystal values (`nil` for none).
+  # 
+  # If *cast_to* is set to a `Class` or similar, it will automatically cast
+  # the result to a Crystal value of that class, otherwise, it will return
+  # a `RbRef` value containing the result.
+  #
+  # If needed, *context* can be set to a `Path` in order to specify *cast_to*.
+  macro call_rb_method_of_object(name, value, args, cast_to = nil, context = nil)
+    %rb = Anyolite::RbRefTable.get_current_interpreter
+    %obj = Anyolite::RbCast.return_value(%rb.to_unsafe, {{value}})
+    %name = Anyolite::RbCore.convert_to_rb_sym(%rb, {{name}})
+
+    {% if args %}
+      %argc = {{args}}.size
+      %argv = Pointer(Anyolite::RbCore::RbValue).malloc(size: %argc) do |i|
+        Anyolite::RbCast.return_value(%rb.to_unsafe, {{args}}[i])
+      end
+    {% else %}
+      %argc = 0
+      %argv = [] of Anyolite::RbCore::RbValue
+    {% end %}
+
+    %call_result = Anyolite::RbCore.rb_funcall_argv(%rb, %obj, %name, %argc, %argv)
+    
+    {% if cast_to %}
+      Anyolite::Macro.convert_from_ruby_to_crystal(%rb.to_unsafe, %call_result, {{cast_to}}, context: {{context}})
+    {% else %}
+      Anyolite::RbRef.new(%call_result)
+    {% end %}
+  end
+
+  # Calls the Ruby method with `String` *name* for `self` and the
+  # arguments *args* as an `Array` of castable Crystal values (`nil` for none).
+  # 
+  # If *cast_to* is set to a `Class` or similar, it will automatically cast
+  # the result to a Crystal value of that class, otherwise, it will return
+  # a `RbRef` value containing the result.
+  #
+  # If needed, *context* can be set to a `Path` in order to specify *cast_to*.
+  macro call_rb_method(name, args = nil, cast_to = nil, context = nil)
+    Anyolite.call_rb_method_of_object({{name}}, self, {{args}}, cast_to: {{cast_to}}, context: {{context}})
   end
 
   # Wraps a Crystal class directly into an mruby class.

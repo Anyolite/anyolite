@@ -177,3 +177,16 @@ mt = TestModule::Test::NewContentTest.new(content: [TestModule::Test::TestChild.
 puts it.overloaded_content[1].x
 puts mt.more_content[0].x
 puts mt.more_content[1].x
+
+module TestModule
+  class Test
+    def method_only_in_ruby(str, int)
+      "#{str} #{int}"
+    end
+  end
+end
+
+a.call_test
+
+# Try to explain in one sentence what that codeline does without losing your brain to the outer gods
+puts "Do I have an identity crisis? #{a.why_would_you_do_this?('am_i_in_ruby?') ? 'Yes' : 'No'}."

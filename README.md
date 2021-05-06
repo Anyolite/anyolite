@@ -173,9 +173,9 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 * [X] `Anyolite.wrap` will run multiple tries to ensure superclasses being wrapped first
 * [X] Classes will only be wrapped twice with `overwrite: true` option
 * [X] Objects may check whether they are created in mruby
-* [ ] Ability to call mruby methods for mruby objects from Crystal by their name
+* [X] Ability to call mruby methods for mruby objects from Crystal by their name
 * [X] Caching of RbValues in the reference table to avoid duplicate objects
-* [ ] Storing of pure ruby objects (and procs?) in GC-safe containers
+* [X] Storing of pure ruby objects (and procs?) in GC-safe containers
 
 #### Breaking changes
 

@@ -304,6 +304,17 @@ module SomeModule
       Anyolite.referenced_in_ruby?(self)
     end
 
+    def call_test
+      result = Anyolite.call_rb_method("method_only_in_ruby", ["Hello", 3], cast_to: String)
+      puts result
+    end
+
+    @[Anyolite::WrapWithoutKeywords]
+    def why_would_you_do_this?(name : String)
+      result = Anyolite.call_rb_method(name, nil, cast_to: String | Int32 | Float32 | Bool | Nil)
+      result
+    end
+
     def ptr_return_test
       pointerof(@x)
     end

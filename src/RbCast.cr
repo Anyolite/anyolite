@@ -120,64 +120,6 @@ module Anyolite
       end
     end
 
-    # Weak reference passing methods
-    # NOTE: These are highly untested and might still be unstable or might even leak memory
-
-    def self.pass_struct_or_enum(rb : RbCore::State*, value : Struct | Enum)
-      ruby_class = RbClassCache.get(value.class)
-
-      destructor = ->(rb_state : Anyolite::RbCore::State*, ptr : Void*) {}
-
-      ptr = Pointer(typeof(value)).malloc(size: 1, value: value)
-
-      new_ruby_object = RbCore.new_empty_object(rb, ruby_class, ptr.as(Void*), RbTypeCache.register_custom_destructor(typeof(value), destructor))
-
-      struct_wrapper = Macro.convert_from_ruby_struct(rb, new_ruby_object, typeof(value))
-      struct_wrapper.value = StructWrapper(typeof(value)).new(value)
-      
-      return new_ruby_object
-    end
-
-    def self.pass_object(rb : RbCore::State*, value : Object)
-      ruby_class = RbClassCache.get(value.class)
-
-      destructor = ->(rb_state : Anyolite::RbCore::State*, ptr : Void*) {}
-
-      ptr = Pointer(typeof(value)).malloc(size: 1, value: value)
-
-      new_ruby_object = RbCore.new_empty_object(rb, ruby_class, ptr.as(Void*), RbTypeCache.register_custom_destructor(typeof(value), destructor))
-
-      Macro.convert_from_ruby_object(rb, new_ruby_object, typeof(value)).value = value
-
-      return new_ruby_object
-    end
-
-    def self.pass_value(rb : RbCore::State*, value : Object)
-      if value.is_a?(Nil)
-        RbCast.return_nil
-      elsif value.is_a?(Bool)
-        value ? RbCast.return_true : return_false
-      elsif value.is_a?(Int)
-        RbCast.return_fixnum(value)
-      elsif value.is_a?(Float)
-        RbCast.return_float(rb, value)
-      elsif value.is_a?(Char)
-        RbCast.return_string(rb, value.to_s)
-      elsif value.is_a?(String)
-        RbCast.return_string(rb, value)
-      elsif value.is_a?(Symbol)
-        RbCast.return_symbol(rb, value)
-      elsif value.is_a?(Array)
-        RbCast.return_array(rb, value)
-      elsif value.is_a?(Hash)
-        RbCast.return_hash(rb, value)
-      elsif value.is_a?(Struct) || value.is_a?(Enum)
-        RbCast.pass_struct_or_enum(rb, value)
-      else
-        RbCast.pass_object(rb, value)
-      end
-    end
-
     # Class check methods
 
     def self.check_for_undef(value : RbCore::RbValue)
