@@ -392,10 +392,21 @@ module Anyolite
   # in form of an `Array` of their names.
   annotation SpecifyGenericTypes; end
 
+  # Specifies the method to require a block argument with the first argument
+  # being the number of values yielded and the second argument the return
+  # type of the block.
   annotation AddBlockArg; end
 
+  # Specifies the instance method given as the first argument 
+  # to require a block argument with the second argument
+  # being the number of values yielded and the third argument the return
+  # type of the block.
   annotation AddBlockArgInstanceMethod; end
 
+  # Specifies the class method given as the first argument 
+  # to require a block argument with the second argument
+  # being the number of values yielded and the third argument the return
+  # type of the block.
   annotation AddBlockArgClassMethod; end
 
   # Wraps a whole class structure under a module into mruby.

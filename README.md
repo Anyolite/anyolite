@@ -179,7 +179,6 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 * [ ] Checks for Ruby method availability from within Crystal
 * [X] Caching of RbValues in the reference table to avoid duplicate objects
 * [X] Storing of pure Ruby objects in GC-safe containers
-* [ ] Automatic wrappers for `initialize_copy`
 * [ ] Methods to call contained Ruby procs from their containers in Crystal
 
 #### Breaking changes
@@ -190,7 +189,7 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 
 #### Usability
 
-* [ ] Updated documentation to new features from 0.10.0 and 0.11.0
+* [X] Updated documentation to new features from 0.10.0 and 0.11.0
 * [X] If nil is expected, cast everything to it without exceptions
 * [X] Simplified internal object casting
 
@@ -204,6 +203,7 @@ its feature list is subject to change.
 
 * [ ] Controlled passing of pointers to ruby using the reference table
 * [ ] Option for required/optional block arguments
+* [ ] Automatic wrappers for `initialize_copy` and similar methods
 
 ### Version 1.0.0
 
@@ -213,10 +213,9 @@ its feature list is subject to change.
 * [ ] Mac support (might be possible, not tested yet)
 * [ ] More configuration options for the Rakefile
 * [ ] Ability to choose between mruby and regular Ruby
+* [ ] Convert macro body variables to fresh variables wherever possible
 
 ### Future ideas (might not actually be possible to implement)
 
 * [ ] Splat argument and/or arbitrary keyword passing
-* [ ] Method in mruby to determine owner of object
-* [ ] Convert macro body variables to fresh variables
 * [ ] Resolve context even in generic type union arguments
