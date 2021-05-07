@@ -24,7 +24,8 @@ This project is currently in active development, so please report any bugs or mi
 * Simple system to prevent garbage collector conflicts
 * Support for keyword arguments and default values
 * Objects, arrays, hashes, structs, enums and unions as function arguments and return values are completely valid
-* Block arguments can also be wrapped
+* Ruby methods can be called at runtime as long as all their possible return values are known
+* Ruby closures can be handled as regular variables
 * Methods and constants can be excluded, modified or renamed with annotations
 
 # Prerequisites
@@ -142,8 +143,8 @@ tools from Anyolite it should technically be possible to circumvent them. If one
 of these does definitely not work, but you need them to, please feel free to open an issue.
 
 * Pointers are technically supported but unsafe
-* Procs as arguments are not directly supported (block arguments are, however)
-* Symbols do not work due to their compiletime nature in Crystal
+* Procs as arguments are possible, but need special handling
+* Symbols do not work fully due to their compiletime nature in Crystal
 * Only one function with the same name can be wrapped
 * Splat arguments and arbitrary keywords are not possible due to their reliance on symbols
 * Keywords will always be given to functions, even if optional (then with default values)
@@ -203,7 +204,6 @@ its feature list is subject to change.
 #### Features
 
 * [ ] Controlled passing of pointers to ruby using the reference table
-* [ ] Option for required/optional block arguments
 * [ ] Automatic wrappers for `initialize_copy` and similar methods
 
 ### Version 1.0.0
