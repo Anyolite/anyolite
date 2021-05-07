@@ -75,6 +75,8 @@ module SomeModule
 
     @@counter : Int32 = 0
 
+    @@magic_block_store : Anyolite::RbRef | Nil = nil
+
     CONSTANT = "Hello"
 
     CONSTANT_NOT_TO_WRAP = 123
@@ -248,10 +250,11 @@ module SomeModule
       arg
     end
 
-    @[Anyolite::AddBlockArg(1, Int32)]
+    @[Anyolite::StoreBlockArg]
     def block_test
-      return_value = yield self
-      return_value.to_s
+      block_cache = Anyolite.obtain_given_rb_block
+      ret_value = Anyolite.call_rb_block(block_cache, [self], cast_to: Int32)
+      ret_value.to_s
     end
 
     @[Anyolite::AddBlockArg(2, String | Int32)]
@@ -264,6 +267,25 @@ module SomeModule
     def self.block_test_3(arg : String)
       return_value = yield "Hello", "There"
       arg.to_s + ": " + return_value.to_s
+    end
+
+    @[Anyolite::StoreBlockArg]
+    def block_store_test
+      if block_cache = Anyolite.obtain_given_rb_block
+        @@magic_block_store = block_cache
+        true
+      else
+        false
+      end
+    end
+
+    def block_store_call
+      if mbs = @@magic_block_store
+        ret_value = Anyolite.call_rb_block(mbs, [self], cast_to: Int32)
+        ret_value.to_s
+      else
+        false
+      end
     end
 
     def hash_return_test

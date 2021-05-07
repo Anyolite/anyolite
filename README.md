@@ -179,7 +179,8 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 * [ ] Checks for Ruby method availability from within Crystal
 * [X] Caching of RbValues in the reference table to avoid duplicate objects
 * [X] Storing of pure Ruby objects in GC-safe containers
-* [ ] Methods to call contained Ruby procs from their containers in Crystal
+* [X] Annotations to enable obtaining Ruby block arguments
+* [X] A method to call contained Ruby procs from their containers in Crystal
 
 #### Breaking changes
 

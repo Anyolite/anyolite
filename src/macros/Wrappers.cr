@@ -1,6 +1,6 @@
 module Anyolite
   module Macro
-    macro wrap_module_function_with_args(rb_interpreter, under_module, name, proc, regular_args = nil, context = nil, return_nil = nil, block_arg_number = nil, block_return_type = nil)
+    macro wrap_module_function_with_args(rb_interpreter, under_module, name, proc, regular_args = nil, context = nil, return_nil = nil, block_arg_number = nil, block_return_type = nil, store_block_arg = false)
       {% if regular_args.is_a?(ArrayLiteral) %}
         {% regular_arg_array = regular_args %}
       {% elsif regular_args == nil %}
@@ -15,17 +15,24 @@ module Anyolite
 
       wrapped_method = Anyolite::RbCore::RbFunc.new do |rb, obj|
         # TODO: Put these kinds of commands into a new macro
-        {% if block_arg_number %}
+        {% if block_arg_number || store_block_arg %}
           block_ptr = Pointer(Anyolite::RbCore::RbValue).malloc(size: 1)
+          
+          {% if store_block_arg %}
+            Anyolite::RbArgCache.set_block_cache(block_ptr)
+          {% end %}
+
           args = Anyolite::Macro.generate_arg_tuple(rb, {{regular_args}}, context: {{context}})
           format_string = Anyolite::Macro.format_string({{regular_args}}, context: {{context}}) + "&"
           
           Anyolite::RbCore.rb_get_args(rb, format_string, *args, block_ptr)
 
-          if Anyolite::RbCast.check_for_nil(block_ptr.value)
-            Anyolite::RbCore.rb_raise_argument_error(rb, "No block given.")
-            Anyolite::RbCast.return_nil
-          end
+          {% if block_arg_number %}
+            if Anyolite::RbCast.check_for_nil(block_ptr.value)
+              Anyolite::RbCore.rb_raise_argument_error(rb, "No block given.")
+              Anyolite::RbCast.return_nil
+            end
+          {% end %}
 
           converted_args = Anyolite::Macro.convert_regular_args(rb, args, {{regular_args}}, context: {{context}})
         {% else %}
@@ -33,13 +40,19 @@ module Anyolite
           converted_args = Anyolite::Macro.get_converted_args(rb, {{regular_arg_array}}, context: {{context}})
         {% end %}
 
-        Anyolite::Macro.call_and_return(rb, {{proc}}, {{regular_arg_array}}, converted_args, return_nil: {{return_nil}}, block_arg_number: {{block_arg_number}}, block_return_type: {{block_return_type}}, block_ptr: block_ptr)
+        return_value = Anyolite::Macro.call_and_return(rb, {{proc}}, {{regular_arg_array}}, converted_args, return_nil: {{return_nil}}, block_arg_number: {{block_arg_number}}, block_return_type: {{block_return_type}}, block_ptr: block_ptr)
+
+        {% if store_block_arg %}
+          Anyolite::RbArgCache.reset_block_cache
+        {% end %}
+
+        return_value
       end
 
       {{rb_interpreter}}.define_module_function({{name}}, Anyolite::RbClassCache.get({{under_module}}), wrapped_method)
     end
 
-    macro wrap_module_function_with_keyword_args(rb_interpreter, under_module, name, proc, keyword_args, regular_args = nil, operator = "", context = nil, return_nil = nil, block_arg_number = nil, block_return_type = nil)
+    macro wrap_module_function_with_keyword_args(rb_interpreter, under_module, name, proc, keyword_args, regular_args = nil, operator = "", context = nil, return_nil = nil, block_arg_number = nil, block_return_type = nil, store_block_arg = false)
       {% if regular_args.is_a?(ArrayLiteral) %}
         {% regular_arg_array = regular_args %}
       {% elsif regular_args == nil %}
@@ -51,16 +64,23 @@ module Anyolite
       wrapped_method = Anyolite::RbCore::RbFunc.new do |rb, obj|
         regular_arg_tuple = Anyolite::Macro.generate_arg_tuple({{rb_interpreter}}, {{regular_arg_array}}, context: {{context}})
 
-        {% if block_arg_number %}
+        {% if block_arg_number || store_block_arg %}
           block_ptr = Pointer(Anyolite::RbCore::RbValue).malloc(size: 1)
+
+          {% if store_block_arg %}
+            Anyolite::RbArgCache.set_block_cache(block_ptr)
+          {% end %}
+
           format_string = Anyolite::Macro.format_string({{regular_arg_array}}, context: {{context}}) + ":&"
           kw_args = Anyolite::Macro.generate_keyword_argument_struct({{rb_interpreter}}, {{keyword_args}})
           Anyolite::RbCore.rb_get_args(rb, format_string, *regular_arg_tuple, pointerof(kw_args), block_ptr)
 
-          if Anyolite::RbCast.check_for_nil(block_ptr.value)
-            Anyolite::RbCore.rb_raise_argument_error(rb, "No block given.")
-            Anyolite::RbCast.return_nil
-          end
+          {% if block_arg_number %}
+            if Anyolite::RbCast.check_for_nil(block_ptr.value)
+              Anyolite::RbCore.rb_raise_argument_error(rb, "No block given.")
+              Anyolite::RbCast.return_nil
+            end
+          {% end %}
         {% else %}
           block_ptr = nil
           format_string = Anyolite::Macro.format_string({{regular_arg_array}}, context: {{context}}) + ":"
@@ -71,16 +91,22 @@ module Anyolite
         converted_regular_args = Anyolite::Macro.convert_regular_args(rb, regular_arg_tuple, {{regular_arg_array}}, context: {{context}})
 
         {% if !regular_arg_array || regular_arg_array.size == 0 %}
-          Anyolite::Macro.call_and_return_keyword_method(rb, {{proc}}, converted_regular_args, {{keyword_args}}, kw_args, operator: {{operator}}, empty_regular: true, context: {{context}}, return_nil: {{return_nil}}, block_arg_number: {{block_arg_number}}, block_return_type: {{block_return_type}}, block_ptr: block_ptr)
+          return_value = Anyolite::Macro.call_and_return_keyword_method(rb, {{proc}}, converted_regular_args, {{keyword_args}}, kw_args, operator: {{operator}}, empty_regular: true, context: {{context}}, return_nil: {{return_nil}}, block_arg_number: {{block_arg_number}}, block_return_type: {{block_return_type}}, block_ptr: block_ptr)
         {% else %}
-          Anyolite::Macro.call_and_return_keyword_method(rb, {{proc}}, converted_regular_args, {{keyword_args}}, kw_args, operator: {{operator}}, context: {{context}}, return_nil: {{return_nil}}, block_arg_number: {{block_arg_number}}, block_return_type: {{block_return_type}}, block_ptr: block_ptr)
+          return_value = Anyolite::Macro.call_and_return_keyword_method(rb, {{proc}}, converted_regular_args, {{keyword_args}}, kw_args, operator: {{operator}}, context: {{context}}, return_nil: {{return_nil}}, block_arg_number: {{block_arg_number}}, block_return_type: {{block_return_type}}, block_ptr: block_ptr)
         {% end %}
+
+        {% if store_block_arg %}
+          Anyolite::RbArgCache.reset_block_cache
+        {% end %}
+
+        return_value
       end
 
       {{rb_interpreter}}.define_module_function({{name}}, Anyolite::RbClassCache.get({{under_module}}), wrapped_method)
     end
 
-    macro wrap_class_method_with_args(rb_interpreter, crystal_class, name, proc, regular_args = nil, operator = "", context = nil, return_nil = nil, block_arg_number = nil, block_return_type = nil)
+    macro wrap_class_method_with_args(rb_interpreter, crystal_class, name, proc, regular_args = nil, operator = "", context = nil, return_nil = nil, block_arg_number = nil, block_return_type = nil, store_block_arg = false)
       {% if regular_args.is_a?(ArrayLiteral) %}
         {% regular_arg_array = regular_args %}
       {% elsif regular_args == nil %}
@@ -94,17 +120,24 @@ module Anyolite
       {% type_var_names = type_var_names_annotation ? type_var_names_annotation[0] : nil %}
 
       wrapped_method = Anyolite::RbCore::RbFunc.new do |rb, obj|
-        {% if block_arg_number %}
+        {% if block_arg_number || store_block_arg %}
           block_ptr = Pointer(Anyolite::RbCore::RbValue).malloc(size: 1)
+
+          {% if store_block_arg %}
+            Anyolite::RbArgCache.set_block_cache(block_ptr)
+          {% end %}
+
           args = Anyolite::Macro.generate_arg_tuple(rb, {{regular_args}}, context: {{context}})
           format_string = Anyolite::Macro.format_string({{regular_args}}, context: {{context}}) + "&"
           
           Anyolite::RbCore.rb_get_args(rb, format_string, *args, block_ptr)
 
-          if Anyolite::RbCast.check_for_nil(block_ptr.value)
-            Anyolite::RbCore.rb_raise_argument_error(rb, "No block given.")
-            Anyolite::RbCast.return_nil
-          end
+          {% if block_arg_number %}
+            if Anyolite::RbCast.check_for_nil(block_ptr.value)
+              Anyolite::RbCore.rb_raise_argument_error(rb, "No block given.")
+              Anyolite::RbCast.return_nil
+            end
+          {% end %}
 
           converted_args = Anyolite::Macro.convert_regular_args(rb, args, {{regular_args}}, context: {{context}})
         {% else %}
@@ -112,13 +145,19 @@ module Anyolite
           converted_args = Anyolite::Macro.get_converted_args(rb, {{regular_arg_array}}, context: {{context}})
         {% end %}
 
-        Anyolite::Macro.call_and_return(rb, {{proc}}, {{regular_arg_array}}, converted_args, operator: {{operator}}, return_nil: {{return_nil}}, block_arg_number: {{block_arg_number}}, block_return_type: {{block_return_type}}, block_ptr: block_ptr)
+        return_value = Anyolite::Macro.call_and_return(rb, {{proc}}, {{regular_arg_array}}, converted_args, operator: {{operator}}, return_nil: {{return_nil}}, block_arg_number: {{block_arg_number}}, block_return_type: {{block_return_type}}, block_ptr: block_ptr)
+
+        {% if store_block_arg %}
+          Anyolite::RbArgCache.reset_block_cache
+        {% end %}
+
+        return_value
       end
       
       {{rb_interpreter}}.define_class_method({{name}}, Anyolite::RbClassCache.get({{crystal_class}}), wrapped_method)
     end
 
-    macro wrap_class_method_with_keyword_args(rb_interpreter, crystal_class, name, proc, keyword_args, regular_args = nil, operator = "", context = nil, return_nil = nil, block_arg_number = nil, block_return_type = nil)
+    macro wrap_class_method_with_keyword_args(rb_interpreter, crystal_class, name, proc, keyword_args, regular_args = nil, operator = "", context = nil, return_nil = nil, block_arg_number = nil, block_return_type = nil, store_block_arg = false)
       {% if regular_args.is_a?(ArrayLiteral) %}
         {% regular_arg_array = regular_args %}
       {% elsif regular_args == nil %}
@@ -134,16 +173,23 @@ module Anyolite
       wrapped_method = Anyolite::RbCore::RbFunc.new do |rb, obj|
         regular_arg_tuple = Anyolite::Macro.generate_arg_tuple({{rb_interpreter}}, {{regular_arg_array}}, context: {{context}})
 
-        {% if block_arg_number %}
+        {% if block_arg_number || store_block_arg %}
           block_ptr = Pointer(Anyolite::RbCore::RbValue).malloc(size: 1)
+
+          {% if store_block_arg %}
+            Anyolite::RbArgCache.set_block_cache(block_ptr)
+          {% end %}
+
           format_string = Anyolite::Macro.format_string({{regular_arg_array}}, context: {{context}}) + ":&"
           kw_args = Anyolite::Macro.generate_keyword_argument_struct({{rb_interpreter}}, {{keyword_args}})
           Anyolite::RbCore.rb_get_args(rb, format_string, *regular_arg_tuple, pointerof(kw_args), block_ptr)
 
-          if Anyolite::RbCast.check_for_nil(block_ptr.value)
-            Anyolite::RbCore.rb_raise_argument_error(rb, "No block given.")
-            Anyolite::RbCast.return_nil
-          end
+          {% if block_arg_number %}
+            if Anyolite::RbCast.check_for_nil(block_ptr.value)
+              Anyolite::RbCore.rb_raise_argument_error(rb, "No block given.")
+              Anyolite::RbCast.return_nil
+            end
+          {% end %}
         {% else %}
           block_ptr = nil
           format_string = Anyolite::Macro.format_string({{regular_arg_array}}, context: {{context}}) + ":"
@@ -154,18 +200,24 @@ module Anyolite
         converted_regular_args = Anyolite::Macro.convert_regular_args(rb, regular_arg_tuple, {{regular_arg_array}}, context: {{context}})
 
         {% if !regular_arg_array || regular_arg_array.size == 0 %}
-          Anyolite::Macro.call_and_return_keyword_method(rb, {{proc}}, converted_regular_args, {{keyword_args}}, kw_args, operator: {{operator}}, 
+          return_value = Anyolite::Macro.call_and_return_keyword_method(rb, {{proc}}, converted_regular_args, {{keyword_args}}, kw_args, operator: {{operator}}, 
             empty_regular: true, context: {{context}}, type_vars: {{type_vars}}, type_var_names: {{type_var_names}}, return_nil: {{return_nil}}, block_arg_number: {{block_arg_number}}, block_return_type: {{block_return_type}}, block_ptr: block_ptr)
         {% else %}
-          Anyolite::Macro.call_and_return_keyword_method(rb, {{proc}}, converted_regular_args, {{keyword_args}}, kw_args, operator: {{operator}}, 
+          return_value = Anyolite::Macro.call_and_return_keyword_method(rb, {{proc}}, converted_regular_args, {{keyword_args}}, kw_args, operator: {{operator}}, 
             context: {{context}}, type_vars: {{type_vars}}, type_var_names: {{type_var_names}}, return_nil: {{return_nil}}, block_arg_number: {{block_arg_number}}, block_return_type: {{block_return_type}}, block_ptr: block_ptr)
         {% end %}
+
+        {% if store_block_arg %}
+          Anyolite::RbArgCache.reset_block_cache
+        {% end %}
+
+        return_value
       end
 
       {{rb_interpreter}}.define_class_method({{name}}, Anyolite::RbClassCache.get({{crystal_class}}), wrapped_method)
     end
 
-    macro wrap_instance_function_with_args(rb_interpreter, crystal_class, name, proc, regular_args = nil, operator = "", context = nil, return_nil = nil, block_arg_number = nil, block_return_type = nil)
+    macro wrap_instance_function_with_args(rb_interpreter, crystal_class, name, proc, regular_args = nil, operator = "", context = nil, return_nil = nil, block_arg_number = nil, block_return_type = nil, store_block_arg = false)
       {% if regular_args.is_a?(ArrayLiteral) %}
         {% regular_arg_array = regular_args %}
       {% elsif regular_args == nil %}
@@ -179,17 +231,24 @@ module Anyolite
       {% type_var_names = type_var_names_annotation ? type_var_names_annotation[0] : nil %}
 
       wrapped_method = Anyolite::RbCore::RbFunc.new do |rb, obj|
-        {% if block_arg_number %}
+        {% if block_arg_number || store_block_arg %}
           block_ptr = Pointer(Anyolite::RbCore::RbValue).malloc(size: 1)
+
+          {% if store_block_arg %}
+            Anyolite::RbArgCache.set_block_cache(block_ptr)
+          {% end %}
+
           args = Anyolite::Macro.generate_arg_tuple(rb, {{regular_args}}, context: {{context}})
           format_string = Anyolite::Macro.format_string({{regular_args}}, context: {{context}}) + "&"
           
           Anyolite::RbCore.rb_get_args(rb, format_string, *args, block_ptr)
 
-          if Anyolite::RbCast.check_for_nil(block_ptr.value)
-            Anyolite::RbCore.rb_raise_argument_error(rb, "No block given.")
-            Anyolite::RbCast.return_nil
-          end
+          {% if block_arg_number %}
+            if Anyolite::RbCast.check_for_nil(block_ptr.value)
+              Anyolite::RbCore.rb_raise_argument_error(rb, "No block given.")
+              Anyolite::RbCast.return_nil
+            end
+          {% end %}
 
           converted_args = Anyolite::Macro.convert_regular_args(rb, args, {{regular_args}}, context: {{context}})
         {% else %}
@@ -203,13 +262,19 @@ module Anyolite
           converted_obj = Anyolite::Macro.convert_from_ruby_object(rb, obj, {{crystal_class}}).value
         end
 
-        Anyolite::Macro.call_and_return_instance_method(rb, {{proc}}, converted_obj, converted_args, operator: {{operator}}, return_nil: {{return_nil}}, block_arg_number: {{block_arg_number}}, block_return_type: {{block_return_type}}, block_ptr: block_ptr)
+        return_value = Anyolite::Macro.call_and_return_instance_method(rb, {{proc}}, converted_obj, converted_args, operator: {{operator}}, return_nil: {{return_nil}}, block_arg_number: {{block_arg_number}}, block_return_type: {{block_return_type}}, block_ptr: block_ptr)
+        
+        {% if store_block_arg %}
+          Anyolite::RbArgCache.reset_block_cache
+        {% end %}
+
+        return_value
       end
 
       {{rb_interpreter}}.define_method({{name}}, Anyolite::RbClassCache.get({{crystal_class}}), wrapped_method)
     end
 
-    macro wrap_instance_function_with_keyword_args(rb_interpreter, crystal_class, name, proc, keyword_args, regular_args = nil, operator = "", context = nil, return_nil = nil, block_arg_number = nil, block_return_type = nil)
+    macro wrap_instance_function_with_keyword_args(rb_interpreter, crystal_class, name, proc, keyword_args, regular_args = nil, operator = "", context = nil, return_nil = nil, block_arg_number = nil, block_return_type = nil, store_block_arg = false)
       {% if regular_args.is_a?(ArrayLiteral) %}
         {% regular_arg_array = regular_args %}
       {% elsif regular_args == nil %}
@@ -227,16 +292,23 @@ module Anyolite
 
         # TODO: Add annotation argument for required blocks ('&!' then)
 
-        {% if block_arg_number %}
+        {% if block_arg_number || store_block_arg %}
           block_ptr = Pointer(Anyolite::RbCore::RbValue).malloc(size: 1)
+
+          {% if store_block_arg %}
+            Anyolite::RbArgCache.set_block_cache(block_ptr)
+          {% end %}
+
           format_string = Anyolite::Macro.format_string({{regular_arg_array}}, context: {{context}}) + ":&"
           kw_args = Anyolite::Macro.generate_keyword_argument_struct({{rb_interpreter}}, {{keyword_args}})
           Anyolite::RbCore.rb_get_args(rb, format_string, *regular_arg_tuple, pointerof(kw_args), block_ptr)
 
-          if Anyolite::RbCast.check_for_nil(block_ptr.value)
-            Anyolite::RbCore.rb_raise_argument_error(rb, "No block given.")
-            Anyolite::RbCast.return_nil
-          end
+          {% if block_arg_number %}
+            if Anyolite::RbCast.check_for_nil(block_ptr.value)
+              Anyolite::RbCore.rb_raise_argument_error(rb, "No block given.")
+              Anyolite::RbCast.return_nil
+            end
+          {% end %}
         {% else %}
           block_ptr = nil
           format_string = Anyolite::Macro.format_string({{regular_arg_array}}, context: {{context}}) + ":"
@@ -253,18 +325,26 @@ module Anyolite
         end
 
         {% if !regular_arg_array || regular_arg_array.size == 0 %}
-          Anyolite::Macro.call_and_return_keyword_instance_method(rb, {{proc}}, converted_obj, converted_regular_args, {{keyword_args}}, kw_args, operator: {{operator}}, 
+          return_value = Anyolite::Macro.call_and_return_keyword_instance_method(rb, {{proc}}, converted_obj, converted_regular_args, {{keyword_args}}, kw_args, operator: {{operator}}, 
             empty_regular: true, context: {{context}}, type_vars: {{type_vars}}, type_var_names: {{type_var_names}}, return_nil: {{return_nil}}, block_arg_number: {{block_arg_number}}, block_return_type: {{block_return_type}}, block_ptr: block_ptr)
         {% else %}
-          Anyolite::Macro.call_and_return_keyword_instance_method(rb, {{proc}}, converted_obj, converted_regular_args, {{keyword_args}}, kw_args, operator: {{operator}}, 
+          return_value = Anyolite::Macro.call_and_return_keyword_instance_method(rb, {{proc}}, converted_obj, converted_regular_args, {{keyword_args}}, kw_args, operator: {{operator}}, 
             context: {{context}}, type_vars: {{type_vars}}, type_var_names: {{type_var_names}}, return_nil: {{return_nil}}, block_arg_number: {{block_arg_number}}, block_return_type: {{block_return_type}}, block_ptr: block_ptr)
         {% end %}
+
+        {% if store_block_arg %}
+          Anyolite::RbArgCache.reset_block_cache
+        {% end %}
+
+        return_value
       end
 
       {{rb_interpreter}}.define_method({{name}}, Anyolite::RbClassCache.get({{crystal_class}}), wrapped_method)
     end
 
-    macro wrap_constructor_function_with_args(rb_interpreter, crystal_class, proc, regular_args = nil, operator = "", context = nil, block_arg_number = nil, block_return_type = nil)
+    # TODO: Add block cache to other functions
+
+    macro wrap_constructor_function_with_args(rb_interpreter, crystal_class, proc, regular_args = nil, operator = "", context = nil, block_arg_number = nil, block_return_type = nil, store_block_arg = false)
       {% if regular_args.is_a?(ArrayLiteral) %}
         {% regular_arg_array = regular_args %}
       {% elsif regular_args == nil %}
@@ -286,17 +366,24 @@ module Anyolite
       {% type_var_names = type_var_names_annotation ? type_var_names_annotation[0] : nil %}
 
       wrapped_method = Anyolite::RbCore::RbFunc.new do |rb, obj|
-        {% if block_arg_number %}
+        {% if block_arg_number || store_block_arg %}
           block_ptr = Pointer(Anyolite::RbCore::RbValue).malloc(size: 1)
+
+          {% if store_block_arg %}
+            Anyolite::RbArgCache.set_block_cache(block_ptr)
+          {% end %}
+
           args = Anyolite::Macro.generate_arg_tuple(rb, {{regular_args}}, context: {{context}})
           format_string = Anyolite::Macro.format_string({{regular_args}}, context: {{context}}) + "&"
           
           Anyolite::RbCore.rb_get_args(rb, format_string, *args, block_ptr)
 
-          if Anyolite::RbCast.check_for_nil(block_ptr.value)
-            Anyolite::RbCore.rb_raise_argument_error(rb, "No block given.")
-            Anyolite::RbCast.return_nil
-          end
+          {% if block_arg_number %}
+            if Anyolite::RbCast.check_for_nil(block_ptr.value)
+              Anyolite::RbCore.rb_raise_argument_error(rb, "No block given.")
+              Anyolite::RbCast.return_nil
+            end
+          {% end %}
 
           converted_args = Anyolite::Macro.convert_regular_args(rb, args, {{regular_args}}, context: {{context}})
         {% else %}
@@ -322,13 +409,18 @@ module Anyolite
         {% end %}
 
         Anyolite::Macro.allocate_constructed_object({{crystal_class}}, obj, new_obj)
+
+        {% if store_block_arg %}
+          Anyolite::RbArgCache.reset_block_cache
+        {% end %}
+
         obj
       end
 
       {{rb_interpreter}}.define_method("initialize", Anyolite::RbClassCache.get({{crystal_class}}), wrapped_method)
     end
 
-    macro wrap_constructor_function_with_keyword_args(rb_interpreter, crystal_class, proc, keyword_args, regular_args = nil, operator = "", context = nil, block_arg_number = nil, block_return_type = nil)
+    macro wrap_constructor_function_with_keyword_args(rb_interpreter, crystal_class, proc, keyword_args, regular_args = nil, operator = "", context = nil, block_arg_number = nil, block_return_type = nil, store_block_arg = false)
       {% if regular_args.is_a?(ArrayLiteral) %}
         {% regular_arg_array = regular_args %}
       {% elsif regular_args == nil %}
@@ -352,16 +444,23 @@ module Anyolite
       wrapped_method = Anyolite::RbCore::RbFunc.new do |rb, obj|
         regular_arg_tuple = Anyolite::Macro.generate_arg_tuple({{rb_interpreter}}, {{regular_arg_array}}, context: {{context}})
 
-        {% if block_arg_number %}
+        {% if block_arg_number || store_block_arg %}
           block_ptr = Pointer(Anyolite::RbCore::RbValue).malloc(size: 1)
+
+          {% if store_block_arg %}
+            Anyolite::RbArgCache.set_block_cache(block_ptr)
+          {% end %}
+
           format_string = Anyolite::Macro.format_string({{regular_arg_array}}, context: {{context}}) + ":&"
           kw_args = Anyolite::Macro.generate_keyword_argument_struct({{rb_interpreter}}, {{keyword_args}})
           Anyolite::RbCore.rb_get_args(rb, format_string, *regular_arg_tuple, pointerof(kw_args), block_ptr)
 
-          if Anyolite::RbCast.check_for_nil(block_ptr.value)
-            Anyolite::RbCore.rb_raise_argument_error(rb, "No block given.")
-            Anyolite::RbCast.return_nil
-          end
+          {% if block_arg_number %}
+            if Anyolite::RbCast.check_for_nil(block_ptr.value)
+              Anyolite::RbCore.rb_raise_argument_error(rb, "No block given.")
+              Anyolite::RbCast.return_nil
+            end
+          {% end %}
         {% else %}
           block_ptr = nil
           format_string = Anyolite::Macro.format_string({{regular_arg_array}}, context: {{context}}) + ":"
@@ -407,6 +506,11 @@ module Anyolite
         {% end %}
 
         Anyolite::Macro.allocate_constructed_object({{crystal_class}}, obj, new_obj)
+
+        {% if store_block_arg %}
+          Anyolite::RbArgCache.reset_block_cache
+        {% end %}
+        
         obj
       end
 

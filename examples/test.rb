@@ -103,6 +103,8 @@ puts a.overload_cheat_test("Something")
 
 carrier = nil
 
+puts a.x
+
 result = a.block_test do |value| 
   carrier = value
   value.x += 1000
@@ -195,3 +197,19 @@ a.class_call_test
 
 # Try to explain in one sentence what that codeline does without losing your brain to the outer gods
 puts "Do I have an identity crisis? #{a.why_would_you_do_this?('am_i_in_ruby?') ? 'Yes' : 'No'}."
+
+puts "Before block storing: #{a.x}"
+new_carrier = nil
+
+a.block_store_test do |value|
+  new_carrier = value
+  value.x += 1000
+  value.x * 2
+end
+
+puts "After block storing: #{a.x}"
+puts "Block store call result: #{a.block_store_call}"
+puts "After block call: #{a.x}"
+puts "Carrier result: #{new_carrier.x}"
+
+puts "Does this have a block? #{a.block_store_test}"

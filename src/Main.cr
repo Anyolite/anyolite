@@ -8,6 +8,7 @@ require "./RbClassCache.cr"
 require "./RbTypeCache.cr"
 require "./RbModule.cr"
 require "./RbRefTable.cr"
+require "./RbArgCache.cr"
 
 # Main wrapper module, which should be covering most of the use cases.
 module Anyolite
@@ -80,6 +81,56 @@ module Anyolite
   # Returns the `RbValue` of the `Class` or `Module` *crystal_class*.
   macro get_rb_class_obj_of(crystal_class)
     Anyolite::RbCore.get_rb_obj_value(Anyolite::RbClassCache.get({{crystal_class}}))
+  end
+
+  # Returns a cached block argument (or `nil`, if none given) in form of a `RbRef`, if enabled.
+  # Otherwise, an error will be triggered.
+  macro obtain_given_rb_block
+    %rb = Anyolite::RbRefTable.get_current_interpreter
+
+    if %bc = Anyolite::RbArgCache.get_block_cache
+      if Anyolite::RbCast.check_for_nil(%bc.value)
+        nil
+      else
+        %bc_ref = Anyolite::RbRef.new(%bc.value)
+        %bc_ref
+      end
+    else
+      raise "This method does not accept block arguments."
+    end
+  end
+
+  # Calls the Ruby block *block_value*, given as a `RbRef`, with the arguments *args*
+  # as an `Array` of castable Crystal values (`nil` for none).
+  # 
+  # If *cast_to* is set to a `Class` or similar, it will automatically cast
+  # the result to a Crystal value of that class, otherwise, it will return
+  # a `RbRef` value containing the result.
+  #
+  # If needed, *context* can be set to a `Path` in order to specify *cast_to*.
+  macro call_rb_block(block_value, args = nil, cast_to = nil, context = nil)
+    %rb = Anyolite::RbRefTable.get_current_interpreter
+
+    if %rb_block = {{block_value}}
+      {% if args %}
+        %argc = {{args}}.size
+        %argv = Pointer(Anyolite::RbCore::RbValue).malloc(size: %argc) do |i|
+          Anyolite::RbCast.return_value(%rb.to_unsafe, {{args}}[i])
+        end
+
+        %block_return_value = Anyolite::RbCore.rb_yield_argv(%rb, %rb_block.value, %argc, %argv)
+      {% else %}
+        %block_return_value = Anyolite::RbCore.rb_yield(%rb, %rb_block.value, Anyolite::RbCast.return_nil)
+      {% end %}
+
+      {% if cast_to %}
+        Anyolite::Macro.convert_from_ruby_to_crystal(%rb.to_unsafe, %block_return_value, {{cast_to}}, context: {{context}})
+      {% else %}
+        Anyolite::RbRef.new(%block_return_value)
+      {% end %}
+    else
+      raise "Empty block argument."
+    end
   end
 
   # TODO: Is it possible to add block args to the two methods below?
@@ -180,8 +231,12 @@ module Anyolite
   # 
   # The value *operator* will append the specified `String`
   # to the final name and *context* can give the function a `Path` for resolving types correctly.
-  macro wrap_constructor(rb_interpreter, crystal_class, proc_args = nil, operator = "", context = nil, block_arg_number = nil, block_return_type = nil)
-    Anyolite::Macro.wrap_constructor_function_with_args({{rb_interpreter}}, {{crystal_class}}, {{crystal_class}}.new, {{proc_args}}, operator: {{operator}}, context: {{context}}, block_arg_number: {{block_arg_number}}, block_return_type: {{block_return_type}})
+  #
+  # The arguments *block_arg_number* and *block_return_type* can be set to an `Int` and a `Class`,
+  # respectively, in order to require a block argument. If *store_block_arg* is set to `true`,
+  # any block argument given will be stored in a cache. 
+  macro wrap_constructor(rb_interpreter, crystal_class, proc_args = nil, operator = "", context = nil, block_arg_number = nil, block_return_type = nil, store_block_arg = false)
+    Anyolite::Macro.wrap_constructor_function_with_args({{rb_interpreter}}, {{crystal_class}}, {{crystal_class}}.new, {{proc_args}}, operator: {{operator}}, context: {{context}}, block_arg_number: {{block_arg_number}}, block_return_type: {{block_return_type}}, store_block_arg: {{store_block_arg}})
   end
 
   # Wraps the constructor of a Crystal class into mruby, using keyword arguments.
@@ -191,8 +246,12 @@ module Anyolite
   #
   # The value *operator* will append the specified `String`
   # to the final name and *context* can give the function a `Path` for resolving types correctly.
-  macro wrap_constructor_with_keywords(rb_interpreter, crystal_class, keyword_args, regular_args = nil, operator = "", context = nil, block_arg_number = nil, block_return_type = nil)
-    Anyolite::Macro.wrap_constructor_function_with_keyword_args({{rb_interpreter}}, {{crystal_class}}, {{crystal_class}}.new, {{keyword_args}}, {{regular_args}}, operator: {{operator}}, context: {{context}}, block_arg_number: {{block_arg_number}}, block_return_type: {{block_return_type}})
+  #
+  # The arguments *block_arg_number* and *block_return_type* can be set to an `Int` and a `Class`,
+  # respectively, in order to require a block argument. If *store_block_arg* is set to `true`,
+  # any block argument given will be stored in a cache. 
+  macro wrap_constructor_with_keywords(rb_interpreter, crystal_class, keyword_args, regular_args = nil, operator = "", context = nil, block_arg_number = nil, block_return_type = nil, store_block_arg = false)
+    Anyolite::Macro.wrap_constructor_function_with_keyword_args({{rb_interpreter}}, {{crystal_class}}, {{crystal_class}}.new, {{keyword_args}}, {{regular_args}}, operator: {{operator}}, context: {{context}}, block_arg_number: {{block_arg_number}}, block_return_type: {{block_return_type}}, store_block_arg: {{store_block_arg}})
   end
 
   # Wraps a module function into mruby.
@@ -205,8 +264,12 @@ module Anyolite
   # The value *operator* will append the specified `String`
   # to the final name and *context* can give the function a `Path` for resolving types correctly.
   # The value *return_nil* will override any returned value with `nil`.
-  macro wrap_module_function(rb_interpreter, under_module, name, proc, proc_args = nil, operator = "", context = nil, return_nil = false, block_arg_number = nil, block_return_type = nil)
-    Anyolite::Macro.wrap_module_function_with_args({{rb_interpreter}}, {{under_module}}, {{name}}, {{proc}}, {{proc_args}}, operator: {{operator}}, context: {{context}}, return_nil: {{return_nil}}, block_arg_number: {{block_arg_number}}, block_return_type: {{block_return_type}})
+  #
+  # The arguments *block_arg_number* and *block_return_type* can be set to an `Int` and a `Class`,
+  # respectively, in order to require a block argument. If *store_block_arg* is set to `true`,
+  # any block argument given will be stored in a cache. 
+  macro wrap_module_function(rb_interpreter, under_module, name, proc, proc_args = nil, operator = "", context = nil, return_nil = false, block_arg_number = nil, block_return_type = nil, store_block_arg = false)
+    Anyolite::Macro.wrap_module_function_with_args({{rb_interpreter}}, {{under_module}}, {{name}}, {{proc}}, {{proc_args}}, operator: {{operator}}, context: {{context}}, return_nil: {{return_nil}}, block_arg_number: {{block_arg_number}}, block_return_type: {{block_return_type}}, store_block_arg: {{store_block_arg}})
   end
 
   # Wraps a module function into mruby, using keyword arguments.
@@ -219,8 +282,12 @@ module Anyolite
   # The value *operator* will append the specified `String`
   # to the final name and *context* can give the function a `Path` for resolving types correctly.
   # The value *return_nil* will override any returned value with `nil`.
-  macro wrap_module_function_with_keywords(rb_interpreter, under_module, name, proc, keyword_args, regular_args = nil, operator = "", context = nil, return_nil = false, block_arg_number = nil, block_return_type = nil)
-    Anyolite::Macro.wrap_module_function_with_keyword_args({{rb_interpreter}}, {{under_module}}, {{name}}, {{proc}}, {{keyword_args}}, {{regular_args}}, operator: {{operator}}, context: {{context}}, return_nil: {{return_nil}}, block_arg_number: {{block_arg_number}}, block_return_type: {{block_return_type}})
+  #
+  # The arguments *block_arg_number* and *block_return_type* can be set to an `Int` and a `Class`,
+  # respectively, in order to require a block argument. If *store_block_arg* is set to `true`,
+  # any block argument given will be stored in a cache. 
+  macro wrap_module_function_with_keywords(rb_interpreter, under_module, name, proc, keyword_args, regular_args = nil, operator = "", context = nil, return_nil = false, block_arg_number = nil, block_return_type = nil, store_block_arg = false)
+    Anyolite::Macro.wrap_module_function_with_keyword_args({{rb_interpreter}}, {{under_module}}, {{name}}, {{proc}}, {{keyword_args}}, {{regular_args}}, operator: {{operator}}, context: {{context}}, return_nil: {{return_nil}}, block_arg_number: {{block_arg_number}}, block_return_type: {{block_return_type}}, store_block_arg: {{store_block_arg}})
   end
 
   # Wraps a class method into mruby.
@@ -233,8 +300,12 @@ module Anyolite
   # The value *operator* will append the specified `String`
   # to the final name and *context* can give the function a `Path` for resolving types correctly.
   # The value *return_nil* will override any returned value with `nil`.
-  macro wrap_class_method(rb_interpreter, crystal_class, name, proc, proc_args = nil, operator = "", context = nil, return_nil = false, block_arg_number = nil, block_return_type = nil)
-    Anyolite::Macro.wrap_class_method_with_args({{rb_interpreter}}, {{crystal_class}}, {{name}}, {{proc}}, {{proc_args}}, operator: {{operator}}, context: {{context}}, return_nil: {{return_nil}}, block_arg_number: {{block_arg_number}}, block_return_type: {{block_return_type}})
+  #
+  # The arguments *block_arg_number* and *block_return_type* can be set to an `Int` and a `Class`,
+  # respectively, in order to require a block argument. If *store_block_arg* is set to `true`,
+  # any block argument given will be stored in a cache. 
+  macro wrap_class_method(rb_interpreter, crystal_class, name, proc, proc_args = nil, operator = "", context = nil, return_nil = false, block_arg_number = nil, block_return_type = nil, store_block_arg = false)
+    Anyolite::Macro.wrap_class_method_with_args({{rb_interpreter}}, {{crystal_class}}, {{name}}, {{proc}}, {{proc_args}}, operator: {{operator}}, context: {{context}}, return_nil: {{return_nil}}, block_arg_number: {{block_arg_number}}, block_return_type: {{block_return_type}}, store_block_arg: {{store_block_arg}})
   end
 
   # Wraps a class method into mruby, using keyword arguments.
@@ -247,8 +318,12 @@ module Anyolite
   # The value *operator* will append the specified `String`
   # to the final name and *context* can give the function a `Path` for resolving types correctly.
   # The value *return_nil* will override any returned value with `nil`.
-  macro wrap_class_method_with_keywords(rb_interpreter, crystal_class, name, proc, keyword_args, regular_args = nil, operator = "", context = nil, return_nil = false, block_arg_number = nil, block_return_type = nil)
-    Anyolite::Macro.wrap_class_method_with_keyword_args({{rb_interpreter}}, {{crystal_class}}, {{name}}, {{proc}}, {{keyword_args}}, {{regular_args}}, operator: {{operator}}, context: {{context}}, return_nil: {{return_nil}}, block_arg_number: {{block_arg_number}}, block_return_type: {{block_return_type}})
+  #
+  # The arguments *block_arg_number* and *block_return_type* can be set to an `Int` and a `Class`,
+  # respectively, in order to require a block argument. If *store_block_arg* is set to `true`,
+  # any block argument given will be stored in a cache. 
+  macro wrap_class_method_with_keywords(rb_interpreter, crystal_class, name, proc, keyword_args, regular_args = nil, operator = "", context = nil, return_nil = false, block_arg_number = nil, block_return_type = nil, store_block_arg = false)
+    Anyolite::Macro.wrap_class_method_with_keyword_args({{rb_interpreter}}, {{crystal_class}}, {{name}}, {{proc}}, {{keyword_args}}, {{regular_args}}, operator: {{operator}}, context: {{context}}, return_nil: {{return_nil}}, block_arg_number: {{block_arg_number}}, block_return_type: {{block_return_type}}, store_block_arg: {{store_block_arg}})
   end
 
   # Wraps an instance method into mruby.
@@ -261,8 +336,12 @@ module Anyolite
   # The value *operator* will append the specified `String`
   # to the final name and *context* can give the function a `Path` for resolving types correctly.
   # The value *return_nil* will override any returned value with `nil`.
-  macro wrap_instance_method(rb_interpreter, crystal_class, name, proc, proc_args = nil, operator = "", context = nil, return_nil = false, block_arg_number = nil, block_return_type = nil)
-    Anyolite::Macro.wrap_instance_function_with_args({{rb_interpreter}}, {{crystal_class}}, {{name}}, {{proc}}, {{proc_args}}, operator: {{operator}}, context: {{context}}, return_nil: {{return_nil}}, block_arg_number: {{block_arg_number}}, block_return_type: {{block_return_type}})
+  #
+  # The arguments *block_arg_number* and *block_return_type* can be set to an `Int` and a `Class`,
+  # respectively, in order to require a block argument. If *store_block_arg* is set to `true`,
+  # any block argument given will be stored in a cache. 
+  macro wrap_instance_method(rb_interpreter, crystal_class, name, proc, proc_args = nil, operator = "", context = nil, return_nil = false, block_arg_number = nil, block_return_type = nil, store_block_arg = false)
+    Anyolite::Macro.wrap_instance_function_with_args({{rb_interpreter}}, {{crystal_class}}, {{name}}, {{proc}}, {{proc_args}}, operator: {{operator}}, context: {{context}}, return_nil: {{return_nil}}, block_arg_number: {{block_arg_number}}, block_return_type: {{block_return_type}}, store_block_arg: {{store_block_arg}})
   end
 
   # Wraps an instance method into mruby, using keyword arguments.
@@ -275,8 +354,12 @@ module Anyolite
   # The value *operator* will append the specified `String`
   # to the final name and *context* can give the function a `Path` for resolving types correctly.
   # The value *return_nil* will override any returned value with `nil`.
-  macro wrap_instance_method_with_keywords(rb_interpreter, crystal_class, name, proc, keyword_args, regular_args = nil, operator = "", context = nil, return_nil = false, block_arg_number = nil, block_return_type = nil)
-    Anyolite::Macro.wrap_instance_function_with_keyword_args({{rb_interpreter}}, {{crystal_class}}, {{name}}, {{proc}}, {{keyword_args}}, {{regular_args}}, operator: {{operator}}, context: {{context}}, return_nil: {{return_nil}}, block_arg_number: {{block_arg_number}}, block_return_type: {{block_return_type}})
+  #
+  # The arguments *block_arg_number* and *block_return_type* can be set to an `Int` and a `Class`,
+  # respectively, in order to require a block argument. If *store_block_arg* is set to `true`,
+  # any block argument given will be stored in a cache. 
+  macro wrap_instance_method_with_keywords(rb_interpreter, crystal_class, name, proc, keyword_args, regular_args = nil, operator = "", context = nil, return_nil = false, block_arg_number = nil, block_return_type = nil, store_block_arg = false)
+    Anyolite::Macro.wrap_instance_function_with_keyword_args({{rb_interpreter}}, {{crystal_class}}, {{name}}, {{proc}}, {{keyword_args}}, {{regular_args}}, operator: {{operator}}, context: {{context}}, return_nil: {{return_nil}}, block_arg_number: {{block_arg_number}}, block_return_type: {{block_return_type}}, store_block_arg: {{store_block_arg}})
   end
 
   # Wraps a setter into mruby.
@@ -430,6 +513,15 @@ module Anyolite
   # being the number of values yielded and the third argument the return
   # type of the block.
   annotation AddBlockArgClassMethod; end
+
+  # Instructs the function to cache an incoming Ruby block argument if given.
+  annotation StoreBlockArg; end
+
+  # Instructs the instance method given as the first argument to cache an incoming Ruby block argument if given.
+  annotation StoreBlockArgInstanceMethod; end
+
+  # Instructs the class method given as the first argument to cache an incoming Ruby block argument if given.
+  annotation StoreBlockArgClassMethod; end
 
   # Wraps a whole class structure under a module into mruby.
   #

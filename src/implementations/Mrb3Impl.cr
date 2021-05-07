@@ -91,6 +91,9 @@ module Anyolite
     fun rb_raise_argument_error = mrb_raise_argument_error(rb : State*, msg : LibC::Char*)
 
     fun rb_get_args = mrb_get_args(rb : State*, format : LibC::Char*, ...) : RbInt
+    
+    fun rb_get_argc = mrb_get_argc(rb : State*) : RbInt
+    fun rb_get_argv = mrb_get_argv(rb : State*) : RbValue*
 
     fun rb_yield = mrb_yield(rb : State*, value : RbValue, arg : RbValue) : RbValue
     fun rb_yield_argv = mrb_yield_argv(rb : State*, value : RbValue, argc : RbInt, argv : RbValue*) : RbValue
