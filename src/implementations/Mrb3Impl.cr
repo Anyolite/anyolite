@@ -156,6 +156,8 @@ module Anyolite
     fun set_data_ptr_and_type(ruby_object : RbValue, data : Void*, type : RbDataType*)
     fun get_data_ptr(ruby_object : RbValue) : Void*
 
+    fun get_rb_obj_value = get_mrb_obj_value(p : Void*) : RbValue
+
     fun rb_obj_is_kind_of = mrb_obj_is_kind_of(rb : State*, obj : RbValue, c : RClass*) : RbBool
     fun get_class_of_obj(rb : State*, obj : RbValue) : RClass*
 

@@ -53,3 +53,9 @@ extern size_t array_length(mrb_value array) {
     return ARY_LEN(mrb_ary_ptr(array));
 
 }
+
+extern mrb_value get_mrb_obj_value(void* p) {
+
+    return mrb_obj_value(p);
+
+}

@@ -183,10 +183,15 @@ module TestModule
     def method_only_in_ruby(str, int)
       "#{str} #{int}"
     end
+
+    def self.class_method_in_ruby(str, int)
+      "Class method with args #{str} and #{int}"
+    end
   end
 end
 
 a.call_test
+a.class_call_test
 
 # Try to explain in one sentence what that codeline does without losing your brain to the outer gods
 puts "Do I have an identity crisis? #{a.why_would_you_do_this?('am_i_in_ruby?') ? 'Yes' : 'No'}."

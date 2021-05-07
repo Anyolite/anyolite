@@ -174,8 +174,8 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 * [X] Classes will only be wrapped twice with `overwrite: true` option
 * [X] Objects may check whether they are created in mruby
 * [X] Ability to call mruby methods for mruby objects from Crystal by their name
-* [ ] Ability to call mruby class and module methods from Crystal
-* [ ] Macros to get the Ruby equivalents of modules and classes
+* [X] Ability to call mruby class and module methods from Crystal
+* [X] Macros to get the Ruby equivalents of modules and classes
 * [ ] Checks for Ruby method availability from within Crystal
 * [X] Caching of RbValues in the reference table to avoid duplicate objects
 * [X] Storing of pure Ruby objects in GC-safe containers

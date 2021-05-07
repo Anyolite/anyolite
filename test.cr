@@ -309,6 +309,10 @@ module SomeModule
       puts result
     end
 
+    def class_call_test
+      puts Anyolite.call_rb_method_of_class(self.class, :class_method_in_ruby, ["World", 4], cast_to: String)
+    end
+
     @[Anyolite::WrapWithoutKeywords]
     def why_would_you_do_this?(name : String)
       result = Anyolite.call_rb_method(name, nil, cast_to: String | Int32 | Float32 | Bool | Nil)
