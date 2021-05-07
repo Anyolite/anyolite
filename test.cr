@@ -326,6 +326,16 @@ module SomeModule
       Anyolite.referenced_in_ruby?(self)
     end
 
+    @[Anyolite::WrapWithoutKeywords]
+    def response_test(name : String)
+      Anyolite.does_obj_respond_to(self, name)
+    end
+
+    @[Anyolite::WrapWithoutKeywords]
+    def class_response_test(name : String)
+      Anyolite.does_class_respond_to(self.class, name)
+    end
+
     def call_test
       result = Anyolite.call_rb_method(:method_only_in_ruby, ["Hello", 3], cast_to: String)
       puts result

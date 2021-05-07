@@ -133,6 +133,34 @@ module Anyolite
     end
   end
 
+  # Checks whether the Ruby function *name* (`String` or `Symbol`) is defined
+  # for the Crystal object *value*.
+  macro does_obj_respond_to(value, name)
+    if !{{name}}.is_a?(Symbol) && !{{name}}.is_a?(String)
+      raise "Given name {{name}} is neither a String nor a Symbol."
+    end
+
+    %rb = Anyolite::RbRefTable.get_current_interpreter
+    %obj = {{value}}.is_a?(Anyolite::RbCore::RbValue) ? {{value}} : Anyolite::RbCast.return_value(%rb.to_unsafe, {{value}})
+    %name = Anyolite::RbCore.convert_to_rb_sym(%rb, {{name}}.to_s)
+
+    Anyolite::RbCore.rb_respond_to(%rb, %obj, %name) == 0 ? false : true
+  end
+
+  # Checks whether the Ruby function *name* (`String` or `Symbol`) is defined
+  # for the Crystal `Class` or `Module` *crystal_class*.
+  macro does_class_respond_to(crystal_class, name)
+    if !{{name}}.is_a?(Symbol) && !{{name}}.is_a?(String)
+      raise "Given name {{name}} is neither a String nor a Symbol."
+    end
+
+    %rb = Anyolite::RbRefTable.get_current_interpreter
+    %rb_class = Anyolite.get_rb_class_obj_of({{crystal_class}})
+    %name = Anyolite::RbCore.convert_to_rb_sym(%rb, {{name}}.to_s)
+
+    Anyolite::RbCore.rb_respond_to(%rb, %rb_class, %name) == 0 ? false : true
+  end
+
   # TODO: Is it possible to add block args to the two methods below?
   
   # Calls the Ruby method with `String` or `Symbol` *name* for the Crystal object *value* and the
@@ -183,6 +211,18 @@ module Anyolite
     Anyolite.call_rb_method_of_object(self, {{name}}, {{args}}, cast_to: {{cast_to}}, context: {{context}})
   end
 
+  # Calls the Ruby method with `String` or `Symbol` *name* for `self.class` and the
+  # arguments *args* as an `Array` of castable Crystal values (`nil` for none).
+  # 
+  # If *cast_to* is set to a `Class` or similar, it will automatically cast
+  # the result to a Crystal value of that class, otherwise, it will return
+  # a `RbRef` value containing the result.
+  #
+  # If needed, *context* can be set to a `Path` in order to specify *cast_to*.
+  macro call_rb_class_method(name, args = nil, cast_to = nil, context = nil)
+    Anyolite.call_rb_method_of_class(self.class, {{name}}, {{args}}, cast_to: {{cast_to}}, context: {{context}})
+  end
+
   # Calls the Ruby method with `String` or `Symbol` *name* 
   # for the Crystal `Class` or `Module` *crystal_class* and the
   # arguments *args* as an `Array` of castable Crystal values (`nil` for none).
@@ -193,7 +233,7 @@ module Anyolite
   #
   # If needed, *context* can be set to a `Path` in order to specify *cast_to*.
   macro call_rb_method_of_class(crystal_class, name, args = nil, cast_to = nil, context = nil)
-    %rb_class = Anyolite.get_rb_class_obj_of(self.class)
+    %rb_class = Anyolite.get_rb_class_obj_of({{crystal_class}})
     Anyolite.call_rb_method_of_object(%rb_class, {{name}}, {{args}}, cast_to: {{cast_to}}, context: {{context}})
   end
 

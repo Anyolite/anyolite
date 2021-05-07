@@ -169,31 +169,31 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 
 #### Features
 
-* [X] Superclass hierarchies will be transferred to Ruby
-* [X] Wrapping will skip classes if their superclass was not yet wrapped
-* [X] `Anyolite.wrap` will run multiple tries to ensure superclasses being wrapped first
-* [X] Classes will only be wrapped twice with `overwrite: true` option
-* [X] Objects may check whether they are created in mruby
-* [X] Ability to call mruby methods for mruby objects from Crystal by their name
-* [X] Ability to call mruby class and module methods from Crystal
-* [X] Macros to get the Ruby equivalents of modules and classes
-* [ ] Checks for Ruby method availability from within Crystal
-* [X] Caching of RbValues in the reference table to avoid duplicate objects
-* [X] Storing of pure Ruby objects in GC-safe containers
-* [X] Annotations to enable obtaining Ruby block arguments
-* [X] A method to call contained Ruby procs from their containers in Crystal
+* Superclass hierarchies will be transferred to Ruby
+* Wrapping will skip classes if their superclass was not yet wrapped
+* `Anyolite.wrap` will run multiple tries to ensure superclasses being wrapped first
+* Classes will only be wrapped twice with `overwrite: true` option
+* Objects may check whether they are created in mruby
+* Ability to call mruby methods for mruby objects from Crystal by their name
+* Ability to call mruby class and module methods from Crystal
+* Macros to get the Ruby equivalents of modules and classes
+* Checks for Ruby method availability from within Crystal
+* Caching of RbValues in the reference table to avoid duplicate objects
+* Storing of pure Ruby objects in GC-safe containers
+* Annotations to enable obtaining Ruby block arguments
+* A method to call contained Ruby procs from their containers in Crystal
 
 #### Breaking changes
 
-* [X] Reference table now has a reference to the interpreter
-* [X] Interpreter and reference table operate together now
-* [X] Reference table system was reworked completely
+* Reference table now has a reference to the interpreter
+* Interpreter and reference table operate together now
+* Reference table system was reworked completely
 
 #### Usability
 
-* [X] Updated documentation to new features from 0.10.0 and 0.11.0
-* [X] If nil is expected, cast everything to it without exceptions
-* [X] Simplified internal object casting
+* Updated documentation to new features from 0.10.0 and 0.11.0
+* If nil is expected, cast everything to it without exceptions
+* Simplified internal object casting
 
 ### Version 0.12.0
 

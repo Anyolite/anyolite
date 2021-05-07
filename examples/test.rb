@@ -205,6 +205,10 @@ end
 a.call_test
 a.class_call_test
 
+puts "Does a answer to method_only_in_ruby ? #{a.response_test('method_only_in_ruby')}"
+puts "Does a answer to method_not_in_ruby ? #{a.response_test('method_not_in_ruby')}"
+puts "Does a.class answer to class_method_in_ruby ? #{a.class_response_test('class_method_in_ruby')}"
+
 # Try to explain in one sentence what that codeline does without losing your brain to the outer gods
 puts "Do I have an identity crisis? #{a.why_would_you_do_this?('am_i_in_ruby?') ? 'Yes' : 'No'}."
 

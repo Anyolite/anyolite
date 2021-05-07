@@ -167,6 +167,8 @@ module Anyolite
     fun rb_funcall_argv = mrb_funcall_argv(rb : State*, value : RbValue, name : RbSymbol, argc : RbInt, argv : RbValue*) : RbValue
     fun rb_funcall_argv_with_block = mrb_funcall_argv_with_block(rb : State*, value : RbValue, name : RbSymbol, argc : RbInt, argv : RbValue*, block : RbValue) : RbValue
 
+    fun rb_respond_to = mrb_respond_to(rb : State*, obj : RbValue, name : RbSymbol) : RbBool
+
     fun load_script_from_file(rb : State*, filename : LibC::Char*) : RbValue
     fun execute_script_line(rb : State*, str : LibC::Char*) : RbValue
   end
