@@ -13,7 +13,7 @@
 <script type="text/javascript" src="../js/doc.js"></script>
 
   <meta name="repository-name" content="anyolite">
-  <title>Anyolite::StructWrapper(T) - anyolite 0.11.0</title>
+  <title>Anyolite::RbArgCache - anyolite 0.11.0</title>
   <script type="text/javascript">
     CrystalDocs.base_path = "../";
   </script>
@@ -101,7 +101,7 @@
       
     </li>
   
-  <li class=" " data-id="anyolite/Anyolite/RbArgCache" data-name="anyolite::rbargcache">
+  <li class=" current" data-id="anyolite/Anyolite/RbArgCache" data-name="anyolite::rbargcache">
       <a href="../Anyolite/RbArgCache.html">RbArgCache</a>
       
     </li>
@@ -226,7 +226,7 @@
       
     </li>
   
-  <li class=" current" data-id="anyolite/Anyolite/StructWrapper" data-name="anyolite::structwrapper(t)">
+  <li class=" " data-id="anyolite/Anyolite/StructWrapper" data-name="anyolite::structwrapper(t)">
       <a href="../Anyolite/StructWrapper.html">StructWrapper</a>
       
     </li>
@@ -265,27 +265,13 @@
 <div class="main-content">
 <h1 class="type-name">
 
-  <span class="kind">class</span> Anyolite::StructWrapper(T)
+  <span class="kind">module</span> Anyolite::RbArgCache
 
 </h1>
 
 
-  <ul class="superclass-hierarchy"><li class="superclass"><a href="../Anyolite/StructWrapper.html">Anyolite::StructWrapper(T)</a></li><li class="superclass">Reference</li><li class="superclass">Object</li></ul>
 
 
-
-
-  <h2>
-    <a id="overview" class="anchor" href="#overview">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>
-    Overview
-  </h2>
-
-  <p>Internal class to hide the <code>Struct</code> <em>T</em> in a special class
-to obtain all class-related properties.</p>
 
 
 
@@ -310,8 +296,8 @@ to obtain all class-related properties.</p>
   </h2>
   
     
-      <a href="https://github.com/Anyolite/anyolite/blob/v0.11.0/src/Main.cr#L31" target="_blank">
-        Main.cr
+      <a href="https://github.com/Anyolite/anyolite/blob/v0.11.0/src/RbArgCache.cr#L2" target="_blank">
+        RbArgCache.cr
       </a>
     
     <br/>
@@ -321,48 +307,36 @@ to obtain all class-related properties.</p>
 
 
 
+
+
   <h2>
-    <a id="constructors" class="anchor" href="#constructors">
+    <a id="class-method-summary" class="anchor" href="#class-method-summary">
   <svg class="octicon-link" aria-hidden="true">
     <use href="#octicon-link"/>
   </svg>
 </a>
-    Constructors
+    Class Method Summary
   </h2>
   <ul class="list-summary">
     
       <li class="entry-summary">
-        <a href="#new(value)-class-method" class="signature"><strong>.new</strong>(value)</a>
+        <a href="#get_block_cache-class-method" class="signature"><strong>.get_block_cache</strong></a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#reset_block_cache-class-method" class="signature"><strong>.reset_block_cache</strong></a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#set_block_cache(value)-class-method" class="signature"><strong>.set_block_cache</strong>(value)</a>
         
       </li>
     
   </ul>
 
 
-
-
-
-  <h2>
-    <a id="instance-method-summary" class="anchor" href="#instance-method-summary">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>
-    Instance Method Summary
-  </h2>
-  <ul class="list-summary">
-    
-      <li class="entry-summary">
-        <a href="#content:T-instance-method" class="signature"><strong>#content</strong> : T</a>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#content=(value)-instance-method" class="signature"><strong>#content=</strong>(value)</a>
-        
-      </li>
-    
-  </ul>
 
 
 
@@ -370,100 +344,70 @@ to obtain all class-related properties.</p>
 
 <div class="methods-inherited">
   
-    
-
-
-    
-
-
-    
-
-
-  
-    
-
-
-    
-
-
-    
-
-
-  
 </div>
 
 
+
+
   <h2>
-    <a id="constructor-detail" class="anchor" href="#constructor-detail">
+    <a id="class-method-detail" class="anchor" href="#class-method-detail">
   <svg class="octicon-link" aria-hidden="true">
     <use href="#octicon-link"/>
   </svg>
 </a>
-    Constructor Detail
+    Class Method Detail
   </h2>
   
-    <div class="entry-detail" id="new(value)-class-method">
+    <div class="entry-detail" id="get_block_cache-class-method">
       <div class="signature">
         
-        def self.<strong>new</strong>(value)
+        def self.<strong>get_block_cache</strong>
 
-        <a class="method-permalink" href="#new(value)-class-method">#</a>
+        <a class="method-permalink" href="#get_block_cache-class-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/Anyolite/anyolite/blob/v0.11.0/src/Main.cr#L34" target="_blank">View source</a>]
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.11.0/src/RbArgCache.cr#L5" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="reset_block_cache-class-method">
+      <div class="signature">
+        
+        def self.<strong>reset_block_cache</strong>
+
+        <a class="method-permalink" href="#reset_block_cache-class-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.11.0/src/RbArgCache.cr#L17" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="set_block_cache(value)-class-method">
+      <div class="signature">
+        
+        def self.<strong>set_block_cache</strong>(value)
+
+        <a class="method-permalink" href="#set_block_cache(value)-class-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.11.0/src/RbArgCache.cr#L13" target="_blank">View source</a>]
         
       </div>
     </div>
   
 
 
-
-
-
-  <h2>
-    <a id="instance-method-detail" class="anchor" href="#instance-method-detail">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>
-    Instance Method Detail
-  </h2>
-  
-    <div class="entry-detail" id="content:T-instance-method">
-      <div class="signature">
-        
-        def <strong>content</strong> : T
-
-        <a class="method-permalink" href="#content:T-instance-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/Anyolite/anyolite/blob/v0.11.0/src/Main.cr#L38" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="content=(value)-instance-method">
-      <div class="signature">
-        
-        def <strong>content=</strong>(value)
-
-        <a class="method-permalink" href="#content=(value)-instance-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/Anyolite/anyolite/blob/v0.11.0/src/Main.cr#L47" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
 
 
 

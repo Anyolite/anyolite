@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="generator" content="Crystal Docs 1.0.0">
-<meta name="crystal_docs.project_version" content="0.10.0">
+<meta name="crystal_docs.project_version" content="0.11.0">
 <meta name="crystal_docs.project_name" content="anyolite">
 
 
@@ -13,7 +13,7 @@
 <script type="text/javascript" src="../js/doc.js"></script>
 
   <meta name="repository-name" content="anyolite">
-  <title>Anyolite::RbRefTable - anyolite 0.10.0</title>
+  <title>Anyolite::RbRefTable - anyolite 0.11.0</title>
   <script type="text/javascript">
     CrystalDocs.base_path = "../";
   </script>
@@ -39,7 +39,7 @@
       </h1>
 
       <span class="project-version">
-        0.10.0
+        0.11.0
       </span>
     </div>
   </div>
@@ -101,6 +101,11 @@
       
     </li>
   
+  <li class=" " data-id="anyolite/Anyolite/RbArgCache" data-name="anyolite::rbargcache">
+      <a href="../Anyolite/RbArgCache.html">RbArgCache</a>
+      
+    </li>
+  
   <li class=" " data-id="anyolite/Anyolite/RbCast" data-name="anyolite::rbcast">
       <a href="../Anyolite/RbCast.html">RbCast</a>
       
@@ -123,6 +128,11 @@
   
   <li class=" " data-id="anyolite/Anyolite/RbModule" data-name="anyolite::rbmodule">
       <a href="../Anyolite/RbModule.html">RbModule</a>
+      
+    </li>
+  
+  <li class=" " data-id="anyolite/Anyolite/RbRef" data-name="anyolite::rbref">
+      <a href="../Anyolite/RbRef.html">RbRef</a>
       
     </li>
   
@@ -201,6 +211,21 @@
       
     </li>
   
+  <li class=" " data-id="anyolite/Anyolite/StoreBlockArg" data-name="anyolite::storeblockarg">
+      <a href="../Anyolite/StoreBlockArg.html">StoreBlockArg</a>
+      
+    </li>
+  
+  <li class=" " data-id="anyolite/Anyolite/StoreBlockArgClassMethod" data-name="anyolite::storeblockargclassmethod">
+      <a href="../Anyolite/StoreBlockArgClassMethod.html">StoreBlockArgClassMethod</a>
+      
+    </li>
+  
+  <li class=" " data-id="anyolite/Anyolite/StoreBlockArgInstanceMethod" data-name="anyolite::storeblockarginstancemethod">
+      <a href="../Anyolite/StoreBlockArgInstanceMethod.html">StoreBlockArgInstanceMethod</a>
+      
+    </li>
+  
   <li class=" " data-id="anyolite/Anyolite/StructWrapper" data-name="anyolite::structwrapper(t)">
       <a href="../Anyolite/StructWrapper.html">StructWrapper</a>
       
@@ -259,10 +284,11 @@
 
   <p>This is a very simple approach to generate artificial references to the wrapped objects.
 Therefore, the GC won't delete the wrapped objects until necessary.
-Note that this is currently one-directional, so mruby might still delete Crystal objects generated from Crystal itself.
 Furthermore, this is only possible as a module due to C closure limitations.</p>
 
 <p><span class="flag orange">TODO</span>  Add compilation option for ignoring entry checks</p>
+
+<p><span class="flag orange">TODO</span>  Put the hash value union into a struct</p>
 
 
 
@@ -287,7 +313,7 @@ Furthermore, this is only possible as a module due to C closure limitations.</p>
   </h2>
   
     
-      <a href="https://github.com/Anyolite/anyolite/blob/v0.10.0/src/RbRefTable.cr#L8" target="_blank">
+      <a href="https://github.com/Anyolite/anyolite/blob/v0.11.0/src/RbRefTable.cr#L8" target="_blank">
         RbRefTable.cr
       </a>
     
@@ -311,7 +337,12 @@ Furthermore, this is only possible as a module due to C closure limitations.</p>
   <ul class="list-summary">
     
       <li class="entry-summary">
-        <a href="#add(identification,value)-class-method" class="signature"><strong>.add</strong>(identification, value)</a>
+        <a href="#add(identification,value,rb_value)-class-method" class="signature"><strong>.add</strong>(identification, value, rb_value)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#check_interpreter-class-method" class="signature"><strong>.check_interpreter</strong></a>
         
       </li>
     
@@ -326,9 +357,19 @@ Furthermore, this is only possible as a module due to C closure limitations.</p>
       </li>
     
       <li class="entry-summary">
+        <a href="#get_current_interpreter:RbInterpreter-class-method" class="signature"><strong>.get_current_interpreter</strong> : RbInterpreter</a>
+        
+      </li>
+    
+      <li class="entry-summary">
         <a href="#get_object_id(value)-class-method" class="signature"><strong>.get_object_id</strong>(value)</a>
         
           <div class="summary"><p><span class="flag orange">TODO</span>  If a struct wrapper is given here, call the struct methods instead of the wrapper methods</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#get_rb_value(identification)-class-method" class="signature"><strong>.get_rb_value</strong>(identification)</a>
         
       </li>
     
@@ -354,6 +395,11 @@ Furthermore, this is only possible as a module due to C closure limitations.</p>
     
       <li class="entry-summary">
         <a href="#reset-class-method" class="signature"><strong>.reset</strong></a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#set_current_interpreter(interpreter:RbInterpreter)-class-method" class="signature"><strong>.set_current_interpreter</strong>(interpreter : RbInterpreter)</a>
         
       </li>
     
@@ -391,18 +437,34 @@ Furthermore, this is only possible as a module due to C closure limitations.</p>
     Class Method Detail
   </h2>
   
-    <div class="entry-detail" id="add(identification,value)-class-method">
+    <div class="entry-detail" id="add(identification,value,rb_value)-class-method">
       <div class="signature">
         
-        def self.<strong>add</strong>(identification, value)
+        def self.<strong>add</strong>(identification, value, rb_value)
 
-        <a class="method-permalink" href="#add(identification,value)-class-method">#</a>
+        <a class="method-permalink" href="#add(identification,value,rb_value)-class-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/Anyolite/anyolite/blob/v0.10.0/src/RbRefTable.cr#L29" target="_blank">View source</a>]
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.11.0/src/RbRefTable.cr#L60" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="check_interpreter-class-method">
+      <div class="signature">
+        
+        def self.<strong>check_interpreter</strong>
+
+        <a class="method-permalink" href="#check_interpreter-class-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.11.0/src/RbRefTable.cr#L48" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -418,7 +480,7 @@ Furthermore, this is only possible as a module due to C closure limitations.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/Anyolite/anyolite/blob/v0.10.0/src/RbRefTable.cr#L48" target="_blank">View source</a>]
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.11.0/src/RbRefTable.cr#L85" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -434,7 +496,23 @@ Furthermore, this is only possible as a module due to C closure limitations.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/Anyolite/anyolite/blob/v0.10.0/src/RbRefTable.cr#L25" target="_blank">View source</a>]
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.11.0/src/RbRefTable.cr#L27" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="get_current_interpreter:RbInterpreter-class-method">
+      <div class="signature">
+        
+        def self.<strong>get_current_interpreter</strong> : <a href="../Anyolite/RbInterpreter.html">RbInterpreter</a>
+
+        <a class="method-permalink" href="#get_current_interpreter:RbInterpreter-class-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.11.0/src/RbRefTable.cr#L52" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -455,7 +533,23 @@ Furthermore, this is only possible as a module due to C closure limitations.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/Anyolite/anyolite/blob/v0.10.0/src/RbRefTable.cr#L83" target="_blank">View source</a>]
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.11.0/src/RbRefTable.cr#L119" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="get_rb_value(identification)-class-method">
+      <div class="signature">
+        
+        def self.<strong>get_rb_value</strong>(identification)
+
+        <a class="method-permalink" href="#get_rb_value(identification)-class-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.11.0/src/RbRefTable.cr#L31" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -471,7 +565,7 @@ Furthermore, this is only possible as a module due to C closure limitations.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/Anyolite/anyolite/blob/v0.10.0/src/RbRefTable.cr#L70" target="_blank">View source</a>]
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.11.0/src/RbRefTable.cr#L104" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -487,7 +581,7 @@ Furthermore, this is only possible as a module due to C closure limitations.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/Anyolite/anyolite/blob/v0.10.0/src/RbRefTable.cr#L62" target="_blank">View source</a>]
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.11.0/src/RbRefTable.cr#L96" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -503,7 +597,7 @@ Furthermore, this is only possible as a module due to C closure limitations.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/Anyolite/anyolite/blob/v0.10.0/src/RbRefTable.cr#L66" target="_blank">View source</a>]
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.11.0/src/RbRefTable.cr#L100" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -519,7 +613,7 @@ Furthermore, this is only possible as a module due to C closure limitations.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/Anyolite/anyolite/blob/v0.10.0/src/RbRefTable.cr#L93" target="_blank">View source</a>]
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.11.0/src/RbRefTable.cr#L129" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -535,7 +629,23 @@ Furthermore, this is only possible as a module due to C closure limitations.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/Anyolite/anyolite/blob/v0.10.0/src/RbRefTable.cr#L74" target="_blank">View source</a>]
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.11.0/src/RbRefTable.cr#L108" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="set_current_interpreter(interpreter:RbInterpreter)-class-method">
+      <div class="signature">
+        
+        def self.<strong>set_current_interpreter</strong>(interpreter : <a href="../Anyolite/RbInterpreter.html">RbInterpreter</a>)
+
+        <a class="method-permalink" href="#set_current_interpreter(interpreter:RbInterpreter)-class-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.11.0/src/RbRefTable.cr#L39" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -551,7 +661,7 @@ Furthermore, this is only possible as a module due to C closure limitations.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/Anyolite/anyolite/blob/v0.10.0/src/RbRefTable.cr#L101" target="_blank">View source</a>]
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.11.0/src/RbRefTable.cr#L137" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -567,7 +677,7 @@ Furthermore, this is only possible as a module due to C closure limitations.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/Anyolite/anyolite/blob/v0.10.0/src/RbRefTable.cr#L105" target="_blank">View source</a>]
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.11.0/src/RbRefTable.cr#L141" target="_blank">View source</a>]
         
       </div>
     </div>

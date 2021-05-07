@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="generator" content="Crystal Docs 1.0.0">
-<meta name="crystal_docs.project_version" content="0.10.0">
+<meta name="crystal_docs.project_version" content="0.11.0">
 <meta name="crystal_docs.project_name" content="anyolite">
 
 
@@ -13,7 +13,7 @@
 <script type="text/javascript" src="js/doc.js"></script>
 
   <meta name="repository-name" content="anyolite">
-  <title>anyolite 0.10.0</title>
+  <title>anyolite 0.11.0</title>
   <script type="text/javascript">
   CrystalDocs.base_path = "";
   </script>
@@ -39,7 +39,7 @@
       </h1>
 
       <span class="project-version">
-        0.10.0
+        0.11.0
       </span>
     </div>
   </div>
@@ -101,6 +101,11 @@
       
     </li>
   
+  <li class=" " data-id="anyolite/Anyolite/RbArgCache" data-name="anyolite::rbargcache">
+      <a href="Anyolite/RbArgCache.html">RbArgCache</a>
+      
+    </li>
+  
   <li class=" " data-id="anyolite/Anyolite/RbCast" data-name="anyolite::rbcast">
       <a href="Anyolite/RbCast.html">RbCast</a>
       
@@ -123,6 +128,11 @@
   
   <li class=" " data-id="anyolite/Anyolite/RbModule" data-name="anyolite::rbmodule">
       <a href="Anyolite/RbModule.html">RbModule</a>
+      
+    </li>
+  
+  <li class=" " data-id="anyolite/Anyolite/RbRef" data-name="anyolite::rbref">
+      <a href="Anyolite/RbRef.html">RbRef</a>
       
     </li>
   
@@ -201,6 +211,21 @@
       
     </li>
   
+  <li class=" " data-id="anyolite/Anyolite/StoreBlockArg" data-name="anyolite::storeblockarg">
+      <a href="Anyolite/StoreBlockArg.html">StoreBlockArg</a>
+      
+    </li>
+  
+  <li class=" " data-id="anyolite/Anyolite/StoreBlockArgClassMethod" data-name="anyolite::storeblockargclassmethod">
+      <a href="Anyolite/StoreBlockArgClassMethod.html">StoreBlockArgClassMethod</a>
+      
+    </li>
+  
+  <li class=" " data-id="anyolite/Anyolite/StoreBlockArgInstanceMethod" data-name="anyolite::storeblockarginstancemethod">
+      <a href="Anyolite/StoreBlockArgInstanceMethod.html">StoreBlockArgInstanceMethod</a>
+      
+    </li>
+  
   <li class=" " data-id="anyolite/Anyolite/StructWrapper" data-name="anyolite::structwrapper(t)">
       <a href="Anyolite/StructWrapper.html">StructWrapper</a>
       
@@ -270,7 +295,7 @@ This way, mruby can be used as a scripting language to Crystal projects, with th
   </svg>
 </a>Features</h1>
 
-<ul><li>Bindings to an mruby interpreter</li><li>Wrapping of nearly arbitrary Crystal classes and methods to mruby</li><li>Easy syntax without unnecessary boilerplate code</li><li>Simple system to prevent garbage collector conflicts</li><li>Support for keyword arguments and default values</li><li>Objects, arrays, hashes, structs, enums and unions as function arguments and return values are completely valid</li><li>Block arguments can also be wrapped</li><li>Methods and constants can be excluded, modified or renamed with annotations</li></ul>
+<ul><li>Bindings to an mruby interpreter</li><li>Wrapping of nearly arbitrary Crystal classes and methods to mruby</li><li>Easy syntax without unnecessary boilerplate code</li><li>Simple system to prevent garbage collector conflicts</li><li>Support for keyword arguments and default values</li><li>Objects, arrays, hashes, structs, enums and unions as function arguments and return values are completely valid</li><li>Ruby methods can be called at runtime as long as all their possible return values are known</li><li>Ruby closures can be handled as regular variables</li><li>Methods and constants can be excluded, modified or renamed with annotations</li></ul>
 
 <h1><a id="prerequisites" class="anchor" href="#prerequisites">
   <svg class="octicon-link" aria-hidden="true">
@@ -394,7 +419,7 @@ now they are potential roadblocks.</p>
 tools from Anyolite it should technically be possible to circumvent them. If one
 of these does definitely not work, but you need them to, please feel free to open an issue.</p>
 
-<ul><li>Pointers are technically supported but unsafe</li><li>Procs as arguments are not directly supported (block arguments are, however)</li><li>Symbols do not work due to their compiletime nature in Crystal</li><li>Only one function with the same name can be wrapped</li><li>Splat arguments and arbitrary keywords are not possible due to their reliance on symbols</li><li>Keywords will always be given to functions, even if optional (then with default values)</li><li>Non-keyword function arguments are always set to their default values before receiving their final values</li><li>Default arguments need to be specialized with their full class and module path in order to work</li><li>Some union and generic types need to be specialized with their full path</li><li>Private constants need to be excluded in order to prevent errors</li></ul>
+<ul><li>Pointers are technically supported but unsafe</li><li>Procs as arguments are possible, but need special handling</li><li>Symbols do not work fully due to their compiletime nature in Crystal</li><li>Only one function with the same name can be wrapped</li><li>Splat arguments and arbitrary keywords are not possible due to their reliance on symbols</li><li>Keywords will always be given to functions, even if optional (then with default values)</li><li>Non-keyword function arguments are always set to their default values before receiving their final values</li><li>Default arguments need to be specialized with their full class and module path in order to work</li><li>Some union and generic types need to be specialized with their full path</li><li>Private constants need to be excluded in order to prevent errors</li></ul>
 
 <h1><a id="why-this-name" class="anchor" href="#why-this-name">
   <svg class="octicon-link" aria-hidden="true">
@@ -420,34 +445,58 @@ of these does definitely not work, but you need them to, please feel free to ope
   </svg>
 </a>Upcoming releases</h2>
 
-<h3><a id="version-0.11.0" class="anchor" href="#version-0.11.0">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>Version 0.11.0</h3>
-
-<p>This version is planned to be the last feature release before 1.0.0.
-Currently, the way its features are going to be implemented is not yet determined,
-so it will probably take some time before it will be released.
-Some of the features might not even make the release.</p>
-
-<ul><li>[ ] Options for inherited and/or inheriting classes</li></ul>
-
 <h3><a id="version-1.0.0" class="anchor" href="#version-1.0.0">
   <svg class="octicon-link" aria-hidden="true">
     <use href="#octicon-link"/>
   </svg>
 </a>Version 1.0.0</h3>
 
-<ul><li>[ ] Windows support (currently not supported due to problems with Crystal)</li><li>[ ] Crystal specs for testing</li><li>[ ] Documentation of all relevant features and wrappers</li><li>[ ] Mac support (might be possible, not tested yet)</li><li>[ ] More configuration options for the Rakefile</li><li>[ ] Ability to choose between mruby and regular Ruby</li></ul>
+<p>This release will mark the first full release of Anyolite, mostly
+focussed on platform support, more examples and code quality.</p>
 
-<h3><a id="future-ideas-might-not-actually-be-possible-to-implement" class="anchor" href="#future-ideas-might-not-actually-be-possible-to-implement">
+<p>Other versions might still come before this, especially for
+bugfixes, but most of the features for a full release of
+Anyolite are already implemented.</p>
+
+<h4><a id="platform-support" class="anchor" href="#platform-support">
   <svg class="octicon-link" aria-hidden="true">
     <use href="#octicon-link"/>
   </svg>
-</a>Future ideas (might not actually be possible to implement)</h3>
+</a>Platform support</h4>
 
-<ul><li>[ ] Splat argument and/or arbitrary keyword passing</li><li>[ ] Method in mruby to determine owner of object</li><li>[ ] Caching of RbValues in the reference table to avoid duplicate objects</li><li>[ ] Storing of pure ruby objects (and procs?) in GC-safe containers</li><li>[ ] Controlled passing of pointers to ruby using the reference table</li><li>[ ] Option for required/optional block arguments</li><li>[ ] Convert macro body variables to fresh variables</li><li>[ ] Resolve context even in generic type union arguments</li></ul>
+<ul><li>[ ] Windows support (currently not supported due to problems with Crystal)</li><li>[ ] Mac support (might be possible, not tested yet)</li></ul>
+
+<h4><a id="documentation" class="anchor" href="#documentation">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Documentation</h4>
+
+<ul><li>[ ] Crystal specs for testing</li><li>[ ] Documentation of all relevant features and wrappers</li></ul>
+
+<h4><a id="configuration-options" class="anchor" href="#configuration-options">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Configuration options</h4>
+
+<ul><li>[ ] More configuration options for the Rakefile</li></ul>
+
+<h4><a id="code-quality" class="anchor" href="#code-quality">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Code quality</h4>
+
+<ul><li>[ ] Convert macro body variables to fresh variables wherever possible</li><li>[ ] Code cleanup (especially in the macro section)</li></ul>
+
+<h3><a id="future-feature-ideas-might-not-actually-be-possible-to-implement" class="anchor" href="#future-feature-ideas-might-not-actually-be-possible-to-implement">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Future feature ideas (might not actually be possible to implement)</h3>
+
+<ul><li>[ ] Splat argument and/or arbitrary keyword passing</li><li>[ ] Resolve context even in generic type union arguments</li><li>[ ] Ability to choose between mruby and regular Ruby</li><li>[ ] Automatic wrappers for <code>initialize_copy</code> and similar methods</li><li>[ ] Controlled passing of pointers to ruby using the reference table</li></ul>
 </div>
 </body>
 </html>

@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="generator" content="Crystal Docs 1.0.0">
-<meta name="crystal_docs.project_version" content="0.10.0">
+<meta name="crystal_docs.project_version" content="0.11.0">
 <meta name="crystal_docs.project_name" content="anyolite">
 
 
@@ -13,7 +13,7 @@
 <script type="text/javascript" src="../js/doc.js"></script>
 
   <meta name="repository-name" content="anyolite">
-  <title>Anyolite::RbClass - anyolite 0.10.0</title>
+  <title>Anyolite::RbClass - anyolite 0.11.0</title>
   <script type="text/javascript">
     CrystalDocs.base_path = "../";
   </script>
@@ -39,7 +39,7 @@
       </h1>
 
       <span class="project-version">
-        0.10.0
+        0.11.0
       </span>
     </div>
   </div>
@@ -101,6 +101,11 @@
       
     </li>
   
+  <li class=" " data-id="anyolite/Anyolite/RbArgCache" data-name="anyolite::rbargcache">
+      <a href="../Anyolite/RbArgCache.html">RbArgCache</a>
+      
+    </li>
+  
   <li class=" " data-id="anyolite/Anyolite/RbCast" data-name="anyolite::rbcast">
       <a href="../Anyolite/RbCast.html">RbCast</a>
       
@@ -123,6 +128,11 @@
   
   <li class=" " data-id="anyolite/Anyolite/RbModule" data-name="anyolite::rbmodule">
       <a href="../Anyolite/RbModule.html">RbModule</a>
+      
+    </li>
+  
+  <li class=" " data-id="anyolite/Anyolite/RbRef" data-name="anyolite::rbref">
+      <a href="../Anyolite/RbRef.html">RbRef</a>
       
     </li>
   
@@ -198,6 +208,21 @@
   
   <li class=" " data-id="anyolite/Anyolite/SpecifyGenericTypes" data-name="anyolite::specifygenerictypes">
       <a href="../Anyolite/SpecifyGenericTypes.html">SpecifyGenericTypes</a>
+      
+    </li>
+  
+  <li class=" " data-id="anyolite/Anyolite/StoreBlockArg" data-name="anyolite::storeblockarg">
+      <a href="../Anyolite/StoreBlockArg.html">StoreBlockArg</a>
+      
+    </li>
+  
+  <li class=" " data-id="anyolite/Anyolite/StoreBlockArgClassMethod" data-name="anyolite::storeblockargclassmethod">
+      <a href="../Anyolite/StoreBlockArgClassMethod.html">StoreBlockArgClassMethod</a>
+      
+    </li>
+  
+  <li class=" " data-id="anyolite/Anyolite/StoreBlockArgInstanceMethod" data-name="anyolite::storeblockarginstancemethod">
+      <a href="../Anyolite/StoreBlockArgInstanceMethod.html">StoreBlockArgInstanceMethod</a>
       
     </li>
   
@@ -284,7 +309,7 @@
   </h2>
   
     
-      <a href="https://github.com/Anyolite/anyolite/blob/v0.10.0/src/RbClass.cr#L3" target="_blank">
+      <a href="https://github.com/Anyolite/anyolite/blob/v0.11.0/src/RbClass.cr#L3" target="_blank">
         RbClass.cr
       </a>
     
@@ -306,7 +331,7 @@
   <ul class="list-summary">
     
       <li class="entry-summary">
-        <a href="#new(rb:RbInterpreter,name:String,superclass:RbClass?=nil,under:RbModule%7CRbClass%7CNil=nil)-class-method" class="signature"><strong>.new</strong>(rb : RbInterpreter, name : String, superclass : RbClass? = <span class="n">nil</span>, under : RbModule | RbClass | Nil = <span class="n">nil</span>)</a>
+        <a href="#new(rb:RbInterpreter,name:String,superclass:RbModule%7CRbClass%7CNil=nil,under:RbModule%7CRbClass%7CNil=nil)-class-method" class="signature"><strong>.new</strong>(rb : RbInterpreter, name : String, superclass : RbModule | RbClass | Nil = <span class="n">nil</span>, under : RbModule | RbClass | Nil = <span class="n">nil</span>)</a>
         
       </li>
     
@@ -371,18 +396,18 @@
     Constructor Detail
   </h2>
   
-    <div class="entry-detail" id="new(rb:RbInterpreter,name:String,superclass:RbClass?=nil,under:RbModule|RbClass|Nil=nil)-class-method">
+    <div class="entry-detail" id="new(rb:RbInterpreter,name:String,superclass:RbModule|RbClass|Nil=nil,under:RbModule|RbClass|Nil=nil)-class-method">
       <div class="signature">
         
-        def self.<strong>new</strong>(rb : <a href="../Anyolite/RbInterpreter.html">RbInterpreter</a>, name : String, superclass : <a href="../Anyolite/RbClass.html">RbClass</a>? = <span class="n">nil</span>, under : <a href="../Anyolite/RbModule.html">RbModule</a> | <a href="../Anyolite/RbClass.html">RbClass</a> | Nil = <span class="n">nil</span>)
+        def self.<strong>new</strong>(rb : <a href="../Anyolite/RbInterpreter.html">RbInterpreter</a>, name : String, superclass : <a href="../Anyolite/RbModule.html">RbModule</a> | <a href="../Anyolite/RbClass.html">RbClass</a> | Nil = <span class="n">nil</span>, under : <a href="../Anyolite/RbModule.html">RbModule</a> | <a href="../Anyolite/RbClass.html">RbClass</a> | Nil = <span class="n">nil</span>)
 
-        <a class="method-permalink" href="#new(rb:RbInterpreter,name:String,superclass:RbClass?=nil,under:RbModule%7CRbClass%7CNil=nil)-class-method">#</a>
+        <a class="method-permalink" href="#new(rb:RbInterpreter,name:String,superclass:RbModule%7CRbClass%7CNil=nil,under:RbModule%7CRbClass%7CNil=nil)-class-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/Anyolite/anyolite/blob/v0.10.0/src/RbClass.cr#L6" target="_blank">View source</a>]
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.11.0/src/RbClass.cr#L6" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -412,7 +437,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/Anyolite/anyolite/blob/v0.10.0/src/RbClass.cr#L15" target="_blank">View source</a>]
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.11.0/src/RbClass.cr#L20" target="_blank">View source</a>]
         
       </div>
     </div>

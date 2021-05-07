@@ -13,7 +13,7 @@
 <script type="text/javascript" src="../js/doc.js"></script>
 
   <meta name="repository-name" content="anyolite">
-  <title>Anyolite::StructWrapper(T) - anyolite 0.11.0</title>
+  <title>Anyolite::RbRef - anyolite 0.11.0</title>
   <script type="text/javascript">
     CrystalDocs.base_path = "../";
   </script>
@@ -131,7 +131,7 @@
       
     </li>
   
-  <li class=" " data-id="anyolite/Anyolite/RbRef" data-name="anyolite::rbref">
+  <li class=" current" data-id="anyolite/Anyolite/RbRef" data-name="anyolite::rbref">
       <a href="../Anyolite/RbRef.html">RbRef</a>
       
     </li>
@@ -226,7 +226,7 @@
       
     </li>
   
-  <li class=" current" data-id="anyolite/Anyolite/StructWrapper" data-name="anyolite::structwrapper(t)">
+  <li class=" " data-id="anyolite/Anyolite/StructWrapper" data-name="anyolite::structwrapper(t)">
       <a href="../Anyolite/StructWrapper.html">StructWrapper</a>
       
     </li>
@@ -265,12 +265,12 @@
 <div class="main-content">
 <h1 class="type-name">
 
-  <span class="kind">class</span> Anyolite::StructWrapper(T)
+  <span class="kind">class</span> Anyolite::RbRef
 
 </h1>
 
 
-  <ul class="superclass-hierarchy"><li class="superclass"><a href="../Anyolite/StructWrapper.html">Anyolite::StructWrapper(T)</a></li><li class="superclass">Reference</li><li class="superclass">Object</li></ul>
+  <ul class="superclass-hierarchy"><li class="superclass"><a href="../Anyolite/RbRef.html">Anyolite::RbRef</a></li><li class="superclass">Reference</li><li class="superclass">Object</li></ul>
 
 
 
@@ -284,8 +284,7 @@
     Overview
   </h2>
 
-  <p>Internal class to hide the <code>Struct</code> <em>T</em> in a special class
-to obtain all class-related properties.</p>
+  <p>Class to contain Ruby values in a GC-protected container</p>
 
 
 
@@ -310,7 +309,7 @@ to obtain all class-related properties.</p>
   </h2>
   
     
-      <a href="https://github.com/Anyolite/anyolite/blob/v0.11.0/src/Main.cr#L31" target="_blank">
+      <a href="https://github.com/Anyolite/anyolite/blob/v0.11.0/src/Main.cr#L53" target="_blank">
         Main.cr
       </a>
     
@@ -332,7 +331,9 @@ to obtain all class-related properties.</p>
   <ul class="list-summary">
     
       <li class="entry-summary">
-        <a href="#new(value)-class-method" class="signature"><strong>.new</strong>(value)</a>
+        <a href="#new(value:RbCore::RbValue)-class-method" class="signature"><strong>.new</strong>(value : RbCore::RbValue)</a>
+        
+          <div class="summary"><p>Create a new container with <em>value</em> as content</p></div>
         
       </li>
     
@@ -353,12 +354,9 @@ to obtain all class-related properties.</p>
   <ul class="list-summary">
     
       <li class="entry-summary">
-        <a href="#content:T-instance-method" class="signature"><strong>#content</strong> : T</a>
+        <a href="#value:Anyolite::RbCore::RbValue-instance-method" class="signature"><strong>#value</strong> : Anyolite::RbCore::RbValue</a>
         
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#content=(value)-instance-method" class="signature"><strong>#content=</strong>(value)</a>
+          <div class="summary"><p>Return the contained value </p></div>
         
       </li>
     
@@ -402,18 +400,23 @@ to obtain all class-related properties.</p>
     Constructor Detail
   </h2>
   
-    <div class="entry-detail" id="new(value)-class-method">
+    <div class="entry-detail" id="new(value:RbCore::RbValue)-class-method">
       <div class="signature">
         
-        def self.<strong>new</strong>(value)
+        def self.<strong>new</strong>(value : RbCore::RbValue)
 
-        <a class="method-permalink" href="#new(value)-class-method">#</a>
+        <a class="method-permalink" href="#new(value:RbCore::RbValue)-class-method">#</a>
       </div>
+      
+        <div class="doc">
+          
+          <p>Create a new container with <em>value</em> as content</p>
+        </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/Anyolite/anyolite/blob/v0.11.0/src/Main.cr#L34" target="_blank">View source</a>]
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.11.0/src/Main.cr#L57" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -432,34 +435,23 @@ to obtain all class-related properties.</p>
     Instance Method Detail
   </h2>
   
-    <div class="entry-detail" id="content:T-instance-method">
+    <div class="entry-detail" id="value:Anyolite::RbCore::RbValue-instance-method">
       <div class="signature">
         
-        def <strong>content</strong> : T
+        def <strong>value</strong> : Anyolite::RbCore::RbValue
 
-        <a class="method-permalink" href="#content:T-instance-method">#</a>
+        <a class="method-permalink" href="#value:Anyolite::RbCore::RbValue-instance-method">#</a>
       </div>
+      
+        <div class="doc">
+          
+          <p>Return the contained value </p>
+        </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/Anyolite/anyolite/blob/v0.11.0/src/Main.cr#L38" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="content=(value)-instance-method">
-      <div class="signature">
-        
-        def <strong>content=</strong>(value)
-
-        <a class="method-permalink" href="#content=(value)-instance-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/Anyolite/anyolite/blob/v0.11.0/src/Main.cr#L47" target="_blank">View source</a>]
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.11.0/src/Main.cr#L63" target="_blank">View source</a>]
         
       </div>
     </div>
