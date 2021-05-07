@@ -175,8 +175,12 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 * [X] Objects may check whether they are created in mruby
 * [X] Ability to call mruby methods for mruby objects from Crystal by their name
 * [ ] Ability to call mruby class and module methods from Crystal
+* [ ] Macros to get the Ruby equivalents of modules and classes
+* [ ] Checks for Ruby method availability from within Crystal
 * [X] Caching of RbValues in the reference table to avoid duplicate objects
-* [X] Storing of pure ruby objects (and procs?) in GC-safe containers
+* [X] Storing of pure Ruby objects in GC-safe containers
+* [ ] Automatic wrappers for `initialize_copy`
+* [ ] Methods to call contained Ruby procs from their containers in Crystal
 
 #### Breaking changes
 
