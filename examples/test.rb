@@ -1,4 +1,14 @@
 a = TestModule::Test.new(x: 5)
+
+puts "Before block storing: #{a.x}"
+new_carrier = nil
+
+a.block_store_test do |value|
+  new_carrier = value
+  value.x += 1000
+  value.x * 2
+end
+
 b = TestModule::Test.new(x: 32)
 
 s = TestModule::Bla.new
@@ -197,15 +207,6 @@ a.class_call_test
 
 # Try to explain in one sentence what that codeline does without losing your brain to the outer gods
 puts "Do I have an identity crisis? #{a.why_would_you_do_this?('am_i_in_ruby?') ? 'Yes' : 'No'}."
-
-puts "Before block storing: #{a.x}"
-new_carrier = nil
-
-a.block_store_test do |value|
-  new_carrier = value
-  value.x += 1000
-  value.x * 2
-end
 
 puts "After block storing: #{a.x}"
 puts "Block store call result: #{a.block_store_call}"
