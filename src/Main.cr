@@ -52,15 +52,18 @@ module Anyolite
   class RbRef
     @value : RbCore::RbValue
 
+    # Create a new container with *value* as content
     def initialize(value : RbCore::RbValue)
       @value = value
       RbCore.rb_gc_register(RbRefTable.get_current_interpreter, value)
     end
 
+    # Return the contained value 
     def value
       @value
     end
 
+    # :nodoc:
     def finalize
       RbCore.rb_gc_unregister(RbRefTable.get_current_interpreter, value)
     end
