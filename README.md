@@ -165,58 +165,38 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 
 ## Upcoming releases
 
-### Version 0.11.0
-
-#### Features
-
-* Superclass hierarchies will be transferred to Ruby
-* Wrapping will skip classes if their superclass was not yet wrapped
-* `Anyolite.wrap` will run multiple tries to ensure superclasses being wrapped first
-* Classes will only be wrapped twice with `overwrite: true` option
-* Objects may check whether they are created in mruby
-* Ability to call mruby methods for mruby objects from Crystal by their name
-* Ability to call mruby class and module methods from Crystal
-* Macros to get the Ruby equivalents of modules and classes
-* Checks for Ruby method availability from within Crystal
-* Caching of RbValues in the reference table to avoid duplicate objects
-* Storing of pure Ruby objects in GC-safe containers
-* Annotations to enable obtaining Ruby block arguments
-* A method to call contained Ruby procs from their containers in Crystal
-
-#### Breaking changes
-
-* Reference table now has a reference to the interpreter
-* Interpreter and reference table operate together now
-* Reference table system was reworked completely
-
-#### Usability
-
-* Updated documentation to new features from 0.10.0 and 0.11.0
-* If nil is expected, cast everything to it without exceptions
-* Simplified internal object casting
-
-### Version 0.12.0
-
-Plans for this versions are not finalized. It might not come at all or only
-in the far future, depending on the ability to implement the features. Also,
-its feature list is subject to change.
-
-#### Features
-
-* [ ] Controlled passing of pointers to ruby using the reference table
-* [ ] Automatic wrappers for `initialize_copy` and similar methods
-
 ### Version 1.0.0
 
+This release will mark the first full release of Anyolite, mostly
+focussed on platform support, more examples and code quality.
+
+Other versions might still come before this, especially for
+bugfixes, but most of the features for a full release of
+Anyolite are already implemented.
+
+#### Platform support
+
 * [ ] Windows support (currently not supported due to problems with Crystal)
+* [ ] Mac support (might be possible, not tested yet)
+
+#### Documentation
+
 * [ ] Crystal specs for testing
 * [ ] Documentation of all relevant features and wrappers
-* [ ] Mac support (might be possible, not tested yet)
-* [ ] More configuration options for the Rakefile
-* [ ] Ability to choose between mruby and regular Ruby
-* [ ] Convert macro body variables to fresh variables wherever possible
 
-### Future ideas (might not actually be possible to implement)
+#### Configuration options
+
+* [ ] More configuration options for the Rakefile
+
+#### Code quality
+
+* [ ] Convert macro body variables to fresh variables wherever possible
+* [ ] Code cleanup (especially in the macro section)
+
+### Future feature ideas (might not actually be possible to implement)
 
 * [ ] Splat argument and/or arbitrary keyword passing
 * [ ] Resolve context even in generic type union arguments
+* [ ] Ability to choose between mruby and regular Ruby
+* [ ] Automatic wrappers for `initialize_copy` and similar methods
+* [ ] Controlled passing of pointers to ruby using the reference table

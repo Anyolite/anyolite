@@ -45,6 +45,10 @@ module Anyolite
       end
     end
 
+    def self.check_interpreter
+      !!@@current_interpreter
+    end
+
     def self.get_current_interpreter : RbInterpreter
       if c = @@current_interpreter
         c

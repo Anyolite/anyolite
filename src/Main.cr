@@ -66,7 +66,7 @@ module Anyolite
 
     # :nodoc:
     def finalize
-      RbCore.rb_gc_unregister(RbRefTable.get_current_interpreter, value)
+      RbCore.rb_gc_unregister(RbRefTable.get_current_interpreter, value) if RbRefTable.check_interpreter
     end
   end
 
