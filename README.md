@@ -165,6 +165,17 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 
 ## Upcoming releases
 
+### Version 0.11.1
+
+#### Usability
+
+* [ ] `RbRef` values can now be used as argument types
+* [ ] Class inheritance can be disabled
+
+#### Bugfixes
+
+* [ ] Boolean operator methods could not be wrapped correctly
+
 ### Version 1.0.0
 
 This release will mark the first full release of Anyolite, mostly
