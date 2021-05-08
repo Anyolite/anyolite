@@ -170,12 +170,13 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 #### Usability
 
 * [ ] `RbRef` values can now be used as argument types
-* [ ] Class inheritance wrapping can be disabled
+* [X] Class inheritance wrapping can be disabled
 * [X] Operator methods take arguments using the `ForceKeywordArg` annotations
 
 #### Bugfixes
 
 * [X] Boolean operator methods with default arguments could not be wrapped correctly
+* [X] Some wrappers had undocumented options
 
 ### Version 1.0.0
 
@@ -212,3 +213,4 @@ Anyolite are already implemented.
 * [ ] Ability to choose between mruby and regular Ruby
 * [ ] Automatic wrappers for `initialize_copy` and similar methods
 * [ ] Controlled passing of pointers to ruby using the reference table
+* [ ] Class inheritance wrapping can be disabled for any class using annotations

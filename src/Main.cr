@@ -583,7 +583,12 @@ module Anyolite
   # *instance_method_exclusions* (for instance methods),
   # *class_method_exclusions* (for class methods) or 
   # *constant_exclusions* (for constants).
+  #
   # Enum classes can be wrapped by setting *use_enum_constructor*.
+  # Setting *wrap_superclass* to `false` will force the algorithm
+  # to ignore any superclass.
+  # The option *overwrite* will iterate through all functions and
+  # constants again if set to `true`.
   # If *verbose* is set, wrapping information will be displayed.
   macro wrap_class_with_methods(rb_interpreter, crystal_class, under = nil,
                                 instance_method_exclusions = [] of String | Symbol,
@@ -647,6 +652,8 @@ module Anyolite
   # `Symbol` or `String` in the `Array` 
   # *class_method_exclusions* (for class methods) or 
   # *constant_exclusions* (for constants).
+  # The option *overwrite* will iterate through all functions and
+  # constants again if set to `true`.
   # If *verbose* is set, wrapping information will be displayed.
   macro wrap_module_with_methods(rb_interpreter, crystal_module, under = nil,
                                  class_method_exclusions = [] of String | Symbol,
@@ -683,11 +690,17 @@ module Anyolite
   # `Symbol` or `String` in the `Array` 
   # *class_method_exclusions* (for class methods) or 
   # *constant_exclusions* (for constants).
+  #
+  # Setting *wrap_superclass* to `false` will force the algorithm
+  # to ignore any superclass.
+  # The option *overwrite* will iterate through all functions and
+  # constants again if set to `true`.
   # If *verbose* is set, wrapping information will be displayed. 
   macro wrap(rb_interpreter, crystal_module_or_class, under = nil,
              instance_method_exclusions = [] of String | Symbol,
              class_method_exclusions = [] of String | Symbol,
              constant_exclusions = [] of String | Symbol,
+             wrap_superclass = false,
              overwrite = false,
              verbose = false)
 
@@ -713,6 +726,7 @@ module Anyolite
           instance_method_exclusions: {{instance_method_exclusions}},
           class_method_exclusions: {{class_method_exclusions}},
           constant_exclusions: {{constant_exclusions}},
+          wrap_superclass: {{wrap_superclass}},
           overwrite: {{overwrite}},
           verbose: {{verbose}}
         )
@@ -724,6 +738,7 @@ module Anyolite
           class_method_exclusions: {{class_method_exclusions}},
           constant_exclusions: {{constant_exclusions}},
           use_enum_constructor: true,
+          wrap_superclass: {{wrap_superclass}},
           overwrite: {{overwrite}},
           verbose: {{verbose}}
         )
@@ -732,6 +747,7 @@ module Anyolite
           instance_method_exclusions: {{instance_method_exclusions}},
           class_method_exclusions: {{class_method_exclusions}},
           constant_exclusions: {{constant_exclusions}},
+          wrap_superclass: {{wrap_superclass}},
           overwrite: {{overwrite}},
           verbose: {{verbose}}
         )
