@@ -322,6 +322,10 @@ module SomeModule
       arg
     end
 
+    def bool_setter_test?(arg : Bool = true)
+      "#{arg}"
+    end
+
     def am_i_in_ruby?
       Anyolite.referenced_in_ruby?(self)
     end

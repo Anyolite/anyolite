@@ -170,11 +170,11 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 #### Usability
 
 * [ ] `RbRef` values can now be used as argument types
-* [ ] Class inheritance can be disabled
+* [ ] Class inheritance wrapping can be disabled
 
 #### Bugfixes
 
-* [ ] Boolean operator methods could not be wrapped correctly
+* [X] Boolean operator methods with default arguments could not be wrapped correctly
 
 ### Version 1.0.0
 

@@ -218,3 +218,7 @@ puts "After block call: #{a.x}"
 puts "Carrier result: #{new_carrier.x}"
 
 puts "Does this have a block? #{a.block_store_test}"
+
+puts a.bool_setter_test?
+puts a.bool_setter_test?(true)
+puts a.bool_setter_test?(false)

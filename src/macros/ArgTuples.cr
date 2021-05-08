@@ -12,6 +12,8 @@ module Anyolite
                 {% elsif arg.type.resolve <= String %}
                   # The outer gods bless my wretched soul that this does neither segfault nor leak
                   Anyolite::Macro.pointer_type({{arg}}, context: {{context}}).malloc(size: 1, value: {{arg.value}}.to_unsafe),
+                {% elsif arg.type.resolve <= Bool %}
+                  Anyolite::Macro.pointer_type({{arg}}, context: {{context}}).malloc(size: 1, value: Anyolite::Macro.type_in_ruby({{arg}}, context: {{context}}).new({{arg.value}} ? 1 : 0)),
                 {% else %}
                   Anyolite::Macro.pointer_type({{arg}}, context: {{context}}).malloc(size: 1, value: Anyolite::Macro.type_in_ruby({{arg}}, context: {{context}}).new({{arg.value}})),
                 {% end %}
