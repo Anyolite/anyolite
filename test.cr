@@ -326,6 +326,11 @@ module SomeModule
       "#{arg}"
     end
 
+    @[Anyolite::ForceKeywordArg]
+    def keyword_operator_arg?(arg : Float)
+      "#{arg + 1.0}"
+    end
+
     def am_i_in_ruby?
       Anyolite.referenced_in_ruby?(self)
     end

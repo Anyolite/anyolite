@@ -222,3 +222,5 @@ puts "Does this have a block? #{a.block_store_test}"
 puts a.bool_setter_test?
 puts a.bool_setter_test?(true)
 puts a.bool_setter_test?(false)
+
+puts a.keyword_operator_arg?(arg: 5)

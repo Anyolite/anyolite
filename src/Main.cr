@@ -563,6 +563,17 @@ module Anyolite
   # Instructs the class method given as the first argument to cache an incoming Ruby block argument if given.
   annotation StoreBlockArgClassMethod; end
 
+  # Forces the method to use keyword arguments (especially for operator methods) if given.
+  annotation ForceKeywordArg; end
+
+  # Forces the instance method given as the first argument to use
+  # keyword arguments (especially for operator methods) if given.
+  annotation ForceKeywordArgInstanceMethod; end
+
+  # Forces the class method given as the first argument to use
+  # keyword arguments (especially for operator methods) if given.
+  annotation ForceKeywordArgClassMethod; end
+
   # Wraps a whole class structure under a module into mruby.
   #
   # The `Class` *crystal_class* will be integrated into the `RbInterpreter` *rb_interpreter*,

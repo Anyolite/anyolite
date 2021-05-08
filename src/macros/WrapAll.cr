@@ -40,6 +40,9 @@ module Anyolite
         {% all_annotations_store_block_arg_im = crystal_class.resolve.annotations(Anyolite::StoreBlockArgInstanceMethod) %}
         {% annotation_store_block_arg_im = all_annotations_store_block_arg_im.find { |element| element[0].id.stringify == method.name.stringify } %}
 
+        {% all_annotations_force_keyword_arg_im = crystal_class.resolve.annotations(Anyolite::ForceKeywordArgInstanceMethod) %}
+        {% annotation_force_keyword_arg_im = all_annotations_force_keyword_arg_im.find { |element| element[0].id.stringify == method.name.stringify } %}
+
         {% if method.annotation(Anyolite::Rename) %}
           {% ruby_name = method.annotation(Anyolite::Rename)[0].id %}
         {% elsif annotation_rename_im && method.name.stringify == annotation_rename_im[0].stringify %}
@@ -87,6 +90,11 @@ module Anyolite
           {% store_block_arg = true %}
         {% end %}
 
+        {% force_keyword_arg = false %}
+        {% if method.annotation(Anyolite::ForceKeywordArg) || (annotation_force_keyword_arg_im) %}
+          {% force_keyword_arg = true %}
+        {% end %}
+
         {% puts "> Processing instance method #{crystal_class}::#{method.name} to #{ruby_name}\n--> Args: #{method.args}" if verbose %}
 
         {% if method.accepts_block? %}
@@ -113,7 +121,7 @@ module Anyolite
         {% elsif method.name[-1..-1] =~ /\W/ %}
           {% operator = ruby_name %}
 
-          Anyolite::Macro.wrap_method_index({{rb_interpreter}}, {{crystal_class}}, {{index}}, "{{ruby_name}}", operator: "{{operator}}", without_keywords: -1, context: {{context}}, return_nil: {{return_nil}}, block_arg_number: {{block_arg_number}}, block_return_type: {{block_return_type}}, store_block_arg: {{store_block_arg}})
+          Anyolite::Macro.wrap_method_index({{rb_interpreter}}, {{crystal_class}}, {{index}}, "{{ruby_name}}", operator: "{{operator}}", without_keywords: {{force_keyword_arg ? false : -1}}, context: {{context}}, return_nil: {{return_nil}}, block_arg_number: {{block_arg_number}}, block_return_type: {{block_return_type}}, store_block_arg: {{store_block_arg}})
           {% how_many_times_wrapped[ruby_name.stringify] = how_many_times_wrapped[ruby_name.stringify] ? how_many_times_wrapped[ruby_name.stringify] + 1 : 1 %}
         # Handle constructors
         {% elsif method.name == "initialize" && use_enum_constructor == false %}
@@ -181,6 +189,9 @@ module Anyolite
         {% all_annotations_store_block_arg_im = crystal_class.resolve.annotations(Anyolite::StoreBlockArgClassMethod) %}
         {% annotation_store_block_arg_im = all_annotations_store_block_arg_im.find { |element| element[0].id.stringify == method.name.stringify } %}
 
+        {% all_annotations_force_keyword_arg_im = crystal_class.resolve.annotations(Anyolite::ForceKeywordArgClassMethod) %}
+        {% annotation_force_keyword_arg_im = all_annotations_force_keyword_arg_im.find { |element| element[0].id.stringify == method.name.stringify } %}
+
         {% if method.annotation(Anyolite::Rename) %}
           {% ruby_name = method.annotation(Anyolite::Rename)[0].id %}
         {% elsif annotation_rename_im && method.name.stringify == annotation_rename_im[0].stringify %}
@@ -228,6 +239,11 @@ module Anyolite
           {% store_block_arg = true %}
         {% end %}
 
+        {% force_keyword_arg = false %}
+        {% if method.annotation(Anyolite::ForceKeywordArg) || (annotation_force_keyword_arg_im) %}
+          {% force_keyword_arg = true %}
+        {% end %}
+
         {% puts "> Processing class method #{crystal_class}::#{method.name} to #{ruby_name}\n--> Args: #{method.args}" if verbose %}
 
         {% if method.accepts_block? %}
@@ -252,7 +268,7 @@ module Anyolite
         {% elsif method.name[-1..-1] =~ /\W/ %}
           {% operator = ruby_name %}
 
-          Anyolite::Macro.wrap_method_index({{rb_interpreter}}, {{crystal_class}}, {{index}}, "{{ruby_name}}", operator: "{{operator}}", is_class_method: true, without_keywords: -1, context: {{context}}, return_nil: {{return_nil}}, block_arg_number: {{block_arg_number}}, block_return_type: {{block_return_type}}, store_block_arg: {{store_block_arg}})
+          Anyolite::Macro.wrap_method_index({{rb_interpreter}}, {{crystal_class}}, {{index}}, "{{ruby_name}}", operator: "{{operator}}", is_class_method: true, without_keywords: {{force_keyword_arg ? false : -1}}, context: {{context}}, return_nil: {{return_nil}}, block_arg_number: {{block_arg_number}}, block_return_type: {{block_return_type}}, store_block_arg: {{store_block_arg}})
           {% how_many_times_wrapped[ruby_name.stringify] = how_many_times_wrapped[ruby_name.stringify] ? how_many_times_wrapped[ruby_name.stringify] + 1 : 1 %}
         # Handle other class methods
         {% else %}
