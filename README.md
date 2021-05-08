@@ -169,7 +169,7 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 
 #### Usability
 
-* [ ] `RbRef` values can now be used as argument types
+* [X] `RbRef` values can now be used as argument type
 * [X] Class inheritance wrapping can be disabled
 * [X] Operator methods take arguments using the `ForceKeywordArg` annotations
 

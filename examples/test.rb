@@ -224,3 +224,5 @@ puts a.bool_setter_test?(true)
 puts a.bool_setter_test?(false)
 
 puts a.keyword_operator_arg?(arg: 5)
+
+puts a.ref_test(str: "Hello", ref: 1223)

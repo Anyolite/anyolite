@@ -42,6 +42,8 @@ module Anyolite
           "z"
         {% elsif arg.resolve <= Array %}
           "A"
+        {% elsif arg.resolve <= Anyolite::RbRef %}
+          "o"
         {% else %}
           "o"
         {% end %}

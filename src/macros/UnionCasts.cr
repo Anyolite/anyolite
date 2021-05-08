@@ -77,6 +77,8 @@ module Anyolite
         if Anyolite::RbCast.check_for_string({{value}}) || Anyolite::RbCast.check_for_symbol({{value}})
           final_value = Anyolite::RbCast.cast_to_string({{rb}}, {{value}})
         end
+      {% elsif type.resolve <= Anyolite::RbRef %}
+        final_value = {{type}}.new({{value}})
       {% elsif type.resolve <= Array %}
         if Anyolite::RbCast.check_for_array({{value}})
           array_size = Anyolite::RbCore.array_length({{value}})

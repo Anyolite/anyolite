@@ -43,6 +43,8 @@ module Anyolite
           ({{arg}}.size > 0 ? {{arg_type}}.new({{arg}}[0] : '\0')
         {% elsif arg_type.resolve <= String %}
           {{arg_type}}.new({{arg}})
+        {% elsif arg_type.resolve <= Anyolite::RbRef %}
+          {{arg_type}}.new({{arg}})
         {% elsif arg_type.resolve <= Array %}
           array_size = Anyolite::RbCore.array_length({{arg}})
           converted_array = {{arg_type}}.new(size: array_size) do |i|
@@ -178,6 +180,8 @@ module Anyolite
           Anyolite::RbCast.cast_to_char({{rb}}, {{arg}})
         {% elsif arg_type.resolve <= String %}
           Anyolite::RbCast.cast_to_string({{rb}}, {{arg}})
+        {% elsif arg_type.resolve <= Anyolite::RbRef %}
+          {{arg_type}}.new({{arg}})
         {% elsif arg_type.resolve <= Array %}
           # TODO: Make a macro out of this
           array_size = Anyolite::RbCore.array_length({{arg}})

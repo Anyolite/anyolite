@@ -133,6 +133,11 @@ module Anyolite
     end
   end
 
+  macro cast_to_crystal(rbref, cast_type, context = nil)
+    %rb = Anyolite::RbRefTable.get_current_interpreter
+    Anyolite::Macro.convert_from_ruby_to_crystal(%rb.to_unsafe, {{rbref}}.value, {{cast_type}}, context: {{context}})
+  end
+
   # Checks whether the Ruby function *name* (`String` or `Symbol`) is defined
   # for the Crystal object *value*.
   macro does_obj_respond_to(value, name)

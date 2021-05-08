@@ -360,6 +360,12 @@ module SomeModule
       result
     end
 
+    def ref_test(str : String, ref : Anyolite::RbRef)
+      # TODO: Why does Int32? not work here?
+      converted_arg = Anyolite.cast_to_crystal(ref, Int32 | Nil)
+      "#{str} and a reference with #{ref.value} (which is #{converted_arg}) were given."
+    end
+
     def ptr_return_test
       pointerof(@x)
     end
