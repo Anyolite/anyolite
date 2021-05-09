@@ -2,6 +2,19 @@
 
 ## Releases
 
+### Version 0.11.1
+
+#### Usability
+
+* `RbRef` values can now be used as argument type
+* Class inheritance wrapping can be disabled
+* Operator methods take arguments using the `ForceKeywordArg` annotations
+
+#### Bugfixes
+
+* Boolean operator methods with default arguments could not be wrapped correctly
+* Some wrappers had undocumented options
+
 ### Version 0.11.0
 
 #### Features
