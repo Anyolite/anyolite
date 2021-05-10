@@ -170,6 +170,8 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 #### Bugfixes
 
 * [X] Argument specialization was not possible for operator methods
+* [X] Fixed class method exclusions not being recognized
+* [ ] Maybe fix or at least warn of abstract structs
 
 ### Version 1.0.0
 

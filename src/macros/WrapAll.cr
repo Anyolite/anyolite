@@ -257,7 +257,7 @@ module Anyolite
         {% elsif method.name == "allocate" || method.name == "new" %}
           {% puts "--> Excluding #{crystal_class}::#{method.name} (Allocation method)" if verbose %}
         # Exclude methods if given as arguments
-        {% elsif exclusions.includes?(method.name.symbolize) || exclusions.includes?(method.name) %}
+        {% elsif exclusions.includes?(method.name.symbolize) || exclusions.includes?(method.name.stringify) %}
           {% puts "--> Excluding #{crystal_class}::#{method.name} (Exclusion argument)" if verbose %}
         # Exclude methods which were annotated to be excluded
         {% elsif method.annotation(Anyolite::Exclude) || (annotation_exclude_im) %}
