@@ -165,6 +165,12 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 
 ## Upcoming releases
 
+### Version 0.11.2
+
+#### Bugfixes
+
+* [X] Argument specialization was not possible for operator methods
+
 ### Version 1.0.0
 
 This release will mark the first full release of Anyolite, mostly
