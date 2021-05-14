@@ -34,7 +34,7 @@ class AnyoliteConfig
         if File.exist?(config_file) then 
             File.open(config_file, "r") do |f|
                 content = JSON.load(f)
-                OPTIONS.each {|option| read_option(content, option)}
+                OPTIONS.each_key {|option| read_option(content, option)}
             end
         else
             puts "Anyolite config file at #{config_file} not found. Default settings are used."
