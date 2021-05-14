@@ -33,7 +33,7 @@ class AnyoliteConfig
     def load(config_file)
         if File.exist?(config_file) then 
             File.open(config_file, "r") do |f|
-                content = JSON.parse(f)
+                content = JSON.load(f)
                 OPTIONS.each {|option| read_option(content, option)}
             end
         else
