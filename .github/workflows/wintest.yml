@@ -23,6 +23,6 @@ jobs:
     - name: Build shard
       run: rake build_shard
     - name: Test directories
-      run: dir
+      run: dir & cd build & dir & cd mruby & dir & cd lib & dir
     - name: Test script
       run: crystal test.cr
