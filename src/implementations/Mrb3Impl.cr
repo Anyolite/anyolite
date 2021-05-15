@@ -53,10 +53,8 @@ module Anyolite
       MRB_TT_RATIONAL
       MRB_TT_MAXDEFINE
     end
-
-    struct RbValue
-      w : LibC::ULong
-    end
+  
+    alias RbValue = LibC::ULong
 
     struct RbDataType
       struct_name : LibC::Char*
