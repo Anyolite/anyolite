@@ -20,8 +20,6 @@ module SomeModule
   @[Anyolite::SpecializeInstanceMethod(output_this_and_struct, [str : TestStruct])]
   @[Anyolite::RenameInstanceMethod(output_this_and_struct, "output_together_with")]
   @[Anyolite::ExcludeInstanceMethod(do_not_wrap_this_either)]
-  @[Anyolite::ExcludeConstant(CONSTANT_NOT_TO_WRAP)]
-  @[Anyolite::RenameConstant(CONSTANT, RUBY_CONSTANT)]
   @[Anyolite::SpecializeInstanceMethod(method_without_keywords, [arg], [arg : String])]
   @[Anyolite::SpecializeInstanceMethod(method_with_various_args, nil)]
   class Test
@@ -78,10 +76,6 @@ module SomeModule
     @@counter : Int32 = 0
 
     @@magic_block_store : Anyolite::RbRef | Nil = nil
-
-    CONSTANT = "Hello"
-
-    CONSTANT_NOT_TO_WRAP = 123
 
     def self.increase_counter
       @@counter += 1
@@ -431,8 +425,6 @@ Anyolite::RbInterpreter.create do |rb|
   puts "Interpreter started."
   Anyolite.wrap_module(rb, SomeModule, "TestModule")
   puts "Module wrapped."
-  Anyolite.wrap_constant(rb, SomeModule, "SOME_CONSTANT", "Smile!")
-  puts "Constant wrapped."
 
   Anyolite.wrap_module_function_with_keywords(rb, SomeModule, "test_method", SomeModule.test_method, [int : Int32 = 19, str : String])
   puts "Function wrapped."  
