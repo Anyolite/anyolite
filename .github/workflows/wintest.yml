@@ -25,4 +25,6 @@ jobs:
     - name: Test directories
       run: dir build/mruby/lib
     - name: Test script
-      run: crystal test.cr
+      run: crystal build test.cr --error-trace
+    - name: Run script
+      run: ./test
