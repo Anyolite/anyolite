@@ -1,5 +1,7 @@
 require "./anyolite.cr"
 
+puts "Required anyolite."
+
 module SomeModule
   def self.test_method(int : Int32, str : String)
     puts "#{str} and #{int}"
@@ -419,9 +421,14 @@ module SomeModule
   end
 end
 
-# Anyolite::RbRefTable.set_option(:logging)
+puts "Module definitions done."
+
+Anyolite::RbRefTable.set_option(:logging)
+
+puts "Starting interpreter."
 
 Anyolite::RbInterpreter.create do |rb|
+  puts "Interpreter started."
   Anyolite.wrap_module(rb, SomeModule, "TestModule")
   Anyolite.wrap_module_function_with_keywords(rb, SomeModule, "test_method", SomeModule.test_method, [int : Int32 = 19, str : String])
   Anyolite.wrap_constant(rb, SomeModule, "SOME_CONSTANT", "Smile! 😊")
@@ -434,7 +441,11 @@ Anyolite::RbInterpreter.create do |rb|
   
   Anyolite.wrap_instance_method(rb, SomeModule::Test, "add", add, [SomeModule::Test])
 
+  puts "Wrapped modules."
+
   rb.load_script_from_file("examples/test.rb")
+
+  puts "Loaded script."
 end
 
 module TestModule
