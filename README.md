@@ -169,7 +169,7 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 
 #### Usability
 
-* [ ] Option to use regular args for a complete class
+* [X] Option to use regular args for a complete class
 
 #### Bugfixes
 

@@ -579,6 +579,11 @@ module Anyolite
   # keyword arguments (especially for operator methods) if given.
   annotation ForceKeywordArgClassMethod; end
 
+  # The methods of the annotated class or module will not
+  # be wrapped with keyword arguments unless `ForceKeywordArg`
+  # or similar was used.
+  annotation NoKeywordArgs; end
+
   # Wraps a whole class structure under a module into mruby.
   #
   # The `Class` *crystal_class* will be integrated into the `RbInterpreter` *rb_interpreter*,
