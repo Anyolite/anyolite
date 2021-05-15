@@ -1,0 +1,23 @@
+name: WinTest
+
+on:
+  push:
+    branches: [win-test]
+
+jobs:
+  build:
+
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - uses: microsoft/setup-msbuild@v1.0.0
+    - uses: actions/setup-ruby@v1
+    - name: Install Crystal
+      uses: oprypin/install-crystal@v1
+      with:
+        crystal: nightly
+    - name: Build shard
+      run: rake build_shard
+    - name: Test script
+      run: crystal test.cr
