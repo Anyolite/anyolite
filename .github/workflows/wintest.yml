@@ -11,6 +11,8 @@ jobs:
 
     steps:
     - uses: actions/setup-ruby@v1
+    - name: Download source
+      uses: actions/checkout@v2
     - name: Set up environment
       run: |
         echo "CRYSTAL_PATH=$(pwd)\..;${env:CRYSTAL_PATH}" >>${env:GITHUB_ENV}
