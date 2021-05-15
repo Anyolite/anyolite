@@ -431,10 +431,11 @@ Anyolite::RbInterpreter.create do |rb|
   puts "Interpreter started."
   Anyolite.wrap_module(rb, SomeModule, "TestModule")
   puts "Module wrapped."
-  Anyolite.wrap_module_function_with_keywords(rb, SomeModule, "test_method", SomeModule.test_method, [int : Int32 = 19, str : String])
-  puts "Function wrapped."  
   Anyolite.wrap_constant(rb, SomeModule, "SOME_CONSTANT", "Smile!")
   puts "Constant wrapped."
+
+  Anyolite.wrap_module_function_with_keywords(rb, SomeModule, "test_method", SomeModule.test_method, [int : Int32 = 19, str : String])
+  puts "Function wrapped."  
 
   Anyolite.wrap(rb, SomeModule::Bla, under: SomeModule, verbose: true)
   puts "Module wrapped."
