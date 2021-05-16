@@ -14,10 +14,11 @@ module Anyolite
                   Anyolite::Macro.pointer_type({{arg}}, context: {{context}}).malloc(size: 1, value: {{arg.value}}.to_unsafe),
                 {% elsif arg.type.resolve <= Anyolite::RbRef %}
                   Anyolite::Macro.pointer_type({{arg}}, context: {{context}}).malloc(size: 1, value: {{arg.value}}),
-                {% elsif arg.type.resolve <= Bool %}
+                # NOTE: This might need some extensions
+                {% elsif arg.type.resolve <= Bool || arg.type.resolve <= Number %}
                   Anyolite::Macro.pointer_type({{arg}}, context: {{context}}).malloc(size: 1, value: Anyolite::Macro.type_in_ruby({{arg}}, context: {{context}}).new({{arg.value}} ? 1 : 0)),
                 {% else %}
-                  Anyolite::Macro.pointer_type({{arg}}, context: {{context}}).malloc(size: 1, value: Anyolite::Macro.type_in_ruby({{arg}}, context: {{context}}).new({{arg.value}})),
+                  Anyolite::Macro.pointer_type({{arg}}, context: {{context}}).malloc(size: 1, value: Anyolite::RbCast.return_value({{rb}}, {{arg.value}})),
                 {% end %}
               {% else %}
                 Anyolite::Macro.pointer_type({{arg}}, context: {{context}}).malloc(size: 1),
