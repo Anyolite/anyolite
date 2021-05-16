@@ -55,7 +55,7 @@ module Anyolite
           Anyolite::Macro.resolve_format_char({{raw_arg}}, {{raw_arg}})
         {% end %}
       {% else %}
-        {% raise "Could not resolve #{arg}, which is a #{arg.class_name}, in any meaningful way" %}
+        "o"
       {% end %}
     end
   end

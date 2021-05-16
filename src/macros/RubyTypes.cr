@@ -40,7 +40,7 @@ module Anyolite
           Anyolite::Macro.resolve_type_in_ruby({{raw_type}}, {{raw_type}})
         {% end %}
       {% else %}
-        {% raise "Could not resolve #{type}, which is a #{type.class_name}, in any meaningful way" %}
+        Anyolite::RbCore::RbValue
       {% end %}
     end
 
@@ -83,7 +83,7 @@ module Anyolite
           Anyolite::Macro.resolve_pointer_type({{raw_type}}, {{raw_type}})
         {% end %}
       {% else %}
-        {% raise "Could not resolve #{type}, which is a #{type.class_name}, in any meaningful way" %}
+        Pointer(Anyolite::RbCore::RbValue)
       {% end %}
     end
   end

@@ -9,8 +9,8 @@ module Anyolite
         {% regular_arg_array = [regular_args] %}
       {% end %}
 
-      {% type_vars = crystal_class.resolve.type_vars %}
-      {% type_var_names_annotation = crystal_class.resolve.annotation(Anyolite::SpecifyGenericTypes) %}
+      {% type_vars = under_module.resolve.type_vars %}
+      {% type_var_names_annotation = under_module.resolve.annotation(Anyolite::SpecifyGenericTypes) %}
       {% type_var_names = type_var_names_annotation ? type_var_names_annotation[0] : nil %}
 
       wrapped_method = Anyolite::RbCore::RbFunc.new do |rb, obj|
@@ -34,10 +34,10 @@ module Anyolite
             end
           {% end %}
 
-          converted_args = Anyolite::Macro.convert_regular_args(rb, args, {{regular_args}}, context: {{context}})
+          converted_args = Anyolite::Macro.convert_regular_args(rb, args, {{regular_args}}, context: {{context}}, type_vars: {{type_vars}}, type_var_names: {{type_var_names}})
         {% else %}
           block_ptr = nil
-          converted_args = Anyolite::Macro.get_converted_args(rb, {{regular_arg_array}}, context: {{context}})
+          converted_args = Anyolite::Macro.get_converted_args(rb, {{regular_arg_array}}, context: {{context}}, type_vars: {{type_vars}}, type_var_names: {{type_var_names}})
         {% end %}
 
         return_value = Anyolite::Macro.call_and_return(rb, {{proc}}, {{regular_arg_array}}, converted_args, return_nil: {{return_nil}}, block_arg_number: {{block_arg_number}}, block_return_type: {{block_return_type}}, block_ptr: block_ptr)
@@ -60,6 +60,10 @@ module Anyolite
       {% else %}
         {% regular_arg_array = [regular_args] %}
       {% end %}
+
+      {% type_vars = under_module.resolve.type_vars %}
+      {% type_var_names_annotation = under_module.resolve.annotation(Anyolite::SpecifyGenericTypes) %}
+      {% type_var_names = type_var_names_annotation ? type_var_names_annotation[0] : nil %}
 
       wrapped_method = Anyolite::RbCore::RbFunc.new do |rb, obj|
         regular_arg_tuple = Anyolite::Macro.generate_arg_tuple({{rb_interpreter}}, {{regular_arg_array}}, context: {{context}})
@@ -88,7 +92,7 @@ module Anyolite
           Anyolite::RbCore.rb_get_args(rb, format_string, *regular_arg_tuple, pointerof(kw_args))
         {% end %}
 
-        converted_regular_args = Anyolite::Macro.convert_regular_args(rb, regular_arg_tuple, {{regular_arg_array}}, context: {{context}})
+        converted_regular_args = Anyolite::Macro.convert_regular_args(rb, regular_arg_tuple, {{regular_arg_array}}, context: {{context}}, type_vars: {{type_vars}}, type_var_names: {{type_var_names}})
 
         {% if !regular_arg_array || regular_arg_array.size == 0 %}
           return_value = Anyolite::Macro.call_and_return_keyword_method(rb, {{proc}}, converted_regular_args, {{keyword_args}}, kw_args, operator: {{operator}}, empty_regular: true, context: {{context}}, return_nil: {{return_nil}}, block_arg_number: {{block_arg_number}}, block_return_type: {{block_return_type}}, block_ptr: block_ptr)
@@ -139,10 +143,10 @@ module Anyolite
             end
           {% end %}
 
-          converted_args = Anyolite::Macro.convert_regular_args(rb, args, {{regular_args}}, context: {{context}})
+          converted_args = Anyolite::Macro.convert_regular_args(rb, args, {{regular_args}}, context: {{context}}, type_vars: {{type_vars}}, type_var_names: {{type_var_names}})
         {% else %}
           block_ptr = nil
-          converted_args = Anyolite::Macro.get_converted_args(rb, {{regular_arg_array}}, context: {{context}})
+          converted_args = Anyolite::Macro.get_converted_args(rb, {{regular_arg_array}}, context: {{context}}, type_vars: {{type_vars}}, type_var_names: {{type_var_names}})
         {% end %}
 
         return_value = Anyolite::Macro.call_and_return(rb, {{proc}}, {{regular_arg_array}}, converted_args, operator: {{operator}}, return_nil: {{return_nil}}, block_arg_number: {{block_arg_number}}, block_return_type: {{block_return_type}}, block_ptr: block_ptr)
@@ -197,7 +201,7 @@ module Anyolite
           Anyolite::RbCore.rb_get_args(rb, format_string, *regular_arg_tuple, pointerof(kw_args))
         {% end %}
 
-        converted_regular_args = Anyolite::Macro.convert_regular_args(rb, regular_arg_tuple, {{regular_arg_array}}, context: {{context}})
+        converted_regular_args = Anyolite::Macro.convert_regular_args(rb, regular_arg_tuple, {{regular_arg_array}}, context: {{context}}, type_vars: {{type_vars}}, type_var_names: {{type_var_names}})
 
         {% if !regular_arg_array || regular_arg_array.size == 0 %}
           return_value = Anyolite::Macro.call_and_return_keyword_method(rb, {{proc}}, converted_regular_args, {{keyword_args}}, kw_args, operator: {{operator}}, 
@@ -250,10 +254,10 @@ module Anyolite
             end
           {% end %}
 
-          converted_args = Anyolite::Macro.convert_regular_args(rb, args, {{regular_args}}, context: {{context}})
+          converted_args = Anyolite::Macro.convert_regular_args(rb, args, {{regular_args}}, context: {{context}}, type_vars: {{type_vars}}, type_var_names: {{type_var_names}})
         {% else %}
           block_ptr = nil
-          converted_args = Anyolite::Macro.get_converted_args(rb, {{regular_arg_array}}, context: {{context}})
+          converted_args = Anyolite::Macro.get_converted_args(rb, {{regular_arg_array}}, context: {{context}}, type_vars: {{type_vars}}, type_var_names: {{type_var_names}})
         {% end %}
 
         if {{crystal_class}} <= Struct || {{crystal_class}} <= Enum
@@ -316,7 +320,7 @@ module Anyolite
           Anyolite::RbCore.rb_get_args(rb, format_string, *regular_arg_tuple, pointerof(kw_args))
         {% end %}
 
-        converted_regular_args = Anyolite::Macro.convert_regular_args(rb, regular_arg_tuple, {{regular_arg_array}}, context: {{context}})
+        converted_regular_args = Anyolite::Macro.convert_regular_args(rb, regular_arg_tuple, {{regular_arg_array}}, context: {{context}}, type_vars: {{type_vars}}, type_var_names: {{type_var_names}})
 
         if {{crystal_class}} <= Struct || {{crystal_class}} <= Enum
           converted_obj = Anyolite::Macro.convert_from_ruby_struct(rb, obj, {{crystal_class}}).value
@@ -385,10 +389,10 @@ module Anyolite
             end
           {% end %}
 
-          converted_args = Anyolite::Macro.convert_regular_args(rb, args, {{regular_args}}, context: {{context}})
+          converted_args = Anyolite::Macro.convert_regular_args(rb, args, {{regular_args}}, context: {{context}}, type_vars: {{type_vars}}, type_var_names: {{type_var_names}})
         {% else %}
           block_ptr = nil
-          converted_args = Anyolite::Macro.get_converted_args(rb, {{regular_arg_array}}, context: {{context}})
+          converted_args = Anyolite::Macro.get_converted_args(rb, {{regular_arg_array}}, context: {{context}}, type_vars: {{type_vars}}, type_var_names: {{type_var_names}})
         {% end %}
 
         new_obj = {{proc}}{{operator.id}}(*converted_args) {{proc_arg_string.id}}
@@ -468,7 +472,7 @@ module Anyolite
           Anyolite::RbCore.rb_get_args(rb, format_string, *regular_arg_tuple, pointerof(kw_args))
         {% end %}
 
-        converted_regular_args = Anyolite::Macro.convert_regular_args(rb, regular_arg_tuple, {{regular_arg_array}}, context: {{context}})
+        converted_regular_args = Anyolite::Macro.convert_regular_args(rb, regular_arg_tuple, {{regular_arg_array}}, context: {{context}}, type_vars: {{type_vars}}, type_var_names: {{type_var_names}})
 
         {% if !regular_arg_array || regular_arg_array.size == 0 %}
           new_obj = {{proc}}{{operator.id}}(

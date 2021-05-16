@@ -63,6 +63,11 @@ module SomeModule
         puts "u1 is #{u1} and has class #{U}, v1 is #{v1} and has class #{V}."
       end
 
+      @[Anyolite::WrapWithoutKeywords]
+      def +(other : GenericTest(U, V))
+        GenericTest(U, V).new(u: @u + other.u, v: @v + other.v)
+      end
+
       def compare(other : GenericTest(U, V))
         puts "This has #{@u} and #{@v}, the other has #{other.u} and #{other.v}."
       end

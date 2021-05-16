@@ -8,14 +8,16 @@ module Anyolite
     end
 
     # Converts Ruby values to Crystal values
-    macro convert_regular_arg(rb, arg, arg_type, context = nil)
+    macro convert_regular_arg(rb, arg, arg_type, context = nil, type_vars = nil, type_var_names = nil)
       {% if arg_type.stringify.includes?("->") || arg_type.stringify.includes?(" Proc(") %}
         {% puts "\e[33m> INFO: Proc types are not allowed as arguments.\e[0m" %}
         raise "Proc types are not allowed as arguments ({{debug_information.id}})"
+      {% elsif arg_type.is_a?(Generic) %}
+        Anyolite::Macro.convert_from_ruby_to_crystal({{rb}}, {{arg}}, dummy_arg : {{arg_type}}, context: {{context}}, type_vars: {{type_vars}}, type_var_names: {{type_var_names}})
       {% elsif arg_type.is_a?(TypeDeclaration) && arg_type.type.is_a?(Union) %}
         Anyolite::Macro.convert_from_ruby_to_crystal({{rb}}, {{arg}}, {{arg_type}}, context: {{context}})
       {% elsif arg_type.is_a?(TypeDeclaration) %}
-        Anyolite::Macro.convert_regular_arg({{rb}}, {{arg}}, {{arg_type.type}}, context: {{context}})
+        Anyolite::Macro.convert_regular_arg({{rb}}, {{arg}}, {{arg_type.type}}, context: {{context}}, type_vars: {{type_vars}}, type_var_names: {{type_var_names}})
       {% elsif context %}
         Anyolite::Macro.resolve_regular_arg({{rb}}, {{arg}}, {{context}}::{{arg_type.stringify.starts_with?("::") ? arg_type.stringify[2..-1].id : arg_type}}, {{arg_type}}, {{context}})
       {% else %}
@@ -224,25 +226,25 @@ module Anyolite
       {% end %}
     end
 
-    macro convert_regular_args(rb, args, regular_args, context)
+    macro convert_regular_args(rb, args, regular_args, context, type_vars = nil, type_var_names = nil)
       Tuple.new(
         {% c = 0 %}
         {% if regular_args %}
           {% for arg in regular_args %}
-            Anyolite::Macro.convert_regular_arg({{rb}}, {{args}}[{{c}}].value, {{arg}}, context: {{context}}),
+            Anyolite::Macro.convert_regular_arg({{rb}}, {{args}}[{{c}}].value, {{arg}}, context: {{context}}, type_vars: {{type_vars}}, type_var_names: {{type_var_names}}),
             {% c += 1 %}
           {% end %}
         {% end %}
       )
     end
 
-    macro get_converted_args(rb, regular_args, context)
+    macro get_converted_args(rb, regular_args, context, type_vars = nil, type_var_names = nil)
       args = Anyolite::Macro.generate_arg_tuple({{rb}}, {{regular_args}}, context: {{context}})
       format_string = Anyolite::Macro.format_string({{regular_args}}, context: {{context}})
       
       Anyolite::RbCore.rb_get_args({{rb}}, format_string, *args)
 
-      Anyolite::Macro.convert_regular_args({{rb}}, args, {{regular_args}}, context: {{context}})
+      Anyolite::Macro.convert_regular_args({{rb}}, args, {{regular_args}}, context: {{context}}, type_vars: {{type_vars}}, type_var_names: {{type_var_names}})
     end
   end
 end
