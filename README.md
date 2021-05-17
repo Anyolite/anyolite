@@ -165,11 +165,24 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 
 ## Upcoming releases
 
-### Version 0.11.2
+### Version 0.12.0
+
+#### Features
+
+* [ ] Automatic wrapping of inherited methods from all non-trivial ancestors
+* [ ] Direct methods for Ruby error messages
 
 #### Usability
 
 * [X] Option to use regular args for a complete class
+* [ ] Maybe fix or at least warn of abstract structs
+* [ ] Option for defaulting to usage of RbValue as data container for regular arguments
+* [ ] Correct handling of `inspect` method
+* [ ] Better error messages for invalid data pointers
+* [ ] Fix for unwrappable `<=` class methods for inherited classes
+* [ ] More consistent debug information
+* [ ] Error message when trying to wrapp slices (for now)
+* [ ] Solution for enum value inequality
 
 #### Bugfixes
 
@@ -178,7 +191,7 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 * [X] Fixed config file parsing
 * [X] Fixed generic argument parsing for regular arguments
 * [X] Fixed error when converting some generics with default arguments
-* [ ] Maybe fix or at least warn of abstract structs
+* [ ] Default arguments for certain regular arguments were not processed correctly
 
 ### Version 1.0.0
 
@@ -211,6 +224,7 @@ Anyolite are already implemented.
 ### Future feature ideas (might not actually be possible to implement)
 
 * [ ] Splat argument and/or arbitrary keyword passing
+* [ ] Support for slices
 * [ ] Resolve context even in generic type union arguments
 * [ ] Ability to choose between mruby and regular Ruby
 * [ ] Automatic wrappers for `initialize_copy` and similar methods
