@@ -191,7 +191,7 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 * [X] Fixed config file parsing
 * [X] Fixed generic argument parsing for regular arguments
 * [X] Fixed error when converting some generics with default arguments
-* [ ] Default arguments for certain regular arguments were not processed correctly
+* [X] Default arguments for numeric regular arguments were not processed correctly
 
 ### Version 1.0.0
 

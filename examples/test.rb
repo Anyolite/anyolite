@@ -226,3 +226,10 @@ puts a.bool_setter_test?(false)
 puts a.keyword_operator_arg?(arg: 5)
 
 puts a.ref_test(str: "Hello", ref: 1223)
+
+puts TestModule::Test::ValueStruct.new.i
+puts TestModule::Test::ValueStruct.new.f
+puts TestModule::Test::ValueStruct.new.s
+puts TestModule::Test::ValueStruct.new(89, 0.89, "Something").i
+puts TestModule::Test::ValueStruct.new(89, 0.89, "Something").f
+puts TestModule::Test::ValueStruct.new(89, 0.89, "Something").s

@@ -15,8 +15,10 @@ module Anyolite
                 {% elsif arg.type.resolve <= Anyolite::RbRef %}
                   Anyolite::Macro.pointer_type({{arg}}, context: {{context}}).malloc(size: 1, value: {{arg.value}}),
                 # NOTE: This might need some extensions
-                {% elsif arg.type.resolve <= Bool || arg.type.resolve <= Number %}
+                {% elsif arg.type.resolve <= Bool %}
                   Anyolite::Macro.pointer_type({{arg}}, context: {{context}}).malloc(size: 1, value: Anyolite::Macro.type_in_ruby({{arg}}, context: {{context}}).new({{arg.value}} ? 1 : 0)),
+                {% elsif arg.type.resolve <= Number %}
+                  Anyolite::Macro.pointer_type({{arg}}, context: {{context}}).malloc(size: 1, value: Anyolite::Macro.type_in_ruby({{arg}}, context: {{context}}).new({{arg.value}})),
                 {% else %}
                   Anyolite::Macro.pointer_type({{arg}}, context: {{context}}).malloc(size: 1, value: Anyolite::RbCast.return_value({{rb}}, {{arg.value}})),
                 {% end %}

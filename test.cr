@@ -23,6 +23,19 @@ module SomeModule
   @[Anyolite::SpecializeInstanceMethod(method_without_keywords, [arg], [arg : String])]
   @[Anyolite::SpecializeInstanceMethod(method_with_various_args, nil)]
   class Test
+    struct ValueStruct
+      property i : Int32 = 1234
+      property f : Float32 = 0.1234
+      property s : String = "Empty"
+  
+      @[Anyolite::WrapWithoutKeywords]
+      def initialize(new_i : Int32 = 5678, new_f : Float32 = 0.5678, new_s : String = "Default")
+        @i = new_i
+        @f = new_f
+        @s = new_s
+      end
+    end
+
     @[Anyolite::RenameClass("UnderTestRenamed")]
     class UnderTest
       module DeepUnderTest
