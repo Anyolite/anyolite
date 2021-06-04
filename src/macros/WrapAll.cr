@@ -113,6 +113,10 @@ module Anyolite
         # Ignore rb hooks, to_unsafe and finalize (unless specialized, but this is not recommended)
         {% elsif (method.name.starts_with?("rb_") || method.name == "finalize" || method.name == "to_unsafe") && !has_specialized_method[method.name.stringify] %}
           {% puts "--> Excluding #{crystal_class}::#{method.name} (Exclusion by default)" if verbose %}
+        # Divert inspection methods automatically to stdout
+        {% elsif method.name == "inspect" || method.name == "to_s" %}
+          Anyolite::Macro.wrap_method_index({{rb_interpreter}}, {{crystal_class}}, {{index}}, "{{ruby_name}}", without_keywords: {{without_keywords || (no_keyword_args && !force_keyword_arg)}}, added_keyword_args: [] of NoReturn, context: {{context}}, return_nil: {{return_nil}}, block_arg_number: {{block_arg_number}}, block_return_type: {{block_return_type}}, store_block_arg: {{store_block_arg}})
+          {% how_many_times_wrapped[ruby_name.stringify] = how_many_times_wrapped[ruby_name.stringify] ? how_many_times_wrapped[ruby_name.stringify] + 1 : 1 %} 
         # Exclude methods if given as arguments
         {% elsif exclusions.includes?(method.name.symbolize) || exclusions.includes?(method.name.stringify) %}
           {% puts "--> Excluding #{crystal_class}::#{method.name} (Exclusion argument)" if verbose %}

@@ -233,3 +233,5 @@ puts TestModule::Test::ValueStruct.new.s
 puts TestModule::Test::ValueStruct.new(89, 0.89, "Something").i
 puts TestModule::Test::ValueStruct.new(89, 0.89, "Something").f
 puts TestModule::Test::ValueStruct.new(89, 0.89, "Something").s
+
+puts a.inspect
