@@ -171,7 +171,6 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 
 * [ ] Automatic wrapping of inherited methods from all non-trivial ancestors
 * [ ] Direct methods for Ruby error messages
-* [ ] Classes as argument type
 * [X] Usage of `self` as argument type is now allowed
 * [X] Option to default to regular args for an entire class
 * [ ] Option for defaulting to usage of RbValue as data container for regular arguments
@@ -181,7 +180,7 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 * [ ] Maybe fix or at least warn of abstract structs
 * [X] Correct handling of `inspect` and `to_s` methods
 * [ ] Better error messages for invalid data pointers
-* [ ] Fix for unwrappable `<=` class methods for inherited classes
+* [X] Default exclusion of unwrappable `<=` class methods for inherited classes
 * [ ] More consistent debug information
 * [ ] Error message when trying to wrap slices (for now)
 * [ ] Solution for enum value inequality
@@ -227,6 +226,7 @@ Anyolite are already implemented.
 
 * [ ] Splat argument and/or arbitrary keyword passing
 * [ ] Support for slices
+* [ ] Classes as argument type
 * [ ] Resolve context even in generic type union arguments
 * [ ] Ability to choose between mruby and regular Ruby
 * [ ] Automatic wrappers for `initialize_copy` and similar methods

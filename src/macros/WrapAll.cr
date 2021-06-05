@@ -272,6 +272,8 @@ module Anyolite
         # We already wrapped 'initialize', so we don't need to wrap these
         {% elsif method.name == "allocate" || method.name == "new" %}
           {% puts "--> Excluding #{crystal_class}::#{method.name} (Allocation method)" if verbose %}
+        {% elsif method.name == "<=" %}
+          {% puts "--> Excluding #{crystal_class}::#{method.name} (Class argument method)" if verbose %}
         # Exclude methods if given as arguments
         {% elsif exclusions.includes?(method.name.symbolize) || exclusions.includes?(method.name.stringify) %}
           {% puts "--> Excluding #{crystal_class}::#{method.name} (Exclusion argument)" if verbose %}
