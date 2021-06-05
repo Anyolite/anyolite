@@ -235,3 +235,5 @@ puts TestModule::Test::ValueStruct.new(89, 0.89, "Something").f
 puts TestModule::Test::ValueStruct.new(89, 0.89, "Something").s
 
 puts a.inspect
+
+TestModule::Test::GTIntFloat.self_test(other: TestModule::Test::GTIntFloat.new(u: 1, v: 2.3))

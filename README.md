@@ -172,10 +172,11 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 * [ ] Automatic wrapping of inherited methods from all non-trivial ancestors
 * [ ] Direct methods for Ruby error messages
 * [ ] Classes as argument type
+* [ ] Usage of `self` as argument type is now allowed
 
 #### Usability
 
-* [X] Option to use regular args for a complete class
+* [X] Option to default to regular args for an entire class
 * [ ] Maybe fix or at least warn of abstract structs
 * [ ] Option for defaulting to usage of RbValue as data container for regular arguments
 * [X] Correct handling of `inspect` and `to_s` methods

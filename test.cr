@@ -76,6 +76,10 @@ module SomeModule
         puts "u1 is #{u1} and has class #{U}, v1 is #{v1} and has class #{V}."
       end
 
+      def self.self_test(other : self)
+        puts "Value is #{other.u} and #{other.v}"
+      end
+
       @[Anyolite::WrapWithoutKeywords]
       def +(other : GenericTest(U, V))
         GenericTest(U, V).new(u: @u + other.u, v: @v + other.v)
