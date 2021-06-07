@@ -240,3 +240,7 @@ TestModule::Test::GTIntFloat.self_test(other: TestModule::Test::GTIntFloat.new(u
 
 puts "Are enums equal: #{TestModule::Test::TestEnum.new(3) == TestModule::Test::TestEnum.new(3)}"
 puts "Are structs equal: #{TestModule::TestStructRenamed.new == TestModule::TestStructRenamed.new}"
+
+inherited_content_test = TestModule::Test::NewContentTest.new(content: [a, a], more_content: [b, a, b])
+
+puts "Inherited content test: #{inherited_content_test.content.inspect.gsub("\n", "")} and #{inherited_content_test.more_content.inspect.gsub("\n", "")}"

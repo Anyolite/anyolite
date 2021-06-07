@@ -1,10 +1,13 @@
 module Anyolite
   module Macro
-    macro wrap_all_instance_methods(rb_interpreter, crystal_class, exclusions, verbose, context = nil, use_enum_constructor = false, wrap_equality_method = false)
+    macro wrap_all_instance_methods(rb_interpreter, crystal_class, exclusions, verbose, context = nil, 
+      use_enum_constructor = false, wrap_equality_method = false, other_source = nil, later_ancestors = nil)
       {% has_specialized_method = {} of String => Bool %}
 
-      {% for method in crystal_class.resolve.methods %}
-        {% all_annotations_specialize_im = crystal_class.resolve.annotations(Anyolite::SpecializeInstanceMethod) %}
+      {% method_source = other_source ? other_source : crystal_class %}
+
+      {% for method in method_source.resolve.methods %}
+        {% all_annotations_specialize_im = crystal_class.resolve.annotations(Anyolite::SpecializeInstanceMethod) + method_source.resolve.annotations(Anyolite::SpecializeInstanceMethod) %}
         {% annotation_specialize_im = all_annotations_specialize_im.find { |element| element[0].stringify == method.name.stringify || element[0] == method.name.stringify } %}
 
         {% if method.annotation(Anyolite::Specialize) %}
@@ -18,32 +21,32 @@ module Anyolite
 
       {% how_many_times_wrapped = {} of String => UInt32 %}
 
-      {% for method, index in crystal_class.resolve.methods %}
-        {% all_annotations_exclude_im = crystal_class.resolve.annotations(Anyolite::ExcludeInstanceMethod) %}
+      {% for method, index in method_source.resolve.methods %}
+        {% all_annotations_exclude_im = crystal_class.resolve.annotations(Anyolite::ExcludeInstanceMethod) + method_source.resolve.annotations(Anyolite::ExcludeInstanceMethod) %}
         {% annotation_exclude_im = all_annotations_exclude_im.find { |element| element[0].id.stringify == method.name.stringify } %}
 
-        {% all_annotations_specialize_im = crystal_class.resolve.annotations(Anyolite::SpecializeInstanceMethod) %}
+        {% all_annotations_specialize_im = crystal_class.resolve.annotations(Anyolite::SpecializeInstanceMethod) + method_source.resolve.annotations(Anyolite::SpecializeInstanceMethod) %}
         {% annotation_specialize_im = all_annotations_specialize_im.find { |element| element[0].id.stringify == method.name.stringify } %}
 
-        {% all_annotations_rename_im = crystal_class.resolve.annotations(Anyolite::RenameInstanceMethod) %}
+        {% all_annotations_rename_im = crystal_class.resolve.annotations(Anyolite::RenameInstanceMethod) + method_source.resolve.annotations(Anyolite::RenameInstanceMethod) %}
         {% annotation_rename_im = all_annotations_rename_im.find { |element| element[0].id.stringify == method.name.stringify } %}
 
-        {% all_annotations_without_keywords_im = crystal_class.resolve.annotations(Anyolite::WrapWithoutKeywordsInstanceMethod) %}
+        {% all_annotations_without_keywords_im = crystal_class.resolve.annotations(Anyolite::WrapWithoutKeywordsInstanceMethod) + method_source.resolve.annotations(Anyolite::WrapWithoutKeywordsInstanceMethod) %}
         {% annotation_without_keyword_im = all_annotations_without_keywords_im.find { |element| element[0].id.stringify == method.name.stringify } %}
 
-        {% all_annotations_return_nil_im = crystal_class.resolve.annotations(Anyolite::ReturnNilInstanceMethod) %}
+        {% all_annotations_return_nil_im = crystal_class.resolve.annotations(Anyolite::ReturnNilInstanceMethod) + method_source.resolve.annotations(Anyolite::ReturnNilInstanceMethod) %}
         {% annotation_return_nil_im = all_annotations_return_nil_im.find { |element| element[0].id.stringify == method.name.stringify } %}
 
-        {% all_annotations_add_block_arg_im = crystal_class.resolve.annotations(Anyolite::AddBlockArgInstanceMethod) %}
+        {% all_annotations_add_block_arg_im = crystal_class.resolve.annotations(Anyolite::AddBlockArgInstanceMethod) + method_source.resolve.annotations(Anyolite::AddBlockArgInstanceMethod) %}
         {% annotation_add_block_arg_im = all_annotations_add_block_arg_im.find { |element| element[0].id.stringify == method.name.stringify } %}
 
-        {% all_annotations_store_block_arg_im = crystal_class.resolve.annotations(Anyolite::StoreBlockArgInstanceMethod) %}
+        {% all_annotations_store_block_arg_im = crystal_class.resolve.annotations(Anyolite::StoreBlockArgInstanceMethod) + method_source.resolve.annotations(Anyolite::StoreBlockArgInstanceMethod) %}
         {% annotation_store_block_arg_im = all_annotations_store_block_arg_im.find { |element| element[0].id.stringify == method.name.stringify } %}
 
-        {% all_annotations_force_keyword_arg_im = crystal_class.resolve.annotations(Anyolite::ForceKeywordArgInstanceMethod) %}
+        {% all_annotations_force_keyword_arg_im = crystal_class.resolve.annotations(Anyolite::ForceKeywordArgInstanceMethod) + method_source.resolve.annotations(Anyolite::ForceKeywordArgInstanceMethod) %}
         {% annotation_force_keyword_arg_im = all_annotations_force_keyword_arg_im.find { |element| element[0].id.stringify == method.name.stringify } %}
 
-        {% if crystal_class.resolve.annotation(Anyolite::NoKeywordArgs) %}
+        {% if crystal_class.resolve.annotation(Anyolite::NoKeywordArgs) || method_source.resolve.annotation(Anyolite::NoKeywordArgs) %}
           {% no_keyword_args = true %}
         {% else %}
           {% no_keyword_args = false %}
@@ -110,12 +113,14 @@ module Anyolite
         # Ignore private and protected methods (can't be called from outside, they'd need to be wrapped for this to work)
         {% if method.visibility != :public && method.name != "initialize" %}
           {% puts "--> Excluding #{crystal_class}::#{method.name} (Exclusion due to visibility)" if verbose %}
+        {% elsif crystal_class != method_source && (later_ancestors ? later_ancestors + [crystal_class] : [crystal_class]).find{|later_ancestor| later_ancestor.resolve.methods.find{|orig_methods| orig_methods.name == method.name}} %}
+          {% puts "||||||||||||||||||||||||||||--> Excluding #{crystal_class}::#{method.name} (Exclusion due to finalization)" if verbose %}
         # Ignore rb hooks, to_unsafe and finalize (unless specialized, but this is not recommended)
         {% elsif (method.name.starts_with?("rb_") || method.name == "finalize" || method.name == "to_unsafe") && !has_specialized_method[method.name.stringify] %}
           {% puts "--> Excluding #{crystal_class}::#{method.name} (Exclusion by default)" if verbose %}
         # Divert inspection methods automatically to stdout
         {% elsif method.name == "inspect" || method.name == "to_s" %}
-          Anyolite::Macro.wrap_method_index({{rb_interpreter}}, {{crystal_class}}, {{index}}, "{{ruby_name}}", without_keywords: {{without_keywords || (no_keyword_args && !force_keyword_arg)}}, added_keyword_args: [] of NoReturn, context: {{context}}, return_nil: {{return_nil}}, block_arg_number: {{block_arg_number}}, block_return_type: {{block_return_type}}, store_block_arg: {{store_block_arg}})
+          Anyolite::Macro.wrap_method_index({{rb_interpreter}}, {{crystal_class}}, {{index}}, "{{ruby_name}}", without_keywords: {{without_keywords || (no_keyword_args && !force_keyword_arg)}}, added_keyword_args: [] of NoReturn, context: {{context}}, return_nil: {{return_nil}}, block_arg_number: {{block_arg_number}}, block_return_type: {{block_return_type}}, store_block_arg: {{store_block_arg}}, other_source: {{other_source}})
           {% how_many_times_wrapped[ruby_name.stringify] = how_many_times_wrapped[ruby_name.stringify] ? how_many_times_wrapped[ruby_name.stringify] + 1 : 1 %} 
         # Exclude methods if given as arguments
         {% elsif exclusions.includes?(method.name.symbolize) || exclusions.includes?(method.name.stringify) %}
@@ -131,15 +136,15 @@ module Anyolite
         {% elsif method.name[-1..-1] =~ /\W/ %}
           {% operator = ruby_name %}
 
-          Anyolite::Macro.wrap_method_index({{rb_interpreter}}, {{crystal_class}}, {{index}}, "{{ruby_name}}", operator: "{{operator}}", without_keywords: {{force_keyword_arg ? false : -1}}, added_keyword_args: {{added_keyword_args}}, context: {{context}}, return_nil: {{return_nil}}, block_arg_number: {{block_arg_number}}, block_return_type: {{block_return_type}}, store_block_arg: {{store_block_arg}})
+          Anyolite::Macro.wrap_method_index({{rb_interpreter}}, {{crystal_class}}, {{index}}, "{{ruby_name}}", operator: "{{operator}}", without_keywords: {{force_keyword_arg ? false : -1}}, added_keyword_args: {{added_keyword_args}}, context: {{context}}, return_nil: {{return_nil}}, block_arg_number: {{block_arg_number}}, block_return_type: {{block_return_type}}, store_block_arg: {{store_block_arg}}, other_source: {{other_source}})
           {% how_many_times_wrapped[ruby_name.stringify] = how_many_times_wrapped[ruby_name.stringify] ? how_many_times_wrapped[ruby_name.stringify] + 1 : 1 %}
         # Handle constructors
         {% elsif method.name == "initialize" && use_enum_constructor == false %}
-          Anyolite::Macro.wrap_method_index({{rb_interpreter}}, {{crystal_class}}, {{index}}, "{{ruby_name}}", is_constructor: true, without_keywords: {{without_keywords || (no_keyword_args && !force_keyword_arg)}}, added_keyword_args: {{added_keyword_args}}, context: {{context}}, return_nil: {{return_nil}}, block_arg_number: {{block_arg_number}}, block_return_type: {{block_return_type}}, store_block_arg: {{store_block_arg}})
+          Anyolite::Macro.wrap_method_index({{rb_interpreter}}, {{crystal_class}}, {{index}}, "{{ruby_name}}", is_constructor: true, without_keywords: {{without_keywords || (no_keyword_args && !force_keyword_arg)}}, added_keyword_args: {{added_keyword_args}}, context: {{context}}, return_nil: {{return_nil}}, block_arg_number: {{block_arg_number}}, block_return_type: {{block_return_type}}, store_block_arg: {{store_block_arg}}, other_source: {{other_source}})
           {% how_many_times_wrapped[ruby_name.stringify] = how_many_times_wrapped[ruby_name.stringify] ? how_many_times_wrapped[ruby_name.stringify] + 1 : 1 %}
         # Handle other instance methods
         {% else %}
-          Anyolite::Macro.wrap_method_index({{rb_interpreter}}, {{crystal_class}}, {{index}}, "{{ruby_name}}", without_keywords: {{without_keywords || (no_keyword_args && !force_keyword_arg)}}, added_keyword_args: {{added_keyword_args}}, context: {{context}}, return_nil: {{return_nil}}, block_arg_number: {{block_arg_number}}, block_return_type: {{block_return_type}}, store_block_arg: {{store_block_arg}})
+          Anyolite::Macro.wrap_method_index({{rb_interpreter}}, {{crystal_class}}, {{index}}, "{{ruby_name}}", without_keywords: {{without_keywords || (no_keyword_args && !force_keyword_arg)}}, added_keyword_args: {{added_keyword_args}}, context: {{context}}, return_nil: {{return_nil}}, block_arg_number: {{block_arg_number}}, block_return_type: {{block_return_type}}, store_block_arg: {{store_block_arg}}, other_source: {{other_source}})
           {% how_many_times_wrapped[ruby_name.stringify] = how_many_times_wrapped[ruby_name.stringify] ? how_many_times_wrapped[ruby_name.stringify] + 1 : 1 %}
         {% end %}
 
@@ -149,16 +154,17 @@ module Anyolite
         {% puts "" if verbose %}
       {% end %}
       
-      # Make sure to add a default constructor if none was specified with Crystal
+      {% if method_source == crystal_class %}
+        # Make sure to add a default constructor if none was specified with Crystal
+        {% if !how_many_times_wrapped["initialize"] && !use_enum_constructor %}
+          Anyolite::Macro.add_default_constructor({{rb_interpreter}}, {{crystal_class}}, {{verbose}})
+        {% elsif !how_many_times_wrapped["initialize"] && use_enum_constructor %}
+          Anyolite::Macro.add_enum_constructor({{rb_interpreter}}, {{crystal_class}}, {{verbose}})
+        {% end %}
 
-      {% if !how_many_times_wrapped["initialize"] && !use_enum_constructor %}
-        Anyolite::Macro.add_default_constructor({{rb_interpreter}}, {{crystal_class}}, {{verbose}})
-      {% elsif !how_many_times_wrapped["initialize"] && use_enum_constructor %}
-        Anyolite::Macro.add_enum_constructor({{rb_interpreter}}, {{crystal_class}}, {{verbose}})
-      {% end %}
-
-      {% if wrap_equality_method && !how_many_times_wrapped["=="] %}
-        Anyolite::Macro.add_equality_method({{rb_interpreter}}, {{crystal_class}}, {{context}}, {{verbose}})
+        {% if wrap_equality_method && !how_many_times_wrapped["=="] %}
+          Anyolite::Macro.add_equality_method({{rb_interpreter}}, {{crystal_class}}, {{context}}, {{verbose}})
+        {% end %}
       {% end %}
     end
 

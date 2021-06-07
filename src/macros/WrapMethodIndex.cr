@@ -6,12 +6,14 @@ module Anyolite
                             without_keywords = false, added_keyword_args = nil,
                             context = nil, return_nil = false,
                             block_arg_number = nil, block_return_type = nil,
-                            store_block_arg = false)
+                            store_block_arg = false, other_source = nil)
+
+      {% method_source = other_source ? other_source : crystal_class %}
 
       {% if is_class_method %}
-        {% method = crystal_class.resolve.class.methods[method_index] %}
+        {% method = method_source.resolve.class.methods[method_index] %}
       {% else %}
-        {% method = crystal_class.resolve.methods[method_index] %}
+        {% method = method_source.resolve.methods[method_index] %}
       {% end %}
 
       {% if !operator.empty? %}
@@ -75,7 +77,7 @@ module Anyolite
           operator: {{operator}}, cut_name: {{cut_name}}, without_keywords: {{without_keywords}},
           added_keyword_args: {{final_arg_array}}, context: {{context}}, return_nil: {{return_nil}},
           block_arg_number: {{block_arg_number}}, block_return_type: {{block_return_type}},
-          store_block_arg: {{store_block_arg}})
+          store_block_arg: {{store_block_arg}}, other_source: {{other_source}})
       {% else %}
         {% if final_arg_array.empty? %}
           {% if is_class_method %}

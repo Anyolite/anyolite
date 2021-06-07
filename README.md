@@ -169,11 +169,10 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 
 #### Features
 
-* [ ] Automatic wrapping of inherited methods from all non-trivial ancestors
+* [X] Automatic wrapping of inherited methods from all non-trivial ancestors
 * [ ] Direct methods for Ruby error messages
 * [X] Usage of `self` as argument type is now allowed
 * [X] Option to default to regular args for an entire class
-* [ ] Option for defaulting to usage of RbValue as data container for regular arguments
 
 #### Usability
 
@@ -220,6 +219,7 @@ Anyolite are already implemented.
 #### Code quality
 
 * [ ] Convert macro body variables to fresh variables wherever possible
+* [ ] Put macro function arguments as options in a hash
 * [ ] Code cleanup (especially in the macro section)
 
 ### Future feature ideas (might not actually be possible to implement)
@@ -232,4 +232,5 @@ Anyolite are already implemented.
 * [ ] Automatic wrappers for `initialize_copy` and similar methods
 * [ ] Controlled passing of pointers to ruby using the reference table
 * [ ] Class inheritance wrapping can be disabled for any class using annotations
+* [ ] Option for defaulting to usage of RbValue as data container for regular arguments
 * [ ] General improvement of type resolving

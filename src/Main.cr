@@ -595,7 +595,7 @@ module Anyolite
   # *constant_exclusions* (for constants).
   #
   # Enum classes can be wrapped by setting *use_enum_constructor*.
-  # Setting *wrap_superclass* to `false` will force the algorithm
+  # Setting *connect_to_superclass* to `false` will force the algorithm
   # to ignore any superclass.
   # The option *overwrite* will iterate through all functions and
   # constants again if set to `true`.
@@ -606,7 +606,8 @@ module Anyolite
                                 constant_exclusions = [] of String | Symbol,
                                 use_enum_constructor = false,
                                 wrap_equality_method = false,
-                                wrap_superclass = true,
+                                connect_to_superclass = true,
+                                include_ancestor_methods = true,
                                 overwrite = false,
                                 verbose = false)
 
@@ -627,8 +628,8 @@ module Anyolite
         {% actual_name = crystal_class.names.last.stringify %}
       {% end %}
 
-      {% if wrap_superclass %}
-        {% superclass = [Reference, Object, Struct, Enum].includes?(resolved_class.superclass) ? nil : resolved_class.superclass %}
+      {% if connect_to_superclass %}
+        {% superclass = [Reference, Object, Struct, Enum, Value, Comparable(Enum)].includes?(resolved_class.superclass) ? nil : resolved_class.superclass %}
       {% else %}
         {% superclass = nil %}
       {% end %}
@@ -645,6 +646,24 @@ module Anyolite
       {% end %}
         if {{overwrite}} || !Anyolite::RbClassCache.check({{resolved_class}}) 
           Anyolite.wrap_class({{rb_interpreter}}, {{resolved_class}}, {{actual_name}}, under: {{under}}, superclass: {{superclass}})
+
+          {% if include_ancestor_methods %}
+            {% reversed_ancestors = [] of TypeNode %}
+            {% for ancestor in resolved_class.ancestors.reject{|ancestor| [Object, Reference, Struct, Enum, Value, Comparable(Enum)].includes?(ancestor)} %}
+              {% reversed_ancestors = [ancestor] + reversed_ancestors %}
+            {% end %}
+
+            {% puts "> Ancestors for #{resolved_class}: #{reversed_ancestors}" if !reversed_ancestors.empty? && verbose %}
+
+            {% for ancestor, ancestor_index in reversed_ancestors %}
+              {% puts "> Going into ancestor #{ancestor} for #{resolved_class}..." if verbose %}
+              {% later_ancestors = reversed_ancestors[ancestor_index + 1 .. -1] %}
+
+              Anyolite::Macro.wrap_all_instance_methods({{rb_interpreter}}, {{crystal_class}}, {{instance_method_exclusions}}, 
+                verbose: {{verbose}}, context: {{new_context}}, use_enum_constructor: {{use_enum_constructor}}, wrap_equality_method: {{wrap_equality_method}}, 
+                other_source: {{ancestor}}, later_ancestors: {{later_ancestors.empty? ? nil : later_ancestors}})
+            {% end %}
+          {% end %}
 
           Anyolite::Macro.wrap_all_instance_methods({{rb_interpreter}}, {{crystal_class}}, {{instance_method_exclusions}}, 
             verbose: {{verbose}}, context: {{new_context}}, use_enum_constructor: {{use_enum_constructor}}, wrap_equality_method: {{wrap_equality_method}})
@@ -702,7 +721,7 @@ module Anyolite
   # *class_method_exclusions* (for class methods) or 
   # *constant_exclusions* (for constants).
   #
-  # Setting *wrap_superclass* to `false` will force the algorithm
+  # Setting *connect_to_superclass* to `false` will force the algorithm
   # to ignore any superclass.
   # The option *overwrite* will iterate through all functions and
   # constants again if set to `true`.
@@ -711,7 +730,8 @@ module Anyolite
              instance_method_exclusions = [] of String | Symbol,
              class_method_exclusions = [] of String | Symbol,
              constant_exclusions = [] of String | Symbol,
-             wrap_superclass = false,
+             connect_to_superclass = false,
+             include_ancestor_methods = true,
              use_enum_constructor = false,
              wrap_equality_method = false,
              overwrite = false,
@@ -741,7 +761,8 @@ module Anyolite
           constant_exclusions: {{constant_exclusions}},
           use_enum_constructor: {{use_enum_constructor}},
           wrap_equality_method: {{wrap_equality_method || crystal_module_or_class.resolve.struct?}},
-          wrap_superclass: {{wrap_superclass}},
+          connect_to_superclass: {{connect_to_superclass}},
+          include_ancestor_methods: {{include_ancestor_methods}},
           overwrite: {{overwrite}},
           verbose: {{verbose}}
         )
@@ -754,7 +775,8 @@ module Anyolite
           constant_exclusions: {{constant_exclusions}},
           use_enum_constructor: true,
           wrap_equality_method: true,
-          wrap_superclass: {{wrap_superclass}},
+          connect_to_superclass: {{connect_to_superclass}},
+          include_ancestor_methods: {{include_ancestor_methods}},
           overwrite: {{overwrite}},
           verbose: {{verbose}}
         )
@@ -765,7 +787,8 @@ module Anyolite
           constant_exclusions: {{constant_exclusions}},
           use_enum_constructor: {{use_enum_constructor}},
           wrap_equality_method: {{wrap_equality_method}},
-          wrap_superclass: {{wrap_superclass}},
+          connect_to_superclass: {{connect_to_superclass}},
+          include_ancestor_methods: {{include_ancestor_methods}},
           overwrite: {{overwrite}},
           verbose: {{verbose}}
         )
