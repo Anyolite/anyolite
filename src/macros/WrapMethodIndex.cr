@@ -67,7 +67,7 @@ module Anyolite
             {% end %}
           {% end %}
         {% else %}
-          {% raise "Argument #{arg} is neither Arg nor TypeDeclaration." %}
+          {% raise "Argument #{arg} in function #{final_method_name} of class #{crystal_class} is neither Arg nor TypeDeclaration." %}
         {% end %}
       {% end %}
 

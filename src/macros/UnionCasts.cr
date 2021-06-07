@@ -1,6 +1,6 @@
 module Anyolite
   module Macro
-    macro cast_to_union_value(rb, value, types, context = nil)
+    macro cast_to_union_value(rb, value, types, context = nil, debug_information = nil)
       final_value = :invalid
 
       {% for type in types %}
@@ -9,7 +9,7 @@ module Anyolite
         {% elsif context %}
           Anyolite::Macro.check_and_cast_union_type({{rb}}, {{value}}, {{context}}::{{type.stringify.starts_with?("::") ? type.stringify[2..-1].id : type}}, {{type}}, context: {{context}})
         {% else %}
-          {% raise "Could not resolve type #{type}, which is a #{type.class_name}, in context #{context}" %}
+          {% raise "Could not resolve type #{type}, which is a #{type.class_name}, in context #{context} (#{debug_information.id})" %}
         {% end %}
       {% end %}
       
@@ -23,7 +23,7 @@ module Anyolite
       end
     end
 
-    macro check_and_cast_union_type(rb, value, type, raw_type, context = nil)
+    macro check_and_cast_union_type(rb, value, type, raw_type, context = nil, debug_information = nil)
       {% if type.resolve? %}
         Anyolite::Macro.check_and_cast_resolved_union_type({{rb}}, {{value}}, {{type}}, {{type}})
       {% elsif context %}
@@ -34,13 +34,13 @@ module Anyolite
           Anyolite::Macro.check_and_cast_union_type({{rb}}, {{value}}, {{raw_type}}, {{raw_type}})
         {% end %}
       {% else %}
-        {% raise "Could not resolve type #{type}, which is a #{type.class_name}" %}
+        {% raise "Could not resolve type #{type}, which is a #{type.class_name} (#{debug_information.id})" %}
       {% end %}
     end
 
     # TODO: Some double checks could be omitted
 
-    macro check_and_cast_resolved_union_type(rb, value, type, raw_type, context = nil)
+    macro check_and_cast_resolved_union_type(rb, value, type, raw_type, context = nil, debug_information = nil)
       {% if type.resolve <= Nil %}
         if Anyolite::RbCast.check_for_nil({{value}})
           final_value = Anyolite::RbCast.cast_to_nil({{rb}}, {{value}})
@@ -116,7 +116,7 @@ module Anyolite
           final_value = Anyolite::Macro.convert_from_ruby_object({{rb}}, {{value}}, {{type}}).value
         end
       {% else %}
-        {% raise "Could not resolve type #{type}, which is a #{type.class_name}" %}
+        {% raise "Could not resolve type #{type}, which is a #{type.class_name} (#{debug_information.id})" %}
       {% end %}
     end
   end

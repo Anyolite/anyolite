@@ -178,9 +178,9 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 
 * [ ] Maybe fix or at least warn of abstract structs
 * [X] Correct handling of `inspect` and `to_s` methods
-* [ ] Better error messages for invalid data pointers
+* [X] Better error messages for invalid data pointers
 * [X] Default exclusion of unwrappable `<=` class methods for inherited classes
-* [ ] More consistent debug information
+* [X] More consistent debug information
 * [X] Error message when trying to wrap slices (for now)
 * [X] Added default equality method for structs and enums
 

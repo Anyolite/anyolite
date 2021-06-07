@@ -8,7 +8,7 @@ module Anyolite
     end
 
     # Converts Ruby values to Crystal values
-    macro convert_regular_arg(rb, arg, arg_type, context = nil, type_vars = nil, type_var_names = nil)
+    macro convert_regular_arg(rb, arg, arg_type, context = nil, type_vars = nil, type_var_names = nil, debug_information = nil)
       {% if arg_type.stringify.includes?("->") || arg_type.stringify.includes?(" Proc(") %}
         {% puts "\e[33m> INFO: Proc types are not allowed as arguments.\e[0m" %}
         raise "Proc types are not allowed as arguments ({{debug_information.id}})"
@@ -16,19 +16,19 @@ module Anyolite
         {% puts "\e[33m> INFO: Slice types are not allowed as arguments (#{debug_information.id}).\e[0m" %}
         raise "Slice types are not allowed as arguments ({{debug_information.id}})"
       {% elsif arg_type.is_a?(Generic) %}
-        Anyolite::Macro.convert_from_ruby_to_crystal({{rb}}, {{arg}}, dummy_arg : {{arg_type}}, context: {{context}}, type_vars: {{type_vars}}, type_var_names: {{type_var_names}})
+        Anyolite::Macro.convert_from_ruby_to_crystal({{rb}}, {{arg}}, dummy_arg : {{arg_type}}, context: {{context}}, type_vars: {{type_vars}}, type_var_names: {{type_var_names}}, debug_information: {{debug_information}})
       {% elsif arg_type.is_a?(TypeDeclaration) && arg_type.type.is_a?(Union) %}
-        Anyolite::Macro.convert_from_ruby_to_crystal({{rb}}, {{arg}}, {{arg_type}}, context: {{context}})
+        Anyolite::Macro.convert_from_ruby_to_crystal({{rb}}, {{arg}}, {{arg_type}}, context: {{context}}, debug_information: {{debug_information}})
       {% elsif arg_type.is_a?(TypeDeclaration) %}
-        Anyolite::Macro.convert_regular_arg({{rb}}, {{arg}}, {{arg_type.type}}, context: {{context}}, type_vars: {{type_vars}}, type_var_names: {{type_var_names}})
+        Anyolite::Macro.convert_regular_arg({{rb}}, {{arg}}, {{arg_type.type}}, context: {{context}}, type_vars: {{type_vars}}, type_var_names: {{type_var_names}}, debug_information: {{debug_information}})
       {% elsif context %}
-        Anyolite::Macro.resolve_regular_arg({{rb}}, {{arg}}, {{context}}::{{arg_type.stringify.starts_with?("::") ? arg_type.stringify[2..-1].id : arg_type}}, {{arg_type}}, {{context}})
+        Anyolite::Macro.resolve_regular_arg({{rb}}, {{arg}}, {{context}}::{{arg_type.stringify.starts_with?("::") ? arg_type.stringify[2..-1].id : arg_type}}, {{arg_type}}, {{context}}, debug_information: {{debug_information}})
       {% else %}
-        Anyolite::Macro.resolve_regular_arg({{rb}}, {{arg}}, {{arg_type}}, {{arg_type}})
+        Anyolite::Macro.resolve_regular_arg({{rb}}, {{arg}}, {{arg_type}}, {{arg_type}}, debug_information: {{debug_information}})
       {% end %}
     end
 
-    macro resolve_regular_arg(rb, arg, arg_type, raw_arg_type, context = nil)
+    macro resolve_regular_arg(rb, arg, arg_type, raw_arg_type, context = nil, debug_information = nil)
       {% if arg_type.resolve? %}
         {% if arg_type.resolve <= Nil %}
           nil
@@ -53,20 +53,20 @@ module Anyolite
         {% elsif arg_type.resolve <= Array %}
           array_size = Anyolite::RbCore.array_length({{arg}})
           converted_array = {{arg_type}}.new(size: array_size) do |i|
-            Anyolite::Macro.convert_from_ruby_to_crystal({{rb}}, Anyolite::RbCore.rb_ary_entry({{arg}}, i), {{arg_type.type_vars[0]}}, context: {{context}})
+            Anyolite::Macro.convert_from_ruby_to_crystal({{rb}}, Anyolite::RbCore.rb_ary_entry({{arg}}, i), {{arg_type.type_vars[0]}}, context: {{context}}, debug_information: {{debug_information}})
           end
           converted_array
         {% elsif arg_type.resolve <= Hash %}
           hash_size = Anyolite::RbCore.rb_hash_size({{rb}}, {{arg}})
 
           all_rb_hash_keys = Anyolite::RbCore.rb_hash_keys({{rb}}, {{arg}})
-          all_converted_hash_keys = Anyolite::Macro.convert_from_ruby_to_crystal({{rb}}, all_rb_hash_keys, Array({{arg_type.type_vars[0]}}), context: {{context}})
+          all_converted_hash_keys = Anyolite::Macro.convert_from_ruby_to_crystal({{rb}}, all_rb_hash_keys, Array({{arg_type.type_vars[0]}}), context: {{context}}, debug_information: {{debug_information}})
 
           converted_hash = {{arg_type}}.new(initial_capacity: hash_size)
           all_converted_hash_keys.each_with_index do |key, i|
             rb_key = Anyolite::RbCore.rb_ary_entry(all_rb_hash_keys, i)
             rb_value = Anyolite::RbCore.rb_hash_get({{rb}}, {{arg}}, rb_key)
-            converted_hash[key] = Anyolite::Macro.convert_from_ruby_to_crystal({{rb}}, rb_value, {{arg_type.type_vars[1]}}, context: {{context}})
+            converted_hash[key] = Anyolite::Macro.convert_from_ruby_to_crystal({{rb}}, rb_value, {{arg_type.type_vars[1]}}, context: {{context}}, debug_information: {{debug_information}})
           end
 
           converted_hash
@@ -80,12 +80,12 @@ module Anyolite
       {% elsif context %}
         {% if context.names[0..-2].size > 0 %}
           {% new_context = context.names[0..-2].join("::").gsub(/(\:\:)+/, "::").id %}
-          Anyolite::Macro.resolve_regular_arg({{rb}}, {{arg}}, {{new_context}}::{{raw_arg_type.stringify.starts_with?("::") ? raw_arg_type.stringify[2..-1].id : raw_arg_type}}, {{raw_arg_type}}, {{new_context}})
+          Anyolite::Macro.resolve_regular_arg({{rb}}, {{arg}}, {{new_context}}::{{raw_arg_type.stringify.starts_with?("::") ? raw_arg_type.stringify[2..-1].id : raw_arg_type}}, {{raw_arg_type}}, {{new_context}}, debug_information: {{debug_information}})
         {% else %}
-          Anyolite::Macro.resolve_regular_arg({{rb}}, {{arg}}, {{raw_arg_type}}, {{raw_arg_type}})
+          Anyolite::Macro.resolve_regular_arg({{rb}}, {{arg}}, {{raw_arg_type}}, {{raw_arg_type}}, debug_information: {{debug_information}})
         {% end %}
       {% else %}
-        {% raise "Could not resolve #{arg_type}, which is a #{arg_type.class_name}, in any meaningful way" %}
+        {% raise "Could not resolve #{arg_type}, which is a #{arg_type.class_name}, in any meaningful way (#{debug_information.id})" %}
       {% end %}
     end
 
@@ -138,7 +138,7 @@ module Anyolite
             {{arg_type.value}}
           {% else %}
             # Should only happen if no default value was given
-            Anyolite::RbCore.rb_raise_argument_error({{rb}}, "Undefined argument #{{{arg}}} of {{arg_type}} in context {{context}}")
+            Anyolite::RbCore.rb_raise_argument_error({{rb}}, "Undefined argument #{{{arg}}} of {{arg_type}} in context {{context}} (#{{{debug_information.stringify}}})")
             # Code should jump to somewhere else before this point, but we want to have a NoReturn type here
             raise("Should not be reached")
           {% end %}
@@ -168,7 +168,7 @@ module Anyolite
           {% char_parser += (brace_counter == 0 && c == '|' ? ',' : c) %}
         {% end %}
 
-        Anyolite::Macro.cast_to_union_value({{rb}}, {{arg}}, {{"[#{char_parser.id}]".id}}, context: {{context}})
+        Anyolite::Macro.cast_to_union_value({{rb}}, {{arg}}, {{"[#{char_parser.id}]".id}}, context: {{context}}, debug_information: {{debug_information}})
       {% elsif arg_type.resolve? %}
         {% if arg_type.resolve <= Nil %}
           Anyolite::RbCast.cast_to_nil({{rb}}, {{arg}})
@@ -194,20 +194,20 @@ module Anyolite
           # TODO: Make a macro out of this
           array_size = Anyolite::RbCore.array_length({{arg}})
           converted_array = {{arg_type}}.new(size: array_size) do |i|
-            Anyolite::Macro.convert_from_ruby_to_crystal({{rb}}, Anyolite::RbCore.rb_ary_entry({{arg}}, i), {{arg_type.type_vars[0]}}, context: {{context}})
+            Anyolite::Macro.convert_from_ruby_to_crystal({{rb}}, Anyolite::RbCore.rb_ary_entry({{arg}}, i), {{arg_type.type_vars[0]}}, context: {{context}}, debug_information: {{debug_information}})
           end
           converted_array
         {% elsif arg_type.resolve <= Hash %}
           hash_size = Anyolite::RbCore.rb_hash_size({{rb}}, {{arg}})
 
           all_rb_hash_keys = Anyolite::RbCore.rb_hash_keys({{rb}}, {{arg}})
-          all_converted_hash_keys = Anyolite::Macro.convert_from_ruby_to_crystal({{rb}}, all_rb_hash_keys, Array({{arg_type.type_vars[0]}}), context: {{context}})
+          all_converted_hash_keys = Anyolite::Macro.convert_from_ruby_to_crystal({{rb}}, all_rb_hash_keys, Array({{arg_type.type_vars[0]}}), context: {{context}}, debug_information: {{debug_information}})
 
           converted_hash = {{arg_type}}.new(initial_capacity: hash_size)
           all_converted_hash_keys.each_with_index do |key, i|
             rb_key = Anyolite::RbCore.rb_ary_entry(all_rb_hash_keys, i)
             rb_value = Anyolite::RbCore.rb_hash_get({{rb}}, {{arg}}, rb_key)
-            converted_hash[key] = Anyolite::Macro.convert_from_ruby_to_crystal({{rb}}, rb_value, {{arg_type.type_vars[1]}}, context: {{context}})
+            converted_hash[key] = Anyolite::Macro.convert_from_ruby_to_crystal({{rb}}, rb_value, {{arg_type.type_vars[1]}}, context: {{context}}, debug_information: {{debug_information}})
           end
 
           converted_hash
@@ -232,25 +232,25 @@ module Anyolite
       {% end %}
     end
 
-    macro convert_regular_args(rb, args, regular_args, context, type_vars = nil, type_var_names = nil)
+    macro convert_regular_args(rb, args, regular_args, context, type_vars = nil, type_var_names = nil, debug_information = nil)
       Tuple.new(
         {% c = 0 %}
         {% if regular_args %}
           {% for arg in regular_args %}
-            Anyolite::Macro.convert_regular_arg({{rb}}, {{args}}[{{c}}].value, {{arg}}, context: {{context}}, type_vars: {{type_vars}}, type_var_names: {{type_var_names}}),
+            Anyolite::Macro.convert_regular_arg({{rb}}, {{args}}[{{c}}].value, {{arg}}, context: {{context}}, type_vars: {{type_vars}}, type_var_names: {{type_var_names}}, debug_information: {{debug_information}}),
             {% c += 1 %}
           {% end %}
         {% end %}
       )
     end
 
-    macro get_converted_args(rb, regular_args, context, type_vars = nil, type_var_names = nil)
+    macro get_converted_args(rb, regular_args, context, type_vars = nil, type_var_names = nil, debug_information = nil)
       args = Anyolite::Macro.generate_arg_tuple({{rb}}, {{regular_args}}, context: {{context}})
       format_string = Anyolite::Macro.format_string({{regular_args}}, context: {{context}})
       
       Anyolite::RbCore.rb_get_args({{rb}}, format_string, *args)
 
-      Anyolite::Macro.convert_regular_args({{rb}}, args, {{regular_args}}, context: {{context}}, type_vars: {{type_vars}}, type_var_names: {{type_var_names}})
+      Anyolite::Macro.convert_regular_args({{rb}}, args, {{regular_args}}, context: {{context}}, type_vars: {{type_vars}}, type_var_names: {{type_var_names}}, debug_information: {{debug_information}})
     end
   end
 end
