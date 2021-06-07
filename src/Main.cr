@@ -605,6 +605,7 @@ module Anyolite
                                 class_method_exclusions = [] of String | Symbol,
                                 constant_exclusions = [] of String | Symbol,
                                 use_enum_constructor = false,
+                                wrap_equality_method = false,
                                 wrap_superclass = true,
                                 overwrite = false,
                                 verbose = false)
@@ -646,7 +647,7 @@ module Anyolite
           Anyolite.wrap_class({{rb_interpreter}}, {{resolved_class}}, {{actual_name}}, under: {{under}}, superclass: {{superclass}})
 
           Anyolite::Macro.wrap_all_instance_methods({{rb_interpreter}}, {{crystal_class}}, {{instance_method_exclusions}}, 
-            verbose: {{verbose}}, context: {{new_context}}, use_enum_constructor: {{use_enum_constructor}})
+            verbose: {{verbose}}, context: {{new_context}}, use_enum_constructor: {{use_enum_constructor}}, wrap_equality_method: {{wrap_equality_method}})
           Anyolite::Macro.wrap_all_class_methods({{rb_interpreter}}, {{crystal_class}}, {{class_method_exclusions}}, verbose: {{verbose}}, context: {{new_context}})
           Anyolite::Macro.wrap_all_constants({{rb_interpreter}}, {{crystal_class}}, {{constant_exclusions}}, verbose: {{verbose}}, context: {{new_context}})
         end
@@ -711,6 +712,8 @@ module Anyolite
              class_method_exclusions = [] of String | Symbol,
              constant_exclusions = [] of String | Symbol,
              wrap_superclass = false,
+             use_enum_constructor = false,
+             wrap_equality_method = false,
              overwrite = false,
              verbose = false)
 
@@ -736,6 +739,8 @@ module Anyolite
           instance_method_exclusions: {{instance_method_exclusions}},
           class_method_exclusions: {{class_method_exclusions}},
           constant_exclusions: {{constant_exclusions}},
+          use_enum_constructor: {{use_enum_constructor}},
+          wrap_equality_method: {{wrap_equality_method || crystal_module_or_class.resolve.struct?}},
           wrap_superclass: {{wrap_superclass}},
           overwrite: {{overwrite}},
           verbose: {{verbose}}
@@ -748,6 +753,7 @@ module Anyolite
           class_method_exclusions: {{class_method_exclusions}},
           constant_exclusions: {{constant_exclusions}},
           use_enum_constructor: true,
+          wrap_equality_method: true,
           wrap_superclass: {{wrap_superclass}},
           overwrite: {{overwrite}},
           verbose: {{verbose}}
@@ -757,6 +763,8 @@ module Anyolite
           instance_method_exclusions: {{instance_method_exclusions}},
           class_method_exclusions: {{class_method_exclusions}},
           constant_exclusions: {{constant_exclusions}},
+          use_enum_constructor: {{use_enum_constructor}},
+          wrap_equality_method: {{wrap_equality_method}},
           wrap_superclass: {{wrap_superclass}},
           overwrite: {{overwrite}},
           verbose: {{verbose}}

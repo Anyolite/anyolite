@@ -527,11 +527,11 @@ module Anyolite
         {% if actual_constant.module? %}
           Anyolite.wrap_module_with_methods({{rb_interpreter}}, {{actual_constant}}, under: {{under_class_or_module}}, overwrite: {{overwrite}}, verbose: {{verbose}})
         {% elsif actual_constant.class? || actual_constant.struct? %}
-          Anyolite.wrap_class_with_methods({{rb_interpreter}}, {{actual_constant}}, under: {{under_class_or_module}}, overwrite: {{overwrite}}, verbose: {{verbose}})
+          Anyolite.wrap_class_with_methods({{rb_interpreter}}, {{actual_constant}}, under: {{under_class_or_module}}, wrap_equality_method: {{actual_constant.struct?}}, overwrite: {{overwrite}}, verbose: {{verbose}})
         {% elsif actual_constant.union? %}
           {% puts "\e[31m> WARNING: Wrapping of unions not supported, thus skipping #{actual_constant}\e[0m" %}
         {% elsif actual_constant < Enum %}
-          Anyolite.wrap_class_with_methods({{rb_interpreter}}, {{actual_constant}}, under: {{under_class_or_module}}, use_enum_constructor: true, overwrite: {{overwrite}}, verbose: {{verbose}})
+          Anyolite.wrap_class_with_methods({{rb_interpreter}}, {{actual_constant}}, under: {{under_class_or_module}}, use_enum_constructor: true, wrap_equality_method: true, overwrite: {{overwrite}}, verbose: {{verbose}})
         {% else %}
           # Could be an alias, just try the default case
           Anyolite.wrap_class_with_methods({{rb_interpreter}}, {{actual_constant}}, under: {{under_class_or_module}}, overwrite: {{overwrite}}, verbose: {{verbose}})

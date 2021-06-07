@@ -182,8 +182,8 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 * [ ] Better error messages for invalid data pointers
 * [X] Default exclusion of unwrappable `<=` class methods for inherited classes
 * [ ] More consistent debug information
-* [ ] Error message when trying to wrap slices (for now)
-* [ ] Solution for enum value inequality
+* [X] Error message when trying to wrap slices (for now)
+* [X] Added default equality method for structs and enums
 
 #### Bugfixes
 

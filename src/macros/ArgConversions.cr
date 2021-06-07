@@ -12,6 +12,9 @@ module Anyolite
       {% if arg_type.stringify.includes?("->") || arg_type.stringify.includes?(" Proc(") %}
         {% puts "\e[33m> INFO: Proc types are not allowed as arguments.\e[0m" %}
         raise "Proc types are not allowed as arguments ({{debug_information.id}})"
+      {% elsif arg_type.stringify.includes?(" Slice(") %}
+        {% puts "\e[33m> INFO: Slice types are not allowed as arguments (#{debug_information.id}).\e[0m" %}
+        raise "Slice types are not allowed as arguments ({{debug_information.id}})"
       {% elsif arg_type.is_a?(Generic) %}
         Anyolite::Macro.convert_from_ruby_to_crystal({{rb}}, {{arg}}, dummy_arg : {{arg_type}}, context: {{context}}, type_vars: {{type_vars}}, type_var_names: {{type_var_names}})
       {% elsif arg_type.is_a?(TypeDeclaration) && arg_type.type.is_a?(Union) %}
@@ -90,6 +93,9 @@ module Anyolite
       {% if arg_type.stringify.includes?("->") || arg_type.stringify.includes?(" Proc(") %}
         {% puts "\e[33m> INFO: Proc types are not allowed as arguments (#{debug_information.id}).\e[0m" %}
         raise "Proc types are not allowed as arguments ({{debug_information.id}})"
+      {% elsif arg_type.stringify.includes?(" Slice(") %}
+        {% puts "\e[33m> INFO: Slice types are not allowed as arguments (#{debug_information.id}).\e[0m" %}
+        raise "Slice types are not allowed as arguments ({{debug_information.id}})"
       {% elsif type_var_names && type_var_names.includes?(arg_type.type) %}
         {% type_var_names.each_with_index { |element, index| result = index if element == arg_type.type } %}
         Anyolite::Macro.convert_from_ruby_to_crystal({{rb}}, {{arg}}, {{type_vars[result]}}, context: {{context}}, debug_information: {{debug_information}})

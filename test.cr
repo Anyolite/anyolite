@@ -153,6 +153,10 @@ module SomeModule
     #   pr.call(12)
     # end
 
+    # def slice_test(s : Slice(Int32))
+      
+    # end
+
     # Gets called in Crystal and mruby
     def initialize(@x : Int32 = 0)
       Test.increase_counter
@@ -489,7 +493,7 @@ module TestModule
   end
 end
 
-#puts "Reference table: #{Anyolite::RbRefTable.inspect}"
+puts "Reference table: #{Anyolite::RbRefTable.inspect}"
 #Anyolite::RbRefTable.reset
 
 puts "------------------------------"

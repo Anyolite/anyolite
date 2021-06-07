@@ -1,6 +1,6 @@
 module Anyolite
   module Macro
-    macro wrap_all_instance_methods(rb_interpreter, crystal_class, exclusions, verbose, context = nil, use_enum_constructor = false)
+    macro wrap_all_instance_methods(rb_interpreter, crystal_class, exclusions, verbose, context = nil, use_enum_constructor = false, wrap_equality_method = false)
       {% has_specialized_method = {} of String => Bool %}
 
       {% for method in crystal_class.resolve.methods %}
@@ -155,6 +155,10 @@ module Anyolite
         Anyolite::Macro.add_default_constructor({{rb_interpreter}}, {{crystal_class}}, {{verbose}})
       {% elsif !how_many_times_wrapped["initialize"] && use_enum_constructor %}
         Anyolite::Macro.add_enum_constructor({{rb_interpreter}}, {{crystal_class}}, {{verbose}})
+      {% end %}
+
+      {% if wrap_equality_method && !how_many_times_wrapped["=="] %}
+        Anyolite::Macro.add_equality_method({{rb_interpreter}}, {{crystal_class}}, {{context}}, {{verbose}})
       {% end %}
     end
 

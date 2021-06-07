@@ -237,3 +237,6 @@ puts TestModule::Test::ValueStruct.new(89, 0.89, "Something").s
 puts a.inspect
 
 TestModule::Test::GTIntFloat.self_test(other: TestModule::Test::GTIntFloat.new(u: 1, v: 2.3))
+
+puts "Are enums equal: #{TestModule::Test::TestEnum.new(3) == TestModule::Test::TestEnum.new(3)}"
+puts "Are structs equal: #{TestModule::TestStructRenamed.new == TestModule::TestStructRenamed.new}"
