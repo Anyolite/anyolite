@@ -652,8 +652,12 @@ module Anyolite
   # *constant_exclusions* (for constants).
   #
   # Enum classes can be wrapped by setting *use_enum_constructor*.
+  # If *wrap_equality_method* is set, the `==` method will be wrapped
+  # automatically.
   # Setting *connect_to_superclass* to `false` will force the algorithm
   # to ignore any superclass.
+  # Setting *include_ancestor_methods* will include any methods
+  # from nontrivial ancestor classes.
   # The option *overwrite* will iterate through all functions and
   # constants again if set to `true`.
   # If *verbose* is set, wrapping information will be displayed.
@@ -778,8 +782,12 @@ module Anyolite
   # *class_method_exclusions* (for class methods) or 
   # *constant_exclusions* (for constants).
   #
+  # If *wrap_equality_method* is set, the `==` method will be wrapped
+  # automatically.
   # Setting *connect_to_superclass* to `false` will force the algorithm
   # to ignore any superclass.
+  # Setting *include_ancestor_methods* will include any methods
+  # from nontrivial ancestor classes.
   # The option *overwrite* will iterate through all functions and
   # constants again if set to `true`.
   # If *verbose* is set, wrapping information will be displayed. 
