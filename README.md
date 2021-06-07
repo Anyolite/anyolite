@@ -170,7 +170,7 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 #### Features
 
 * [X] Automatic wrapping of inherited methods from all non-trivial ancestors
-* [ ] Direct methods for Ruby error messages
+* [X] Direct methods for Ruby error messages
 * [X] Usage of `self` as argument type is now allowed
 * [X] Option to default to regular args for an entire class
 

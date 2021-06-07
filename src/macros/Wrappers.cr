@@ -29,7 +29,7 @@ module Anyolite
 
           {% if block_arg_number %}
             if Anyolite::RbCast.check_for_nil(block_ptr.value)
-              Anyolite::RbCore.rb_raise_argument_error(rb, "No block given.")
+              Anyolite.raise_argument_error("No block given.")
               Anyolite::RbCast.return_nil
             end
           {% end %}
@@ -81,7 +81,7 @@ module Anyolite
 
           {% if block_arg_number %}
             if Anyolite::RbCast.check_for_nil(block_ptr.value)
-              Anyolite::RbCore.rb_raise_argument_error(rb, "No block given.")
+              Anyolite.raise_argument_error("No block given.")
               Anyolite::RbCast.return_nil
             end
           {% end %}
@@ -138,7 +138,7 @@ module Anyolite
 
           {% if block_arg_number %}
             if Anyolite::RbCast.check_for_nil(block_ptr.value)
-              Anyolite::RbCore.rb_raise_argument_error(rb, "No block given.")
+              Anyolite.raise_argument_error("No block given.")
               Anyolite::RbCast.return_nil
             end
           {% end %}
@@ -190,7 +190,7 @@ module Anyolite
 
           {% if block_arg_number %}
             if Anyolite::RbCast.check_for_nil(block_ptr.value)
-              Anyolite::RbCore.rb_raise_argument_error(rb, "No block given.")
+              Anyolite.raise_argument_error("No block given.")
               Anyolite::RbCast.return_nil
             end
           {% end %}
@@ -249,7 +249,7 @@ module Anyolite
 
           {% if block_arg_number %}
             if Anyolite::RbCast.check_for_nil(block_ptr.value)
-              Anyolite::RbCore.rb_raise_argument_error(rb, "No block given.")
+              Anyolite.raise_argument_error("No block given.")
               Anyolite::RbCast.return_nil
             end
           {% end %}
@@ -309,7 +309,7 @@ module Anyolite
 
           {% if block_arg_number %}
             if Anyolite::RbCast.check_for_nil(block_ptr.value)
-              Anyolite::RbCore.rb_raise_argument_error(rb, "No block given.")
+              Anyolite.raise_argument_error("No block given.")
               Anyolite::RbCast.return_nil
             end
           {% end %}
@@ -384,7 +384,7 @@ module Anyolite
 
           {% if block_arg_number %}
             if Anyolite::RbCast.check_for_nil(block_ptr.value)
-              Anyolite::RbCore.rb_raise_argument_error(rb, "No block given.")
+              Anyolite.raise_argument_error("No block given.")
               Anyolite::RbCast.return_nil
             end
           {% end %}
@@ -461,7 +461,7 @@ module Anyolite
 
           {% if block_arg_number %}
             if Anyolite::RbCast.check_for_nil(block_ptr.value)
-              Anyolite::RbCore.rb_raise_argument_error(rb, "No block given.")
+              Anyolite.raise_argument_error("No block given.")
               Anyolite::RbCast.return_nil
             end
           {% end %}

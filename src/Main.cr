@@ -133,9 +133,66 @@ module Anyolite
     end
   end
 
+  # Casts the `RbRef` *rbref* to the Crystal `Class` *cast_type*.
+  #
+  # If needed, *context* can be set to a `Path` in order to specify *cast_to*.
   macro cast_to_crystal(rbref, cast_type, context = nil)
     %rb = Anyolite::RbRefTable.get_current_interpreter
     Anyolite::Macro.convert_from_ruby_to_crystal(%rb.to_unsafe, {{rbref}}.value, {{cast_type}}, context: {{context}})
+  end
+
+  # Raises a Ruby runtime error with `String` *message*.
+  macro raise_runtime_error(message)
+    %rb = Anyolite::RbRefTable.get_current_interpreter
+    Anyolite::RbCore.rb_raise_runtime_error(%rb.to_unsafe, {{message}}.to_unsafe)
+  end
+  
+  # Raises a Ruby type error with `String` *message*.
+  macro raise_type_error(message)
+    %rb = Anyolite::RbRefTable.get_current_interpreter
+    Anyolite::RbCore.rb_raise_type_error(%rb.to_unsafe, {{message}}.to_unsafe)
+  end
+
+  # Raises a Ruby argument error with `String` *message*.
+  macro raise_argument_error(message)
+    %rb = Anyolite::RbRefTable.get_current_interpreter
+    Anyolite::RbCore.rb_raise_argument_error(%rb.to_unsafe, {{message}}.to_unsafe)
+  end
+
+  # Raises a Ruby index error with `String` *message*.
+  macro raise_index_error(message)
+    %rb = Anyolite::RbRefTable.get_current_interpreter
+    Anyolite::RbCore.rb_raise_index_error(%rb.to_unsafe, {{message}}.to_unsafe)
+  end
+
+  # Raises a Ruby range error with `String` *message*.
+  macro raise_range_error(message)
+    %rb = Anyolite::RbRefTable.get_current_interpreter
+    Anyolite::RbCore.rb_raise_range_error(%rb.to_unsafe, {{message}}.to_unsafe)
+  end
+
+  # Raises a Ruby name error with `String` *message*.
+  macro raise_name_error(message)
+    %rb = Anyolite::RbRefTable.get_current_interpreter
+    Anyolite::RbCore.rb_raise_name_error(%rb.to_unsafe, {{message}}.to_unsafe)
+  end
+
+  # Raises a Ruby script error with `String` *message*.
+  macro raise_script_error(message)
+    %rb = Anyolite::RbRefTable.get_current_interpreter
+    Anyolite::RbCore.rb_raise_script_error(%rb.to_unsafe, {{message}}.to_unsafe)
+  end
+
+  # Raises a Ruby non-implementation error with `String` *message*.
+  macro raise_not_implemented_error(message)
+    %rb = Anyolite::RbRefTable.get_current_interpreter
+    Anyolite::RbCore.rb_raise_not_implemented_error(%rb.to_unsafe, {{message}}.to_unsafe)
+  end
+
+  # Raises a Ruby key error with `String` *message*.
+  macro raise_key_error(message)
+    %rb = Anyolite::RbRefTable.get_current_interpreter
+    Anyolite::RbCore.rb_raise_key_error(%rb.to_unsafe, {{message}}.to_unsafe)
   end
 
   # Checks whether the Ruby function *name* (`String` or `Symbol`) is defined

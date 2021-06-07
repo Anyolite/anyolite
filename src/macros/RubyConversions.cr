@@ -5,7 +5,7 @@ module Anyolite
         obj_class = Anyolite::RbCore.get_class_of_obj({{rb}}, {{obj}})
 
         rb_class_name = String.new(Anyolite::RbCore.rb_class_name({{rb}}, obj_class))
-        Anyolite::RbCore.rb_raise_argument_error({{rb}}, "Invalid data type #{rb_class_name} for object class #{{{crystal_type.stringify}}}.")
+        Anyolite.raise_argument_error("Invalid data type #{rb_class_name} for object class #{{{crystal_type.stringify}}}.")
       end
 
       ptr = Anyolite::RbCore.get_data_ptr({{obj}})
@@ -17,7 +17,7 @@ module Anyolite
         obj_class = Anyolite::RbCore.get_class_of_obj({{rb}}, {{obj}})
 
         rb_class_name = String.new(Anyolite::RbCore.rb_class_name({{rb}}, obj_class))
-        Anyolite::RbCore.rb_raise_argument_error({{rb}}, "Invalid data type #{rb_class_name} for struct class #{{{crystal_type.stringify}}}")
+        Anyolite.raise_argument_error("Invalid data type #{rb_class_name} for struct class #{{{crystal_type.stringify}}}")
       end
       
       ptr = Anyolite::RbCore.get_data_ptr({{obj}})

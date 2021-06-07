@@ -177,7 +177,7 @@ module Anyolite
       class_name = String.new(RbCore.rb_class_name(rb, rb_class))
 
       value_debug = RbCast.cast_to_string(rb, rb_inspect_string)
-      RbCore.rb_raise_argument_error(rb, "Could not cast value #{value_debug} of class #{class_name} to #{crystal_class}.")
+      Anyolite.raise_argument_error("Could not cast value #{value_debug} of class #{class_name} to #{crystal_class}.")
       rescue_value
     end
 

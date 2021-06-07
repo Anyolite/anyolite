@@ -138,7 +138,7 @@ module Anyolite
             {{arg_type.value}}
           {% else %}
             # Should only happen if no default value was given
-            Anyolite::RbCore.rb_raise_argument_error({{rb}}, "Undefined argument #{{{arg}}} of {{arg_type}} in context {{context}} (#{{{debug_information.stringify}}})")
+            Anyolite.raise_argument_error("Undefined argument #{{{arg}}} of {{arg_type}} in context {{context}} (#{{{debug_information.stringify}}})")
             # Code should jump to somewhere else before this point, but we want to have a NoReturn type here
             raise("Should not be reached")
           {% end %}

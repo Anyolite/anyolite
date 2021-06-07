@@ -88,7 +88,15 @@ module Anyolite
     fun rb_print_error = mrb_print_error(rb : State*)
 
     fun rb_raise = mrb_raise(rb : State*, c : RClass*, msg : LibC::Char*)
+    fun rb_raise_runtime_error = mrb_raise_runtime_error(rb : State*, msg : LibC::Char*)
+    fun rb_raise_type_error = mrb_raise_type_error(rb : State*, msg : LibC::Char*)
     fun rb_raise_argument_error = mrb_raise_argument_error(rb : State*, msg : LibC::Char*)
+    fun rb_raise_index_error = mrb_raise_index_error(rb : State*, msg : LibC::Char*)
+    fun rb_raise_range_error = mrb_raise_range_error(rb : State*, msg : LibC::Char*)
+    fun rb_raise_name_error = mrb_raise_name_error(rb : State*, msg : LibC::Char*)
+    fun rb_raise_script_error = mrb_raise_script_error(rb : State*, msg : LibC::Char*)
+    fun rb_raise_not_implemented_error = mrb_raise_not_implemented_error(rb : State*, msg : LibC::Char*)
+    fun rb_raise_key_error = mrb_raise_key_error(rb : State*, msg : LibC::Char*)
 
     fun rb_get_args = mrb_get_args(rb : State*, format : LibC::Char*, ...) : RbInt
     
