@@ -174,6 +174,10 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 * [X] Usage of `self` as argument type is now allowed
 * [X] Option to default to regular args for an entire class
 
+# Breaking changes
+
+* [X] Renamed `wrap_superclass` to `connect_to_superclass` for clarity
+
 #### Usability
 
 * [ ] Maybe fix or at least warn of abstract structs

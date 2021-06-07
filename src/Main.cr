@@ -690,7 +690,7 @@ module Anyolite
       {% end %}
 
       {% if connect_to_superclass %}
-        {% superclass = [Reference, Object, Struct, Enum, Value, Comparable(Enum)].includes?(resolved_class.superclass) ? nil : resolved_class.superclass %}
+        {% superclass = [Reference, Object, Struct, Enum, Value, Comparable(Enum), Enumerable].includes?(resolved_class.superclass) ? nil : resolved_class.superclass %}
       {% else %}
         {% superclass = nil %}
       {% end %}
@@ -710,7 +710,7 @@ module Anyolite
 
           {% if include_ancestor_methods %}
             {% reversed_ancestors = [] of TypeNode %}
-            {% for ancestor in resolved_class.ancestors.reject{|ancestor| [Object, Reference, Struct, Enum, Value, Comparable(Enum)].includes?(ancestor)} %}
+            {% for ancestor in resolved_class.ancestors.reject{|ancestor| [Object, Reference, Struct, Enum, Value, Comparable(Enum), Enumerable].includes?(ancestor)} %}
               {% reversed_ancestors = [ancestor] + reversed_ancestors %}
             {% end %}
 
