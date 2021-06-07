@@ -158,11 +158,11 @@ module Anyolite
     end
 
     macro resolve_from_ruby_to_crystal(rb, arg, arg_type, raw_arg_type, context = nil, debug_information = nil)
-      {% if arg_type.stringify.starts_with?("Union") %}
+      {% if arg_type.stringify.starts_with?("Union") || arg_type.stringify.starts_with?("::Union") %}
         # This sadly needs some uncanny magic
         {% char_parser = "" %}
         {% brace_counter = 0 %}
-        {% for c in arg_type.stringify[6..-2].chars %}
+        {% for c in arg_type.stringify[(arg_type.stringify.starts_with?("::") ? 8 : 6)..-2].chars %}
           {% brace_counter += 1 if c == '(' %}
           {% brace_counter -= 1 if c == ')' %}
           {% char_parser += (brace_counter == 0 && c == '|' ? ',' : c) %}

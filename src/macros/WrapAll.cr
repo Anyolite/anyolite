@@ -114,7 +114,7 @@ module Anyolite
         {% if method.visibility != :public && method.name != "initialize" %}
           {% puts "--> Excluding #{crystal_class}::#{method.name} (Exclusion due to visibility)" if verbose %}
         {% elsif crystal_class != method_source && (later_ancestors ? later_ancestors + [crystal_class] : [crystal_class]).find{|later_ancestor| later_ancestor.resolve.methods.find{|orig_methods| orig_methods.name == method.name}} %}
-          {% puts "||||||||||||||||||||||||||||--> Excluding #{crystal_class}::#{method.name} (Exclusion due to finalization)" if verbose %}
+          {% puts "--> Excluding #{crystal_class}::#{method.name} (Exclusion due to finalization)" if verbose %}
         # Ignore rb hooks, to_unsafe and finalize (unless specialized, but this is not recommended)
         {% elsif (method.name.starts_with?("rb_") || method.name == "finalize" || method.name == "to_unsafe") && !has_specialized_method[method.name.stringify] %}
           {% puts "--> Excluding #{crystal_class}::#{method.name} (Exclusion by default)" if verbose %}
