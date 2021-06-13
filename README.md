@@ -182,7 +182,7 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 #### Usability
 
 * [X] Better handling for abstract classes
-* [X] Correct handling of `inspect` and `to_s` methods
+* [X] Correct handling of `inspect`, `to_s` and `hash` methods
 * [X] Better error messages for invalid data pointers
 * [X] Default exclusion of unwrappable `<=` class methods for inherited classes
 * [X] More consistent debug information

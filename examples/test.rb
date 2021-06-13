@@ -244,3 +244,6 @@ puts "Are structs equal: #{TestModule::TestStructRenamed.new == TestModule::Test
 inherited_content_test = TestModule::Test::NewContentTest.new(content: [a, a], more_content: [b, a, b])
 
 puts "Inherited content test: #{inherited_content_test.content.inspect.gsub("\n", "")} and #{inherited_content_test.more_content.inspect.gsub("\n", "")}"
+
+puts a.hash
+puts b.hash

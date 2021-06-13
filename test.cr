@@ -396,6 +396,10 @@ module SomeModule
       "#{str} and a reference with #{ref.value} (which is #{converted_arg}) were given."
     end
 
+    def hash
+      213345
+    end
+
     def ptr_return_test
       pointerof(@x)
     end
