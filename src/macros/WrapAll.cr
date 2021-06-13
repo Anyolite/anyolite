@@ -109,9 +109,13 @@ module Anyolite
         {% if method.accepts_block? %}
           {% puts "--> Block arg possible for #{crystal_class}::#{method.name}" if verbose %}
         {% end %}
-        
+
         # Ignore private and protected methods (can't be called from outside, they'd need to be wrapped for this to work)
-        {% if method.visibility != :public && method.name != "initialize" %}
+        {% if method.name == "dup" || method.name == "clone" %}
+          {% puts "--> Excluding #{crystal_class}::#{method.name} (Exclusion due to copy property)" if verbose %}
+        {% elsif crystal_class.resolve.abstract? && method.name == "initialize" %}
+          {% puts "--> Excluding #{crystal_class}::#{method.name} (Exclusion due to abstract class)" if verbose %}
+        {% elsif method.visibility != :public && method.name != "initialize" %}
           {% puts "--> Excluding #{crystal_class}::#{method.name} (Exclusion due to visibility)" if verbose %}
         {% elsif crystal_class != method_source && (later_ancestors ? later_ancestors + [crystal_class] : [crystal_class]).find{|later_ancestor| later_ancestor.resolve.methods.find{|orig_methods| orig_methods.name == method.name}} %}
           {% puts "--> Excluding #{crystal_class}::#{method.name} (Exclusion due to finalization)" if verbose %}
@@ -154,7 +158,7 @@ module Anyolite
         {% puts "" if verbose %}
       {% end %}
       
-      {% if method_source == crystal_class %}
+      {% if method_source == crystal_class && !crystal_class.resolve.abstract? %}
         # Make sure to add a default constructor if none was specified with Crystal
         {% if !how_many_times_wrapped["initialize"] && !use_enum_constructor %}
           Anyolite::Macro.add_default_constructor({{rb_interpreter}}, {{crystal_class}}, {{verbose}})

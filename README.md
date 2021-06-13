@@ -177,10 +177,11 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 # Breaking changes
 
 * [X] Renamed `wrap_superclass` to `connect_to_superclass` for clarity
+* [X] Excluded wrapping of `dup` and `clone` methods
 
 #### Usability
 
-* [ ] Maybe fix or at least warn of abstract structs
+* [X] Better handling for abstract classes
 * [X] Correct handling of `inspect` and `to_s` methods
 * [X] Better error messages for invalid data pointers
 * [X] Default exclusion of unwrappable `<=` class methods for inherited classes
