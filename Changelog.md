@@ -11,7 +11,7 @@
 * Usage of `self` as argument type is now allowed
 * Option to default to regular args for an entire class
 
-# Breaking changes
+#### Breaking changes
 
 * Renamed `wrap_superclass` to `connect_to_superclass` for clarity
 * Excluded wrapping of `dup` and `clone` methods
