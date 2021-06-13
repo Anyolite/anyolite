@@ -165,41 +165,6 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 
 ## Upcoming releases
 
-### Version 0.12.0
-
-#### Features
-
-* [X] Automatic wrapping of inherited methods from all non-trivial ancestors
-* [X] Direct methods for Ruby error messages
-* [X] Usage of `self` as argument type is now allowed
-* [X] Option to default to regular args for an entire class
-
-# Breaking changes
-
-* [X] Renamed `wrap_superclass` to `connect_to_superclass` for clarity
-* [X] Excluded wrapping of `dup` and `clone` methods
-
-#### Usability
-
-* [X] Better handling for abstract classes
-* [X] Correct handling of `inspect`, `to_s` and `hash` methods
-* [X] Enum class method `parse?` is now wrapped automatically
-* [X] Better error messages for invalid data pointers
-* [X] Default exclusion of unwrappable `<=` class methods for inherited classes
-* [X] More consistent debug information
-* [X] Error message when trying to wrap slices (for now)
-* [X] Added default equality method for structs and enums
-
-#### Bugfixes
-
-* [X] Argument specialization was not possible for operator methods
-* [X] Fixed class method exclusions not being recognized
-* [X] Fixed config file parsing
-* [X] Fixed generic argument parsing for regular arguments
-* [X] Fixed error when converting some generics with default arguments
-* [X] Default arguments for numeric regular arguments were not processed correctly
-* [X] Fixed error when using unions in the style of `Bool?` at some points
-
 ### Version 1.0.0
 
 This release will mark the first full release of Anyolite, mostly

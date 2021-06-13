@@ -2,6 +2,41 @@
 
 ## Releases
 
+### Version 0.12.0
+
+#### Features
+
+* Automatic wrapping of inherited methods from all non-trivial ancestors
+* Direct methods for Ruby error messages
+* Usage of `self` as argument type is now allowed
+* Option to default to regular args for an entire class
+
+# Breaking changes
+
+* Renamed `wrap_superclass` to `connect_to_superclass` for clarity
+* Excluded wrapping of `dup` and `clone` methods
+
+#### Usability
+
+* Better handling for abstract classes
+* Correct handling of `inspect`, `to_s` and `hash` methods
+* Enum class method `parse?` is now wrapped automatically
+* Better error messages for invalid data pointers
+* Default exclusion of unwrappable `<=` class methods for inherited classes
+* More consistent debug information
+* Error message when trying to wrap slices (for now)
+* Added default equality method for structs and enums
+
+#### Bugfixes
+
+* Argument specialization was not possible for operator methods
+* Fixed class method exclusions not being recognized
+* Fixed config file parsing
+* Fixed generic argument parsing for regular arguments
+* Fixed error when converting some generics with default arguments
+* Default arguments for numeric regular arguments were not processed correctly
+* Fixed error when using unions in the style of `Bool?` at some points
+
 ### Version 0.11.1
 
 #### Usability
