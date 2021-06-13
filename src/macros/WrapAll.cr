@@ -286,6 +286,11 @@ module Anyolite
         # We already wrapped 'initialize', so we don't need to wrap these
         {% elsif method.name == "allocate" || method.name == "new" %}
           {% puts "--> Excluding #{crystal_class}::#{method.name} (Allocation method)" if verbose %}
+        {% elsif method.name == "parse?" && method.args.stringify == "[string]" %}
+          {% operator = ruby_name %}
+
+          Anyolite::Macro.wrap_method_index({{rb_interpreter}}, {{crystal_class}}, {{index}}, "{{ruby_name}}", operator: "{{operator}}", is_class_method: true, added_keyword_args: [string : String], without_keywords: {{force_keyword_arg ? false : -1}}, context: {{context}}, return_nil: {{return_nil}}, block_arg_number: {{block_arg_number}}, block_return_type: {{block_return_type}}, store_block_arg: {{store_block_arg}})
+          {% how_many_times_wrapped[ruby_name.stringify] = how_many_times_wrapped[ruby_name.stringify] ? how_many_times_wrapped[ruby_name.stringify] + 1 : 1 %}
         {% elsif method.name == "<=" %}
           {% puts "--> Excluding #{crystal_class}::#{method.name} (Class argument method)" if verbose %}
         # Exclude methods if given as arguments
