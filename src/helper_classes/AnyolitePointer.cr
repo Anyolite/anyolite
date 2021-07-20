@@ -1,9 +1,5 @@
 module Anyolite
   module HelperClasses
-    macro load_helper_class(rb, helper_class)
-      Anyolite.wrap({{rb}}, Anyolite::HelperClasses::{{helper_class}})
-    end
-
     class AnyolitePointer
       property address : UInt64 = 0
 

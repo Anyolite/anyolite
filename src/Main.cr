@@ -10,8 +10,6 @@ require "./RbModule.cr"
 require "./RbRefTable.cr"
 require "./RbArgCache.cr"
 
-require "./helper_classes/HelperClasses.cr"
-
 # Main wrapper module, which should be covering most of the use cases.
 module Anyolite
   # Special struct representing undefined values in mruby.
@@ -871,3 +869,5 @@ module Anyolite
     end
   end
 end
+
+require "./helper_classes/HelperClasses.cr"

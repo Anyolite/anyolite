@@ -142,9 +142,9 @@ The limitations here do not have a trivial solution (yet), but with some tricks 
 tools from Anyolite it should technically be possible to circumvent them. If one
 of these does definitely not work, but you need them to, please feel free to open an issue.
 
-* Pointers are technically supported but unsafe
 * Procs as arguments are possible, but need special handling
 * Symbols do not work fully due to their compiletime nature in Crystal
+* Arrays, hashes and strings passed from Crystal to Ruby (or vice versa) are immutable
 * Only one function with the same name can be wrapped
 * Splat arguments and arbitrary keywords are not possible due to their reliance on symbols
 * Keywords will always be given to functions, even if optional (then with default values)
@@ -170,8 +170,6 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 #### Features
 
 * [X] AnyolitePointer helper class for accessing pointers
-* [ ] AnyoliteArray helper class for providing mutable arrays to Ruby
-* [ ] AnyoliteHash helper class for providing mutable hashes to Ruby
 
 ### Version 1.0.0
 
