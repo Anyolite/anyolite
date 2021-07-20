@@ -139,7 +139,7 @@ now they are potential roadblocks.
 ## Soft limitations
 
 The limitations here do not have a trivial solution (yet), but with some tricks and
-tools from Anyolite it should technically be possible to circumvent them (see indented points).
+tools from Anyolite it should technically be possible to circumvent them (possible solutions are written below each problem).
 If one of these does definitely not work, but you need them to, please feel free to open an issue.
 
 ### Procs as arguments are possible, but need special handling
