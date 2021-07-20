@@ -104,8 +104,9 @@ module Anyolite
           final_value = converted_hash
         end
       {% elsif type.resolve <= Pointer %}
-        if Anyolite::RbCast.check_for_fixnum({{value}})
-          final_value = {{type}}.new(address: Anyolite::RbCast.cast_to_int({{rb}}, {{value}}))
+        if Anyolite::RbCast.check_for_data({{value}}) && Anyolite::RbCast.check_custom_type({{rb}}, {{value}}, Anyolite::HelperClasses::AnyolitePointer)
+          %helper_ptr = Anyolite::Macro.convert_from_ruby_object({{rb}}, {{value}}, Anyolite::HelperClasses::AnyolitePointer).value
+          final_value = {{type}}.new(address: %helper_ptr.address)
         end
       {% elsif type.resolve <= Struct || type.resolve <= Enum %}
         if Anyolite::RbCast.check_for_data({{value}}) && Anyolite::RbCast.check_custom_type({{rb}}, {{value}}, {{type}})

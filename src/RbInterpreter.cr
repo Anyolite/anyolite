@@ -6,6 +6,7 @@ module Anyolite
 
     def self.create
       rb = self.new
+      Anyolite::HelperClasses.load_all(rb)
       yield rb
       rb.close
     end

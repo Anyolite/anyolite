@@ -165,6 +165,14 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 
 ## Upcoming releases
 
+### Version 0.13.0
+
+#### Features
+
+* [X] AnyolitePointer helper class for accessing pointers
+* [ ] AnyoliteArray helper class for providing mutable arrays to Ruby
+* [ ] AnyoliteHash helper class for providing mutable hashes to Ruby
+
 ### Version 1.0.0
 
 This release will mark the first full release of Anyolite, mostly

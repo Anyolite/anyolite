@@ -405,7 +405,21 @@ module SomeModule
     end
 
     def ptr_arg_test(arg : Pointer(Int32))
+      arg.value += 1
       arg.value
+    end
+
+    def ptr_star_arg_test(arg : Int32*)
+      arg.value += 3
+      arg.value
+    end
+
+    def test_int_or_ptr(arg : Int32 | Int32*)
+      if arg.is_a?(Int32)
+        arg
+      else
+        arg.value
+      end
     end
 
     class TestChild < Test

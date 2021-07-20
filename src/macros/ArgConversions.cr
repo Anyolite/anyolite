@@ -71,7 +71,7 @@ module Anyolite
 
           converted_hash
         {% elsif arg_type.resolve <= Pointer %}
-          {{arg_type}}.new(address: UInt64.new({{arg}}))
+          {{arg_type}}.new(address: UInt64.new({{arg.address}}))
         {% elsif arg_type.resolve <= Struct || arg_type.resolve <= Enum %}
           Anyolite::Macro.convert_from_ruby_struct({{rb}}, {{arg}}, {{arg_type}}).value.content
         {% else %}
@@ -212,7 +212,8 @@ module Anyolite
 
           converted_hash
         {% elsif arg_type.resolve <= Pointer %}
-          {{arg_type}}.new(address: Anyolite::RbCast.cast_to_int({{rb}}, {{arg}}))
+          %helper_ptr = Anyolite::Macro.convert_from_ruby_object({{rb}}, {{arg}}, Anyolite::HelperClasses::AnyolitePointer).value
+          {{arg_type}}.new(address: %helper_ptr.address)
         {% elsif arg_type.resolve <= Struct || arg_type.resolve <= Enum %}
           Anyolite::Macro.convert_from_ruby_struct({{rb}}, {{arg}}, {{arg_type}}).value.content
         {% elsif arg_type.resolve? %}
