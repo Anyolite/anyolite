@@ -203,6 +203,7 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 #### Features
 
 * [X] AnyolitePointer helper class for accessing pointers
+* [ ] Infrastructure to convert script files into bytecode at runtime and compiletime
 
 #### Usability
 
