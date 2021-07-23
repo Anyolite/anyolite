@@ -182,6 +182,10 @@ Use the `Specialize` annotations to specify the full path if necessary.
 
 Use the `ExcludeConstant` annotation to exclude private constants.
 
+### Pointers given to Ruby are weak references and therefore not tracked by the garbage collector
+
+Try to avoid pointers wherever possible, otherwise keep track of the referenced objects.
+
 # Why this name?
 
 https://en.wikipedia.org/wiki/Anyolite
