@@ -398,7 +398,6 @@ module SomeModule
     end
 
     def ref_test(str : String, ref : Anyolite::RbRef)
-      # TODO: Why does Int32? not work here?
       converted_arg = Anyolite.cast_to_crystal(ref, Int32?)
       "#{str} and a reference with #{ref.value} (which is #{converted_arg}) were given."
     end
