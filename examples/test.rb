@@ -1,3 +1,5 @@
+BytecodeTestClass.new("Hello world").do_test(5)
+
 a = TestModule::Test.new(x: 5)
 
 puts "Before block storing: #{a.x}"

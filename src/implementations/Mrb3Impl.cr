@@ -179,5 +179,9 @@ module Anyolite
 
     fun load_script_from_file(rb : State*, filename : LibC::Char*) : RbValue
     fun execute_script_line(rb : State*, str : LibC::Char*) : RbValue
+    fun execute_bytecode(rb : State*, bytecode : UInt8*) : RbValue
+    fun load_bytecode_from_file(rb : State*, filename : LibC::Char*) : RbValue
+
+    fun transform_script_to_bytecode(filename : LibC::Char*, target_filename : LibC::Char*) : LibC::Int
   end
 end

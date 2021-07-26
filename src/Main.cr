@@ -9,6 +9,7 @@ require "./RbTypeCache.cr"
 require "./RbModule.cr"
 require "./RbRefTable.cr"
 require "./RbArgCache.cr"
+require "./Preloader.cr"
 
 # Main wrapper module, which should be covering most of the use cases.
 module Anyolite

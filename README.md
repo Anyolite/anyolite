@@ -203,12 +203,16 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 #### Features
 
 * [X] AnyolitePointer helper class for accessing pointers
-* [ ] Infrastructure to convert script files into bytecode at runtime and compiletime
+* [X] Infrastructure to convert script files into bytecode at runtime and compiletime
 
 #### Usability
 
 * [ ] Option for defaulting to usage of RbValue as data container for regular arguments
 * [ ] More base structure for allowing different Ruby implementations
+
+#### Security
+
+* [ ] Error messages for unability to load script or bytecode files
 
 ### Version 1.0.0
 

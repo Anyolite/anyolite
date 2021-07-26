@@ -1,5 +1,8 @@
 require "./anyolite.cr"
 
+Anyolite::Preloader::AtCompiletime.transform_script_to_bytecode("examples/bytecode_test.rb", "examples/bytecode_test.mrb")
+Anyolite::Preloader::AtCompiletime.load_bytecode_file("examples/bytecode_test.mrb")
+
 module SomeModule
   def self.test_method(int : Int32, str : String)
     puts "#{str} and #{int}"
@@ -470,6 +473,8 @@ end
 # Anyolite::RbRefTable.set_option(:logging)
 
 Anyolite::RbInterpreter.create do |rb|
+  Anyolite::Preloader.execute_content(rb, "examples/bytecode_test.mrb")
+
   Anyolite.wrap_module(rb, SomeModule, "TestModule")
   Anyolite.wrap_module_function_with_keywords(rb, SomeModule, "test_method", SomeModule.test_method, [int : Int32 = 19, str : String])
   Anyolite.wrap_constant(rb, SomeModule, "SOME_CONSTANT", "Smile! 😊")

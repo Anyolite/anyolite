@@ -33,6 +33,14 @@ module Anyolite
       RbCore.load_script_from_file(@rb_ptr, filename)
     end
 
+    def execute_bytecode(bytecode : Array(UInt8))
+      RbCore.execute_bytecode(@rb_ptr, bytecode)
+    end
+
+    def load_bytecode_from_file(filename : String)
+      RbCore.load_bytecode_from_file(@rb_ptr, filename)
+    end
+
     # TODO: Use internal mruby arg count in future versions
     def define_method(name : String, c : RbClass | RbModule, proc : RbCore::RbFunc)
       if c.is_a?(RbModule)
