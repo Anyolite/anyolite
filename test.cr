@@ -144,10 +144,6 @@ module SomeModule
     end
 
     # Would all trigger an error!
-    # def pointer_test(p : ::Pointer(Test))
-    #   puts "Pointer has value #{p.value.x}"
-    # end
-
     # def proc_test(pr : Int32 | (Int32 -> Int32))
     #   pr.call(12)
     # end
