@@ -209,7 +209,8 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 #### Usability
 
 * [X] Option for defaulting to usage of RbValue as data container for regular arguments
-* [ ] More base structure for allowing different Ruby implementations
+* [X] More base structure for allowing different Ruby implementations
+* [X] Alternate build paths are now passed to Anyolite via the environment variable `ANYOLITE_BUILD_PATH`
 
 #### Security
 
@@ -217,7 +218,7 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 
 #### Bugfixes
 
-* [ ] Alternate build paths are not recognized properly in implementation files
+* [X] Alternate build paths are not recognized properly in implementation files
 
 ### Version 1.0.0
 

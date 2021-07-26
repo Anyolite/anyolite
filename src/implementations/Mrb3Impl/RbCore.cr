@@ -1,18 +1,23 @@
 module Anyolite
-  # TODO: Change build directory according to Rakefile!
-  {% if flag?(:win32) %}
-    @[Link(ldflags: "#{__DIR__}/../../../build/mruby/lib/libmruby.lib -DMRB_INT64 msvcrt.lib Ws2_32.lib")]
-    @[Link(ldflags: "#{__DIR__}/../../../build/glue/return_functions.obj -DMRB_INT64")]
-    @[Link(ldflags: "#{__DIR__}/../../../build/glue/data_helper.obj -DMRB_INT64")]
-    @[Link(ldflags: "#{__DIR__}/../../../build/glue/script_helper.obj -DMRB_INT64")]
-    @[Link(ldflags: "#{__DIR__}/../../../build/glue/error_helper.obj -DMRB_INT64")]
-  {% else %}
-    @[Link(ldflags: "#{__DIR__}/../../../build/mruby/lib/libmruby.a -DMRB_INT64")]
-    @[Link(ldflags: "#{__DIR__}/../../../build/glue/return_functions.o -DMRB_INT64")]
-    @[Link(ldflags: "#{__DIR__}/../../../build/glue/data_helper.o -DMRB_INT64")]
-    @[Link(ldflags: "#{__DIR__}/../../../build/glue/script_helper.o -DMRB_INT64")]
-    @[Link(ldflags: "#{__DIR__}/../../../build/glue/error_helper.o -DMRB_INT64")]
-  {% end %}
+  macro link_libraries
+    {% build_path = env("ANYOLITE_BUILD_PATH") ? env("ANYOLITE_BUILD_PATH") : "build" %}
+    
+    {% if flag?(:win32) %}
+      @[Link(ldflags: "#{__DIR__}/../../../{{build_path.id}}/mruby/lib/libmruby.lib -DMRB_INT64 msvcrt.lib Ws2_32.lib")]
+      @[Link(ldflags: "#{__DIR__}/../../../{{build_path.id}}/glue/return_functions.obj -DMRB_INT64")]
+      @[Link(ldflags: "#{__DIR__}/../../../{{build_path.id}}/glue/data_helper.obj -DMRB_INT64")]
+      @[Link(ldflags: "#{__DIR__}/../../../{{build_path.id}}/glue/script_helper.obj -DMRB_INT64")]
+      @[Link(ldflags: "#{__DIR__}/../../../{{build_path.id}}/glue/error_helper.obj -DMRB_INT64")]
+    {% else %}
+      @[Link(ldflags: "#{__DIR__}/../../../{{build_path.id}}/mruby/lib/libmruby.a -DMRB_INT64")]
+      @[Link(ldflags: "#{__DIR__}/../../../{{build_path.id}}/glue/return_functions.o -DMRB_INT64")]
+      @[Link(ldflags: "#{__DIR__}/../../../{{build_path.id}}/glue/data_helper.o -DMRB_INT64")]
+      @[Link(ldflags: "#{__DIR__}/../../../{{build_path.id}}/glue/script_helper.o -DMRB_INT64")]
+      @[Link(ldflags: "#{__DIR__}/../../../{{build_path.id}}/glue/error_helper.o -DMRB_INT64")]
+    {% end %}
+  end
+  
+  Anyolite.link_libraries
 
   lib RbCore
     alias RbFunc = Proc(State*, RbValue, RbValue)
