@@ -32,9 +32,9 @@ module SomeModule
       property s : String = "Empty"
   
       @[Anyolite::WrapWithoutKeywords]
-      def initialize(new_i : Int32 = 5678, new_f : Float32 = 0.5678, new_s : String = "Default")
-        @i = new_i
-        @f = new_f
+      def initialize(new_i : Int = 5678, new_f : Float = 0.5678, new_s : String = "Default")
+        @i = new_i.to_i32
+        @f = new_f.to_f32
         @s = new_s
       end
     end

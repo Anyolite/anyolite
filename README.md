@@ -208,7 +208,7 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 
 #### Usability
 
-* [ ] Option for defaulting to usage of RbValue as data container for regular arguments
+* [X] Option for defaulting to usage of RbValue as data container for regular arguments
 * [ ] More base structure for allowing different Ruby implementations
 
 #### Security

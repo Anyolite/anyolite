@@ -238,7 +238,11 @@ module Anyolite
         {% c = 0 %}
         {% if regular_args %}
           {% for arg in regular_args %}
-            Anyolite::Macro.convert_regular_arg({{rb}}, {{args}}[{{c}}].value, {{arg}}, context: {{context}}, type_vars: {{type_vars}}, type_var_names: {{type_var_names}}, debug_information: {{debug_information}}),
+            {% if flag?(:use_general_object_format_chars) %}
+              Anyolite::Macro.convert_from_ruby_to_crystal({{rb}}, {{args}}[{{c}}].value, {{arg}}, context: {{context}}, type_vars: {{type_vars}}, type_var_names: {{type_var_names}}, debug_information: {{debug_information}}),
+            {% else %}
+              Anyolite::Macro.convert_regular_arg({{rb}}, {{args}}[{{c}}].value, {{arg}}, context: {{context}}, type_vars: {{type_vars}}, type_var_names: {{type_var_names}}, debug_information: {{debug_information}}),
+            {% end %}
             {% c += 1 %}
           {% end %}
         {% end %}

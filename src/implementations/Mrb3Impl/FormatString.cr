@@ -32,20 +32,24 @@ module Anyolite
 
     macro resolve_format_char(arg, raw_arg, context = nil)
       {% if arg.resolve? %}
-        {% if arg.resolve <= Bool %}
-          "b"
-        {% elsif arg.resolve <= Int || arg.resolve <= Pointer %}
-          "i"
-        {% elsif arg.resolve <= Float %}
-          "f"
-        {% elsif arg.resolve <= String %}
-          "z"
-        {% elsif arg.resolve <= Array %}
-          "A"
-        {% elsif arg.resolve <= Anyolite::RbRef %}
+        {% if flag?(:use_general_object_format_chars) %}
           "o"
         {% else %}
-          "o"
+          {% if arg.resolve <= Bool %}
+            "b"
+          {% elsif arg.resolve <= Int || arg.resolve <= Pointer %}
+            "i"
+          {% elsif arg.resolve <= Float %}
+            "f"
+          {% elsif arg.resolve <= String %}
+            "z"
+          {% elsif arg.resolve <= Array %}
+            "A"
+          {% elsif arg.resolve <= Anyolite::RbRef %}
+            "o"
+          {% else %}
+            "o"
+          {% end %}
         {% end %}
       {% elsif context %}
         {% if context.names[0..-2].size > 0 %}

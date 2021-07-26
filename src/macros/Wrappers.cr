@@ -346,8 +346,6 @@ module Anyolite
       {{rb_interpreter}}.define_method({{name}}, Anyolite::RbClassCache.get({{crystal_class}}), wrapped_method)
     end
 
-    # TODO: Add block cache to other functions
-
     macro wrap_constructor_function_with_args(rb_interpreter, crystal_class, proc, regular_args = nil, operator = "", context = nil, block_arg_number = nil, block_return_type = nil, store_block_arg = false)
       {% if regular_args.is_a?(ArrayLiteral) %}
         {% regular_arg_array = regular_args %}

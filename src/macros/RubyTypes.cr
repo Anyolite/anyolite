@@ -16,21 +16,25 @@ module Anyolite
 
     macro resolve_type_in_ruby(type, raw_type, context = nil)
       {% if type.resolve? %}
-        {% if type.resolve <= Bool %}
-          Anyolite::RbCore::RbBool
-        {% elsif type.resolve <= Int || type.resolve <= Pointer %}
-          Anyolite::RbCore::RbInt
-        {% elsif type.resolve <= Float %}
-          Anyolite::RbCore::RbFloat
-        {% elsif type.resolve <= String %}
-          # Should actually never occur due to special handling before this function
-          Pointer(LibC::Char)
-        {% elsif type.resolve <= Anyolite::RbRef %}
-          Anyolite::RbCore::RbValue
-        {% elsif type.resolve <= Array %}
+        {% if flag?(:use_general_object_format_chars) %}
           Anyolite::RbCore::RbValue
         {% else %}
-          Anyolite::RbCore::RbValue
+          {% if type.resolve <= Bool %}
+            Anyolite::RbCore::RbBool
+          {% elsif type.resolve <= Int || type.resolve <= Pointer %}
+            Anyolite::RbCore::RbInt
+          {% elsif type.resolve <= Float %}
+            Anyolite::RbCore::RbFloat
+          {% elsif type.resolve <= String %}
+            # Should actually never occur due to special handling before this function
+            Pointer(LibC::Char)
+          {% elsif type.resolve <= Anyolite::RbRef %}
+            Anyolite::RbCore::RbValue
+          {% elsif type.resolve <= Array %}
+            Anyolite::RbCore::RbValue
+          {% else %}
+            Anyolite::RbCore::RbValue
+          {% end %}
         {% end %}
       {% elsif context %}
         {% if context.names[0..-2].size > 0 %}
@@ -60,20 +64,24 @@ module Anyolite
 
     macro resolve_pointer_type(type, raw_type, context = nil)
       {% if type.resolve? %}
-        {% if type.resolve <= Bool %}
-          Pointer(Anyolite::RbCore::RbBool)
-        {% elsif type.resolve <= Int || type.resolve <= Pointer %}
-          Pointer(Anyolite::RbCore::RbInt)
-        {% elsif type.resolve <= Float || type.resolve == Number %}
-          Pointer(Anyolite::RbCore::RbFloat)
-        {% elsif type.resolve <= String %}
-          Pointer(LibC::Char*)
-        {% elsif type.resolve <= Anyolite::RbRef %}
-          Pointer(Anyolite::RbCore::RbValue)
-        {% elsif type.resolve <= Array %}
+        {% if flag?(:use_general_object_format_chars) %}
           Pointer(Anyolite::RbCore::RbValue)
         {% else %}
-          Pointer(Anyolite::RbCore::RbValue)
+          {% if type.resolve <= Bool %}
+            Pointer(Anyolite::RbCore::RbBool)
+          {% elsif type.resolve <= Int || type.resolve <= Pointer %}
+            Pointer(Anyolite::RbCore::RbInt)
+          {% elsif type.resolve <= Float || type.resolve == Number %}
+            Pointer(Anyolite::RbCore::RbFloat)
+          {% elsif type.resolve <= String %}
+            Pointer(LibC::Char*)
+          {% elsif type.resolve <= Anyolite::RbRef %}
+            Pointer(Anyolite::RbCore::RbValue)
+          {% elsif type.resolve <= Array %}
+            Pointer(Anyolite::RbCore::RbValue)
+          {% else %}
+            Pointer(Anyolite::RbCore::RbValue)
+          {% end %}
         {% end %}
       {% elsif context %}
         {% if context.names[0..-2].size > 0 %}
