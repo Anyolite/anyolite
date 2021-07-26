@@ -215,6 +215,10 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 
 * [ ] Error messages for unability to load script or bytecode files
 
+#### Bugfixes
+
+* [ ] Alternate build paths are not recognized properly in implementation files
+
 ### Version 1.0.0
 
 This release will mark the first full release of Anyolite, mostly

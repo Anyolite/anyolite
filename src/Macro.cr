@@ -4,7 +4,6 @@ module Anyolite
   end
 end
 
-require "./macros/FormatString.cr"
 require "./macros/RubyTypes.cr"
 require "./macros/ArgTuples.cr"
 require "./macros/ArgConversions.cr"
