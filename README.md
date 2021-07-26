@@ -27,6 +27,7 @@ This project is currently in active development, so please report any bugs or mi
 * Ruby methods can be called at runtime as long as all their possible return values are known
 * Ruby closures can be handled as regular variables
 * Methods and constants can be excluded, modified or renamed with annotations
+* Options to compile scripts directly into the executable
 
 # Prerequisites
 

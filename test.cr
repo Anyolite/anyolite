@@ -473,7 +473,7 @@ end
 # Anyolite::RbRefTable.set_option(:logging)
 
 Anyolite::RbInterpreter.create do |rb|
-  Anyolite::Preloader.execute_content(rb, "examples/bytecode_test.mrb")
+  Anyolite::Preloader.execute_bytecode_from_cache_or_file(rb, "examples/bytecode_test.mrb")
 
   Anyolite.wrap_module(rb, SomeModule, "TestModule")
   Anyolite.wrap_module_function_with_keywords(rb, SomeModule, "test_method", SomeModule.test_method, [int : Int32 = 19, str : String])
