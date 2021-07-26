@@ -205,16 +205,13 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 
 * [X] AnyolitePointer helper class for accessing pointers
 * [X] Infrastructure to convert script files into bytecode at runtime and compiletime
-* [X] Support for setting and getting instance variables from Crystal
-* [ ] Support for setting and getting class variables from Crystal
-* [ ] Support for setting and getting global variables from Crystal
+* [X] Support for setting and getting instance, class and global variables from Crystal
 
 #### Usability
 
 * [X] Option for defaulting to usage of RbValue as data container for regular arguments
 * [X] More base structure for allowing different Ruby implementations
 * [X] Alternate build paths are now passed to Anyolite via the environment variable `ANYOLITE_BUILD_PATH`
-* [ ] Documentation for missing features
 
 #### Security
 
@@ -252,6 +249,7 @@ Anyolite are already implemented.
 * [ ] Convert macro body variables to fresh variables wherever possible
 * [ ] Put macro function arguments as options in a hash
 * [ ] Code cleanup (especially in the macro section)
+* [ ] More compatibility between methods accepting `RbRef` and `RbValue`
 
 ### Future feature ideas (might not actually be possible to implement)
 

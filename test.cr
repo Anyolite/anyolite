@@ -395,11 +395,10 @@ module SomeModule
 
     def set_instance_variable_to_int(name : String, value : Int)
       Anyolite.set_iv(self, name, value)
-      nil
     end
 
     def get_instance_variable(name : String)
-      Anyolite.cast_to_crystal(Anyolite.get_iv(self, name), Int?)
+      Anyolite.get_iv(self, name, cast_to: Int?)
     end
 
     def ref_test(str : String, ref : Anyolite::RbRef)

@@ -306,24 +306,117 @@ module Anyolite
     Anyolite::RbRef.new(Anyolite::RbCast.return_value(%rb.to_unsafe, self))
   end
 
-  macro get_iv(object, name)
+  # Gets the Ruby instance variable with `String` or `Symbol` *name* for the Crystal object *object*.
+  # 
+  # If *cast_to* is set to a `Class` or similar, it will automatically cast
+  # the result to a Crystal value of that class, otherwise, it will return
+  # a `RbRef` value containing the result.
+  #
+  # If needed, *context* can be set to a `Path` in order to specify *cast_to*.
+  macro get_iv(object, name, cast_to = nil, context = nil)
     %rb = Anyolite::RbRefTable.get_current_interpreter
     %obj = {{object}}.is_a?(Anyolite::RbCore::RbValue) ? {{object}} : Anyolite::RbCast.return_value(%rb.to_unsafe, {{object}})
     %name = Anyolite::RbCore.convert_to_rb_sym(%rb, {{name}}.to_s)
 
-    Anyolite::RbRef.new(Anyolite::RbCore.rb_iv_get(%rb, %obj, %name))
+    %result = Anyolite::RbCore.rb_iv_get(%rb, %obj, %name)
+
+    {% if cast_to %}
+      Anyolite::Macro.convert_from_ruby_to_crystal(%rb.to_unsafe, %result, {{cast_to}}, context: {{context}})
+    {% else %}
+      Anyolite::RbRef.new(%result)
+    {% end %}
   end
 
+  # Sets the Ruby instance variable with `String` or `Symbol` *name* for the Crystal object *object*
+  # to the Crystal value *value*.
+  # 
+  # If *cast_to* is set to a `Class` or similar, it will automatically cast
+  # the result to a Crystal value of that class, otherwise, it will return
+  # a `RbRef` value containing the result.
+  #
+  # If needed, *context* can be set to a `Path` in order to specify *cast_to*.
   macro set_iv(object, name, value)
     %rb = Anyolite::RbRefTable.get_current_interpreter
     %obj = {{object}}.is_a?(Anyolite::RbCore::RbValue) ? {{object}} : Anyolite::RbCast.return_value(%rb.to_unsafe, {{object}})
     %name = Anyolite::RbCore.convert_to_rb_sym(%rb, {{name}}.to_s)
-    %value = {{value}}.is_a?(Anyolite::RbCore::RbValue) ? {{value}} : Anyolite::RbCast.return_value(%rb.to_unsafe, {{value}})
+    %value = Anyolite::RbCast.return_value(%rb.to_unsafe, {{value}})
 
     Anyolite::RbCore.rb_iv_set(%rb, %obj, %name, %value)
   end
 
-  # TODO: Global variables and class variables
+  # Gets the Ruby class variable with `String` or `Symbol` *name* for the Crystal `Class` or `Module` *crystal_class*.
+  # 
+  # If *cast_to* is set to a `Class` or similar, it will automatically cast
+  # the result to a Crystal value of that class, otherwise, it will return
+  # a `RbRef` value containing the result.
+  #
+  # If needed, *context* can be set to a `Path` in order to specify *cast_to*.
+  macro get_cv(crystal_class, name, cast_to = nil, context = nil)
+    %rb = Anyolite::RbRefTable.get_current_interpreter
+    %rb_class = Anyolite.get_rb_class_obj_of({{crystal_class}})
+    %name = Anyolite::RbCore.convert_to_rb_sym(%rb, {{name}}.to_s)
+
+    %result = Anyolite::RbCore.rb_cv_get(%rb, %rb_class, %name)
+
+    {% if cast_to %}
+      Anyolite::Macro.convert_from_ruby_to_crystal(%rb.to_unsafe, %result, {{cast_to}}, context: {{context}})
+    {% else %}
+      Anyolite::RbRef.new(%result)
+    {% end %}
+  end
+
+  # Sets the Ruby class variable with `String` or `Symbol` *name* for the Crystal `Class` or `Module` *crystal_class*
+  # to the value *value*.
+  # 
+  # If *cast_to* is set to a `Class` or similar, it will automatically cast
+  # the result to a Crystal value of that class, otherwise, it will return
+  # a `RbRef` value containing the result.
+  #
+  # If needed, *context* can be set to a `Path` in order to specify *cast_to*.
+  macro set_cv(crystal_class, name, value)
+    %rb = Anyolite::RbRefTable.get_current_interpreter
+    %rb_class = Anyolite.get_rb_class_obj_of({{crystal_class}})
+    %name = Anyolite::RbCore.convert_to_rb_sym(%rb, {{name}}.to_s)
+    %value = Anyolite::RbCast.return_value(%rb.to_unsafe, {{value}})
+
+    Anyolite::RbCore.rb_cv_set(%rb, %rb_class, %name, %value)
+  end
+
+  # Gets the Ruby global variable with `String` or `Symbol` *name*.
+  # 
+  # If *cast_to* is set to a `Class` or similar, it will automatically cast
+  # the result to a Crystal value of that class, otherwise, it will return
+  # a `RbRef` value containing the result.
+  #
+  # If needed, *context* can be set to a `Path` in order to specify *cast_to*.
+  macro get_gv(name, cast_to = nil, context = nil)
+    %rb = Anyolite::RbRefTable.get_current_interpreter
+    %name = Anyolite::RbCore.convert_to_rb_sym(%rb, {{name}}.to_s)
+
+    %result = Anyolite::RbCore.rb_gv_get(%rb, %name)
+
+    {% if cast_to %}
+      Anyolite::Macro.convert_from_ruby_to_crystal(%rb.to_unsafe, %result, {{cast_to}}, context: {{context}})
+    {% else %}
+      Anyolite::RbRef.new(%result)
+    {% end %}
+  end
+
+  # Sets the Ruby global variable with `String` or `Symbol` *name*
+  # to the Crystal value *value*.
+  # 
+  # If *cast_to* is set to a `Class` or similar, it will automatically cast
+  # the result to a Crystal value of that class, otherwise, it will return
+  # a `RbRef` value containing the result.
+  #
+  # If needed, *context* can be set to a `Path` in order to specify *cast_to*.
+  macro set_gv(name, value)
+    %rb = Anyolite::RbRefTable.get_current_interpreter
+    %name = Anyolite::RbCore.convert_to_rb_sym(%rb, {{name}}.to_s)
+    %value = Anyolite::RbCast.return_value(%rb.to_unsafe, {{value}})
+
+    Anyolite::RbCore.rb_gv_set(%rb, %name, %value)
+  end
 
   # Wraps a Crystal class directly into an mruby class.
   #
