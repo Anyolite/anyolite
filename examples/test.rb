@@ -252,3 +252,7 @@ puts "Inherited content test: #{inherited_content_test.content.inspect.gsub("\n"
 
 puts a.hash
 puts b.hash
+
+puts a.get_instance_variable(name: "hello")
+a.set_instance_variable_to_int(name: "hello", value: 15667)
+puts a.get_instance_variable(name: "hello")

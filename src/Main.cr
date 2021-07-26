@@ -300,6 +300,31 @@ module Anyolite
     Anyolite.call_rb_method_of_object(%rb_class, {{name}}, {{args}}, cast_to: {{cast_to}}, context: {{context}})
   end
 
+  # Returns current object as a `RbRef`
+  macro self_in_rb
+    %rb = Anyolite::RbRefTable.get_current_interpreter
+    Anyolite::RbRef.new(Anyolite::RbCast.return_value(%rb.to_unsafe, self))
+  end
+
+  macro get_iv(object, name)
+    %rb = Anyolite::RbRefTable.get_current_interpreter
+    %obj = {{object}}.is_a?(Anyolite::RbCore::RbValue) ? {{object}} : Anyolite::RbCast.return_value(%rb.to_unsafe, {{object}})
+    %name = Anyolite::RbCore.convert_to_rb_sym(%rb, {{name}}.to_s)
+
+    Anyolite::RbRef.new(Anyolite::RbCore.rb_iv_get(%rb, %obj, %name))
+  end
+
+  macro set_iv(object, name, value)
+    %rb = Anyolite::RbRefTable.get_current_interpreter
+    %obj = {{object}}.is_a?(Anyolite::RbCore::RbValue) ? {{object}} : Anyolite::RbCast.return_value(%rb.to_unsafe, {{object}})
+    %name = Anyolite::RbCore.convert_to_rb_sym(%rb, {{name}}.to_s)
+    %value = {{value}}.is_a?(Anyolite::RbCore::RbValue) ? {{value}} : Anyolite::RbCast.return_value(%rb.to_unsafe, {{value}})
+
+    Anyolite::RbCore.rb_iv_set(%rb, %obj, %name, %value)
+  end
+
+  # TODO: Global variables and class variables
+
   # Wraps a Crystal class directly into an mruby class.
   #
   # The Crystal `Class` *crystal_class* will be integrated into the `RbInterpreter` *rb_interpreter*,

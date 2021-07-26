@@ -183,6 +183,15 @@ module Anyolite
 
     fun rb_respond_to = mrb_respond_to(rb : State*, obj : RbValue, name : RbSymbol) : RbBool
 
+    fun rb_iv_set = mrb_iv_set(rb : State*, obj : RbValue, sym : RbSymbol, value : RbValue) : Void
+    fun rb_iv_get = mrb_iv_get(rb : State*, obj : RbValue, sym : RbSymbol) : RbValue
+
+    fun rb_cv_set = mrb_cv_set(rb : State*, mod : RbValue, sym : RbSymbol, value : RbValue) : Void
+    fun rb_cv_get = mrb_cv_get(rb : State*, mod : RbValue, sym : RbSymbol) : RbValue
+
+    fun rb_gv_set = mrb_gv_set(rb : State*, sym : RbSymbol, value : RbValue) : Void
+    fun rb_gv_get = mrb_gv_get(rb : State*, sym : RbSymbol) : RbValue
+
     fun load_script_from_file(rb : State*, filename : LibC::Char*) : RbValue
     fun execute_script_line(rb : State*, str : LibC::Char*) : RbValue
     fun execute_bytecode(rb : State*, bytecode : UInt8*) : RbValue
