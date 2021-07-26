@@ -40,7 +40,12 @@ module Anyolite
     # Converts the Ruby script in *filename* to bytecode, which is
     # then stored in *target_filename*.
     def self.transform_script_to_bytecode(filename : String, target_filename : String)
-      RbCore.transform_script_to_bytecode(filename, target_filename)
+      error_code = RbCore.transform_script_to_bytecode(filename, target_filename)
+      case error_code
+        when 1 then raise "Could not load script file #{filename}"
+        when 2 then raise "Error when loading script file #{filename}"
+        when 3 then raise "Could not write to target file #{target_filename}"
+      end
     end
   end
 end

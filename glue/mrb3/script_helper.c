@@ -12,7 +12,7 @@ extern mrb_value load_script_from_file(mrb_state* mrb, const char* filename) {
 
     if(!file) {
 
-        //! TODO: Error
+        mrb_raisef(mrb, E_RUNTIME_ERROR, "Could not load script file: %s", filename);
 
     }
 
@@ -46,13 +46,16 @@ extern mrb_value load_bytecode_from_file(mrb_state* mrb, const char* filename) {
 
 	if (!file) {
 
-        //! TODO: Error
+        //! TODO: Find out why this does trigger an unstoppable IOT signal
+        mrb_raisef(mrb, E_RUNTIME_ERROR, "Could not load bytecode file: %s", filename);
 
 	}
 
 	mrb_value status = mrb_load_irep_file(mrb, file);
 
 	if (file) fclose(file);
+
+    if(mrb->exc) mrb_print_error(mrb);
 
     return status;
 
@@ -81,7 +84,6 @@ extern int transform_script_to_bytecode(const char* filename, const char* target
     if(!file) {
 
         return 1;
-        //! TODO: Error
 
     }
 
@@ -89,8 +91,7 @@ extern int transform_script_to_bytecode(const char* filename, const char* target
 
     if (mrb_undef_p(result)) {
 
-        return 1;
-        //! TODO: Error
+        return 2;
 
     }
 
@@ -102,8 +103,7 @@ extern int transform_script_to_bytecode(const char* filename, const char* target
 
     if (!outfile) {
 
-        return 1;
-        //! TODO: Error
+        return 3;
 
     }
 
