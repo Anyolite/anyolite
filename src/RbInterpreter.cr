@@ -14,8 +14,6 @@ module Anyolite
     def initialize
       @rb_ptr = RbCore.rb_open
       RbRefTable.set_current_interpreter(self)
-
-      raise "HEHE"
     end
 
     def close
