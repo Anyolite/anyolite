@@ -1,0 +1,9 @@
+{
+  "implementation": "mri",
+  "build_path": "build",
+  "rb_fork": "https://github.com/ruby/ruby",
+  "rb_release": "master",
+  "rb_dir": "third_party",
+  "rb_config": "",
+  "glue_dir": "glue/mri"
+}

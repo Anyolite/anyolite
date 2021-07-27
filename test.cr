@@ -1,7 +1,8 @@
 require "./anyolite.cr"
 
-Anyolite::Preloader::AtCompiletime.transform_script_to_bytecode("examples/bytecode_test.rb", "examples/bytecode_test.mrb")
-Anyolite::Preloader::AtCompiletime.load_bytecode_file("examples/bytecode_test.mrb")
+# TODO: Pass flags to temporary executable
+#Anyolite::Preloader::AtCompiletime.transform_script_to_bytecode("examples/bytecode_test.rb", "examples/bytecode_test.mrb")
+#Anyolite::Preloader::AtCompiletime.load_bytecode_file("examples/bytecode_test.mrb")
 
 module SomeModule
   def self.test_method(int : Int32, str : String)

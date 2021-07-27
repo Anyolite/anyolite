@@ -1,7 +1,7 @@
 module Anyolite
   # Reference to a mruby class
   class RbClass
-    @class_ptr : RbCore::RClass*
+    @class_ptr : RbCore::RClassPtr
 
     def initialize(@rb : RbInterpreter, @name : String, superclass : RbModule | RbClass | Nil = nil, @under : RbModule | RbClass | Nil = nil)
       if superclass.is_a?(RbModule)

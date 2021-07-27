@@ -4,16 +4,16 @@ module Anyolite
     
     {% if flag?(:win32) %}
       @[Link(ldflags: "#{__DIR__}/../../../{{build_path.id}}/mruby/lib/libmruby.lib -DMRB_INT64 msvcrt.lib Ws2_32.lib")]
-      @[Link(ldflags: "#{__DIR__}/../../../{{build_path.id}}/glue/return_functions.obj -DMRB_INT64")]
-      @[Link(ldflags: "#{__DIR__}/../../../{{build_path.id}}/glue/data_helper.obj -DMRB_INT64")]
-      @[Link(ldflags: "#{__DIR__}/../../../{{build_path.id}}/glue/script_helper.obj -DMRB_INT64")]
-      @[Link(ldflags: "#{__DIR__}/../../../{{build_path.id}}/glue/error_helper.obj -DMRB_INT64")]
+      @[Link(ldflags: "#{__DIR__}/../../../{{build_path.id}}/glue/mruby/return_functions.obj -DMRB_INT64")]
+      @[Link(ldflags: "#{__DIR__}/../../../{{build_path.id}}/glue/mruby/data_helper.obj -DMRB_INT64")]
+      @[Link(ldflags: "#{__DIR__}/../../../{{build_path.id}}/glue/mruby/script_helper.obj -DMRB_INT64")]
+      @[Link(ldflags: "#{__DIR__}/../../../{{build_path.id}}/glue/mruby/error_helper.obj -DMRB_INT64")]
     {% else %}
       @[Link(ldflags: "#{__DIR__}/../../../{{build_path.id}}/mruby/lib/libmruby.a -DMRB_INT64")]
-      @[Link(ldflags: "#{__DIR__}/../../../{{build_path.id}}/glue/return_functions.o -DMRB_INT64")]
-      @[Link(ldflags: "#{__DIR__}/../../../{{build_path.id}}/glue/data_helper.o -DMRB_INT64")]
-      @[Link(ldflags: "#{__DIR__}/../../../{{build_path.id}}/glue/script_helper.o -DMRB_INT64")]
-      @[Link(ldflags: "#{__DIR__}/../../../{{build_path.id}}/glue/error_helper.o -DMRB_INT64")]
+      @[Link(ldflags: "#{__DIR__}/../../../{{build_path.id}}/glue/mruby/return_functions.o -DMRB_INT64")]
+      @[Link(ldflags: "#{__DIR__}/../../../{{build_path.id}}/glue/mruby/data_helper.o -DMRB_INT64")]
+      @[Link(ldflags: "#{__DIR__}/../../../{{build_path.id}}/glue/mruby/script_helper.o -DMRB_INT64")]
+      @[Link(ldflags: "#{__DIR__}/../../../{{build_path.id}}/glue/mruby/error_helper.o -DMRB_INT64")]
     {% end %}
   end
   
@@ -29,6 +29,8 @@ module Anyolite
     alias RbInt = Int64
     alias RbBool = UInt8
     alias RbSymbol = UInt32
+
+    alias RClassPtr = RClass*
 
     enum MrbVType
       MRB_TT_FALSE = 0
@@ -80,20 +82,20 @@ module Anyolite
     fun rb_open = mrb_open : State*
     fun rb_close = mrb_close(rb : State*)
 
-    fun rb_define_module = mrb_define_module(rb : State*, name : LibC::Char*) : RClass*
-    fun rb_define_module_under = mrb_define_module_under(rb : State*, under : RClass*, name : LibC::Char*) : RClass*
-    fun rb_define_class = mrb_define_class(rb : State*, name : LibC::Char*, superclass : RClass*) : RClass*
-    fun rb_define_class_under = mrb_define_class_under(rb : State*, under : RClass*, name : LibC::Char*, superclass : RClass*) : RClass*
+    fun rb_define_module = mrb_define_module(rb : State*, name : LibC::Char*) : RClassPtr
+    fun rb_define_module_under = mrb_define_module_under(rb : State*, under : RClassPtr, name : LibC::Char*) : RClassPtr
+    fun rb_define_class = mrb_define_class(rb : State*, name : LibC::Char*, superclass : RClassPtr) : RClassPtr
+    fun rb_define_class_under = mrb_define_class_under(rb : State*, under : RClassPtr, name : LibC::Char*, superclass : RClassPtr) : RClassPtr
 
-    fun rb_define_method = mrb_define_method(rb : State*, c : RClass*, name : LibC::Char*, func : State*, RbValue -> RbValue, aspec : UInt32) # TODO: Aspec values
-    fun rb_define_class_method = mrb_define_class_method(rb : State*, c : RClass*, name : LibC::Char*, func : State*, RbValue -> RbValue, aspect : UInt32)
-    fun rb_define_module_function = mrb_define_module_function(rb : State*, c : RClass*, name : LibC::Char*, func : State*, RbValue -> RbValue, aspect : UInt32)
+    fun rb_define_method = mrb_define_method(rb : State*, c : RClassPtr, name : LibC::Char*, func : State*, RbValue -> RbValue, aspec : UInt32) # TODO: Aspec values
+    fun rb_define_class_method = mrb_define_class_method(rb : State*, c : RClassPtr, name : LibC::Char*, func : State*, RbValue -> RbValue, aspect : UInt32)
+    fun rb_define_module_function = mrb_define_module_function(rb : State*, c : RClassPtr, name : LibC::Char*, func : State*, RbValue -> RbValue, aspect : UInt32)
 
-    fun rb_define_const = mrb_define_const(rb : State*, c : RClass*, name : LibC::Char*, val : RbValue)
+    fun rb_define_const = mrb_define_const(rb : State*, c : RClassPtr, name : LibC::Char*, val : RbValue)
 
     fun rb_print_error = mrb_print_error(rb : State*)
 
-    fun rb_raise = mrb_raise(rb : State*, c : RClass*, msg : LibC::Char*)
+    fun rb_raise = mrb_raise(rb : State*, c : RClassPtr, msg : LibC::Char*)
     fun rb_raise_runtime_error = mrb_raise_runtime_error(rb : State*, msg : LibC::Char*)
     fun rb_raise_type_error = mrb_raise_type_error(rb : State*, msg : LibC::Char*)
     fun rb_raise_argument_error = mrb_raise_argument_error(rb : State*, msg : LibC::Char*)
@@ -155,7 +157,7 @@ module Anyolite
     fun get_symbol_value_of_string(rb : State*, value : LibC::Char*) : RbValue
 
     # Base class, not to be confused with `get_class_of_obj`
-    fun get_object_class(rb : State*) : RClass*
+    fun get_object_class(rb : State*) : RClassPtr
 
     fun rb_obj_inspect = mrb_obj_inspect(rb : State*, value : RbValue) : RbValue
     fun rb_any_to_s = mrb_any_to_s(rb : State*, value : RbValue) : RbValue
@@ -164,19 +166,19 @@ module Anyolite
     fun rb_gc_register = mrb_gc_register(rb : State*, value : RbValue) : Void
     fun rb_gc_unregister = mrb_gc_unregister(rb : State*, value : RbValue) : Void
 
-    fun rb_class_name = mrb_class_name(rb : State*, class_ptr : RClass*) : LibC::Char*
+    fun rb_class_name = mrb_class_name(rb : State*, class_ptr : RClassPtr) : LibC::Char*
 
     fun data_type(value : RbValue) : RbDataType*
     fun rb_data_get_ptr = mrb_data_get_ptr(rb : State*, obj : RbValue, type : RbDataType*) : Void*
-    fun set_instance_tt_as_data(ruby_class : RClass*) : Void
-    fun new_empty_object(rb : State*, ruby_class : RClass*, data_ptr : Void*, type : RbDataType*) : RbValue
+    fun set_instance_tt_as_data(ruby_class : RClassPtr) : Void
+    fun new_empty_object(rb : State*, ruby_class : RClassPtr, data_ptr : Void*, type : RbDataType*) : RbValue
     fun set_data_ptr_and_type(ruby_object : RbValue, data : Void*, type : RbDataType*)
     fun get_data_ptr(ruby_object : RbValue) : Void*
 
     fun get_rb_obj_value = get_mrb_obj_value(p : Void*) : RbValue
 
-    fun rb_obj_is_kind_of = mrb_obj_is_kind_of(rb : State*, obj : RbValue, c : RClass*) : RbBool
-    fun get_class_of_obj(rb : State*, obj : RbValue) : RClass*
+    fun rb_obj_is_kind_of = mrb_obj_is_kind_of(rb : State*, obj : RbValue, c : RClassPtr) : RbBool
+    fun get_class_of_obj(rb : State*, obj : RbValue) : RClassPtr
 
     fun rb_funcall_argv = mrb_funcall_argv(rb : State*, value : RbValue, name : RbSymbol, argc : RbInt, argv : RbValue*) : RbValue
     fun rb_funcall_argv_with_block = mrb_funcall_argv_with_block(rb : State*, value : RbValue, name : RbSymbol, argc : RbInt, argv : RbValue*, block : RbValue) : RbValue

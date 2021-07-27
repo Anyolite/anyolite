@@ -15,12 +15,13 @@ end
 
 class AnyoliteConfig
     OPTIONS = {
+        :implementation => "mruby",
         :build_path => "build", 
         :rb_fork => "https://github.com/mruby/mruby",
         :rb_release => "3.0.0",
         :rb_dir => "third_party", 
         :rb_config => "utility/mruby_build_config.rb", 
-        :glue_dir => "glue/mrb3",
+        :glue_dir => "glue/mruby",
         :compiler => determine_compiler
     }
 
@@ -42,7 +43,7 @@ class AnyoliteConfig
     end
 
     def read_option(content, name)
-        read_value = content["ANYOLITE_#{name.to_s.upcase}"]
+        read_value = content["ANYOLITE_#{name.to_s.upcase}"] || content[name.to_s]
         set_option(name, read_value) if read_value
     end
 
@@ -51,9 +52,9 @@ class AnyoliteConfig
     end
 end
 
-task :build_shard => [:load_config, :install_mruby, :build_mruby, :build_glue]
+task :build_shard => [:load_config, :install_ruby, :build_ruby, :build_glue]
 task :recompile_glue => [:load_config, :build_glue]
-task :recompile => [:load_config, :build_mruby, :build_glue]
+task :recompile => [:load_config, :build_ruby, :build_glue]
 
 GLUE_FILES = ["return_functions", "data_helper", "script_helper", "error_helper"]
 
@@ -75,40 +76,75 @@ task :reload_config do
     $config.load(config_file)
 end
 
-task :install_mruby => [:load_config] do
+task :install_ruby => [:load_config] do
     FileUtils.mkdir_p($config.build_path)
 
-    unless File.exist?("#{$config.rb_dir}/mruby/Rakefile")
-        system "git clone #{$config.rb_fork} --branch #{$config.rb_release} --recursive #{$config.rb_dir}/mruby"
+    unless File.exist?("#{$config.rb_dir}/#{$config.implementation}/README.md")
+        system "git clone #{$config.rb_fork} --branch #{$config.rb_release} --recursive #{$config.rb_dir}/#{$config.implementation}"
     end
 end
 
-task :build_mruby => [:load_config] do
+task :build_ruby => [:load_config] do
     temp_path = Dir.pwd
-    if ANYOLITE_COMPILER == :msvc
-        system "cd #{$config.rb_dir}/mruby & ruby minirake MRUBY_BUILD_DIR=\"#{temp_path}/#{$config.build_path}/mruby\" MRUBY_CONFIG=\"#{temp_path}/#{$config.rb_config}\""
-    elsif ANYOLITE_COMPILER == :gcc
-        system "cd #{$config.rb_dir}/mruby; ruby minirake MRUBY_BUILD_DIR=\"#{temp_path}/#{$config.build_path}/mruby\" MRUBY_CONFIG=\"#{temp_path}/#{$config.rb_config}\""
+
+    if $config.implementation == "mruby"
+        if ANYOLITE_COMPILER == :msvc
+            system "cd #{$config.rb_dir}/#{$config.implementation} & ruby minirake MRUBY_BUILD_DIR=\"#{temp_path}/#{$config.build_path}/#{$config.implementation}\" MRUBY_CONFIG=\"#{temp_path}/#{$config.rb_config}\""
+        elsif ANYOLITE_COMPILER == :gcc
+            system "cd #{$config.rb_dir}/#{$config.implementation}; ruby minirake MRUBY_BUILD_DIR=\"#{temp_path}/#{$config.build_path}/#{$config.implementation}\" MRUBY_CONFIG=\"#{temp_path}/#{$config.rb_config}\""
+        else
+            system "cd #{$config.rb_dir}/#{$config.implementation}; ruby minirake MRUBY_BUILD_DIR=\"#{temp_path}/#{$config.build_path}/#{$config.implementation}\" MRUBY_CONFIG=\"#{temp_path}/#{$config.rb_config}\""
+        end
+    elsif $config.implementation == "mri"
+        # TODO: Copy source directly to build directory
+        if ANYOLITE_COMPILER == :msvc
+            raise "MSVC compilation of MRI is not supported yet."
+            # TODO
+        elsif ANYOLITE_COMPILER == :gcc
+            system "cd #{$config.rb_dir}/#{$config.implementation}; ./autogen.sh"
+            system "cd #{$config.rb_dir}/#{$config.implementation}; ./configure --prefix=\"#{temp_path}/#{$config.build_path}/#{$config.implementation}\""
+            system "cd #{$config.rb_dir}/#{$config.implementation}; make"
+            system "cd #{$config.rb_dir}/#{$config.implementation}; make install"
+        else
+        end
     else
-        system "cd #{$config.rb_dir}/mruby; ruby minirake MRUBY_BUILD_DIR=\"#{temp_path}/#{$config.build_path}/mruby\" MRUBY_CONFIG=\"#{temp_path}/#{$config.rb_config}\""
+        raise "Invalid ruby implementation: #{$config.implementation}. Use either \"mruby\" or \"mri\"."
     end
 end
 
 task :build_glue => [:load_config] do
-    FileUtils.mkdir_p($config.build_path + "/glue")
+    FileUtils.mkdir_p($config.build_path + "/glue/#{$config.implementation}")
 
-    if ANYOLITE_COMPILER == :msvc
-        GLUE_FILES.each do |name|
-            system "cl /I #{$config.rb_dir}/mruby/include /D MRB_INT64 /c #{$config.glue_dir}/#{name}.c /Fo\"#{$config.build_path}/glue/#{name}.obj\""
+    if $config.implementation == "mruby"
+        if ANYOLITE_COMPILER == :msvc
+            GLUE_FILES.each do |name|
+                system "cl /I #{$config.rb_dir}/#{$config.implementation}/include /D MRB_INT64 /c #{$config.glue_dir}/#{name}.c /Fo\"#{$config.build_path}/glue/#{$config.implementation}/#{name}.obj\""
+            end
+        elsif ANYOLITE_COMPILER == :gcc
+            GLUE_FILES.each do |name|
+                system "cc -std=c99 -I#{$config.rb_dir}/#{$config.implementation}/include -DMRB_INT64 -c #{$config.glue_dir}/#{name}.c -o #{$config.build_path}/glue/#{$config.implementation}/#{name}.o"
+            end
+        else
+            GLUE_FILES.each do |name|
+                system "#{$config.compiler.to_s} -std=c99 -I#{$config.rb_dir}/#{$config.implementation}/include -DMRB_INT64 -c #{$config.glue_dir}/#{name}.c -o #{$config.build_path}/glue/#{$config.implementation}/#{name}.o"
+            end
         end
-    elsif ANYOLITE_COMPILER == :gcc
-        GLUE_FILES.each do |name|
-            system "cc -std=c99 -I#{$config.rb_dir}/mruby/include -DMRB_INT64 -c #{$config.glue_dir}/#{name}.c -o #{$config.build_path}/glue/#{name}.o"
+    elsif $config.implementation == "mri"
+        if ANYOLITE_COMPILER == :msvc
+            GLUE_FILES.each do |name|
+                system "cl /I #{$config.rb_dir}/#{$config.implementation}/include /D MRB_INT64 /c #{$config.glue_dir}/#{name}.c /Fo\"#{$config.build_path}/glue/#{$config.implementation}/#{name}.obj\""
+            end
+        elsif ANYOLITE_COMPILER == :gcc
+            GLUE_FILES.each do |name|
+                system "cc -std=c99 -I#{$config.build_path}/#{$config.implementation}/include/ruby-3.1.0 -I#{$config.build_path}/#{$config.implementation}/include/ruby-3.1.0/x86_64-linux -DMRB_INT64 -c #{$config.glue_dir}/#{name}.c -o #{$config.build_path}/glue/#{$config.implementation}/#{name}.o"
+            end
+        else
+            GLUE_FILES.each do |name|
+                system "#{$config.compiler.to_s} -std=c99 -I#{$config.rb_dir}/#{$config.implementation}/include -DMRB_INT64 -c #{$config.glue_dir}/#{name}.c -o #{$config.build_path}/glue/#{$config.implementation}/#{name}.o"
+            end
         end
     else
-        GLUE_FILES.each do |name|
-            system "#{$config.compiler.to_s} -std=c99 -I#{$config.rb_dir}/mruby/include -DMRB_INT64 -c #{$config.glue_dir}/#{name}.c -o #{$config.build_path}/glue/#{name}.o"
-        end
+        raise "Invalid ruby implementation: #{$config.implementation}. Use either \"mruby\" or \"mri\"."
     end
 end
 
