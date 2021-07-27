@@ -150,7 +150,7 @@ module Anyolite
     # fun get_rb_bool = get_mrb_bool(value : RbValue) : RbBool
     # fun get_rb_string = get_mrb_string(rb : State*, value : RbValue) : LibC::Char*
 
-    # fun rb_str_to_csts = mrb_str_to_cstr(rb : State*, value : RbValue) : LibC::Char*
+    # fun rb_str_to_cstr = mrb_str_to_cstr(rb : State*, value : RbValue) : LibC::Char*
 
     # fun convert_to_rb_sym = convert_to_mrb_sym(rb : State*, value : LibC::Char*) : RbSymbol
     # fun get_symbol_value_of_string(rb : State*, value : LibC::Char*) : RbValue

@@ -203,14 +203,24 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 
 #### Features
 
+* [ ] Full MRI Ruby as alternative implementation (might be postponed to a later release)
+* * [X] Infrastructure for building Anyolite with MRI on Linux
+* * [ ] Correct argument passing between Crystal and MRI
+* * [ ] Linked all MRI functions to the abstraction layer
+* * [ ] Bytecode compilation (might not be possible)
+* * [ ] Tests
 * [X] AnyolitePointer helper class for accessing pointers
 * [X] Infrastructure to convert script files into bytecode at runtime and compiletime
 * [X] Support for setting and getting instance, class and global variables from Crystal
 
+#### Breaking changes
+
+* [X] Changed `RClass*` to `RClassPtr` to allow compatibility with MRI
+* [X] Changed directory structure
+
 #### Usability
 
 * [X] Option for defaulting to usage of RbValue as data container for regular arguments
-* [X] More base structure for allowing different Ruby implementations
 * [X] Alternate build paths are now passed to Anyolite via the environment variable `ANYOLITE_BUILD_PATH`
 
 #### Security
@@ -220,6 +230,7 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 #### Bugfixes
 
 * [X] Alternate build paths are not recognized properly in implementation files
+* [X] Fixed typo in name of `rb_str_to_cstr`
 
 ### Version 1.0.0
 
