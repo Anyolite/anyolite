@@ -20,7 +20,7 @@ module Anyolite
   Anyolite.link_libraries
 
   lib RbCore
-    alias RbFunc = Proc(State*, RbValue, RbValue)
+    alias RbFunc = Proc(RbInt, RbValue*, RbValue, RbValue) # argc, argv, self -> VALUE
 
     type State = Void
 

@@ -13,7 +13,7 @@ module Anyolite
       {% type_var_names_annotation = under_module.resolve.annotation(Anyolite::SpecifyGenericTypes) %}
       {% type_var_names = type_var_names_annotation ? type_var_names_annotation[0] : nil %}
 
-      wrapped_method = Anyolite::RbCore::RbFunc.new do |rb, obj|
+      wrapped_method = Anyolite::Macro.new_rb_func do
         # TODO: Put these kinds of commands into a new macro
         {% if block_arg_number || store_block_arg %}
           block_ptr = Pointer(Anyolite::RbCore::RbValue).malloc(size: 1)
@@ -65,7 +65,7 @@ module Anyolite
       {% type_var_names_annotation = under_module.resolve.annotation(Anyolite::SpecifyGenericTypes) %}
       {% type_var_names = type_var_names_annotation ? type_var_names_annotation[0] : nil %}
 
-      wrapped_method = Anyolite::RbCore::RbFunc.new do |rb, obj|
+      wrapped_method = Anyolite::Macro.new_rb_func do
         regular_arg_tuple = Anyolite::Macro.generate_arg_tuple({{rb_interpreter}}, {{regular_arg_array}}, context: {{context}})
 
         {% if block_arg_number || store_block_arg %}
@@ -123,7 +123,7 @@ module Anyolite
       {% type_var_names_annotation = crystal_class.resolve.annotation(Anyolite::SpecifyGenericTypes) %}
       {% type_var_names = type_var_names_annotation ? type_var_names_annotation[0] : nil %}
 
-      wrapped_method = Anyolite::RbCore::RbFunc.new do |rb, obj|
+      wrapped_method = Anyolite::Macro.new_rb_func do
         {% if block_arg_number || store_block_arg %}
           block_ptr = Pointer(Anyolite::RbCore::RbValue).malloc(size: 1)
 
@@ -174,7 +174,7 @@ module Anyolite
       {% type_var_names_annotation = crystal_class.resolve.annotation(Anyolite::SpecifyGenericTypes) %}
       {% type_var_names = type_var_names_annotation ? type_var_names_annotation[0] : nil %}
 
-      wrapped_method = Anyolite::RbCore::RbFunc.new do |rb, obj|
+      wrapped_method = Anyolite::Macro.new_rb_func do
         regular_arg_tuple = Anyolite::Macro.generate_arg_tuple({{rb_interpreter}}, {{regular_arg_array}}, context: {{context}})
 
         {% if block_arg_number || store_block_arg %}
@@ -234,7 +234,7 @@ module Anyolite
       {% type_var_names_annotation = crystal_class.resolve.annotation(Anyolite::SpecifyGenericTypes) %}
       {% type_var_names = type_var_names_annotation ? type_var_names_annotation[0] : nil %}
 
-      wrapped_method = Anyolite::RbCore::RbFunc.new do |rb, obj|
+      wrapped_method = Anyolite::Macro.new_rb_func do
         {% if block_arg_number || store_block_arg %}
           block_ptr = Pointer(Anyolite::RbCore::RbValue).malloc(size: 1)
 
@@ -291,7 +291,7 @@ module Anyolite
       {% type_var_names_annotation = crystal_class.resolve.annotation(Anyolite::SpecifyGenericTypes) %}
       {% type_var_names = type_var_names_annotation ? type_var_names_annotation[0] : nil %}
 
-      wrapped_method = Anyolite::RbCore::RbFunc.new do |rb, obj|
+      wrapped_method = Anyolite::Macro.new_rb_func do
         regular_arg_tuple = Anyolite::Macro.generate_arg_tuple({{rb_interpreter}}, {{regular_arg_array}}, context: {{context}})
 
         # TODO: Add annotation argument for required blocks ('&!' then)
@@ -367,7 +367,7 @@ module Anyolite
       {% type_var_names_annotation = crystal_class.resolve.annotation(Anyolite::SpecifyGenericTypes) %}
       {% type_var_names = type_var_names_annotation ? type_var_names_annotation[0] : nil %}
 
-      wrapped_method = Anyolite::RbCore::RbFunc.new do |rb, obj|
+      wrapped_method = Anyolite::Macro.new_rb_func do
         {% if block_arg_number || store_block_arg %}
           block_ptr = Pointer(Anyolite::RbCore::RbValue).malloc(size: 1)
 
@@ -443,7 +443,7 @@ module Anyolite
       {% type_var_names_annotation = crystal_class.resolve.annotation(Anyolite::SpecifyGenericTypes) %}
       {% type_var_names = type_var_names_annotation ? type_var_names_annotation[0] : nil %}
       
-      wrapped_method = Anyolite::RbCore::RbFunc.new do |rb, obj|
+      wrapped_method = Anyolite::Macro.new_rb_func do
         regular_arg_tuple = Anyolite::Macro.generate_arg_tuple({{rb_interpreter}}, {{regular_arg_array}}, context: {{context}})
 
         {% if block_arg_number || store_block_arg %}
