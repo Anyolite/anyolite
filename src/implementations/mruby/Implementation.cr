@@ -9,19 +9,19 @@ module Anyolite
       end
     end
 
-    macro load_args_into_vars(rb, format_string, regular_arg_tuple, block_ptr = nil)
+    macro load_args_into_vars(format_string, regular_arg_tuple, block_ptr = nil)
       {% if block_ptr %}
-        Anyolite::RbCore.rb_get_args({{rb}}, {{format_string}}, *{{regular_arg_tuple}}, {{block_ptr}})
+        Anyolite::RbCore.rb_get_args(rb, {{format_string}}, *{{regular_arg_tuple}}, {{block_ptr}})
       {% else %}
-        Anyolite::RbCore.rb_get_args({{rb}}, {{format_string}}, *{{regular_arg_tuple}})
+        Anyolite::RbCore.rb_get_args(rb, {{format_string}}, *{{regular_arg_tuple}})
       {% end %}
     end
 
-    macro load_kw_args_into_vars(rb, format_string, regular_arg_tuple, kw_arg_ptr, block_ptr = nil)
+    macro load_kw_args_into_vars(format_string, regular_arg_tuple, kw_arg_ptr, block_ptr = nil)
       {% if block_ptr %}
-        Anyolite::RbCore.rb_get_args({{rb}}, {{format_string}}, *{{regular_arg_tuple}}, {{kw_arg_ptr}}, {{block_ptr}})
+        Anyolite::RbCore.rb_get_args(rb, {{format_string}}, *{{regular_arg_tuple}}, {{kw_arg_ptr}}, {{block_ptr}})
       {% else %}
-        Anyolite::RbCore.rb_get_args({{rb}}, {{format_string}}, *{{regular_arg_tuple}}, {{kw_arg_ptr}})
+        Anyolite::RbCore.rb_get_args(rb, {{format_string}}, *{{regular_arg_tuple}}, {{kw_arg_ptr}})
       {% end %}
     end
   end
