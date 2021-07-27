@@ -1,7 +1,7 @@
 require "./anyolite.cr"
 
 # TODO: Pass flags to temporary executable
-{% if flag?(:anyolite_implementation_mruby_3) %}
+{% unless flag?(:anyolite_implementation_ruby_3) %}
   Anyolite::Preloader::AtCompiletime.transform_script_to_bytecode("examples/bytecode_test.rb", "examples/bytecode_test.mrb")
   Anyolite::Preloader::AtCompiletime.load_bytecode_file("examples/bytecode_test.mrb")
 {% end %}
