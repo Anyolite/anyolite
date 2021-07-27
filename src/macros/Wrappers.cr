@@ -25,7 +25,7 @@ module Anyolite
           args = Anyolite::Macro.generate_arg_tuple(rb, {{regular_args}}, context: {{context}})
           format_string = Anyolite::Macro.format_string({{regular_args}}, context: {{context}}) + "&"
           
-          Anyolite::RbCore.rb_get_args(rb, format_string, *args, block_ptr)
+          Anyolite::Macro.load_args_into_vars(rb, format_string, args, block_ptr)
 
           {% if block_arg_number %}
             if Anyolite::RbCast.check_for_nil(block_ptr.value)
@@ -77,7 +77,7 @@ module Anyolite
 
           format_string = Anyolite::Macro.format_string({{regular_arg_array}}, context: {{context}}) + ":&"
           kw_args = Anyolite::Macro.generate_keyword_argument_struct({{rb_interpreter}}, {{keyword_args}})
-          Anyolite::RbCore.rb_get_args(rb, format_string, *regular_arg_tuple, pointerof(kw_args), block_ptr)
+          Anyolite::Macro.load_kw_args_into_vars(rb, format_string, regular_arg_tuple, pointerof(kw_args), block_ptr)
 
           {% if block_arg_number %}
             if Anyolite::RbCast.check_for_nil(block_ptr.value)
@@ -89,7 +89,7 @@ module Anyolite
           block_ptr = nil
           format_string = Anyolite::Macro.format_string({{regular_arg_array}}, context: {{context}}) + ":"
           kw_args = Anyolite::Macro.generate_keyword_argument_struct({{rb_interpreter}}, {{keyword_args}})
-          Anyolite::RbCore.rb_get_args(rb, format_string, *regular_arg_tuple, pointerof(kw_args))
+          Anyolite::Macro.load_kw_args_into_vars(rb, format_string, regular_arg_tuple, pointerof(kw_args))
         {% end %}
 
         converted_regular_args = Anyolite::Macro.convert_regular_args(rb, regular_arg_tuple, {{regular_arg_array}}, context: {{context}}, type_vars: {{type_vars}}, type_var_names: {{type_var_names}})
@@ -133,8 +133,8 @@ module Anyolite
 
           args = Anyolite::Macro.generate_arg_tuple(rb, {{regular_args}}, context: {{context}})
           format_string = Anyolite::Macro.format_string({{regular_args}}, context: {{context}}) + "&"
-          
-          Anyolite::RbCore.rb_get_args(rb, format_string, *args, block_ptr)
+
+          Anyolite::Macro.load_args_into_vars(rb, format_string, args, block_ptr)
 
           {% if block_arg_number %}
             if Anyolite::RbCast.check_for_nil(block_ptr.value)
@@ -186,7 +186,7 @@ module Anyolite
 
           format_string = Anyolite::Macro.format_string({{regular_arg_array}}, context: {{context}}) + ":&"
           kw_args = Anyolite::Macro.generate_keyword_argument_struct({{rb_interpreter}}, {{keyword_args}})
-          Anyolite::RbCore.rb_get_args(rb, format_string, *regular_arg_tuple, pointerof(kw_args), block_ptr)
+          Anyolite::Macro.load_kw_args_into_vars(rb, format_string, regular_arg_tuple, pointerof(kw_args), block_ptr)
 
           {% if block_arg_number %}
             if Anyolite::RbCast.check_for_nil(block_ptr.value)
@@ -198,7 +198,7 @@ module Anyolite
           block_ptr = nil
           format_string = Anyolite::Macro.format_string({{regular_arg_array}}, context: {{context}}) + ":"
           kw_args = Anyolite::Macro.generate_keyword_argument_struct({{rb_interpreter}}, {{keyword_args}})
-          Anyolite::RbCore.rb_get_args(rb, format_string, *regular_arg_tuple, pointerof(kw_args))
+          Anyolite::Macro.load_args_into_vars(rb, format_string, regular_arg_tuple, pointerof(kw_args))
         {% end %}
 
         converted_regular_args = Anyolite::Macro.convert_regular_args(rb, regular_arg_tuple, {{regular_arg_array}}, context: {{context}}, type_vars: {{type_vars}}, type_var_names: {{type_var_names}})
@@ -245,7 +245,7 @@ module Anyolite
           args = Anyolite::Macro.generate_arg_tuple(rb, {{regular_args}}, context: {{context}})
           format_string = Anyolite::Macro.format_string({{regular_args}}, context: {{context}}) + "&"
           
-          Anyolite::RbCore.rb_get_args(rb, format_string, *args, block_ptr)
+          Anyolite::Macro.load_args_into_vars(rb, format_string, args, block_ptr)
 
           {% if block_arg_number %}
             if Anyolite::RbCast.check_for_nil(block_ptr.value)
@@ -305,7 +305,7 @@ module Anyolite
 
           format_string = Anyolite::Macro.format_string({{regular_arg_array}}, context: {{context}}) + ":&"
           kw_args = Anyolite::Macro.generate_keyword_argument_struct({{rb_interpreter}}, {{keyword_args}})
-          Anyolite::RbCore.rb_get_args(rb, format_string, *regular_arg_tuple, pointerof(kw_args), block_ptr)
+          Anyolite::Macro.load_kw_args_into_vars(rb, format_string, regular_arg_tuple, pointerof(kw_args), block_ptr)
 
           {% if block_arg_number %}
             if Anyolite::RbCast.check_for_nil(block_ptr.value)
@@ -317,7 +317,7 @@ module Anyolite
           block_ptr = nil
           format_string = Anyolite::Macro.format_string({{regular_arg_array}}, context: {{context}}) + ":"
           kw_args = Anyolite::Macro.generate_keyword_argument_struct({{rb_interpreter}}, {{keyword_args}})
-          Anyolite::RbCore.rb_get_args(rb, format_string, *regular_arg_tuple, pointerof(kw_args))
+          Anyolite::Macro.load_kw_args_into_vars(rb, format_string, regular_arg_tuple, pointerof(kw_args))
         {% end %}
 
         converted_regular_args = Anyolite::Macro.convert_regular_args(rb, regular_arg_tuple, {{regular_arg_array}}, context: {{context}}, type_vars: {{type_vars}}, type_var_names: {{type_var_names}})
@@ -377,8 +377,8 @@ module Anyolite
 
           args = Anyolite::Macro.generate_arg_tuple(rb, {{regular_args}}, context: {{context}})
           format_string = Anyolite::Macro.format_string({{regular_args}}, context: {{context}}) + "&"
-          
-          Anyolite::RbCore.rb_get_args(rb, format_string, *args, block_ptr)
+
+          Anyolite::Macro.load_args_into_vars(rb, format_string, args, block_ptr)
 
           {% if block_arg_number %}
             if Anyolite::RbCast.check_for_nil(block_ptr.value)
@@ -455,7 +455,7 @@ module Anyolite
 
           format_string = Anyolite::Macro.format_string({{regular_arg_array}}, context: {{context}}) + ":&"
           kw_args = Anyolite::Macro.generate_keyword_argument_struct({{rb_interpreter}}, {{keyword_args}})
-          Anyolite::RbCore.rb_get_args(rb, format_string, *regular_arg_tuple, pointerof(kw_args), block_ptr)
+          Anyolite::Macro.load_kw_args_into_vars(rb, format_string, regular_arg_tuple, pointerof(kw_args), block_ptr)
 
           {% if block_arg_number %}
             if Anyolite::RbCast.check_for_nil(block_ptr.value)
@@ -467,7 +467,7 @@ module Anyolite
           block_ptr = nil
           format_string = Anyolite::Macro.format_string({{regular_arg_array}}, context: {{context}}) + ":"
           kw_args = Anyolite::Macro.generate_keyword_argument_struct({{rb_interpreter}}, {{keyword_args}})
-          Anyolite::RbCore.rb_get_args(rb, format_string, *regular_arg_tuple, pointerof(kw_args))
+          Anyolite::Macro.load_kw_args_into_vars(rb, format_string, regular_arg_tuple, pointerof(kw_args))
         {% end %}
 
         converted_regular_args = Anyolite::Macro.convert_regular_args(rb, regular_arg_tuple, {{regular_arg_array}}, context: {{context}}, type_vars: {{type_vars}}, type_var_names: {{type_var_names}})

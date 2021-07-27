@@ -3,7 +3,7 @@ module Anyolite
     macro get_raw_args(rb, regular_args, context = nil)
       args = Anyolite::Macro.generate_arg_tuple({{rb}}, {{regular_args}}, context: {{context}})
       format_string = Anyolite::Macro.format_string({{regular_args}}, context: {{context}})
-      Anyolite::RbCore.rb_get_args({{rb}}, format_string, *args)
+      Anyolite::Macro.load_args_into_vars({{rb}}, format_string, args)
       args
     end
 
@@ -253,7 +253,7 @@ module Anyolite
       args = Anyolite::Macro.generate_arg_tuple({{rb}}, {{regular_args}}, context: {{context}})
       format_string = Anyolite::Macro.format_string({{regular_args}}, context: {{context}})
       
-      Anyolite::RbCore.rb_get_args({{rb}}, format_string, *args)
+      Anyolite::Macro.load_args_into_vars({{rb}}, format_string, args)
 
       Anyolite::Macro.convert_regular_args({{rb}}, args, {{regular_args}}, context: {{context}}, type_vars: {{type_vars}}, type_var_names: {{type_var_names}}, debug_information: {{debug_information}})
     end
