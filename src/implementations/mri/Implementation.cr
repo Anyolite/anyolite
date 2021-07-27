@@ -3,10 +3,10 @@ require "./FormatString.cr"
 
 module Anyolite
   module Macro
-    def self.new_rb_func(&b)
+    def new_rb_func(&b)
       Anyolite::RbCore::RbFunc.new do |argc, argv, obj|
         rb = Pointer(Void).null
-        {{b}}
+        {{b.body}}
       end
     end
   end
