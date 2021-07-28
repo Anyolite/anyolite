@@ -217,6 +217,7 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 
 * [X] Changed `RClass*` to `RClassPtr` to allow compatibility with MRI
 * [X] Changed directory structure
+* [X] Block variables for functions definitions have now an underscore in front of them
 
 #### Usability
 
@@ -231,6 +232,7 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 
 * [X] Alternate build paths are not recognized properly in implementation files
 * [X] Fixed typo in name of `rb_str_to_cstr`
+* [X] Fixed inconsistent usage of `rb` in many functions
 
 ### Version 1.0.0
 

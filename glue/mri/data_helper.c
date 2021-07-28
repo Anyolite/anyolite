@@ -37,3 +37,9 @@ extern const char* rb_class_name_helper(void* rb, VALUE ruby_class) {
   rb_string_value_cstr(&class_name_value);
 
 }
+
+extern void* get_data_ptr(VALUE ruby_object) {
+
+    return DATA_PTR(ruby_object);
+
+}

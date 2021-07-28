@@ -95,15 +95,15 @@ module Anyolite
     # fun rb_print_error = mrb_print_error(rb : State*)
 
     # fun rb_raise = mrb_raise(rb : State*, c : RClassPtr, msg : LibC::Char*)
-    # fun rb_raise_runtime_error = mrb_raise_runtime_error(rb : State*, msg : LibC::Char*)
-    # fun rb_raise_type_error = mrb_raise_type_error(rb : State*, msg : LibC::Char*)
-    # fun rb_raise_argument_error = mrb_raise_argument_error(rb : State*, msg : LibC::Char*)
-    # fun rb_raise_index_error = mrb_raise_index_error(rb : State*, msg : LibC::Char*)
-    # fun rb_raise_range_error = mrb_raise_range_error(rb : State*, msg : LibC::Char*)
-    # fun rb_raise_name_error = mrb_raise_name_error(rb : State*, msg : LibC::Char*)
-    # fun rb_raise_script_error = mrb_raise_script_error(rb : State*, msg : LibC::Char*)
-    # fun rb_raise_not_implemented_error = mrb_raise_not_implemented_error(rb : State*, msg : LibC::Char*)
-    # fun rb_raise_key_error = mrb_raise_key_error(rb : State*, msg : LibC::Char*)
+    fun rb_raise_runtime_error = rb_raise_runtime_error(rb : State*, msg : LibC::Char*)
+    fun rb_raise_type_error = rb_raise_type_error(rb : State*, msg : LibC::Char*)
+    fun rb_raise_argument_error = rb_raise_argument_error(rb : State*, msg : LibC::Char*)
+    fun rb_raise_index_error = rb_raise_index_error(rb : State*, msg : LibC::Char*)
+    fun rb_raise_range_error = rb_raise_range_error(rb : State*, msg : LibC::Char*)
+    fun rb_raise_name_error = rb_raise_name_error(rb : State*, msg : LibC::Char*)
+    fun rb_raise_script_error = rb_raise_script_error(rb : State*, msg : LibC::Char*)
+    fun rb_raise_not_implemented_error = rb_raise_not_implemented_error(rb : State*, msg : LibC::Char*)
+    fun rb_raise_key_error = rb_raise_key_error(rb : State*, msg : LibC::Char*)
 
     fun rb_get_args = rb_scan_args(argc : RbInt, argv : RbValue*, format : LibC::Char*, ...) : Void
     
@@ -172,7 +172,7 @@ module Anyolite
     fun set_instance_tt_as_data(ruby_class : RClassPtr) : Void
     # fun new_empty_object(rb : State*, ruby_class : RClassPtr, data_ptr : Void*, type : RbDataType*) : RbValue
     # fun set_data_ptr_and_type(ruby_object : RbValue, data : Void*, type : RbDataType*)
-    # fun get_data_ptr(ruby_object : RbValue) : Void*
+    fun get_data_ptr(ruby_object : RbValue) : Void*
 
     # fun get_rb_obj_value = get_mrb_obj_value(p : Void*) : RbValue
 

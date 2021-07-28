@@ -23,15 +23,15 @@ module Anyolite
       return RbCore.get_bool_value(value ? 1 : 0)
     end
 
-    def self.return_float(rb, value)
+    def self.return_float(rb : RbCore::State*, value)
       return RbCore.get_float_value(rb, value)
     end
 
-    def self.return_string(rb, value)
+    def self.return_string(rb : RbCore::State*, value)
       return RbCore.get_string_value(rb, value)
     end
 
-    def self.return_array(rb, value)
+    def self.return_array(rb : RbCore::State*, value)
       array_size = value.size
 
       array_values = Pointer(RbCore::RbValue).malloc(size: array_size) do |i|
@@ -41,11 +41,11 @@ module Anyolite
       return RbCore.rb_ary_new_from_values(rb, array_size, array_values)
     end
 
-    def self.return_symbol(rb, value)
+    def self.return_symbol(rb : RbCore::State*, value)
       return RbCore.get_symbol_value_of_string(rb, value.to_s)
     end
 
-    def self.return_hash(rb, value)
+    def self.return_hash(rb : RbCore::State*, value)
       hash_size = value.size
 
       rb_hash = RbCore.rb_hash_new(rb)
@@ -170,7 +170,7 @@ module Anyolite
       RbCore.check_rb_data(value) != 0
     end
 
-    def self.casting_error(rb, value, crystal_class, rescue_value)
+    def self.casting_error(rb : RbCore::State*, value, crystal_class, rescue_value)
       rb_inspect_string = RbCore.rb_inspect(rb, value)
       rb_class = RbCore.get_class_of_obj(rb, value)
       

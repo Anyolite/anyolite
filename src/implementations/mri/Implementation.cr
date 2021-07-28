@@ -4,17 +4,17 @@ require "./FormatString.cr"
 module Anyolite
   module Macro
     macro new_rb_func(&b)
-      Anyolite::RbCore::RbFunc.new do |argc, argv, obj|
-        rb = Anyolite::RbRefTable.get_current_interpreter # TODO: Fix this - For now it will be casted to an unsafe RbCore::State anyway
+      Anyolite::RbCore::RbFunc.new do |_argc, _argv, _obj|
+        _rb = Pointer(Anyolite::RbCore::State).null
         {{b.body}}
       end
     end
 
     macro load_args_into_vars(format_string, regular_arg_tuple, block_ptr = nil)
       {% if block_ptr %}
-        Anyolite::RbCore.rb_get_args(argc, argv, {{format_string}}, *{{regular_arg_tuple}}, {{block_ptr}})
+        Anyolite::RbCore.rb_get_args(_argc, _argv, {{format_string}}, *{{regular_arg_tuple}}, {{block_ptr}})
       {% else %}
-        Anyolite::RbCore.rb_get_args(argc, argv, {{format_string}}, *{{regular_arg_tuple}})
+        Anyolite::RbCore.rb_get_args(_argc, _argv, {{format_string}}, *{{regular_arg_tuple}})
       {% end %}
     end
 
@@ -23,9 +23,9 @@ module Anyolite
       # TODO: Proper keyword handling
 
       {% if block_ptr %}
-        Anyolite::RbCore.rb_get_args(argc, argv, {{format_string}}, *{{regular_arg_tuple}}, kw_ptr, {{block_ptr}})
+        Anyolite::RbCore.rb_get_args(_argc, _argv, {{format_string}}, *{{regular_arg_tuple}}, kw_ptr, {{block_ptr}})
       {% else %}
-        Anyolite::RbCore.rb_get_args(argc, argv, {{format_string}}, *{{regular_arg_tuple}}, kw_ptr)
+        Anyolite::RbCore.rb_get_args(_argc, _argv, {{format_string}}, *{{regular_arg_tuple}}, kw_ptr)
       {% end %}
     end
   end
