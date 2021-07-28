@@ -1,4 +1,4 @@
-#include "ruby.h"
+#include <ruby.h>
 
 extern VALUE rb_define_class_under_helper(void* rb, VALUE superclass, const char* name, VALUE under) {
 

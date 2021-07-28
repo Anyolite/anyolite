@@ -496,6 +496,8 @@ Anyolite::RbInterpreter.create do |rb|
   rb.load_script_from_file("examples/test.rb")
 end
 
+puts "Proceeding..."
+
 module TestModule
   class Entity
     property hp : Int32
@@ -523,7 +525,7 @@ module TestModule
 end
 
 puts "Reference table: #{Anyolite::RbRefTable.inspect}"
-#Anyolite::RbRefTable.reset
+Anyolite::RbRefTable.reset
 
 puts "------------------------------"
 

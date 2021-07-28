@@ -1,3 +1,5 @@
+puts "Initiate testing script..."
+
 BytecodeTestClass.new("Hello world").do_test(5)
 
 a = TestModule::Test.new(x: 5)

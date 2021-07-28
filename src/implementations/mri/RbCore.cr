@@ -3,17 +3,17 @@ module Anyolite
     {% build_path = env("ANYOLITE_BUILD_PATH") ? env("ANYOLITE_BUILD_PATH") : "build" %}
     
     {% if flag?(:win32) %}
-      @[Link(ldflags: "#{__DIR__}/../../../{{build_path.id}}/mri/lib/libruby-static.lib -DMRB_INT64 msvcrt.lib Ws2_32.lib")]
-      @[Link(ldflags: "#{__DIR__}/../../../{{build_path.id}}/glue/mri/return_functions.obj -DMRB_INT64")]
-      @[Link(ldflags: "#{__DIR__}/../../../{{build_path.id}}/glue/mri/data_helper.obj -DMRB_INT64")]
-      @[Link(ldflags: "#{__DIR__}/../../../{{build_path.id}}/glue/mri/script_helper.obj -DMRB_INT64")]
-      @[Link(ldflags: "#{__DIR__}/../../../{{build_path.id}}/glue/mri/error_helper.obj -DMRB_INT64")]
+      @[Link(ldflags: "#{__DIR__}/../../../{{build_path.id}}/mri/lib/libruby-static.lib -lgmp -lcrypt -lz msvcrt.lib Ws2_32.lib")]
+      @[Link(ldflags: "#{__DIR__}/../../../{{build_path.id}}/glue/mri/return_functions.obj -lgmp -lcrypt -lz")]
+      @[Link(ldflags: "#{__DIR__}/../../../{{build_path.id}}/glue/mri/data_helper.obj -lgmp -lcrypt -lz")]
+      @[Link(ldflags: "#{__DIR__}/../../../{{build_path.id}}/glue/mri/script_helper.obj -lgmp -lcrypt -lz")]
+      @[Link(ldflags: "#{__DIR__}/../../../{{build_path.id}}/glue/mri/error_helper.obj -lgmp -lcrypt -lz")]
     {% else %}
-      @[Link(ldflags: "#{__DIR__}/../../../{{build_path.id}}/mri/lib/libruby-static.a -DMRB_INT64")]
-      @[Link(ldflags: "#{__DIR__}/../../../{{build_path.id}}/glue/mri/return_functions.o -DMRB_INT64")]
-      @[Link(ldflags: "#{__DIR__}/../../../{{build_path.id}}/glue/mri/data_helper.o -DMRB_INT64")]
-      @[Link(ldflags: "#{__DIR__}/../../../{{build_path.id}}/glue/mri/script_helper.o -DMRB_INT64")]
-      @[Link(ldflags: "#{__DIR__}/../../../{{build_path.id}}/glue/mri/error_helper.o -DMRB_INT64")]
+      @[Link(ldflags: "#{__DIR__}/../../../{{build_path.id}}/mri/lib/libruby-static.a -lgmp -lcrypt -lz")]
+      @[Link(ldflags: "#{__DIR__}/../../../{{build_path.id}}/glue/mri/return_functions.o -lgmp -lcrypt -lz")]
+      @[Link(ldflags: "#{__DIR__}/../../../{{build_path.id}}/glue/mri/data_helper.o -lgmp -lcrypt -lz")]
+      @[Link(ldflags: "#{__DIR__}/../../../{{build_path.id}}/glue/mri/script_helper.o -lgmp -lcrypt -lz")]
+      @[Link(ldflags: "#{__DIR__}/../../../{{build_path.id}}/glue/mri/error_helper.o -lgmp -lcrypt -lz")]
     {% end %}
   end
   
@@ -29,7 +29,7 @@ module Anyolite
     alias RbFloat = LibC::Double
     alias RbInt = Int64
     alias RbBool = UInt8
-    alias RbSymbol = UInt32
+    alias RbSymbol = LibC::ULong
 
     enum MrbVType
       MRB_TT_FALSE = 0
@@ -79,7 +79,7 @@ module Anyolite
     end
 
     fun rb_open = open_interpreter : State*
-    # fun rb_close = mrb_close(rb : State*)
+    fun rb_close = close_interpreter(rb : State*)
 
     # fun rb_define_module = mrb_define_module(rb : State*, name : LibC::Char*) : RClassPtr
     # fun rb_define_module_under = mrb_define_module_under(rb : State*, under : RClassPtr, name : LibC::Char*) : RClassPtr
@@ -125,35 +125,35 @@ module Anyolite
     # fun rb_hash_keys = mrb_hash_keys(rb : State*, hash : RbValue) : RbValue
     # fun rb_hash_size = mrb_hash_size(rb : State*, hash : RbValue) : RbInt
 
-    # fun get_nil_value : RbValue
-    # fun get_false_value : RbValue
-    # fun get_true_value : RbValue
-    # fun get_fixnum_value(value : RbInt) : RbValue
-    # fun get_bool_value(value : RbBool) : RbValue
-    # fun get_float_value(rb : State*, value : RbFloat) : RbValue
-    # fun get_string_value(rb : State*, value : LibC::Char*) : RbValue
+    fun get_nil_value : RbValue
+    fun get_false_value : RbValue
+    fun get_true_value : RbValue
+    fun get_fixnum_value(value : RbInt) : RbValue
+    fun get_bool_value(value : RbBool) : RbValue
+    fun get_float_value(rb : State*, value : RbFloat) : RbValue
+    fun get_string_value(rb : State*, value : LibC::Char*) : RbValue
 
-    # fun check_rb_fixnum = check_mrb_fixnum(value : RbValue) : LibC::Int
-    # fun check_rb_float = check_mrb_float(value : RbValue) : LibC::Int
-    # fun check_rb_true = check_mrb_true(value : RbValue) : LibC::Int
-    # fun check_rb_false = check_mrb_false(value : RbValue) : LibC::Int
-    # fun check_rb_nil = check_mrb_nil(value : RbValue) : LibC::Int
-    # fun check_rb_undef = check_mrb_undef(value : RbValue) : LibC::Int
-    # fun check_rb_string = check_mrb_string(value : RbValue) : LibC::Int
-    # fun check_rb_symbol = check_mrb_symbol(value : RbValue) : LibC::Int
-    # fun check_rb_array = check_mrb_array(value : RbValue) : LibC::Int
-    # fun check_rb_hash = check_mrb_hash(value : RbValue) : LibC::Int
-    # fun check_rb_data = check_mrb_data(value : RbValue) : LibC::Int
+    fun check_rb_fixnum(value : RbValue) : LibC::Int
+    fun check_rb_float(value : RbValue) : LibC::Int
+    fun check_rb_true (value : RbValue) : LibC::Int
+    fun check_rb_false(value : RbValue) : LibC::Int
+    fun check_rb_nil(value : RbValue) : LibC::Int
+    fun check_rb_undef(value : RbValue) : LibC::Int
+    fun check_rb_string(value : RbValue) : LibC::Int
+    fun check_rb_symbol(value : RbValue) : LibC::Int
+    fun check_rb_array(value : RbValue) : LibC::Int
+    fun check_rb_hash(value : RbValue) : LibC::Int
+    fun check_rb_data(value : RbValue) : LibC::Int
 
-    # fun get_rb_fixnum = get_mrb_fixnum(value : RbValue) : RbInt 
-    # fun get_rb_float = get_mrb_float(value : RbValue) : RbFloat
-    # fun get_rb_bool = get_mrb_bool(value : RbValue) : RbBool
-    # fun get_rb_string = get_mrb_string(rb : State*, value : RbValue) : LibC::Char*
+    fun get_rb_fixnum(value : RbValue) : RbInt 
+    fun get_rb_float(value : RbValue) : RbFloat
+    fun get_rb_bool(value : RbValue) : RbBool
+    fun get_rb_string(rb : State*, value : RbValue) : LibC::Char*
 
-    # fun rb_str_to_cstr = mrb_str_to_cstr(rb : State*, value : RbValue) : LibC::Char*
+    fun rb_str_to_cstr(rb : State*, value : RbValue) : LibC::Char*
 
     # fun convert_to_rb_sym = convert_to_mrb_sym(rb : State*, value : LibC::Char*) : RbSymbol
-    # fun get_symbol_value_of_string(rb : State*, value : LibC::Char*) : RbValue
+    fun get_symbol_value_of_string(rb : State*, value : LibC::Char*) : RbValue
 
     # Base class, not to be confused with `get_class_of_obj`
     fun get_object_class(rb : State*) : RClassPtr
@@ -193,7 +193,7 @@ module Anyolite
     # fun rb_gv_set = mrb_gv_set(rb : State*, sym : RbSymbol, value : RbValue) : Void
     # fun rb_gv_get = mrb_gv_get(rb : State*, sym : RbSymbol) : RbValue
 
-    # fun load_script_from_file(rb : State*, filename : LibC::Char*) : RbValue
+    fun load_script_from_file(rb : State*, filename : LibC::Char*) : Void
     # fun execute_script_line(rb : State*, str : LibC::Char*) : RbValue
     # fun execute_bytecode(rb : State*, bytecode : UInt8*) : RbValue
     # fun load_bytecode_from_file(rb : State*, filename : LibC::Char*) : RbValue

@@ -132,15 +132,15 @@ task :build_glue => [:load_config] do
     elsif $config.implementation == "mri"
         if ANYOLITE_COMPILER == :msvc
             GLUE_FILES.each do |name|
-                system "cl /I #{$config.rb_dir}/#{$config.implementation}/include /D MRB_INT64 /c #{$config.glue_dir}/#{name}.c /Fo\"#{$config.build_path}/glue/#{$config.implementation}/#{name}.obj\""
+                system "cl /I #{$config.rb_dir}/#{$config.implementation}/include /c #{$config.glue_dir}/#{name}.c /Fo\"#{$config.build_path}/glue/#{$config.implementation}/#{name}.obj\""
             end
         elsif ANYOLITE_COMPILER == :gcc
             GLUE_FILES.each do |name|
-                system "cc -std=c99 -I#{$config.build_path}/#{$config.implementation}/include/ruby-3.1.0 -I#{$config.build_path}/#{$config.implementation}/include/ruby-3.1.0/x86_64-linux -DMRB_INT64 -c #{$config.glue_dir}/#{name}.c -o #{$config.build_path}/glue/#{$config.implementation}/#{name}.o"
+                system "cc -std=c99 -I#{$config.build_path}/#{$config.implementation}/include/ruby-3.1.0 -I#{$config.build_path}/#{$config.implementation}/include/ruby-3.1.0/x86_64-linux -c #{$config.glue_dir}/#{name}.c -o #{$config.build_path}/glue/#{$config.implementation}/#{name}.o"
             end
         else
             GLUE_FILES.each do |name|
-                system "#{$config.compiler.to_s} -std=c99 -I#{$config.rb_dir}/#{$config.implementation}/include -DMRB_INT64 -c #{$config.glue_dir}/#{name}.c -o #{$config.build_path}/glue/#{$config.implementation}/#{name}.o"
+                system "#{$config.compiler.to_s} -std=c99 -I#{$config.rb_dir}/#{$config.implementation}/include -c #{$config.glue_dir}/#{name}.c -o #{$config.build_path}/glue/#{$config.implementation}/#{name}.o"
             end
         end
     else
