@@ -479,24 +479,32 @@ end
 # Anyolite::RbRefTable.set_option(:logging)
 
 Anyolite::RbInterpreter.create do |rb|
-  Anyolite::Preloader.execute_bytecode_from_cache_or_file(rb, "examples/bytecode_test.mrb")
-
-  Anyolite.wrap_module(rb, SomeModule, "TestModule")
-  Anyolite.wrap_module_function_with_keywords(rb, SomeModule, "test_method", SomeModule.test_method, [int : Int32 = 19, str : String])
-  Anyolite.wrap_constant(rb, SomeModule, "SOME_CONSTANT", "Smile! 😊")
-
-  Anyolite.wrap(rb, SomeModule::Bla, under: SomeModule, verbose: true)
-
-  Anyolite.wrap(rb, SomeModule::TestStruct, under: SomeModule, verbose: true)
-
-  Anyolite.wrap(rb, SomeModule::Test, under: SomeModule, instance_method_exclusions: [:add], verbose: true)
   
-  Anyolite.wrap_instance_method(rb, SomeModule::Test, "add", add, [SomeModule::Test])
+  # TODO: Make this work
+  {% unless flag?(:anyolite_implementation_ruby_3) %}
+    Anyolite::Preloader.execute_bytecode_from_cache_or_file(rb, "examples/bytecode_test.mrb")
 
-  rb.load_script_from_file("examples/test.rb")
+    Anyolite.wrap_module(rb, SomeModule, "TestModule")
+    Anyolite.wrap_module_function_with_keywords(rb, SomeModule, "test_method", SomeModule.test_method, [int : Int32 = 19, str : String])
+    Anyolite.wrap_constant(rb, SomeModule, "SOME_CONSTANT", "Smile! 😊")
+
+    Anyolite.wrap(rb, SomeModule::Bla, under: SomeModule, verbose: true)
+
+    Anyolite.wrap(rb, SomeModule::TestStruct, under: SomeModule, verbose: true)
+
+    Anyolite.wrap(rb, SomeModule::Test, under: SomeModule, instance_method_exclusions: [:add], verbose: true)
+    
+    Anyolite.wrap_instance_method(rb, SomeModule::Test, "add", add, [SomeModule::Test])
+  {% end %}
+
+  {% if flag?(:anyolite_implementation_ruby_3) %}
+    rb.load_script_from_file("examples/mri_test.rb")
+  {% else %}
+    rb.load_script_from_file("examples/test.rb")
+  {% end %}
 end
 
-puts "Proceeding..."
+{% unless flag?(:anyolite_implementation_ruby_3) %}
 
 module TestModule
   class Entity
@@ -536,3 +544,5 @@ Anyolite::RbInterpreter.create do |rb|
 end
 
 puts "Reference table: #{Anyolite::RbRefTable.inspect}"
+
+{% end %}
