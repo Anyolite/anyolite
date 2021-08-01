@@ -16,7 +16,10 @@ This way, mruby can be used as a scripting language to Crystal projects, with th
 
 This project is currently in active development, so please report any bugs or missing relevant features.
 
-A demo project is available at https://github.com/Anyolite/ScapoLite.
+Useful links for an overview:
+* Demo project: https://github.com/Anyolite/ScapoLite
+* Wiki (under construction): https://github.com/Anyolite/anyolite/wiki
+* Documentation: https://anyolite.github.io/anyolite/
 
 # Features
 
