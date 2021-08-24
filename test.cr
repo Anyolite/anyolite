@@ -483,11 +483,17 @@ Anyolite::RbInterpreter.create do |rb|
   # TODO: Make this work
   {% unless flag?(:anyolite_implementation_ruby_3) %}
     Anyolite::Preloader.execute_bytecode_from_cache_or_file(rb, "examples/bytecode_test.mrb")
+  {% end %}
 
     Anyolite.wrap_module(rb, SomeModule, "TestModule")
+  
+  {% unless flag?(:anyolite_implementation_ruby_3) %}
     Anyolite.wrap_module_function_with_keywords(rb, SomeModule, "test_method", SomeModule.test_method, [int : Int32 = 19, str : String])
+  {% end %}
+
     Anyolite.wrap_constant(rb, SomeModule, "SOME_CONSTANT", "Smile! 😊")
 
+  {% unless flag?(:anyolite_implementation_ruby_3) %}
     Anyolite.wrap(rb, SomeModule::Bla, under: SomeModule, verbose: true)
 
     Anyolite.wrap(rb, SomeModule::TestStruct, under: SomeModule, verbose: true)

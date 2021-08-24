@@ -21,6 +21,7 @@ module Anyolite
 
   lib RbCore
     alias RbFunc = Proc(State*, RbValue, RbValue)
+    alias RbDataFunc = Proc(State*, Void*, Nil)
 
     type State = Void
     type RClass = Void
@@ -68,7 +69,7 @@ module Anyolite
 
     struct RbDataType
       struct_name : LibC::Char*
-      dfree : State*, Void* -> Void
+      dfree : RbDataFunc
     end
 
     struct KWArgs

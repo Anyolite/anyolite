@@ -12,6 +12,24 @@ extern VALUE rb_define_class_helper(void* rb, VALUE superclass, const char* name
 
 }
 
+extern VALUE rb_define_module_under_helper(void* rb, VALUE under, const char* name) {
+
+  rb_define_module_under(under, name);
+
+}
+
+extern VALUE rb_define_module_helper(void* rb, const char* name) {
+
+  rb_define_module(name);
+
+}
+
+extern VALUE rb_define_const_helper(void* rb, VALUE under, const char* name, VALUE value) {
+
+  rb_define_const(under, name, value);
+
+}
+
 extern void set_instance_tt_as_data(VALUE ruby_class) {
 
   //! TODO: Is this function required?
@@ -40,6 +58,12 @@ extern const char* rb_class_name_helper(void* rb, VALUE ruby_class) {
 
 extern void* get_data_ptr(VALUE ruby_object) {
 
-    return DATA_PTR(ruby_object);
+  return DATA_PTR(ruby_object);
+
+}
+
+extern void set_data_ptr_and_type(VALUE ruby_object, void* data, struct rb_data_type_struct* data_type) {
+
+  TypedData_Wrap_Struct(ruby_object, data_type, data);
 
 }

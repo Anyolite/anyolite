@@ -21,6 +21,7 @@ module Anyolite
 
   lib RbCore
     alias RbFunc = Proc(RbInt, RbValue*, RbValue, RbValue) # argc, argv, self -> VALUE
+    alias RbDataFunc = Proc(Void*, Nil)
 
     type State = Void
 
@@ -67,7 +68,14 @@ module Anyolite
 
     struct RbDataType
       struct_name : LibC::Char*
-      dfree : State*, Void* -> Void
+      dmark : RbDataFunc
+      dfree : RbDataFunc
+      dize : Proc(Void*, LibC::SizeT)
+      dcompact : RbDataFunc
+      reserved : Void**
+      parent : RbDataType*
+      data : Void*
+      flags : RbValue
     end
 
     struct KWArgs
@@ -81,8 +89,8 @@ module Anyolite
     fun rb_open = open_interpreter : State*
     fun rb_close = close_interpreter(rb : State*)
 
-    # fun rb_define_module = mrb_define_module(rb : State*, name : LibC::Char*) : RClassPtr
-    # fun rb_define_module_under = mrb_define_module_under(rb : State*, under : RClassPtr, name : LibC::Char*) : RClassPtr
+    fun rb_define_module = rb_define_module_helper(rb : State*, name : LibC::Char*) : RClassPtr
+    fun rb_define_module_under = rb_define_module_under_helper(rb : State*, under : RClassPtr, name : LibC::Char*) : RClassPtr
     fun rb_define_class = rb_define_class_helper(rb : State*, name : LibC::Char*, superclass : RClassPtr) : RClassPtr
     fun rb_define_class_under = rb_define_class_under_helper(rb : State*, under : RClassPtr, name : LibC::Char*, superclass : RClassPtr) : RClassPtr
 
@@ -90,7 +98,7 @@ module Anyolite
     # fun rb_define_class_method = mrb_define_class_method(rb : State*, c : RClassPtr, name : LibC::Char*, func : State*, RbValue -> RbValue, aspect : UInt32)
     # fun rb_define_module_function = mrb_define_module_function(rb : State*, c : RClassPtr, name : LibC::Char*, func : State*, RbValue -> RbValue, aspect : UInt32)
 
-    # fun rb_define_const = mrb_define_const(rb : State*, c : RClassPtr, name : LibC::Char*, val : RbValue)
+    fun rb_define_const = rb_define_const_helper(rb : State*, c : RClassPtr, name : LibC::Char*, val : RbValue)
 
     # fun rb_print_error = mrb_print_error(rb : State*)
 
@@ -171,7 +179,7 @@ module Anyolite
     # fun rb_data_get_ptr = mrb_data_get_ptr(rb : State*, obj : RbValue, type : RbDataType*) : Void*
     fun set_instance_tt_as_data(ruby_class : RClassPtr) : Void
     # fun new_empty_object(rb : State*, ruby_class : RClassPtr, data_ptr : Void*, type : RbDataType*) : RbValue
-    # fun set_data_ptr_and_type(ruby_object : RbValue, data : Void*, type : RbDataType*)
+    fun set_data_ptr_and_type(ruby_object : RbValue, data : Void*, type : RbDataType*)
     fun get_data_ptr(ruby_object : RbValue) : Void*
 
     # fun get_rb_obj_value = get_mrb_obj_value(p : Void*) : RbValue

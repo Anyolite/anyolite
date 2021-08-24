@@ -10,6 +10,13 @@ module Anyolite
       end
     end
 
+    macro new_rb_data_func(&b)
+      Anyolite::RbCore::RbDataFunc.new do |__ptr|
+        __rb = Pointer(Anyolite::RbCore::State).null
+        {{b.body}}
+      end
+    end
+
     macro load_args_into_vars(format_string, regular_arg_tuple, block_ptr = nil)
       {% if block_ptr %}
         Anyolite::RbCore.rb_get_args(_argc, _argv, {{format_string}}, *{{regular_arg_tuple}}, {{block_ptr}})
