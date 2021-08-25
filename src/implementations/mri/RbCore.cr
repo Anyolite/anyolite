@@ -94,9 +94,9 @@ module Anyolite
     fun rb_define_class = rb_define_class_helper(rb : State*, name : LibC::Char*, superclass : RClassPtr) : RClassPtr
     fun rb_define_class_under = rb_define_class_under_helper(rb : State*, under : RClassPtr, name : LibC::Char*, superclass : RClassPtr) : RClassPtr
 
-    # fun rb_define_method = mrb_define_method(rb : State*, c : RClassPtr, name : LibC::Char*, func : State*, RbValue -> RbValue, aspec : UInt32) # TODO: Aspec values
-    # fun rb_define_class_method = mrb_define_class_method(rb : State*, c : RClassPtr, name : LibC::Char*, func : State*, RbValue -> RbValue, aspect : UInt32)
-    # fun rb_define_module_function = mrb_define_module_function(rb : State*, c : RClassPtr, name : LibC::Char*, func : State*, RbValue -> RbValue, aspect : UInt32)
+    fun rb_define_method = rb_define_method_helper(rb : State*, c : RClassPtr, name : LibC::Char*, func : RbFunc, aspec : UInt32) # TODO: Aspec values
+    fun rb_define_class_method = rb_define_class_method_helper(rb : State*, c : RClassPtr, name : LibC::Char*, func : RbFunc, aspect : UInt32)
+    fun rb_define_module_function = rb_define_module_function_helper(rb : State*, c : RClassPtr, name : LibC::Char*, func : RbFunc, aspect : UInt32)
 
     fun rb_define_const = rb_define_const_helper(rb : State*, c : RClassPtr, name : LibC::Char*, val : RbValue)
 
@@ -168,7 +168,7 @@ module Anyolite
 
     # fun rb_obj_inspect = mrb_obj_inspect(rb : State*, value : RbValue) : RbValue
     # fun rb_any_to_s = mrb_any_to_s(rb : State*, value : RbValue) : RbValue
-    # fun rb_inspect = mrb_inspect(rb : State*, value : RbValue) : RbValue
+    fun rb_inspect = rb_inspect_helper(rb : State*, value : RbValue) : RbValue
 
     # fun rb_gc_register = mrb_gc_register(rb : State*, value : RbValue) : Void
     # fun rb_gc_unregister = mrb_gc_unregister(rb : State*, value : RbValue) : Void

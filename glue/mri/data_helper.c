@@ -67,3 +67,27 @@ extern void set_data_ptr_and_type(VALUE ruby_object, void* data, struct rb_data_
   TypedData_Wrap_Struct(ruby_object, data_type, data);
 
 }
+
+extern void rb_define_method_helper(void* rb, VALUE ruby_class, const char* name, VALUE (*func)(int argc, VALUE* argv, VALUE self), int aspec) {
+
+  rb_define_method(ruby_class, name, func, -1);
+
+}
+
+extern void rb_define_class_method_helper(void* rb, VALUE ruby_class, const char* name, VALUE (*func)(int argc, VALUE* argv, VALUE self), int aspec) {
+
+  rb_define_module_function(ruby_class, name, func, -1);
+
+}
+
+extern void rb_define_module_function_helper(void* rb, VALUE ruby_module, const char* name, VALUE (*func)(int argc, VALUE* argv, VALUE self), int aspec) {
+
+  rb_define_module_function(ruby_module, name, func, -1);
+
+}
+
+extern VALUE rb_inspect_helper(void* rb, VALUE value) {
+
+  rb_inspect(value);
+
+}

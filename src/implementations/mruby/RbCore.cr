@@ -88,9 +88,9 @@ module Anyolite
     fun rb_define_class = mrb_define_class(rb : State*, name : LibC::Char*, superclass : RClassPtr) : RClassPtr
     fun rb_define_class_under = mrb_define_class_under(rb : State*, under : RClassPtr, name : LibC::Char*, superclass : RClassPtr) : RClassPtr
 
-    fun rb_define_method = mrb_define_method(rb : State*, c : RClassPtr, name : LibC::Char*, func : State*, RbValue -> RbValue, aspec : UInt32) # TODO: Aspec values
-    fun rb_define_class_method = mrb_define_class_method(rb : State*, c : RClassPtr, name : LibC::Char*, func : State*, RbValue -> RbValue, aspect : UInt32)
-    fun rb_define_module_function = mrb_define_module_function(rb : State*, c : RClassPtr, name : LibC::Char*, func : State*, RbValue -> RbValue, aspect : UInt32)
+    fun rb_define_method = mrb_define_method(rb : State*, c : RClassPtr, name : LibC::Char*, func : RbFunc, aspec : UInt32) # TODO: Aspec values
+    fun rb_define_class_method = mrb_define_class_method(rb : State*, c : RClassPtr, name : LibC::Char*, func : RbFunc, aspect : UInt32)
+    fun rb_define_module_function = mrb_define_module_function(rb : State*, c : RClassPtr, name : LibC::Char*, func : RbFunc, aspect : UInt32)
 
     fun rb_define_const = mrb_define_const(rb : State*, c : RClassPtr, name : LibC::Char*, val : RbValue)
 

@@ -23,6 +23,9 @@ module Anyolite
       {% else %}
         Anyolite::RbCore.rb_get_args(_argc, _argv, {{format_string}}, *{{regular_arg_tuple}})
       {% end %}
+
+      # TODO: Block args
+      # TODO: Default arguments
     end
 
     macro load_kw_args_into_vars(format_string, regular_arg_tuple, kw_arg_ptr, block_ptr = nil)

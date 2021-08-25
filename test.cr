@@ -478,6 +478,13 @@ end
 
 # Anyolite::RbRefTable.set_option(:logging)
 
+module MRITest
+  @[Anyolite::WrapWithoutKeywords]
+  def self.do_something(number : UInt32, object : String = "Nothing")
+    "Something with #{number} #{object}"
+  end
+end
+
 Anyolite::RbInterpreter.create do |rb|
   
   # TODO: Make this work
@@ -492,6 +499,12 @@ Anyolite::RbInterpreter.create do |rb|
   {% end %}
 
     Anyolite.wrap_constant(rb, SomeModule, "SOME_CONSTANT", "Smile! 😊")
+
+    ###
+
+    Anyolite.wrap(rb, MRITest)
+
+    ###
 
   {% unless flag?(:anyolite_implementation_ruby_3) %}
     Anyolite.wrap(rb, SomeModule::Bla, under: SomeModule, verbose: true)
