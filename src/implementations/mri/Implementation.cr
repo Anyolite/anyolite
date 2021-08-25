@@ -1,6 +1,10 @@
 require "./RbCore.cr"
 require "./FormatString.cr"
 
+{% if !flag?(:use_general_object_format_chars) %}
+  {% raise "Flag 'use_general_object_format_chars' needs to be set for a working MRI implementation" %}
+{% end %}
+
 module Anyolite
   module Macro
     macro new_rb_func(&b)
