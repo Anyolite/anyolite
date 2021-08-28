@@ -23,7 +23,7 @@ module Anyolite
       {% end %}
     end
 
-    macro load_kw_args_into_vars(format_string, regular_arg_tuple, kw_arg_ptr, block_ptr = nil)
+    macro load_kw_args_into_vars(keyword_args, format_string, regular_arg_tuple, kw_arg_ptr, block_ptr = nil)
       {% if block_ptr %}
         Anyolite::RbCore.rb_get_args(_rb, {{format_string}}, *{{regular_arg_tuple}}, {{kw_arg_ptr}}, {{block_ptr}})
       {% else %}

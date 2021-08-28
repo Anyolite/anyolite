@@ -48,7 +48,7 @@ module Anyolite
       # TODO: Default arguments
     end
 
-    macro load_kw_args_into_vars(format_string, regular_arg_tuple, kw_arg_ptr, block_ptr = nil)
+    macro load_kw_args_into_vars(keyword_args, format_string, regular_arg_tuple, kw_arg_ptr, block_ptr = nil)
       kw_ptr = Pointer(RbCore::RbValue).malloc(size: 1, value: RbCast.return_nil)
       # TODO: Proper keyword handling
 
