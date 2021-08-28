@@ -503,7 +503,7 @@ module MRITest
     end
 
     def rb_finalize(rb)
-      #puts "Goodbye, #{@name}..."
+      puts "Goodbye, #{@name}..."
     end
   end
 end
