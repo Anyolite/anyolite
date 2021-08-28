@@ -21,11 +21,25 @@ module Anyolite
       end
     end
 
-    macro load_args_into_vars(format_string, regular_arg_tuple, block_ptr = nil)
+    macro load_args_into_vars(args, format_string, regular_arg_tuple, block_ptr = nil)
       {% if block_ptr %}
-        Anyolite::RbCore.rb_get_args(_argc, _argv, {{format_string}}, *{{regular_arg_tuple}}, {{block_ptr}})
+        number_of_args = Anyolite::RbCore.rb_get_args(_argc, _argv, {{format_string}}, *{{regular_arg_tuple}}, {{block_ptr}})
       {% else %}
-        Anyolite::RbCore.rb_get_args(_argc, _argv, {{format_string}}, *{{regular_arg_tuple}})
+        number_of_args = Anyolite::RbCore.rb_get_args(_argc, _argv, {{format_string}}, *{{regular_arg_tuple}})
+      {% end %}
+
+      {% c = 0 %}
+      {% for arg in args %}
+        {% if arg.is_a? TypeDeclaration %}
+          {% if arg.value %}
+            if number_of_args <= {{c}} && Anyolite::RbCast.check_for_nil({{regular_arg_tuple}}[{{c}}].value)
+              {{regular_arg_tuple}}[{{c}}].value = Anyolite::RbCast.return_value(_rb, {{arg.value}})
+            end
+          {% end %}
+        {% else %}
+          {% raise "Not a TypeDeclaration: #{arg} of #{arg.class_name}" %}
+        {% end %}
+        {% c += 1 %}
       {% end %}
 
       # TODO: Block args

@@ -15,7 +15,7 @@ module Anyolite
       end
     end
 
-    macro load_args_into_vars(format_string, regular_arg_tuple, block_ptr = nil)
+    macro load_args_into_vars(args, format_string, regular_arg_tuple, block_ptr = nil)
       {% if block_ptr %}
         Anyolite::RbCore.rb_get_args(_rb, {{format_string}}, *{{regular_arg_tuple}}, {{block_ptr}})
       {% else %}

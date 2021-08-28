@@ -113,7 +113,7 @@ module Anyolite
     fun rb_raise_not_implemented_error = rb_raise_not_implemented_error(rb : State*, msg : LibC::Char*)
     fun rb_raise_key_error = rb_raise_key_error(rb : State*, msg : LibC::Char*)
 
-    fun rb_get_args = rb_scan_args(argc : RbInt, argv : RbValue*, format : LibC::Char*, ...) : Void
+    fun rb_get_args = rb_scan_args(argc : RbInt, argv : RbValue*, format : LibC::Char*, ...) : RbInt
     
     # fun rb_get_argc = mrb_get_argc(rb : State*) : RbInt
     # fun rb_get_argv = mrb_get_argv(rb : State*) : RbValue*
