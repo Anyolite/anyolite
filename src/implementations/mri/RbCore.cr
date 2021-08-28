@@ -178,7 +178,7 @@ module Anyolite
     # fun data_type(value : RbValue) : RbDataType*
     # fun rb_data_get_ptr = mrb_data_get_ptr(rb : State*, obj : RbValue, type : RbDataType*) : Void*
     fun set_instance_tt_as_data(ruby_class : RClassPtr) : Void
-    # fun new_empty_object(rb : State*, ruby_class : RClassPtr, data_ptr : Void*, type : RbDataType*) : RbValue
+    fun new_empty_object(rb : State*, ruby_class : RClassPtr, data_ptr : Void*, type : RbDataType*) : RbValue
     fun set_data_ptr_and_type(ruby_object : RbValue, data : Void*, type : RbDataType*)
     fun get_data_ptr(ruby_object : RbValue) : Void*
 

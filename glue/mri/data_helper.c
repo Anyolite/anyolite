@@ -76,6 +76,12 @@ extern void set_data_ptr_and_type(VALUE ruby_object, void* data, struct rb_data_
 
 }
 
+extern VALUE new_empty_object(void* rb, VALUE ruby_class, void* data_ptr, struct rb_data_type_struct* data_type) {
+
+  rb_data_object_wrap(ruby_class, data_ptr, data_type->function.dmark, data_type->function.dfree);
+
+}
+
 extern void rb_define_method_helper(void* rb, VALUE ruby_class, const char* name, VALUE (*func)(int argc, VALUE* argv, VALUE self), int aspec) {
 
   rb_define_method(ruby_class, name, func, -1);

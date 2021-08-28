@@ -492,8 +492,18 @@ module MRITest
       @name = name
     end
 
+    @[Anyolite::WrapWithoutKeywords]
+    def greet(other : MRITestClass)
+      puts "#{@name} greets #{other.name}"
+    end
+
+    @[Anyolite::WrapWithoutKeywords]
+    def create_child_with(other : MRITestClass)
+      MRITestClass.new(name: @name + "-" + other.name)
+    end
+
     def rb_finalize(rb)
-      puts "Goodbye, #{@name}..."
+      #puts "Goodbye, #{@name}..."
     end
   end
 end
