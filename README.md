@@ -43,6 +43,17 @@ You need to have the following programs installed (and in your PATH variable, if
 * Git (for downloading mruby)
 * GCC or Microsoft Visual Studio 19 (for building the object files required for Anyolite, depending on your OS)
 
+## Experimental MRI test
+
+If you want to test MRI as implementation, you need these additional programs:
+* Autoconf
+
+Compiling Anyolite for MRI requires setting the environment variable `ANYOLITE_CONFIG_PATH` to a valid MRI configuration path (like `config_files/anyolite_config_mri.json`), building the shard and then setting the `anyolite_implementation_ruby_3` and `use_general_object_format_chars` flags for the final compilation.
+
+Support for MRI is still not complete and many problems and errors might be encountered, so mruby is still recommended as the main Ruby implementation for now.
+
+Please report any bugs with MRI, so development can progress smoothly.
+
 # Installing
 
 Put this shard as a requirement into your shard.yml project file and then call
@@ -225,6 +236,7 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 #### Breaking changes
 
 * [X] Changed `RClass*` to `RClassPtr` to allow compatibility with MRI
+* [X] Reorganized some macros
 * [X] Changed directory structure
 * [X] Block variables for functions definitions have now an underscore in front of them
 

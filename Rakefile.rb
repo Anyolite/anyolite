@@ -136,7 +136,7 @@ task :build_glue => [:load_config] do
             end
         elsif ANYOLITE_COMPILER == :gcc
             GLUE_FILES.each do |name|
-                system "cc -std=c99 -I#{$config.build_path}/#{$config.implementation}/include/ruby-3.1.0 -I#{$config.build_path}/#{$config.implementation}/include/ruby-3.1.0/x86_64-linux -c #{$config.glue_dir}/#{name}.c -o #{$config.build_path}/glue/#{$config.implementation}/#{name}.o"
+                system "cc -std=c99 -I#{$config.build_path}/#{$config.implementation}/include/ruby-3.1.0 -I#{$config.build_path}/#{$config.implementation}/include/ruby-3.1.0/x86_64-linux -I#{$config.build_path}/#{$config.implementation}/include/ruby-3.1.0/aarch64-linux -c #{$config.glue_dir}/#{name}.c -o #{$config.build_path}/glue/#{$config.implementation}/#{name}.o"
             end
         else
             GLUE_FILES.each do |name|
