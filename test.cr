@@ -483,6 +483,19 @@ module MRITest
   def self.do_something(number : UInt32, object : String = "Nothing")
     "Something with #{number} #{object}"
   end
+
+  class MRITestClass
+    property name : String
+    
+    @[Anyolite::WrapWithoutKeywords]
+    def initialize(name : String = "Unknown")
+      @name = name
+    end
+
+    def rb_finalize(rb)
+      puts "Goodbye, #{@name}..."
+    end
+  end
 end
 
 Anyolite::RbInterpreter.create do |rb|
@@ -502,7 +515,7 @@ Anyolite::RbInterpreter.create do |rb|
 
     ###
 
-    Anyolite.wrap(rb, MRITest)
+    Anyolite.wrap(rb, MRITest, verbose: true)
 
     ###
 

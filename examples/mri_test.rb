@@ -13,4 +13,11 @@ puts TestModule::SOME_CONSTANT
 puts MRITest.do_something(13, "Crystals")
 puts MRITest.do_something(13)
 
-require_relative "./test.rb"
+dummy = MRITest::MRITestClass.new("Dummy")
+puts "Name of dummy is: #{dummy.name}"
+
+#require_relative "./test.rb"
+
+GC.start
+
+puts "End of MRI script"

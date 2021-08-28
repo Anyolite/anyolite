@@ -1,12 +1,12 @@
 #include <ruby.h>
 
-extern VALUE rb_define_class_under_helper(void* rb, VALUE superclass, const char* name, VALUE under) {
+extern VALUE rb_define_class_under_helper(void* rb, VALUE under, const char* name, VALUE superclass) {
 
   rb_define_class_under(under, name, superclass);
 
 }
 
-extern VALUE rb_define_class_helper(void* rb, VALUE superclass, const char* name) {
+extern VALUE rb_define_class_helper(void* rb, const char* name, VALUE superclass) {
 
   rb_define_class(name, superclass);
 
@@ -62,9 +62,17 @@ extern void* get_data_ptr(VALUE ruby_object) {
 
 }
 
+//! About the following method...
+//! It is highly hacky and just modifies a newly creates Ruby object, but that is okay.
+//! It tells the Ruby GC that this object is a pointer and how to free it.
+//! Crystal owns the pointer, so Ruby does not have to do anything else besides calling dfree.
+
 extern void set_data_ptr_and_type(VALUE ruby_object, void* data, struct rb_data_type_struct* data_type) {
 
-  TypedData_Wrap_Struct(ruby_object, data_type, data);
+  DATA_PTR(ruby_object) = data;
+  RDATA(ruby_object)->basic.flags = T_DATA;
+  RDATA(ruby_object)->dmark = data_type->function.dmark;
+  RDATA(ruby_object)->dfree = data_type->function.dfree;
 
 }
 

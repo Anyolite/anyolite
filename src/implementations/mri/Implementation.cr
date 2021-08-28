@@ -29,17 +29,19 @@ module Anyolite
       {% end %}
 
       {% c = 0 %}
-      {% for arg in args %}
-        {% if arg.is_a? TypeDeclaration %}
-          {% if arg.value %}
-            if number_of_args <= {{c}} && Anyolite::RbCast.check_for_nil({{regular_arg_tuple}}[{{c}}].value)
-              {{regular_arg_tuple}}[{{c}}].value = Anyolite::RbCast.return_value(_rb, {{arg.value}})
-            end
+      {% if args %}
+        {% for arg in args %}
+          {% if arg.is_a? TypeDeclaration %}
+            {% if arg.value %}
+              if number_of_args <= {{c}} && Anyolite::RbCast.check_for_nil({{regular_arg_tuple}}[{{c}}].value)
+                {{regular_arg_tuple}}[{{c}}].value = Anyolite::RbCast.return_value(_rb, {{arg.value}})
+              end
+            {% end %}
+          {% else %}
+            {% raise "Not a TypeDeclaration: #{arg} of #{arg.class_name}" %}
           {% end %}
-        {% else %}
-          {% raise "Not a TypeDeclaration: #{arg} of #{arg.class_name}" %}
+          {% c += 1 %}
         {% end %}
-        {% c += 1 %}
       {% end %}
 
       # TODO: Block args
