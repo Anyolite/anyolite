@@ -225,6 +225,7 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 * * [X] Correct argument passing between Crystal and MRI
 * * [X] Object allocation and conversion
 * * [ ] Keyword argument handling
+* * [ ] Block argument handling
 * * [ ] Linked all MRI functions to the abstraction layer
 * * [ ] Bytecode compilation (might not be possible)
 * * [ ] Tests

@@ -1,5 +1,6 @@
 require "./RbCore.cr"
 require "./FormatString.cr"
+require "./KeywordArgStruct.cr"
 
 module Anyolite
   module Macro
@@ -23,12 +24,16 @@ module Anyolite
       {% end %}
     end
 
-    macro load_kw_args_into_vars(keyword_args, format_string, regular_arg_tuple, kw_arg_ptr, block_ptr = nil)
+    macro load_kw_args_into_vars(keyword_args, format_string, regular_arg_tuple, block_ptr = nil)
+      kw_args = Anyolite::Macro.generate_keyword_argument_struct(_rb, {{keyword_args}})
+
       {% if block_ptr %}
-        Anyolite::RbCore.rb_get_args(_rb, {{format_string}}, *{{regular_arg_tuple}}, {{kw_arg_ptr}}, {{block_ptr}})
+        Anyolite::RbCore.rb_get_args(_rb, {{format_string}}, *{{regular_arg_tuple}}, pointerof(kw_args), {{block_ptr}})
       {% else %}
-        Anyolite::RbCore.rb_get_args(_rb, {{format_string}}, *{{regular_arg_tuple}}, {{kw_arg_ptr}})
+        Anyolite::RbCore.rb_get_args(_rb, {{format_string}}, *{{regular_arg_tuple}}, pointerof(kw_args))
       {% end %}
+
+      kw_args
     end
   end
 end

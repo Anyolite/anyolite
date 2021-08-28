@@ -1,5 +1,6 @@
 require "./RbCore.cr"
 require "./FormatString.cr"
+require "./KeywordArgStruct.cr"
 
 {% if !flag?(:use_general_object_format_chars) %}
   {% raise "Flag 'use_general_object_format_chars' needs to be set for a working MRI implementation" %}
@@ -45,18 +46,22 @@ module Anyolite
       {% end %}
 
       # TODO: Block args
-      # TODO: Default arguments
     end
 
-    macro load_kw_args_into_vars(keyword_args, format_string, regular_arg_tuple, kw_arg_ptr, block_ptr = nil)
-      kw_ptr = Pointer(RbCore::RbValue).malloc(size: 1, value: RbCast.return_nil)
-      # TODO: Proper keyword handling
+    macro load_kw_args_into_vars(keyword_args, format_string, regular_arg_tuple, block_ptr = nil)
+      kw_ptr = Pointer(Anyolite::RbCore::RbValue).malloc(size: 1, value: Anyolite::RbCast.return_nil)
 
       {% if block_ptr %}
         Anyolite::RbCore.rb_get_args(_argc, _argv, {{format_string}}, *{{regular_arg_tuple}}, kw_ptr, {{block_ptr}})
       {% else %}
         Anyolite::RbCore.rb_get_args(_argc, _argv, {{format_string}}, *{{regular_arg_tuple}}, kw_ptr)
       {% end %}
+
+      # TODO: Check default values for regular arguments (similar to above)
+      # TODO: Generate hash out of kw_ptr.value, which contains all keywords
+      # TODO: Block args
+
+      {:name => Anyolite::RbCast.return_value(_rb, "???")}  # TODO: Remove this test dummy
     end
   end
 end

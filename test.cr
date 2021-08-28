@@ -487,7 +487,6 @@ module MRITest
   class MRITestClass
     property name : String
     
-    @[Anyolite::WrapWithoutKeywords]
     def initialize(name : String = "Unknown")
       @name = name
     end

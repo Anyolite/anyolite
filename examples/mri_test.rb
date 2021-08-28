@@ -13,7 +13,7 @@ puts TestModule::SOME_CONSTANT
 puts MRITest.do_something(13, "Crystals")
 puts MRITest.do_something(13)
 
-dummy = MRITest::MRITestClass.new("Dummy")
+dummy = MRITest::MRITestClass.new(name: "Dummy")
 puts "Name of dummy is: #{dummy.name}"
 
 unknown = MRITest::MRITestClass.new
