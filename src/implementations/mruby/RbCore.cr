@@ -115,6 +115,9 @@ module Anyolite
     fun rb_yield = mrb_yield(rb : State*, value : RbValue, arg : RbValue) : RbValue
     fun rb_yield_argv = mrb_yield_argv(rb : State*, value : RbValue, argc : RbInt, argv : RbValue*) : RbValue
 
+    fun rb_call_block = mrb_yield(rb : State*, value : RbValue, arg : RbValue) : RbValue
+    fun rb_call_block_with_args = mrb_yield_argv(rb : State*, value : RbValue, argc : RbInt, argv : RbValue*) : RbValue
+
     fun rb_ary_ref = mrb_ary_ref(rb : State*, value : RbValue, pos : RbInt) : RbValue
     fun rb_ary_entry = mrb_ary_entry(value : RbValue, offset : RbInt) : RbValue
     fun array_length(value : RbValue) : LibC::SizeT
@@ -176,7 +179,7 @@ module Anyolite
     fun set_data_ptr_and_type(ruby_object : RbValue, data : Void*, type : RbDataType*)
     fun get_data_ptr(ruby_object : RbValue) : Void*
 
-    fun get_rb_obj_value = get_mrb_obj_value(p : Void*) : RbValue
+    fun get_rb_obj_value = get_mrb_obj_value(p : RClassPtr) : RbValue
 
     fun rb_obj_is_kind_of = mrb_obj_is_kind_of(rb : State*, obj : RbValue, c : RClassPtr) : RbBool
     fun get_class_of_obj(rb : State*, obj : RbValue) : RClassPtr

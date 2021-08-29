@@ -40,10 +40,12 @@ puts "Output: #{a.output_together_with(str: ts)}"
 puts "Output: #{a.output_together_with(str: some_struct)}"
 
 puts "Value of Test: #{TestModule::Test.counter}"
-puts "Value of Test after adding 17: #{TestModule::Test + 17}"
-puts "Value of nested module: #{TestModule::Test::UnderTestRenamed::DeepUnderTest + 13}"
+puts "Value of Test after subtracting 17: #{TestModule::Test - 17}"
+puts "Value of nested module: #{TestModule::Test::UnderTestRenamed::DeepUnderTest - 13}"
 
 puts "Test constant is: #{TestModule::SOME_CONSTANT}"
+
+puts a.methods.inspect
 
 puts "Sum is #{(a + b).x}"
 
@@ -102,7 +104,7 @@ puts "Results of complicated method: #{a.complicated_method(99, 0.999, 0.9, arg_
 puts "Results of complicated method: #{a.complicated_method(100, 0.000, 1.0)}"
 puts "Results of complicated method: #{a.complicated_method(0, 0.0, 0.0, TestModule::Test::GTIntInt.new(u: 1, v: 1))}"
 
-a.happy😀emoji😀test😀😀😀(1234567)
+a.happy😀emoji😀test😀😀😀(1234567) unless a.inside_mri?
 
 same_as_a = TestModule::Test.new(x: a.x)
 
@@ -222,7 +224,7 @@ puts "Do I have an identity crisis? #{a.why_would_you_do_this?('am_i_in_ruby?') 
 puts "After block storing: #{a.x}"
 puts "Block store call result: #{a.block_store_call}"
 puts "After block call: #{a.x}"
-puts "Carrier result: #{new_carrier.x}"
+puts "Carrier result: #{new_carrier ? new_carrier.x : new_carrier}" # TODO: Ths does not work in MRI yet
 
 puts "Does this have a block? #{a.block_store_test}"
 

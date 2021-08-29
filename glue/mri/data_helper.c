@@ -173,3 +173,52 @@ extern void rb_gc_unregister_helper(void* rb, VALUE value) {
   rb_gc_unregister_address(&value);
   
 }
+
+extern VALUE rb_yield_helper(void* rb, VALUE value, VALUE arg) {
+
+  rb_yield(arg);
+
+}
+
+extern VALUE rb_yield_argv_helper(void* rb, VALUE value, int argc, VALUE* argv) {
+
+  rb_yield_values2(argc, argv);
+
+}
+
+extern VALUE rb_call_block_helper(void* rb, VALUE value, VALUE arg) {
+
+  rb_funcall(value, rb_intern("call"), 0);
+
+}
+
+extern VALUE rb_call_block_with_args_helper(void* rb, VALUE value, int argc, VALUE* argv) {
+
+  rb_funcall(value, rb_intern("call"), argc, argv);
+
+}
+
+extern int rb_respond_to_helper(void* rb, VALUE obj, ID name) {
+
+  rb_respond_to(obj, name);
+
+}
+
+extern VALUE get_rb_obj_value(VALUE obj) {
+
+  return obj;
+
+}
+
+extern VALUE rb_funcall_argv_helper(void *rb, VALUE value, ID name, int argc, VALUE* argv) {
+
+  rb_funcallv(value, name, argc, argv);
+
+}
+
+extern VALUE rb_funcall_argv_with_block_helper(void *rb, VALUE value, ID name, int argc, VALUE* argv, VALUE block) {
+
+  rb_funcall_with_block(value, name, argc, argv, block);
+
+}
+

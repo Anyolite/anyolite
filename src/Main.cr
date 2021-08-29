@@ -74,6 +74,15 @@ module Anyolite
   # Undefined mruby value.
   Undef = Undefined.new
 
+  # Returns the current implementation (either `:mruby` or `:mri`) as a `Symbol`.
+  macro implementation
+    {% if flag?(:anyolite_implementation_ruby_3) %}
+      :mri
+    {% else %}
+      :mruby
+    {% end %}
+  end
+
   # Checks whether *value* is referenced in the current reference table.
   macro referenced_in_ruby?(value)
     !!Anyolite::RbRefTable.is_registered?(Anyolite::RbRefTable.get_object_id({{value}}))
@@ -119,9 +128,9 @@ module Anyolite
           Anyolite::RbCast.return_value(%rb.to_unsafe, {{args}}[i])
         end
 
-        %block_return_value = Anyolite::RbCore.rb_yield_argv(%rb, %rb_block.value, %argc, %argv)
+        %block_return_value = Anyolite::RbCore.rb_call_block_with_args(%rb, %rb_block.value, %argc, %argv)
       {% else %}
-        %block_return_value = Anyolite::RbCore.rb_yield(%rb, %rb_block.value, Anyolite::RbCast.return_nil)
+        %block_return_value = Anyolite::RbCore.rb_call_block(%rb, %rb_block.value)
       {% end %}
 
       {% if cast_to %}

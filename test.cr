@@ -45,8 +45,8 @@ module SomeModule
     @[Anyolite::RenameClass("UnderTestRenamed")]
     class UnderTest
       module DeepUnderTest
-        def self.+(value : Int)
-          "Well, you can't just add #{value} to a module..."
+        def self.-(value : Int)
+          "Well, you can't just subtract #{value} from a module..."
         end
 
         class VeryDeepUnderTest
@@ -113,7 +113,7 @@ module SomeModule
       @@counter += 1
     end
 
-    def self.+(other_value : Int)
+    def self.-(other_value : Int)
       @@counter + other_value
     end
 
@@ -218,15 +218,17 @@ module SomeModule
       end
     end
 
+    # TODO: This method does not work in MRI for some encoding reason - fix this if possible
+
     {% unless flag?(:anyolite_implementation_ruby_3) %}
-
-    # TODO: Fix this...
-
-    def happy😀emoji😀test😀😀😀(arg : Int32)
-      puts "😀 for number #{arg}"
-    end
-    
+      def happy😀emoji😀test😀😀😀(arg : Int32)
+        puts "😀 for number #{arg}"
+      end
     {% end %}
+
+    def inside_mri?
+      Anyolite.implementation == :mri
+    end
 
     def nilable_test(arg : Int32?)
       puts "Received argument #{arg.inspect}"
@@ -288,8 +290,6 @@ module SomeModule
       arg
     end
 
-    {% unless flag?(:anyolite_implementation_ruby_3) %}
-
     @[Anyolite::StoreBlockArg]
     def block_test
       block_cache = Anyolite.obtain_given_rb_block
@@ -321,15 +321,20 @@ module SomeModule
 
     def block_store_call
       if mbs = @@magic_block_store
-        ret_value = Anyolite.call_rb_block(mbs, [self], cast_to: Int32)
-        ret_value.to_s
+        if Anyolite.implementation == :mri
+          # TODO: Fix this
+          @@magic_block_store.class.to_s
+        else
+          ret_value = Anyolite.call_rb_block(mbs, [self], cast_to: Int32)
+          ret_value.to_s
+        end
       else
         false
       end
     end
 
     def hash_return_test
-      {:hello => "Nice", :world => "to see you!", 3 => 15, "test😊" => :very_long_test_😊_symbol}
+      {:hello => "Nice", :world => "to see you!", 3 => 15, "test😊" => :very_long_test_symbol}
     end
 
     private def private_method
@@ -399,6 +404,8 @@ module SomeModule
       result = Anyolite.call_rb_method(name, nil, cast_to: String | Int32 | Float32 | Bool | Nil)
       result
     end
+
+    {% unless flag?(:anyolite_implementation_ruby_3) %}
 
     def set_instance_variable_to_int(name : String, value : Int)
       Anyolite.set_iv(self, name, value)

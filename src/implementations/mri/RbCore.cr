@@ -118,8 +118,11 @@ module Anyolite
     # fun rb_get_argc = mrb_get_argc(rb : State*) : RbInt
     # fun rb_get_argv = mrb_get_argv(rb : State*) : RbValue*
 
-    # fun rb_yield = mrb_yield(rb : State*, value : RbValue, arg : RbValue) : RbValue
-    # fun rb_yield_argv = mrb_yield_argv(rb : State*, value : RbValue, argc : RbInt, argv : RbValue*) : RbValue
+    fun rb_yield = rb_yield_helper(rb : State*, value : RbValue, arg : RbValue) : RbValue
+    fun rb_yield_argv = rb_yield_argv_helper(rb : State*, value : RbValue, argc : RbInt, argv : RbValue*) : RbValue
+
+    fun rb_call_block = rb_yield_helper(rb : State*, value : RbValue, arg : RbValue) : RbValue
+    fun rb_call_block_with_args = rb_yield_argv_helper(rb : State*, value : RbValue, argc : RbInt, argv : RbValue*) : RbValue
 
     fun rb_ary_ref = rb_ary_ref_helper(rb : State*, value : RbValue, pos : RbInt) : RbValue
     fun rb_ary_entry(value : RbValue, offset : RbInt) : RbValue
@@ -182,15 +185,15 @@ module Anyolite
     fun set_data_ptr_and_type(ruby_object : RbValue, data : Void*, type : RbDataType*)
     fun get_data_ptr(ruby_object : RbValue) : Void*
 
-    # fun get_rb_obj_value = get_mrb_obj_value(p : Void*) : RbValue
+    fun get_rb_obj_value(p : RClassPtr) : RbValue
 
     fun rb_obj_is_kind_of = rb_obj_is_kind_of_helper(rb : State*, obj : RbValue, c : RClassPtr) : RbBool
     fun get_class_of_obj = rb_obj_class_helper(rb : State*, obj : RbValue) : RClassPtr
 
-    # fun rb_funcall_argv = mrb_funcall_argv(rb : State*, value : RbValue, name : RbSymbol, argc : RbInt, argv : RbValue*) : RbValue
-    # fun rb_funcall_argv_with_block = mrb_funcall_argv_with_block(rb : State*, value : RbValue, name : RbSymbol, argc : RbInt, argv : RbValue*, block : RbValue) : RbValue
+    fun rb_funcall_argv = rb_funcall_argv_helper(rb : State*, value : RbValue, name : RbSymbol, argc : RbInt, argv : RbValue*) : RbValue
+    fun rb_funcall_argv_with_block = rb_funcall_argv_with_block_helper(rb : State*, value : RbValue, name : RbSymbol, argc : RbInt, argv : RbValue*, block : RbValue) : RbValue
 
-    # fun rb_respond_to = mrb_respond_to(rb : State*, obj : RbValue, name : RbSymbol) : RbBool
+    fun rb_respond_to = rb_respond_to_helper(rb : State*, obj : RbValue, name : RbSymbol) : RbBool
 
     # fun rb_iv_set = mrb_iv_set(rb : State*, obj : RbValue, sym : RbSymbol, value : RbValue) : Void
     # fun rb_iv_get = mrb_iv_get(rb : State*, obj : RbValue, sym : RbSymbol) : RbValue
