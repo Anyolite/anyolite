@@ -7,10 +7,7 @@ module Anyolite
     def self.create
       rb = self.new
       
-      # TODO: Fix this
-      {% unless flag?(:anyolite_implementation_ruby_3) %}
-        Anyolite::HelperClasses.load_all(rb)
-      {% end %}
+      Anyolite::HelperClasses.load_all(rb)
       
       yield rb
       rb.close

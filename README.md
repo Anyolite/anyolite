@@ -225,12 +225,13 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 * * [X] Correct argument passing between Crystal and MRI
 * * [X] Object allocation and conversion
 * * [X] Keyword argument handling
-* * [ ] Nontrivial argument type conversions
 * * [ ] Block argument handling
-* * [ ] Linked all MRI functions to the abstraction layer
+* * [ ] Storage of Ruby object
+* * [ ] Porting of all MRI functions to the abstraction layer
 * * [ ] Bytecode compilation (might not be possible)
 * * [ ] Tests
 * * [ ] Copy source in build directory and call compile scripts there
+* * [ ] Find solution for MRI crash at second script loading
 * [X] AnyolitePointer helper class for accessing pointers
 * [X] Infrastructure to convert script files into bytecode at runtime and compiletime
 * [X] Support for setting and getting instance, class and global variables from Crystal

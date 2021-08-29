@@ -218,9 +218,15 @@ module SomeModule
       end
     end
 
+    {% unless flag?(:anyolite_implementation_ruby_3) %}
+
+    # TODO: Fix this...
+
     def happy😀emoji😀test😀😀😀(arg : Int32)
       puts "😀 for number #{arg}"
     end
+    
+    {% end %}
 
     def nilable_test(arg : Int32?)
       puts "Received argument #{arg.inspect}"
@@ -281,6 +287,8 @@ module SomeModule
 
       arg
     end
+
+    {% unless flag?(:anyolite_implementation_ruby_3) %}
 
     @[Anyolite::StoreBlockArg]
     def block_test
@@ -404,6 +412,8 @@ module SomeModule
       converted_arg = Anyolite.cast_to_crystal(ref, Int32?)
       "#{str} and a reference with #{ref.value} (which is #{converted_arg}) were given."
     end
+
+    {% end %}
 
     def hash
       213345
@@ -561,7 +571,7 @@ end
   puts "Reference table: #{Anyolite::RbRefTable.inspect}"
 {% else %}
   Anyolite::RbInterpreter.create do |rb|
-    #load_test_module()
+    load_test_module()
     Anyolite.wrap(rb, MRITest, verbose: true)
     Anyolite.wrap(rb, RPGTest)
     rb.load_script_from_file("examples/mri_test.rb")

@@ -125,7 +125,7 @@ module Anyolite
     fun rb_ary_entry(value : RbValue, offset : RbInt) : RbValue
     fun array_length = rb_ary_length_helper(value : RbValue) : LibC::SizeT
 
-    # fun rb_ary_new_from_values = mrb_ary_new_from_values(rb : State*, size : RbInt, values : RbValue*) : RbValue
+    fun rb_ary_new_from_values = rb_ary_new_from_values_helper(rb : State*, size : RbInt, values : RbValue*) : RbValue
 
     fun rb_hash_new = rb_hash_new_helper(rb : State*) : RbValue
     fun rb_hash_set = rb_hash_set_helper(rb : State*, hash : RbValue, key : RbValue, value : RbValue)
@@ -170,8 +170,8 @@ module Anyolite
     # fun rb_any_to_s = mrb_any_to_s(rb : State*, value : RbValue) : RbValue
     fun rb_inspect = rb_inspect_helper(rb : State*, value : RbValue) : RbValue
 
-    # fun rb_gc_register = mrb_gc_register(rb : State*, value : RbValue) : Void
-    # fun rb_gc_unregister = mrb_gc_unregister(rb : State*, value : RbValue) : Void
+    fun rb_gc_register = rb_gc_register_helper(rb : State*, value : RbValue) : Void
+    fun rb_gc_unregister = rb_gc_unregister_helper(rb : State*, value : RbValue) : Void
 
     fun rb_class_name = rb_class_name_helper(rb : State*, class_ptr : RClassPtr) : LibC::Char*
 

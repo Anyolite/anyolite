@@ -155,3 +155,21 @@ extern size_t rb_ary_length_helper(VALUE ary) {
   return_value;
 
 }
+
+extern VALUE rb_ary_new_from_values_helper(void* rb, int size, VALUE* values) {
+
+  rb_ary_new_from_values(size, values);
+
+}
+
+extern void rb_gc_register_helper(void* rb, VALUE value) {
+
+  rb_gc_register_address(&value);
+
+}
+
+extern void rb_gc_unregister_helper(void* rb, VALUE value) {
+
+  rb_gc_unregister_address(&value);
+  
+}

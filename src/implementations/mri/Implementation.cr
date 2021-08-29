@@ -1,6 +1,5 @@
 require "./RbCore.cr"
 require "./FormatString.cr"
-require "./KeywordArgStruct.cr"
 
 {% if !flag?(:use_general_object_format_chars) %}
   {% raise "Flag 'use_general_object_format_chars' needs to be set for a working MRI implementation" %}
@@ -22,18 +21,18 @@ module Anyolite
       end
     end
 
-    macro set_default_args_for_regular_args(args, regular_arg_tuple)
+    macro set_default_args_for_regular_args(args, regular_arg_tuple, number_of_args)
       {% c = 0 %}
       {% if args %}
         {% for arg in args %}
           {% if arg.is_a? TypeDeclaration %}
             {% if arg.value %}
-              if number_of_args <= {{c}} && Anyolite::RbCast.check_for_nil({{regular_arg_tuple}}[{{c}}].value)
+              if {{number_of_args}} <= {{c}} && Anyolite::RbCast.check_for_nil({{regular_arg_tuple}}[{{c}}].value)
                 {{regular_arg_tuple}}[{{c}}].value = Anyolite::RbCast.return_value(_rb, {{arg.value}})
               end
             {% end %}
           {% else %}
-            {% raise "Not a TypeDeclaration: #{arg} of #{arg.class_name}" %}
+            raise "Not a TypeDeclaration: #{"{{arg}}"} of #{{{arg.class_name}}}"
           {% end %}
           {% c += 1 %}
         {% end %}
@@ -47,7 +46,7 @@ module Anyolite
         number_of_args = Anyolite::RbCore.rb_get_args(_argc, _argv, {{format_string}}, *{{regular_arg_tuple}})
       {% end %}
 
-      Anyolite::Macro.set_default_args_for_regular_args({{args}}, {{regular_arg_tuple}})
+      Anyolite::Macro.set_default_args_for_regular_args({{args}}, {{regular_arg_tuple}}, number_of_args)
 
       # TODO: Block args
     end
@@ -56,12 +55,14 @@ module Anyolite
       kw_ptr = Pointer(Anyolite::RbCore::RbValue).malloc(size: 1, value: Anyolite::RbCast.return_nil)
 
       {% if block_ptr %}
-        Anyolite::RbCore.rb_get_args(_argc, _argv, {{format_string}}, *{{regular_arg_tuple}}, kw_ptr, {{block_ptr}})
+        number_of_args = Anyolite::RbCore.rb_get_args(_argc, _argv, {{format_string}}, *{{regular_arg_tuple}}, kw_ptr, {{block_ptr}})
       {% else %}
-        Anyolite::RbCore.rb_get_args(_argc, _argv, {{format_string}}, *{{regular_arg_tuple}}, kw_ptr)
+        number_of_args = Anyolite::RbCore.rb_get_args(_argc, _argv, {{format_string}}, *{{regular_arg_tuple}}, kw_ptr)
       {% end %}
 
-      Anyolite::Macro.set_default_args_for_regular_args({{regular_args}}, {{regular_arg_tuple}})
+      # TODO: Is number_of_args correct here?
+
+      Anyolite::Macro.set_default_args_for_regular_args({{regular_args}}, {{regular_arg_tuple}}, number_of_args)
 
       # TODO: This is relatively complicated and messy, so can this be simplified?
 
