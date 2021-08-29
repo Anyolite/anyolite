@@ -121,17 +121,17 @@ module Anyolite
     # fun rb_yield = mrb_yield(rb : State*, value : RbValue, arg : RbValue) : RbValue
     # fun rb_yield_argv = mrb_yield_argv(rb : State*, value : RbValue, argc : RbInt, argv : RbValue*) : RbValue
 
-    # fun rb_ary_ref = mrb_ary_ref(rb : State*, value : RbValue, pos : RbInt) : RbValue
-    # fun rb_ary_entry = mrb_ary_entry(value : RbValue, offset : RbInt) : RbValue
-    # fun array_length(value : RbValue) : LibC::SizeT
+    fun rb_ary_ref = rb_ary_ref_helper(rb : State*, value : RbValue, pos : RbInt) : RbValue
+    fun rb_ary_entry(value : RbValue, offset : RbInt) : RbValue
+    fun array_length = rb_ary_length_helper(value : RbValue) : LibC::SizeT
 
     # fun rb_ary_new_from_values = mrb_ary_new_from_values(rb : State*, size : RbInt, values : RbValue*) : RbValue
 
-    # fun rb_hash_new = mrb_hash_new(rb : State*) : RbValue
-    # fun rb_hash_set = mrb_hash_set(rb : State*, hash : RbValue, key : RbValue, value : RbValue)
-    # fun rb_hash_get = mrb_hash_get(rb : State*, hash : RbValue, key : RbValue) : RbValue
-    # fun rb_hash_keys = mrb_hash_keys(rb : State*, hash : RbValue) : RbValue
-    # fun rb_hash_size = mrb_hash_size(rb : State*, hash : RbValue) : RbInt
+    fun rb_hash_new = rb_hash_new_helper(rb : State*) : RbValue
+    fun rb_hash_set = rb_hash_set_helper(rb : State*, hash : RbValue, key : RbValue, value : RbValue)
+    fun rb_hash_get = rb_hash_get_helper(rb : State*, hash : RbValue, key : RbValue) : RbValue
+    fun rb_hash_keys = rb_hash_keys_helper(rb : State*, hash : RbValue) : RbValue
+    fun rb_hash_size = rb_hash_size_helper(rb : State*, hash : RbValue) : RbInt
 
     fun get_nil_value : RbValue
     fun get_false_value : RbValue
@@ -160,7 +160,7 @@ module Anyolite
 
     fun rb_str_to_cstr(rb : State*, value : RbValue) : LibC::Char*
 
-    # fun convert_to_rb_sym = convert_to_mrb_sym(rb : State*, value : LibC::Char*) : RbSymbol
+    fun convert_to_rb_sym = convert_to_rb_sym_helper(rb : State*, value : LibC::Char*) : RbSymbol
     fun get_symbol_value_of_string(rb : State*, value : LibC::Char*) : RbValue
 
     # Base class, not to be confused with `get_class_of_obj`

@@ -105,3 +105,53 @@ extern VALUE rb_inspect_helper(void* rb, VALUE value) {
   rb_inspect(value);
 
 }
+
+extern VALUE rb_hash_new_helper(void* rb) {
+
+  rb_hash_new();
+
+}
+
+extern void rb_hash_set_helper(void* rb, VALUE hash, VALUE key, VALUE value) {
+
+  rb_hash_aset(hash, key, value);
+
+}
+
+extern VALUE rb_hash_get_helper(void* rb, VALUE hash, VALUE key) {
+
+  rb_hash_aref(hash, key);
+
+}
+
+extern VALUE rb_hash_keys_helper(void* rb, VALUE hash) {
+
+  //! NOTE: For some reason rb_hash_keys is not marked as extern, so for now this is a workaround
+  rb_funcall(hash, rb_intern("keys"), 0);
+
+}
+
+extern int rb_hash_size_helper(void* rb, VALUE hash) {
+
+  rb_hash_size(hash);
+
+}
+
+extern VALUE convert_to_rb_sym_helper(void* rb, const char* value) {
+
+  rb_intern(value);
+
+}
+
+extern VALUE rb_ary_ref_helper(void* rb, VALUE ary, int pos) {
+
+  rb_ary_entry(ary, pos);
+
+}
+
+extern size_t rb_ary_length_helper(VALUE ary) {
+
+  size_t return_value = (size_t) RARRAY_LEN(ary);
+  return_value;
+
+}

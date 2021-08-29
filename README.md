@@ -84,7 +84,7 @@ which allows for changing multiple options when installing the shard. Possible o
 Imagine a Crystal class for a really bad RPG:
 
 ```crystal
-module TestModule
+module RPGTest
   class Entity
     property hp : Int32
 
@@ -117,7 +117,7 @@ Now, you want to wrap this class in Ruby. All you need to do is to execute the f
 require "anyolite"
 
 Anyolite::RbInterpreter.create do |rb|
-  Anyolite.wrap(rb, TestModule)
+  Anyolite.wrap(rb, RPGTest)
 
   rb.load_script_from_file("examples/hp_example.rb")
 end
@@ -127,11 +127,11 @@ Well, that's it already.
 The last line in the block calls the following example script:
 
 ```ruby
-a = TestModule::Entity.new(hp: 20)
+a = RPGTest::Entity.new(hp: 20)
 a.damage(diff: 13)
 puts a.hp
 
-b = TestModule::Entity.new(hp: 10)
+b = RPGTest::Entity.new(hp: 10)
 a.absorb_hp_from(other: b)
 puts a.hp
 puts b.hp
@@ -224,7 +224,8 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 * * [X] Interpreter can run one script (more are currently not possible)
 * * [X] Correct argument passing between Crystal and MRI
 * * [X] Object allocation and conversion
-* * [ ] Keyword argument handling
+* * [X] Keyword argument handling
+* * [ ] Nontrivial argument type conversions
 * * [ ] Block argument handling
 * * [ ] Linked all MRI functions to the abstraction layer
 * * [ ] Bytecode compilation (might not be possible)

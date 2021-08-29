@@ -24,7 +24,7 @@ module Anyolite
       {% end %}
     end
 
-    macro load_kw_args_into_vars(keyword_args, format_string, regular_arg_tuple, block_ptr = nil)
+    macro load_kw_args_into_vars(regular_args, keyword_args, format_string, regular_arg_tuple, block_ptr = nil)
       kw_args = Anyolite::Macro.generate_keyword_argument_struct(_rb, {{keyword_args}})
 
       {% if block_ptr %}

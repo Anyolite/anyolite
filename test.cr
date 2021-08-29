@@ -476,78 +476,7 @@ module SomeModule
   end
 end
 
-# Anyolite::RbRefTable.set_option(:logging)
-
-module MRITest
-  @[Anyolite::WrapWithoutKeywords]
-  def self.do_something(number : UInt32, object : String = "Nothing")
-    "Something with #{number} #{object}"
-  end
-
-  class MRITestClass
-    property name : String
-    
-    def initialize(name : String = "Unknown")
-      @name = name
-    end
-
-    @[Anyolite::WrapWithoutKeywords]
-    def greet(other : MRITestClass)
-      puts "#{@name} greets #{other.name}"
-    end
-
-    @[Anyolite::WrapWithoutKeywords]
-    def create_child_with(other : MRITestClass)
-      MRITestClass.new(name: @name + "-" + other.name)
-    end
-
-    def rb_finalize(rb)
-      puts "Goodbye, #{@name}..."
-    end
-  end
-end
-
-Anyolite::RbInterpreter.create do |rb|
-  
-  # TODO: Make this work
-  {% unless flag?(:anyolite_implementation_ruby_3) %}
-    Anyolite::Preloader.execute_bytecode_from_cache_or_file(rb, "examples/bytecode_test.mrb")
-  {% end %}
-
-    Anyolite.wrap_module(rb, SomeModule, "TestModule")
-  
-  {% unless flag?(:anyolite_implementation_ruby_3) %}
-    Anyolite.wrap_module_function_with_keywords(rb, SomeModule, "test_method", SomeModule.test_method, [int : Int32 = 19, str : String])
-  {% end %}
-
-    Anyolite.wrap_constant(rb, SomeModule, "SOME_CONSTANT", "Smile! 😊")
-
-    ###
-
-    Anyolite.wrap(rb, MRITest, verbose: true)
-
-    ###
-
-  {% unless flag?(:anyolite_implementation_ruby_3) %}
-    Anyolite.wrap(rb, SomeModule::Bla, under: SomeModule, verbose: true)
-
-    Anyolite.wrap(rb, SomeModule::TestStruct, under: SomeModule, verbose: true)
-
-    Anyolite.wrap(rb, SomeModule::Test, under: SomeModule, instance_method_exclusions: [:add], verbose: true)
-    
-    Anyolite.wrap_instance_method(rb, SomeModule::Test, "add", add, [SomeModule::Test])
-  {% end %}
-
-  {% if flag?(:anyolite_implementation_ruby_3) %}
-    rb.load_script_from_file("examples/mri_test.rb")
-  {% else %}
-    rb.load_script_from_file("examples/test.rb")
-  {% end %}
-end
-
-{% unless flag?(:anyolite_implementation_ruby_3) %}
-
-module TestModule
+module RPGTest
   class Entity
     property hp : Int32
 
@@ -573,17 +502,68 @@ module TestModule
   end
 end
 
-puts "Reference table: #{Anyolite::RbRefTable.inspect}"
-Anyolite::RbRefTable.reset
+module MRITest
+  @[Anyolite::WrapWithoutKeywords]
+  def self.do_something(number : UInt32, object : String = "Nothing")
+    "Something with #{number} #{object}"
+  end
 
-puts "------------------------------"
+  class MRITestClass
+    property name : String | Int32
+    
+    def initialize(name : String | Int32 = "Unknown")
+      @name = name
+    end
 
-Anyolite::RbInterpreter.create do |rb|
-  Anyolite.wrap(rb, TestModule)
+    @[Anyolite::WrapWithoutKeywords]
+    def greet(other : MRITestClass)
+      puts "#{@name} greets #{other.name}"
+    end
 
-  rb.load_script_from_file("examples/hp_example.rb")
+    @[Anyolite::WrapWithoutKeywords]
+    def create_child_with(other : MRITestClass)
+      MRITestClass.new(name: @name.to_s + "-" + other.name.to_s)
+    end
+
+    def rb_finalize(rb)
+      puts "Goodbye, #{@name}..."
+    end
+  end
 end
 
-puts "Reference table: #{Anyolite::RbRefTable.inspect}"
+macro load_test_module()
+  Anyolite.wrap_module(rb, SomeModule, "TestModule")
+  Anyolite.wrap_module_function_with_keywords(rb, SomeModule, "test_method", SomeModule.test_method, [int : Int32 = 19, str : String])
+  Anyolite.wrap_constant(rb, SomeModule, "SOME_CONSTANT", "Smile! 😊")
+  Anyolite.wrap(rb, SomeModule::Bla, under: SomeModule, verbose: true)
+  Anyolite.wrap(rb, SomeModule::TestStruct, under: SomeModule, verbose: true)
+  Anyolite.wrap(rb, SomeModule::Test, under: SomeModule, instance_method_exclusions: [:add], verbose: true)
+  Anyolite.wrap_instance_method(rb, SomeModule::Test, "add", add, [SomeModule::Test])
+end
 
+{% unless flag?(:anyolite_implementation_ruby_3) %}
+  Anyolite::RbInterpreter.create do |rb|
+    Anyolite::Preloader.execute_bytecode_from_cache_or_file(rb, "examples/bytecode_test.mrb")
+    load_test_module()
+    rb.load_script_from_file("examples/test.rb")
+  end
+
+  puts "Reference table: #{Anyolite::RbRefTable.inspect}"
+  Anyolite::RbRefTable.reset
+
+  puts "------------------------------"
+
+  Anyolite::RbInterpreter.create do |rb|
+    Anyolite.wrap(rb, RPGTest)
+    rb.load_script_from_file("examples/hp_example.rb")
+  end
+
+  puts "Reference table: #{Anyolite::RbRefTable.inspect}"
+{% else %}
+  Anyolite::RbInterpreter.create do |rb|
+    #load_test_module()
+    Anyolite.wrap(rb, MRITest, verbose: true)
+    Anyolite.wrap(rb, RPGTest)
+    rb.load_script_from_file("examples/mri_test.rb")
+  end
 {% end %}
