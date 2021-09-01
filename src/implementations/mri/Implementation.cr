@@ -31,8 +31,10 @@ module Anyolite
                 {{regular_arg_tuple}}[{{c}}].value = Anyolite::RbCast.return_value(_rb, {{arg.value}})
               end
             {% end %}
+          {% elsif arg.is_a? Path %}
+            # No default argument was given, so no action is required here
           {% else %}
-            raise "Not a TypeDeclaration: #{"{{arg}}"} of #{{{arg.class_name}}}"
+            {% raise "Not a TypeDeclaration or a Path: #{arg} of #{arg.class_name}" %}
           {% end %}
           {% c += 1 %}
         {% end %}
@@ -47,8 +49,6 @@ module Anyolite
       {% end %}
 
       Anyolite::Macro.set_default_args_for_regular_args({{args}}, {{regular_arg_tuple}}, number_of_args)
-
-      # TODO: Block args
     end
 
     macro load_kw_args_into_vars(regular_args, keyword_args, format_string, regular_arg_tuple, block_ptr = nil)
@@ -60,7 +60,7 @@ module Anyolite
         number_of_args = Anyolite::RbCore.rb_get_args(_argc, _argv, {{format_string}}, *{{regular_arg_tuple}}, kw_ptr)
       {% end %}
 
-      # TODO: Is number_of_args correct here?
+      # TODO: Is number_of_args for the regular arg function correct here?
 
       Anyolite::Macro.set_default_args_for_regular_args({{regular_args}}, {{regular_arg_tuple}}, number_of_args)
 
@@ -86,12 +86,12 @@ module Anyolite
               Anyolite.raise_argument_error("Keyword #{"{{keyword_arg.var.id}}"} was not defined.")
             {% end %}
           end
+        {% elsif arg.is_a? Path %}
+          # No default argument was given, so no action is required here
         {% else %}
-          {% raise "Not a TypeDeclaration: #{keyword_arg} of #{keyword_arg.class_name}" %}
+          {% raise "Not a TypeDeclaration or a Path: #{keyword_arg} of #{keyword_arg.class_name}" %}
         {% end %}
       {% end %}
-
-      # TODO: Block args
 
       return_hash
     end

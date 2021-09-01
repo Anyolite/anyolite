@@ -321,13 +321,8 @@ module SomeModule
 
     def block_store_call
       if mbs = @@magic_block_store
-        if Anyolite.implementation == :mri
-          # TODO: Fix this
-          @@magic_block_store.class.to_s
-        else
-          ret_value = Anyolite.call_rb_block(mbs, [self], cast_to: Int32)
-          ret_value.to_s
-        end
+        ret_value = Anyolite.call_rb_block(mbs, [self], cast_to: Int32)
+        ret_value.to_s
       else
         false
       end
@@ -415,12 +410,12 @@ module SomeModule
       Anyolite.get_iv(self, name, cast_to: Int?)
     end
 
+    {% end %}
+
     def ref_test(str : String, ref : Anyolite::RbRef)
       converted_arg = Anyolite.cast_to_crystal(ref, Int32?)
       "#{str} and a reference with #{ref.value} (which is #{converted_arg}) were given."
     end
-
-    {% end %}
 
     def hash
       213345

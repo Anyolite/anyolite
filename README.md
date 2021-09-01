@@ -226,7 +226,7 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 * * [X] Object allocation and conversion
 * * [X] Keyword argument handling
 * * [X] Block argument handling
-* * [ ] Storage of Ruby objects
+* * [X] Storage of Ruby objects
 * * [ ] Porting of all MRI functions to the abstraction layer
 * * [ ] Bytecode compilation (might not be possible)
 * * [ ] Tests

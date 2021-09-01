@@ -123,9 +123,6 @@ puts a.x
 
 result = a.block_test do |value| 
   carrier = value
-  puts "SUp"
-  puts "Carrier = #{carrier}"
-  puts "VALUUUUUUUUUUE = #{value}"
   value.x += 1000
   value.x * 2
 end
@@ -227,7 +224,7 @@ puts "Do I have an identity crisis? #{a.why_would_you_do_this?('am_i_in_ruby?') 
 puts "After block storing: #{a.x}"
 puts "Block store call result: #{a.block_store_call}"
 puts "After block call: #{a.x}"
-puts "Carrier result: #{new_carrier ? new_carrier.x : new_carrier}" # TODO: Ths does not work in MRI yet
+puts "Carrier result: #{new_carrier ? new_carrier.x : new_carrier}"
 
 puts "Does this have a block? #{a.block_store_test}"
 
