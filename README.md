@@ -54,6 +54,14 @@ Support for MRI is still not complete and many problems and errors might be enco
 
 Please report any bugs with MRI, so development can progress smoothly.
 
+### Known issues
+
+* Currently it is only possible to run a single Ruby script
+* UTF-8 function and variable names defined in Crystal can lead to crashes in Ruby
+* Bytecode compilation functions are not available yet (and might never be)
+* Some utility available in mruby are not available in MRI
+* Gems need to be installed manually after installing Ruby
+
 # Installing
 
 Put this shard as a requirement into your shard.yml project file and then call
