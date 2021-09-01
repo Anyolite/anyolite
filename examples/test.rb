@@ -123,6 +123,9 @@ puts a.x
 
 result = a.block_test do |value| 
   carrier = value
+  puts "SUp"
+  puts "Carrier = #{carrier}"
+  puts "VALUUUUUUUUUUE = #{value}"
   value.x += 1000
   value.x * 2
 end

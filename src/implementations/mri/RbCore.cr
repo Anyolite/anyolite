@@ -122,7 +122,7 @@ module Anyolite
     fun rb_yield_argv = rb_yield_argv_helper(rb : State*, value : RbValue, argc : RbInt, argv : RbValue*) : RbValue
 
     fun rb_call_block = rb_yield_helper(rb : State*, value : RbValue, arg : RbValue) : RbValue
-    fun rb_call_block_with_args = rb_yield_argv_helper(rb : State*, value : RbValue, argc : RbInt, argv : RbValue*) : RbValue
+    fun rb_call_block_with_args = rb_call_block_with_args_helper(rb : State*, value : RbValue, argc : RbInt, argv : RbValue*) : RbValue
 
     fun rb_ary_ref = rb_ary_ref_helper(rb : State*, value : RbValue, pos : RbInt) : RbValue
     fun rb_ary_entry(value : RbValue, offset : RbInt) : RbValue

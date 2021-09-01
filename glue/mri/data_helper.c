@@ -188,13 +188,13 @@ extern VALUE rb_yield_argv_helper(void* rb, VALUE value, int argc, VALUE* argv) 
 
 extern VALUE rb_call_block_helper(void* rb, VALUE value, VALUE arg) {
 
-  rb_funcall(value, rb_intern("call"), 0);
+  rb_proc_call(value, rb_ary_new_from_values(1, &arg));
 
 }
 
 extern VALUE rb_call_block_with_args_helper(void* rb, VALUE value, int argc, VALUE* argv) {
 
-  rb_funcall(value, rb_intern("call"), argc, argv);
+  rb_proc_call(value, rb_ary_new_from_values(argc, argv));
 
 }
 
