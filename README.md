@@ -220,18 +220,12 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 #### Features
 
 * [ ] Full MRI Ruby as alternative implementation (might be postponed to a later release)
-* * [X] Infrastructure for building Anyolite with MRI on Linux
-* * [X] Interpreter can run one script (more are currently not possible)
-* * [X] Correct argument passing between Crystal and MRI
-* * [X] Object allocation and conversion
-* * [X] Keyword argument handling
-* * [X] Block argument handling
-* * [X] Storage of Ruby objects
-* * [X] Access to variables
-* * [ ] Porting of all MRI functions to the abstraction layer
+* * [X] Basic functionality similar to mruby
 * * [ ] Bytecode compilation (might not be possible)
+* * [ ] Calling of script lines
 * * [ ] Tests
 * * [ ] Copy source in build directory and call compile scripts there
+* * [ ] Find solution for UTF-8 function names leading to crashes
 * * [ ] Find solution for MRI crash at second script loading
 * [X] AnyolitePointer helper class for accessing pointers
 * [X] Infrastructure to convert script files into bytecode at runtime and compiletime

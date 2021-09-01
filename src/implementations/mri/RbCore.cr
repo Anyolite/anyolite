@@ -100,9 +100,10 @@ module Anyolite
 
     fun rb_define_const = rb_define_const_helper(rb : State*, c : RClassPtr, name : LibC::Char*, val : RbValue)
 
+    # UNUSED
     # fun rb_print_error = mrb_print_error(rb : State*)
 
-    # fun rb_raise = mrb_raise(rb : State*, c : RClassPtr, msg : LibC::Char*)
+    fun rb_raise = rb_raise_helper(rb : State*, c : RClassPtr, msg : LibC::Char*)
     fun rb_raise_runtime_error = rb_raise_runtime_error(rb : State*, msg : LibC::Char*)
     fun rb_raise_type_error = rb_raise_type_error(rb : State*, msg : LibC::Char*)
     fun rb_raise_argument_error = rb_raise_argument_error(rb : State*, msg : LibC::Char*)
@@ -115,6 +116,7 @@ module Anyolite
 
     fun rb_get_args = rb_scan_args(argc : RbInt, argv : RbValue*, format : LibC::Char*, ...) : RbInt
     
+    # UNUSED
     # fun rb_get_argc = mrb_get_argc(rb : State*) : RbInt
     # fun rb_get_argv = mrb_get_argv(rb : State*) : RbValue*
 
@@ -169,8 +171,10 @@ module Anyolite
     # Base class, not to be confused with `get_class_of_obj`
     fun get_object_class(rb : State*) : RClassPtr
 
+    # UNUSED
     # fun rb_obj_inspect = mrb_obj_inspect(rb : State*, value : RbValue) : RbValue
     # fun rb_any_to_s = mrb_any_to_s(rb : State*, value : RbValue) : RbValue
+
     fun rb_inspect = rb_inspect_helper(rb : State*, value : RbValue) : RbValue
 
     fun rb_gc_register = rb_gc_register_helper(rb : State*, value : RbValue) : Void
@@ -178,8 +182,10 @@ module Anyolite
 
     fun rb_class_name = rb_class_name_helper(rb : State*, class_ptr : RClassPtr) : LibC::Char*
 
+    # UNUSED
     # fun data_type(value : RbValue) : RbDataType*
     # fun rb_data_get_ptr = mrb_data_get_ptr(rb : State*, obj : RbValue, type : RbDataType*) : Void*
+
     fun set_instance_tt_as_data(ruby_class : RClassPtr) : Void
     fun new_empty_object(rb : State*, ruby_class : RClassPtr, data_ptr : Void*, type : RbDataType*) : RbValue
     fun set_data_ptr_and_type(ruby_object : RbValue, data : Void*, type : RbDataType*)
@@ -205,10 +211,13 @@ module Anyolite
     fun rb_gv_get = rb_gv_get_helper(rb : State*, name : LibC::Char*) : RbValue
 
     fun load_script_from_file(rb : State*, filename : LibC::Char*) : Void
+
+    # TODO
     # fun execute_script_line(rb : State*, str : LibC::Char*) : RbValue
+
+    # UNUSED
     # fun execute_bytecode(rb : State*, bytecode : UInt8*) : RbValue
     # fun load_bytecode_from_file(rb : State*, filename : LibC::Char*) : RbValue
-
     # fun transform_script_to_bytecode(filename : LibC::Char*, target_filename : LibC::Char*) : LibC::Int
   end
 end
