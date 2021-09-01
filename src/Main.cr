@@ -400,9 +400,8 @@ module Anyolite
   # If needed, *context* can be set to a `Path` in order to specify *cast_to*.
   macro get_gv(name, cast_to = nil, context = nil)
     %rb = Anyolite::RbRefTable.get_current_interpreter
-    %name = Anyolite::RbCore.convert_to_rb_sym(%rb, {{name}}.to_s)
 
-    %result = Anyolite::RbCore.rb_gv_get(%rb, %name)
+    %result = Anyolite::RbCore.rb_gv_get(%rb, {{name}}.to_s)
 
     {% if cast_to %}
       Anyolite::Macro.convert_from_ruby_to_crystal(%rb.to_unsafe, %result, {{cast_to}}, context: {{context}})
@@ -421,10 +420,9 @@ module Anyolite
   # If needed, *context* can be set to a `Path` in order to specify *cast_to*.
   macro set_gv(name, value)
     %rb = Anyolite::RbRefTable.get_current_interpreter
-    %name = Anyolite::RbCore.convert_to_rb_sym(%rb, {{name}}.to_s)
     %value = Anyolite::RbCast.return_value(%rb.to_unsafe, {{value}})
 
-    Anyolite::RbCore.rb_gv_set(%rb, %name, %value)
+    Anyolite::RbCore.rb_gv_set(%rb, {{name}}.to_s, %value)
   end
 
   # Wraps a Crystal class directly into an mruby class.

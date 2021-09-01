@@ -222,3 +222,38 @@ extern VALUE rb_funcall_argv_with_block_helper(void *rb, VALUE value, ID name, i
 
 }
 
+extern VALUE rb_iv_get_helper(void* rb, VALUE obj, ID sym) {
+
+  rb_ivar_get(obj, sym);
+
+}
+
+extern void rb_iv_set_helper(void* rb, VALUE obj, ID sym, VALUE value) {
+  
+  rb_ivar_set(obj, sym, value);
+
+}
+
+extern VALUE rb_cv_get_helper(void* rb, VALUE mod, ID sym) {
+
+  rb_cvar_get(mod, sym);
+  
+}
+
+extern void rb_cv_set_helper(void* rb, VALUE mod, ID sym, VALUE value) {
+
+  rb_cvar_set(mod, sym, value);
+  
+}
+
+extern VALUE rb_gv_get_helper(void* rb, const char* name) {
+
+  rb_gv_get(name);
+  
+}
+
+extern void rb_gv_set_helper(void* rb, const char* name, VALUE value) {
+
+  rb_gv_set(name, value);
+  
+}

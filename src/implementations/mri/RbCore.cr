@@ -195,14 +195,14 @@ module Anyolite
 
     fun rb_respond_to = rb_respond_to_helper(rb : State*, obj : RbValue, name : RbSymbol) : RbBool
 
-    # fun rb_iv_set = mrb_iv_set(rb : State*, obj : RbValue, sym : RbSymbol, value : RbValue) : Void
-    # fun rb_iv_get = mrb_iv_get(rb : State*, obj : RbValue, sym : RbSymbol) : RbValue
+    fun rb_iv_set = rb_iv_set_helper(rb : State*, obj : RbValue, sym : RbSymbol, value : RbValue) : Void
+    fun rb_iv_get = rb_iv_get_helper(rb : State*, obj : RbValue, sym : RbSymbol) : RbValue
 
-    # fun rb_cv_set = mrb_cv_set(rb : State*, mod : RbValue, sym : RbSymbol, value : RbValue) : Void
-    # fun rb_cv_get = mrb_cv_get(rb : State*, mod : RbValue, sym : RbSymbol) : RbValue
+    fun rb_cv_set = rb_cv_set_helper(rb : State*, mod : RbValue, sym : RbSymbol, value : RbValue) : Void
+    fun rb_cv_get = rb_cv_get_helper(rb : State*, mod : RbValue, sym : RbSymbol) : RbValue
 
-    # fun rb_gv_set = mrb_gv_set(rb : State*, sym : RbSymbol, value : RbValue) : Void
-    # fun rb_gv_get = mrb_gv_get(rb : State*, sym : RbSymbol) : RbValue
+    fun rb_gv_set = rb_gv_set_helper(rb : State*, name : LibC::Char*, value : RbValue) : Void
+    fun rb_gv_get = rb_gv_get_helper(rb : State*, name : LibC::Char*) : RbValue
 
     fun load_script_from_file(rb : State*, filename : LibC::Char*) : Void
     # fun execute_script_line(rb : State*, str : LibC::Char*) : RbValue

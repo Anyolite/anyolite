@@ -3,3 +3,4 @@ utility/mruby_build_config.rb.lock
 third_party/
 docs/
 examples/bytecode_test.mrb
+.vscode/

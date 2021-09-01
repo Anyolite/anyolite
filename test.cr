@@ -400,8 +400,6 @@ module SomeModule
       result
     end
 
-    {% unless flag?(:anyolite_implementation_ruby_3) %}
-
     def set_instance_variable_to_int(name : String, value : Int)
       Anyolite.set_iv(self, name, value)
     end
@@ -409,8 +407,6 @@ module SomeModule
     def get_instance_variable(name : String)
       Anyolite.get_iv(self, name, cast_to: Int?)
     end
-
-    {% end %}
 
     def ref_test(str : String, ref : Anyolite::RbRef)
       converted_arg = Anyolite.cast_to_crystal(ref, Int32?)

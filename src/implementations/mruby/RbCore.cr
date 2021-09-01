@@ -195,8 +195,11 @@ module Anyolite
     fun rb_cv_set = mrb_cv_set(rb : State*, mod : RbValue, sym : RbSymbol, value : RbValue) : Void
     fun rb_cv_get = mrb_cv_get(rb : State*, mod : RbValue, sym : RbSymbol) : RbValue
 
-    fun rb_gv_set = mrb_gv_set(rb : State*, sym : RbSymbol, value : RbValue) : Void
-    fun rb_gv_get = mrb_gv_get(rb : State*, sym : RbSymbol) : RbValue
+    # NOTE: These are differing due to global variable methods by ID being private in MRI
+    # NOTE: You should not use globals that often, anyway
+
+    fun rb_gv_set = mrb_gv_set(rb : State*, name : LibC::Char*, value : RbValue) : Void
+    fun rb_gv_get = mrb_gv_get(rb : State*, name : LibC::Char*) : RbValue
 
     fun load_script_from_file(rb : State*, filename : LibC::Char*) : RbValue
     fun execute_script_line(rb : State*, str : LibC::Char*) : RbValue
