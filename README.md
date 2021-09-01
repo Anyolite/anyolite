@@ -61,6 +61,7 @@ Please report any bugs with MRI, so development can progress smoothly.
 * Bytecode compilation functions are not available yet (and might never be)
 * Some utility available in mruby are not available in MRI
 * Gems need to be installed manually after installing Ruby
+* Only GCC is supported as of now
 
 # Installing
 
