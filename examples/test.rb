@@ -47,8 +47,6 @@ puts "Value of nested module: #{TestModule::Test::UnderTestRenamed::DeepUnderTes
 
 puts "Test constant is: #{TestModule::SOME_CONSTANT}"
 
-puts a.methods.inspect
-
 puts "Sum is #{(a + b).x}"
 
 a.keyword_test(strvar: "Hi there", intvar: -121212, floatvar: -0.313, strvarkw: "💎", othervar: b)

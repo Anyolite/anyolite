@@ -212,8 +212,7 @@ module Anyolite
 
     fun load_script_from_file(rb : State*, filename : LibC::Char*) : Void
 
-    # TODO
-    # fun execute_script_line(rb : State*, str : LibC::Char*) : RbValue
+    fun execute_script_line(rb : State*, str : LibC::Char*) : RbValue
 
     # UNUSED
     # fun execute_bytecode(rb : State*, bytecode : UInt8*) : RbValue

@@ -56,12 +56,12 @@ Please report any bugs with MRI, so development can progress smoothly.
 
 ### Known issues
 
-* Currently it is only possible to run a single Ruby script
+* Currently it is only possible to run a single actual Ruby script file
 * UTF-8 function and variable names defined in Crystal can lead to crashes in Ruby
 * Bytecode compilation functions are not available yet (and might never be)
-* Some utility available in mruby are not available in MRI
+* Some utility functions from mruby are not available in MRI
 * Gems need to be installed manually after installing Ruby
-* Only GCC is supported as of now
+* For now, only gcc is supported as compiler
 
 # Installing
 
@@ -230,12 +230,12 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 
 * [ ] Full MRI Ruby as alternative implementation (might be postponed to a later release)
 * * [X] Basic functionality similar to mruby
+* * [X] Calling of script lines
 * * [ ] Bytecode compilation (might not be possible)
-* * [ ] Calling of script lines
-* * [ ] Tests
+* * [ ] Even more tests
 * * [ ] Copy source in build directory and call compile scripts there
 * * [ ] Find solution for UTF-8 function names leading to crashes
-* * [ ] Find solution for MRI crash at second script loading
+* * [ ] Find solution for MRI crash at second script file loading
 * [X] AnyolitePointer helper class for accessing pointers
 * [X] Infrastructure to convert script files into bytecode at runtime and compiletime
 * [X] Support for setting and getting instance, class and global variables from Crystal
@@ -302,3 +302,4 @@ Anyolite are already implemented.
 * [ ] Automatic wrappers for `initialize_copy` and similar methods
 * [ ] Class inheritance wrapping can be disabled for any class using annotations
 * [ ] General improvement of type resolving
+* [ ] Return values from evaluated script lines

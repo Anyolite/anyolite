@@ -546,6 +546,12 @@ end
 
     Anyolite.wrap(rb, RPGTest)
 
+    rb.execute_script_line("puts TestModule::Test.new(x: 12345).inspect")
+
+    rb.execute_script_line("require_relative './examples/bytecode_test.rb'")
+
     rb.load_script_from_file("examples/mri_test.rb")
+
+    rb.execute_script_line("puts TestModule::Test.new(x: 67890).inspect")
   end
 {% end %}
