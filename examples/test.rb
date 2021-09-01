@@ -1,3 +1,5 @@
+start_time = Time.now
+
 puts "Initiate testing script..."
 
 BytecodeTestClass.new("Hello world").do_test(5)
@@ -260,3 +262,7 @@ puts b.hash
 puts a.get_instance_variable(name: "hello")
 a.set_instance_variable_to_int(name: "hello", value: 15667)
 puts a.get_instance_variable(name: "hello")
+
+final_time = Time.now
+
+puts "Total time for MRI test script: #{(final_time - start_time)} s"

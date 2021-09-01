@@ -159,15 +159,15 @@ module SomeModule
       
     # end
 
-    # Gets called in Crystal and mruby
+    # Gets called in Crystal and Ruby
     def initialize(@x : Int32 = 0)
       Test.increase_counter
       puts "Test object initialized with value #{@x}"
     end
 
-    # Gets called in mruby
+    # Gets called in Ruby
     def rb_initialize(rb)
-      puts "Object registered in mruby"
+      puts "Object registered in Ruby"
     end
 
     def ==(other : Test)
@@ -469,9 +469,9 @@ module SomeModule
       end
     end
 
-    # Gets called in mruby unless program crashes
+    # Gets called in Ruby unless program crashes
     def rb_finalize(rb)
-      puts "Mruby destructor called for value #{@x}"
+      puts "Ruby destructor called for value #{@x}"
     end
   end
 
@@ -510,35 +510,6 @@ module RPGTest
   end
 end
 
-module MRITest
-  @[Anyolite::WrapWithoutKeywords]
-  def self.do_something(number : UInt32, object : String = "Nothing")
-    "Something with #{number} #{object}"
-  end
-
-  class MRITestClass
-    property name : String | Int32
-    
-    def initialize(name : String | Int32 = "Unknown")
-      @name = name
-    end
-
-    @[Anyolite::WrapWithoutKeywords]
-    def greet(other : MRITestClass)
-      puts "#{@name} greets #{other.name}"
-    end
-
-    @[Anyolite::WrapWithoutKeywords]
-    def create_child_with(other : MRITestClass)
-      MRITestClass.new(name: @name.to_s + "-" + other.name.to_s)
-    end
-
-    def rb_finalize(rb)
-      puts "Goodbye, #{@name}..."
-    end
-  end
-end
-
 macro load_test_module()
   Anyolite.wrap_module(rb, SomeModule, "TestModule")
   Anyolite.wrap_module_function_with_keywords(rb, SomeModule, "test_method", SomeModule.test_method, [int : Int32 = 19, str : String])
@@ -553,6 +524,7 @@ end
   Anyolite::RbInterpreter.create do |rb|
     Anyolite::Preloader.execute_bytecode_from_cache_or_file(rb, "examples/bytecode_test.mrb")
     load_test_module()
+
     rb.load_script_from_file("examples/test.rb")
   end
 
@@ -563,6 +535,7 @@ end
 
   Anyolite::RbInterpreter.create do |rb|
     Anyolite.wrap(rb, RPGTest)
+
     rb.load_script_from_file("examples/hp_example.rb")
   end
 
@@ -570,8 +543,9 @@ end
 {% else %}
   Anyolite::RbInterpreter.create do |rb|
     load_test_module()
-    Anyolite.wrap(rb, MRITest, verbose: true)
+
     Anyolite.wrap(rb, RPGTest)
+
     rb.load_script_from_file("examples/mri_test.rb")
   end
 {% end %}
