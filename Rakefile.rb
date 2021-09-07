@@ -96,7 +96,6 @@ task :build_ruby => [:load_config] do
             system "cd #{$config.rb_dir}/#{$config.implementation}; ruby minirake MRUBY_BUILD_DIR=\"#{temp_path}/#{$config.build_path}/#{$config.implementation}\" MRUBY_CONFIG=\"#{temp_path}/#{$config.rb_config}\""
         end
     elsif $config.implementation == "mri"
-        # TODO: Copy source directly to build directory
         if ANYOLITE_COMPILER == :msvc
             raise "MSVC compilation of MRI is not supported yet."
             # TODO
