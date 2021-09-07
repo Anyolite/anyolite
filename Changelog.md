@@ -2,6 +2,38 @@
 
 ## Releases
 
+### Version 0.13.0
+
+#### Features
+
+* Full MRI Ruby as alternative implementation
+* AnyolitePointer helper class for accessing pointers
+* Infrastructure to convert script files into bytecode at runtime and compiletime
+* Support for setting and getting instance, class and global variables from Crystal
+
+#### Breaking changes
+
+* Changed `RClass*` to `RClassPtr` to allow compatibility with MRI
+* Reorganized some macros
+* Changed directory structure
+* Several code changes for compatibility with MRI
+* Block variables for functions definitions have now an underscore in front of them
+
+#### Usability
+
+* Option for defaulting to usage of RbValue as data container for regular arguments
+* Alternate build paths are now passed to Anyolite via the environment variable `ANYOLITE_BUILD_PATH`
+
+#### Security
+
+* Error messages for problems when loading scripts or bytecode files
+
+#### Bugfixes
+
+* Alternate build paths are not recognized properly in implementation files
+* Fixed typo in name of `rb_str_to_cstr`
+* Fixed inconsistent usage of `rb` in many functions
+
 ### Version 0.12.0
 
 #### Features
