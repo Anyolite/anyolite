@@ -1,6 +1,6 @@
 # Anyolite
 
-Anyolite is a Crystal shard which adds a fully functional mruby interpreter to Crystal.
+Anyolite is a Crystal shard which adds a fully functional mruby (or even regular Ruby) interpreter to Crystal.
 
 ![Test](https://github.com/Anyolite/anyolite/workflows/Test/badge.svg)
 
@@ -11,8 +11,8 @@ Anyolite is a Crystal shard which adds a fully functional mruby interpreter to C
 
 # Description
 
-Anyolite allows for wrapping Crystal classes and functions into mruby with little effort.
-This way, mruby can be used as a scripting language to Crystal projects, with the major advantage of a similar syntax.
+Anyolite allows for wrapping Crystal classes and functions into Ruby with little effort.
+This way, Ruby can be used as a scripting language to Crystal projects, with the major advantage of a similar syntax.
 
 This project is currently in active development, so please report any bugs or missing relevant features.
 
@@ -24,7 +24,8 @@ Useful links for an overview:
 # Features
 
 * Bindings to an mruby interpreter
-* Wrapping of nearly arbitrary Crystal classes and methods to mruby
+* Near complete support to regular Ruby as alternative implementation (also known as MRI or CRuby)
+* Wrapping of nearly arbitrary Crystal classes and methods to Ruby
 * Easy syntax without unnecessary boilerplate code
 * Simple system to prevent garbage collector conflicts
 * Support for keyword arguments and default values
@@ -43,14 +44,15 @@ You need to have the following programs installed (and in your PATH variable, if
 * Git (for downloading mruby)
 * GCC or Microsoft Visual Studio 19 (for building the object files required for Anyolite, depending on your OS)
 
-## Experimental MRI test
+## Using MRI instead of mruby
 
 If you want to test MRI as implementation, you need these additional programs:
 * Autoconf
 
 Compiling Anyolite for MRI requires setting the environment variable `ANYOLITE_CONFIG_PATH` to a valid MRI configuration path (like `config_files/anyolite_config_mri.json`), building the shard and then setting the `anyolite_implementation_ruby_3` and `use_general_object_format_chars` flags for the final compilation.
 
-Support for MRI is still not complete and many problems and errors might be encountered, so mruby is still recommended as the main Ruby implementation for now.
+Support for MRI is still not as fleshed out as mruby. 
+Many problems and errors might occur, so mruby is still recommended as the main Ruby implementation for now.
 
 Please report any bugs with MRI, so development can progress smoothly.
 
@@ -81,10 +83,10 @@ If you want to use other options for Anyolite, you can set `ANYOLITE_CONFIG_PATH
 which allows for changing multiple options when installing the shard. Possible options are:
 
 * `ANYOLITE_BUILD_PATH` - The relative directory in which Anyolite will be built
-* `ANYOLITE_RUBY_FORK` - The web address of the mruby repository
-* `ANYOLITE_RUBY_RELEASE` - The release tag of the mruby version to be used
-* `ANYOLITE_RUBY_DIR` - The relative directory mruby will be installed in
-* `ANYOLITE_RUBY_CONFIG` - The config file which is used for building mruby
+* `ANYOLITE_RUBY_FORK` - The web address of the Ruby repository
+* `ANYOLITE_RUBY_RELEASE` - The release tag of the Ruby version to be used
+* `ANYOLITE_RUBY_DIR` - The relative directory Ruby will be installed in
+* `ANYOLITE_RUBY_CONFIG` - The config file which is used for building Ruby
 * `ANYOLITE_GLUE_DIR` - The directory in which helper function C files are located
 * `ANYOLITE_COMPILER` - The C compiler used for building Anyolite
 
@@ -160,7 +162,7 @@ It might be possible to remove them in future versions, but for
 now they are potential roadblocks.
 
 * Currently, Anyolite does not work on Windows due to Crystal compiler bugs
-* Anyolite is only compatible with mruby 3 at the current time
+* Anyolite is only compatible with mruby 3 and Ruby 3 (with some restrictions) at the current time
 
 ## Soft limitations
 
@@ -292,7 +294,6 @@ Anyolite are already implemented.
 * [ ] Support for slices
 * [ ] Classes as argument type
 * [ ] Resolve context even in generic type union arguments
-* [ ] Ability to choose between mruby and regular Ruby
 * [ ] Automatic wrappers for `initialize_copy` and similar methods
 * [ ] Class inheritance wrapping can be disabled for any class using annotations
 * [ ] General improvement of type resolving
