@@ -101,10 +101,11 @@ task :build_ruby => [:load_config] do
             raise "MSVC compilation of MRI is not supported yet."
             # TODO
         elsif ANYOLITE_COMPILER == :gcc
-            system "cd #{$config.rb_dir}/#{$config.implementation}; ./autogen.sh"
-            system "cd #{$config.rb_dir}/#{$config.implementation}; ./configure --prefix=\"#{temp_path}/#{$config.build_path}/#{$config.implementation}\""
-            system "cd #{$config.rb_dir}/#{$config.implementation}; make"
-            system "cd #{$config.rb_dir}/#{$config.implementation}; make install"
+            system "cp -r #{$config.rb_dir}/#{$config.implementation} #{temp_path}/#{$config.build_path}/src_#{$config.implementation}"
+            system "cd #{$config.build_path}/src_#{$config.implementation}; ./autogen.sh"
+            system "cd #{$config.build_path}/src_#{$config.implementation}; ./configure --prefix=\"#{temp_path}/#{$config.build_path}/#{$config.implementation}\""
+            system "cd #{$config.build_path}/src_#{$config.implementation}; make"
+            system "cd #{$config.build_path}/src_#{$config.implementation}; make install"
         else
         end
     else
@@ -136,7 +137,7 @@ task :build_glue => [:load_config] do
             end
         elsif ANYOLITE_COMPILER == :gcc
             GLUE_FILES.each do |name|
-                system "cc -std=c99 -I#{$config.build_path}/#{$config.implementation}/include/ruby-3.1.0 -I#{$config.build_path}/#{$config.implementation}/include/ruby-3.1.0/x86_64-linux -I#{$config.build_path}/#{$config.implementation}/include/ruby-3.1.0/aarch64-linux -c #{$config.glue_dir}/#{name}.c -o #{$config.build_path}/glue/#{$config.implementation}/#{name}.o"
+                system "cc -std=c99 -I#{$config.build_path}/#{$config.implementation}/include/ruby-3.0.0 -I#{$config.build_path}/#{$config.implementation}/include/ruby-3.0.0/x86_64-linux -I#{$config.build_path}/#{$config.implementation}/include/ruby-3.0.0/aarch64-linux -c #{$config.glue_dir}/#{name}.c -o #{$config.build_path}/glue/#{$config.implementation}/#{name}.o"
             end
         else
             GLUE_FILES.each do |name|

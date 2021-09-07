@@ -1,11 +1,20 @@
 #include <ruby.h>
 
-//! TODO: Is a complete cleanup maybe possible? For now, the state is kept.
-
 extern void* open_interpreter(void) {
+
+  static int first_run = 1;
+
+  if(!first_run) {
+
+    printf("ERROR: Only one Ruby interpreter can be used at this point.\n");
+    return (void*) 0;
+
+  }
 
   RUBY_INIT_STACK;
   ruby_init();
+
+  first_run = 0;
 
   return (void*) 0;
 
@@ -13,26 +22,45 @@ extern void* open_interpreter(void) {
 
 extern void close_interpreter(void* rb) {
 
+  static int first_run = 1;
+
+  if(!first_run) {
+
+    return;
+
+  }
+
+  first_run = 0;
+
   ruby_cleanup(0);
 
 }
 
 extern void load_script_from_file(void* rb, const char* filename) {
 
-  static int first_script = 1;
+  static int first_run = 1;
 
-  if(first_script) {
+  char* args[2] = {"test", (char*) filename};
+  
+  if(!first_run) {
 
-    ruby_script(filename);
-    first_script = 0;
+    printf("ERROR: Ruby scripts can only be run once at this point.\n");
+    return;
 
   }
 
-  int error;
-
-  char* args[2] = {"test", (char*) filename};
-
   void* options = ruby_options(2, args);
+
+  int ex_node_status;
+  int ex_node_return = ruby_executable_node(options, &ex_node_status);
+
+  if(!ex_node_return) {
+
+    printf("Error: File %s could not be executed.\n", filename);
+    ruby_cleanup(ex_node_status);
+    return;
+
+  }
 
   int return_value = ruby_exec_node(options);
 
@@ -44,6 +72,8 @@ extern void load_script_from_file(void* rb, const char* filename) {
     printf("%s\n", rb_string_value_cstr(&exception_str));
 
   }
+
+  first_run = 0;
 
   //! TODO: Fix segfaults at second execution
 
