@@ -226,6 +226,12 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 
 ## Upcoming releases
 
+### Version 0.14.0
+
+#### Features
+
+* [ ] Windows support
+
 ### Version 1.0.0
 
 This release will mark the first full release of Anyolite, mostly
@@ -237,7 +243,6 @@ Anyolite are already implemented.
 
 #### Platform support
 
-* [ ] Windows support (currently not supported due to problems with Crystal)
 * [ ] Mac support (might be possible, not tested yet)
 
 #### Documentation

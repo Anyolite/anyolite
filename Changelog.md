@@ -2,6 +2,12 @@
 
 ## Releases
 
+### Version 0.13.1
+
+#### Bugfixes
+
+* Fixed documentation
+
 ### Version 0.13.0
 
 #### Features
