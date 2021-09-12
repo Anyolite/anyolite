@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8" />
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="generator" content="Crystal Docs 1.0.0">
-<meta name="crystal_docs.project_version" content="0.12.0">
+<meta name="generator" content="Crystal Docs 1.1.1">
+<meta name="crystal_docs.project_version" content="0.13.1">
 <meta name="crystal_docs.project_name" content="anyolite">
 
 
@@ -13,7 +13,7 @@
 <script type="text/javascript" src="../js/doc.js"></script>
 
   <meta name="repository-name" content="anyolite">
-  <title>Anyolite::RbInterpreter - anyolite 0.12.0</title>
+  <title>Anyolite::RbInterpreter - anyolite 0.13.1</title>
   <script type="text/javascript">
     CrystalDocs.base_path = "../";
   </script>
@@ -39,7 +39,7 @@
       </h1>
 
       <span class="project-version">
-        0.12.0
+        0.13.1
       </span>
     </div>
   </div>
@@ -111,6 +111,21 @@
       
     </li>
   
+  <li class="parent " data-id="anyolite/Anyolite/HelperClasses" data-name="anyolite::helperclasses">
+      <a href="../Anyolite/HelperClasses.html">HelperClasses</a>
+      
+        <ul>
+  
+  <li class=" " data-id="anyolite/Anyolite/HelperClasses/AnyolitePointer" data-name="anyolite::helperclasses::anyolitepointer">
+      <a href="../Anyolite/HelperClasses/AnyolitePointer.html">AnyolitePointer</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
   <li class=" " data-id="anyolite/Anyolite/Macro" data-name="anyolite::macro">
       <a href="../Anyolite/Macro.html">Macro</a>
       
@@ -118,6 +133,21 @@
   
   <li class=" " data-id="anyolite/Anyolite/NoKeywordArgs" data-name="anyolite::nokeywordargs">
       <a href="../Anyolite/NoKeywordArgs.html">NoKeywordArgs</a>
+      
+    </li>
+  
+  <li class="parent " data-id="anyolite/Anyolite/Preloader" data-name="anyolite::preloader">
+      <a href="../Anyolite/Preloader.html">Preloader</a>
+      
+        <ul>
+  
+  <li class=" " data-id="anyolite/Anyolite/Preloader/AtCompiletime" data-name="anyolite::preloader::atcompiletime">
+      <a href="../Anyolite/Preloader/AtCompiletime.html">AtCompiletime</a>
+      
+    </li>
+  
+</ul>
+
       
     </li>
   
@@ -305,7 +335,6 @@
   </h2>
 
   <p>Wrapper for an mruby state reference</p>
-
 <p><span class="flag purple">NOTE</span>  Do not create more than one at a time!</p>
 
 
@@ -331,7 +360,7 @@
   </h2>
   
     
-      <a href="https://github.com/Anyolite/anyolite/blob/v0.12.0/src/RbInterpreter.cr#L4" target="_blank">
+      <a href="https://github.com/Anyolite/anyolite/blob/v0.13.1/src/RbInterpreter.cr#L4" target="_blank">
         RbInterpreter.cr
       </a>
     
@@ -413,7 +442,17 @@
       </li>
     
       <li class="entry-summary">
+        <a href="#execute_bytecode(bytecode:Array(UInt8))-instance-method" class="signature"><strong>#execute_bytecode</strong>(bytecode : Array(UInt8))</a>
+        
+      </li>
+    
+      <li class="entry-summary">
         <a href="#execute_script_line(str:String)-instance-method" class="signature"><strong>#execute_script_line</strong>(str : String)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#load_bytecode_from_file(filename:String)-instance-method" class="signature"><strong>#load_bytecode_from_file</strong>(filename : String)</a>
         
       </li>
     
@@ -478,7 +517,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/Anyolite/anyolite/blob/v0.12.0/src/RbInterpreter.cr#L13" target="_blank">View source</a>]
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.13.1/src/RbInterpreter.cr#L16" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -495,7 +534,7 @@
     Class Method Detail
   </h2>
   
-    <div class="entry-detail" id="create(&)-class-method">
+    <div class="entry-detail" id="create(&amp;)-class-method">
       <div class="signature">
         
         def self.<strong>create</strong>(&)
@@ -506,7 +545,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/Anyolite/anyolite/blob/v0.12.0/src/RbInterpreter.cr#L7" target="_blank">View source</a>]
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.13.1/src/RbInterpreter.cr#L7" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -534,7 +573,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/Anyolite/anyolite/blob/v0.12.0/src/RbInterpreter.cr#L18" target="_blank">View source</a>]
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.13.1/src/RbInterpreter.cr#L21" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -550,7 +589,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/Anyolite/anyolite/blob/v0.12.0/src/RbInterpreter.cr#L52" target="_blank">View source</a>]
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.13.1/src/RbInterpreter.cr#L63" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -571,7 +610,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/Anyolite/anyolite/blob/v0.12.0/src/RbInterpreter.cr#L36" target="_blank">View source</a>]
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.13.1/src/RbInterpreter.cr#L47" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -587,7 +626,23 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/Anyolite/anyolite/blob/v0.12.0/src/RbInterpreter.cr#L44" target="_blank">View source</a>]
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.13.1/src/RbInterpreter.cr#L55" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="execute_bytecode(bytecode:Array(UInt8))-instance-method">
+      <div class="signature">
+        
+        def <strong>execute_bytecode</strong>(bytecode : Array(UInt8))
+
+        <a class="method-permalink" href="#execute_bytecode(bytecode:Array(UInt8))-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.13.1/src/RbInterpreter.cr#L38" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -603,7 +658,23 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/Anyolite/anyolite/blob/v0.12.0/src/RbInterpreter.cr#L27" target="_blank">View source</a>]
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.13.1/src/RbInterpreter.cr#L30" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="load_bytecode_from_file(filename:String)-instance-method">
+      <div class="signature">
+        
+        def <strong>load_bytecode_from_file</strong>(filename : String)
+
+        <a class="method-permalink" href="#load_bytecode_from_file(filename:String)-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.13.1/src/RbInterpreter.cr#L42" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -619,7 +690,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/Anyolite/anyolite/blob/v0.12.0/src/RbInterpreter.cr#L31" target="_blank">View source</a>]
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.13.1/src/RbInterpreter.cr#L34" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -635,7 +706,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/Anyolite/anyolite/blob/v0.12.0/src/RbInterpreter.cr#L23" target="_blank">View source</a>]
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.13.1/src/RbInterpreter.cr#L26" target="_blank">View source</a>]
         
       </div>
     </div>
