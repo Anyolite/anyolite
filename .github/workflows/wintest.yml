@@ -1,0 +1,30 @@
+name: WinTest
+
+on:
+  push:
+    branches: [win-test]
+
+jobs:
+  build:
+
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/setup-ruby@v1
+    - name: Download source
+      uses: actions/checkout@v2
+    - name: Set up environment
+      run: |
+        echo "CRYSTAL_PATH=$(pwd)\..;${env:CRYSTAL_PATH}" >>${env:GITHUB_ENV}
+    - name: Install Crystal
+      uses: oprypin/install-crystal@v1
+      with:
+        crystal: nightly
+    - name: Build shard
+      run: rake build_shard
+    - name: Test directories
+      run: dir build/mruby/lib
+    - name: Test script
+      run: crystal build test.cr
+    - name: Run script
+      run: ./test
