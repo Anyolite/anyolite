@@ -4,3 +4,4 @@ third_party/
 docs/
 examples/bytecode_test.mrb
 .vscode/
+.crystal/

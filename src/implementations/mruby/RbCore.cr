@@ -64,7 +64,7 @@ module Anyolite
     end
 
     struct RbValue
-      w : LibC::ULong
+      w : LibC::ULongLong
     end
 
     struct RbDataType

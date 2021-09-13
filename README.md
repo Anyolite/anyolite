@@ -161,7 +161,6 @@ These limitations can not be circumvented using other methods.
 It might be possible to remove them in future versions, but for
 now they are potential roadblocks.
 
-* Currently, Anyolite does not work on Windows due to Crystal compiler bugs
 * Anyolite is only compatible with mruby 3 and Ruby 3 (with some restrictions) at the current time
 
 ## Soft limitations
@@ -230,7 +229,8 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 
 #### Features
 
-* [ ] Windows support
+* [X] Windows support for the mruby implementation
+* [ ] Windows support for the MRI implementation
 
 ### Version 1.0.0
 
