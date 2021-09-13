@@ -9,10 +9,9 @@
   module Anyolite
     module Macro
       macro new_rb_func(&b)
-        {% bb = b %}
         Anyolite::RbCore::RbFunc.new do |_argc, _argv, _obj|
           _rb = Pointer(Anyolite::RbCore::State).null
-          {{bb.body}}
+          {{yield}}
         end
       end
 
