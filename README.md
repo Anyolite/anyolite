@@ -161,7 +161,7 @@ These limitations can not be circumvented using other methods.
 It might be possible to remove them in future versions, but for
 now they are potential roadblocks.
 
-* Anyolite is only compatible with mruby 3 and Ruby 3 (with some restrictions) at the current time
+* Only GCC and Visual Studio are officially supported as compilers (others might work)
 
 ## Soft limitations
 
@@ -231,6 +231,10 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 
 * [X] Windows support for the mruby implementation
 * [ ] Windows support for the MRI implementation
+
+#### Usability
+
+* [ ] CI for MRI (Linux and Ruby)
 
 ### Version 1.0.0
 
