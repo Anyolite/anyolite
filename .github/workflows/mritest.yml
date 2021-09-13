@@ -1,0 +1,29 @@
+name: MRITest
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+  schedule:
+    - cron: '45 03 * * 6'
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Install Crystal
+      uses: oprypin/install-crystal@v1
+      with:
+        crystal: nightly
+    - name: Install Autoconf
+      run: sudo apt install -y autoconf
+    - name: Install Ruby
+      run: sudo apt install -y ruby
+    - name: Build shard
+      run: ANYOLITE_CONFIG_PATH="config_files/anyolite_config_mri.json" rake build_shard
+    - name: Test script
+      run: crystal run test.cr -Danyolite_implementation_ruby_3 -Duse_general_object_format_char
