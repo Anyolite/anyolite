@@ -1,6 +1,7 @@
 {% if flag?(:anyolite_implementation_ruby_3) %}
   require "./RbCore.cr"
   require "./FormatString.cr"
+{% end %}
 
   {% if !flag?(:use_general_object_format_chars) %}
     {% raise "Flag 'use_general_object_format_chars' needs to be set for a working MRI implementation" %}
@@ -11,7 +12,7 @@
       macro new_rb_func(&b)
         Anyolite::RbCore::RbFunc.new do |_argc, _argv, _obj|
           _rb = Pointer(Anyolite::RbCore::State).null
-          {{yield}}
+          {{b.body}}
         end
       end
 
@@ -98,4 +99,3 @@
       end
     end
   end
-{% end %}
