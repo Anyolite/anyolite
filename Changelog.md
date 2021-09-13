@@ -2,6 +2,20 @@
 
 ## Releases
 
+### Version 0.13.2
+
+#### Features
+
+* Windows support for the default mruby implementation
+
+#### Usability
+
+* CI for MRI (on Linux)
+
+#### Bugfixes
+
+* Fixed macro error for MRI
+
 ### Version 0.13.1
 
 #### Bugfixes

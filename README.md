@@ -227,16 +227,6 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 
 ## Upcoming releases
 
-### Version 0.14.0
-
-#### Features
-
-* [X] Windows support for the default mruby implementation
-
-#### Usability
-
-* [ ] CI for MRI (on Linux)
-
 ### Version 1.0.0
 
 This release will mark the first full release of Anyolite, mostly
