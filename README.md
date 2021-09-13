@@ -162,6 +162,8 @@ It might be possible to remove them in future versions, but for
 now they are potential roadblocks.
 
 * Only GCC and Visual Studio are officially supported as compilers (others might work)
+* Anyolite for Windows does only work with Crystal version 1.2.0 or higher
+* MRI is currently not supported on Windows
 
 ## Soft limitations
 
@@ -229,12 +231,11 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 
 #### Features
 
-* [X] Windows support for the mruby implementation
-* [ ] Windows support for the MRI implementation
+* [X] Windows support for the default mruby implementation
 
 #### Usability
 
-* [ ] CI for MRI (Linux and Ruby)
+* [ ] CI for MRI (on Linux)
 
 ### Version 1.0.0
 
@@ -248,6 +249,7 @@ Anyolite are already implemented.
 #### Platform support
 
 * [ ] Mac support (might be possible, not tested yet)
+* [ ] MRI support on Windows
 
 #### Documentation
 
