@@ -227,18 +227,6 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 
 ## Upcoming releases
 
-### Version 0.14.0
-
-#### Features
-
-* Support for copying wrapped objects
-* Ruby classes and modules can be obtained by name
-
-#### Breaking changes
-
-* All classes and structs automatically wrap the Crystal `dup` function as a copy constructor
-* Updates in C glue functions
-
 ### Version 1.0.0
 
 This release will mark the first full release of Anyolite, mostly

@@ -2,6 +2,18 @@
 
 ## Releases
 
+### Version 0.14.0
+
+#### Features
+
+* Support for copying wrapped objects
+* Ruby classes and modules can be obtained by name
+
+#### Breaking changes
+
+* All classes and structs automatically wrap the Crystal `dup` function as a copy constructor
+* Updates in C glue functions
+
 ### Version 0.13.2
 
 #### Features
