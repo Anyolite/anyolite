@@ -166,6 +166,7 @@ module Anyolite
           Anyolite::Macro.add_enum_constructor({{rb_interpreter}}, {{crystal_class}}, {{verbose}})
         {% end %}
 
+        {% all_annotations_exclude_im = crystal_class.resolve.annotations(Anyolite::ExcludeInstanceMethod) + method_source.resolve.annotations(Anyolite::ExcludeInstanceMethod) %}
         {% if all_annotations_exclude_im.find { |element| element[0].id.stringify == "dup" || element[0].id.stringify == "clone" } %}
           # TODO: Undef dup in the future
           # TODO: Define a dummy method which just yields nil or something else
