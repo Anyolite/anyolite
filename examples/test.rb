@@ -261,6 +261,32 @@ puts a.get_instance_variable(name: "hello")
 a.set_instance_variable_to_int(name: "hello", value: 15667)
 puts a.get_instance_variable(name: "hello")
 
+puts "Testing dup..."
+
+a_copy = a.dup
+puts a_copy.x
+
+a_copy.x += 3
+a.x -= 3
+
+puts a_copy.x
+puts a.x
+
+enum_orig = TestModule::Test::TestEnum::Three
+enum_copy = enum_orig.dup
+
+puts enum_copy
+
+intfloat = TestModule::Test::GTIntFloat.new(u: 1, v: 2.3)
+intfloat_copy = intfloat.dup
+
+intfloat_copy.u -= 1
+
+puts intfloat.u
+puts intfloat_copy.u
+
+puts "Testing done."
+
 final_time = Time.now
 
 puts "Total time for MRI test script: #{(final_time - start_time)} s"

@@ -166,6 +166,8 @@ module Anyolite
           Anyolite::Macro.add_enum_constructor({{rb_interpreter}}, {{crystal_class}}, {{verbose}})
         {% end %}
 
+        Anyolite::Macro.add_copy_constructor({{rb_interpreter}}, {{crystal_class}}, {{context}}, {{verbose}})
+
         {% if wrap_equality_method && !how_many_times_wrapped["=="] %}
           Anyolite::Macro.add_equality_method({{rb_interpreter}}, {{crystal_class}}, {{context}}, {{verbose}})
         {% end %}
