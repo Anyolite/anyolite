@@ -268,6 +268,7 @@ Anyolite are already implemented.
 * [ ] Put macro function arguments as options in a hash
 * [ ] Code cleanup (especially in the macro section)
 * [ ] More compatibility between methods accepting `RbRef` and `RbValue`
+* [ ] Better overloads between Ruby and Crystal classes, where possible
 
 ### Future feature ideas (might not actually be possible to implement)
 

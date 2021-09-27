@@ -35,6 +35,10 @@ module Anyolite
       self.new(rb, ruby_module, under) if ruby_module
     end
 
+    def to_rb_obj
+      RbCore.get_rb_obj_value(@class_ptr)
+    end
+
     def to_unsafe
       return @module_ptr
     end
