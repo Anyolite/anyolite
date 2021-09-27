@@ -198,7 +198,7 @@ extern VALUE rb_call_block_with_args_helper(void* rb, VALUE value, int argc, VAL
 
 }
 
-extern int rb_respond_to_helper(void* rb, VALUE obj, ID name) {
+extern bool rb_respond_to_helper(void* rb, VALUE obj, ID name) {
 
   rb_respond_to(obj, name);
 
@@ -256,4 +256,28 @@ extern void rb_gv_set_helper(void* rb, const char* name, VALUE value) {
 
   rb_gv_set(name, value);
   
+}
+
+extern bool does_constant_exist_under(void* rb, VALUE under, const char* name) {
+
+  rb_const_defined_at(under, rb_intern(name)) == Qtrue;
+
+}
+
+extern bool does_constant_exist(void* rb, const char* name) {
+
+  rb_const_defined(rb_cObject, rb_intern(name)) == Qtrue;
+
+}
+
+extern VALUE get_constant_under(void* rb, VALUE under, const char* name) {
+
+  rb_const_get_at(under, rb_intern(name));
+
+}
+
+extern VALUE get_constant(void* rb, const char* name) {
+
+  rb_const_get(rb_cObject, rb_intern(name));
+
 }

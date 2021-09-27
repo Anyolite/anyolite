@@ -205,6 +205,18 @@ module Anyolite
 
     fun rb_respond_to = rb_respond_to_helper(rb : State*, obj : RbValue, name : RbSymbol) : RbBool
 
+    fun rb_class_get = get_constant(rb : State*, name : LibC::Char*) : RClassPtr
+    fun rb_class_get_under = get_constant_under(rb : State*, under : RClassPtr, name : LibC::Char*)
+
+    fun rb_class_defined = does_constant_exist(rb : State*, name : LibC::Char*) : RbBool
+    fun rb_class_defined_under = does_constant_exist_under(rb : State*, under : RClassPtr, name : LibC::Char*) : RbBool
+
+    fun rb_module_get = get_constant(rb : State*, name : LibC::Char*) : RClassPtr
+    fun rb_module_get_under = get_constant_under(rb : State*, under : RClassPtr, name : LibC::Char*)
+    
+    fun rb_module_defined = does_constant_exist(rb : State*, name : LibC::Char*) : RbBool
+    fun rb_module_defined_under = does_constant_exist_under(rb : State*, under : RClassPtr, name : LibC::Char*) : RbBool
+
     fun rb_iv_set = rb_iv_set_helper(rb : State*, obj : RbValue, sym : RbSymbol, value : RbValue) : Void
     fun rb_iv_get = rb_iv_get_helper(rb : State*, obj : RbValue, sym : RbSymbol) : RbValue
 

@@ -231,8 +231,12 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 
 #### Features
 
-* [X] Support for copying wrapped objects using `dup` and `clone`
+* [X] Support for copying wrapped objects
 * [ ] Methods for obtaining classes and constants by name
+
+#### Breaking changes
+
+* [X] All classes and structs automatically wrap the Crystal `dup` function as a copy constructor
 
 ### Version 1.0.0
 
@@ -270,7 +274,6 @@ Anyolite are already implemented.
 * [ ] Support for slices
 * [ ] Classes as argument type
 * [ ] Resolve context even in generic type union arguments
-* [ ] Automatic wrappers for `initialize_copy` and similar methods
 * [ ] Class inheritance wrapping can be disabled for any class using annotations
 * [ ] General improvement of type resolving
 * [ ] Return values from evaluated script lines
