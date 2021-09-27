@@ -260,13 +260,13 @@ extern void rb_gv_set_helper(void* rb, const char* name, VALUE value) {
 
 extern bool does_constant_exist_under(void* rb, VALUE under, const char* name) {
 
-  rb_const_defined_at(under, rb_intern(name)) == Qtrue;
+  rb_const_defined_at(under, rb_intern(name)) == Qtrue ? 1 : 0;
 
 }
 
 extern bool does_constant_exist(void* rb, const char* name) {
 
-  rb_const_defined(rb_cObject, rb_intern(name)) == Qtrue;
+  rb_const_defined(rb_cObject, rb_intern(name)) == Qtrue ? 1 : 0;
 
 }
 

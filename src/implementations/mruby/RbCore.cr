@@ -197,9 +197,9 @@ module Anyolite
 
     fun rb_module_get = mrb_module_get(rb : State*, name : LibC::Char*) : RClassPtr
     fun rb_module_get_under = mrb_module_get_under(rb : State*, under : RClassPtr, name : LibC::Char*)
-    
-    fun rb_module_defined = mrb_module_defined(rb : State*, name : LibC::Char*) : RbBool
-    fun rb_module_defined_under = mrb_module_defined_under(rb : State*, under : RClassPtr, name : LibC::Char*) : RbBool
+
+    fun rb_module_defined = mrb_class_defined(rb : State*, name : LibC::Char*) : RbBool
+    fun rb_module_defined_under = mrb_class_defined_under(rb : State*, under : RClassPtr, name : LibC::Char*) : RbBool
 
     fun rb_iv_set = mrb_iv_set(rb : State*, obj : RbValue, sym : RbSymbol, value : RbValue) : Void
     fun rb_iv_get = mrb_iv_get(rb : State*, obj : RbValue, sym : RbSymbol) : RbValue
