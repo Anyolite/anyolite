@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="generator" content="Crystal Docs 1.1.1">
-<meta name="crystal_docs.project_version" content="0.13.2">
+<meta name="crystal_docs.project_version" content="0.14.0">
 <meta name="crystal_docs.project_name" content="anyolite">
 
 
@@ -13,7 +13,7 @@
 <script type="text/javascript" src="../js/doc.js"></script>
 
   <meta name="repository-name" content="anyolite">
-  <title>Anyolite::RbClass - anyolite 0.13.2</title>
+  <title>Anyolite::RbClass - anyolite 0.14.0</title>
   <script type="text/javascript">
     CrystalDocs.base_path = "../";
   </script>
@@ -39,7 +39,7 @@
       </h1>
 
       <span class="project-version">
-        0.13.2
+        0.14.0
       </span>
     </div>
   </div>
@@ -359,7 +359,7 @@
   </h2>
   
     
-      <a href="https://github.com/Anyolite/anyolite/blob/v0.13.2/src/RbClass.cr#L3" target="_blank">
+      <a href="https://github.com/Anyolite/anyolite/blob/v0.14.0/src/RbClass.cr#L3" target="_blank">
         RbClass.cr
       </a>
     
@@ -385,9 +385,31 @@
         
       </li>
     
+      <li class="entry-summary">
+        <a href="#new(rb:RbInterpreter,class_ptr:RbCore::RClassPtr,under:RbModule%7CRbClass%7CNil=nil)-class-method" class="signature"><strong>.new</strong>(rb : RbInterpreter, class_ptr : RbCore::RClassPtr, under : RbModule | RbClass | Nil = <span class="n">nil</span>)</a>
+        
+      </li>
+    
   </ul>
 
 
+
+  <h2>
+    <a id="class-method-summary" class="anchor" href="#class-method-summary">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Class Method Summary
+  </h2>
+  <ul class="list-summary">
+    
+      <li class="entry-summary">
+        <a href="#get_from_ruby_name(rb:RbInterpreter,name:String,under:RbModule%7CRbClass%7CNil=nil)-class-method" class="signature"><strong>.get_from_ruby_name</strong>(rb : RbInterpreter, name : String, under : RbModule | RbClass | Nil = <span class="n">nil</span>)</a>
+        
+      </li>
+    
+  </ul>
 
 
 
@@ -400,6 +422,11 @@
     Instance Method Summary
   </h2>
   <ul class="list-summary">
+    
+      <li class="entry-summary">
+        <a href="#to_rb_obj-instance-method" class="signature"><strong>#to_rb_obj</strong></a>
+        
+      </li>
     
       <li class="entry-summary">
         <a href="#to_unsafe-instance-method" class="signature"><strong>#to_unsafe</strong></a>
@@ -457,13 +484,55 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/Anyolite/anyolite/blob/v0.13.2/src/RbClass.cr#L6" target="_blank">View source</a>]
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.14.0/src/RbClass.cr#L6" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="new(rb:RbInterpreter,class_ptr:RbCore::RClassPtr,under:RbModule|RbClass|Nil=nil)-class-method">
+      <div class="signature">
+        
+        def self.<strong>new</strong>(rb : <a href="../Anyolite/RbInterpreter.html">RbInterpreter</a>, class_ptr : RbCore::RClassPtr, under : <a href="../Anyolite/RbModule.html">RbModule</a> | <a href="../Anyolite/RbClass.html">RbClass</a> | Nil = <span class="n">nil</span>)
+
+        <a class="method-permalink" href="#new(rb:RbInterpreter,class_ptr:RbCore::RClassPtr,under:RbModule%7CRbClass%7CNil=nil)-class-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.14.0/src/RbClass.cr#L20" target="_blank">View source</a>]
         
       </div>
     </div>
   
 
 
+
+  <h2>
+    <a id="class-method-detail" class="anchor" href="#class-method-detail">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Class Method Detail
+  </h2>
+  
+    <div class="entry-detail" id="get_from_ruby_name(rb:RbInterpreter,name:String,under:RbModule|RbClass|Nil=nil)-class-method">
+      <div class="signature">
+        
+        def self.<strong>get_from_ruby_name</strong>(rb : <a href="../Anyolite/RbInterpreter.html">RbInterpreter</a>, name : String, under : <a href="../Anyolite/RbModule.html">RbModule</a> | <a href="../Anyolite/RbClass.html">RbClass</a> | Nil = <span class="n">nil</span>)
+
+        <a class="method-permalink" href="#get_from_ruby_name(rb:RbInterpreter,name:String,under:RbModule%7CRbClass%7CNil=nil)-class-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.14.0/src/RbClass.cr#L24" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
 
 
 
@@ -476,6 +545,22 @@
     Instance Method Detail
   </h2>
   
+    <div class="entry-detail" id="to_rb_obj-instance-method">
+      <div class="signature">
+        
+        def <strong>to_rb_obj</strong>
+
+        <a class="method-permalink" href="#to_rb_obj-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.14.0/src/RbClass.cr#L42" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
     <div class="entry-detail" id="to_unsafe-instance-method">
       <div class="signature">
         
@@ -487,7 +572,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/Anyolite/anyolite/blob/v0.13.2/src/RbClass.cr#L20" target="_blank">View source</a>]
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.14.0/src/RbClass.cr#L46" target="_blank">View source</a>]
         
       </div>
     </div>
