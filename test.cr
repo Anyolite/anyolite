@@ -385,6 +385,8 @@ module SomeModule
       Anyolite.does_class_respond_to(self.class, name)
     end
 
+    # This annotation will prevent the method from its global exclusion
+    @[Anyolite::Include]
     def call_test
       result = Anyolite.call_rb_method(:method_only_in_ruby, ["Hello", 3], cast_to: String)
       puts result
@@ -483,6 +485,11 @@ module SomeModule
     def initialize
     end
   end
+end
+
+# For testing purposes, let's exclude this method globally (and include it again locally)
+@[Anyolite::ExcludeInstanceMethod("call_test")]
+class Object
 end
 
 module RPGTest

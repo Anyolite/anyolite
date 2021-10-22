@@ -652,6 +652,7 @@ module Anyolite
   annotation Exclude; end
 
   # Excludes the instance method given as the first argument from wrapping.
+  # Use it on `Object` to exclude the named method from all classes.
   annotation ExcludeInstanceMethod; end
 
   # Excludes the class method given as the first argument from wrapping.
@@ -659,6 +660,13 @@ module Anyolite
 
   # Excludes the constant given as the first argument from wrapping.
   annotation ExcludeConstant; end
+
+  # Overrides `ExcludeInstanceMethod` on `Object`.
+  annotation Include; end
+
+  # Overrides `ExcludeInstanceMethod` on `Object`
+  # the instance method given as the first argument.
+  annotation IncludeInstanceMethod; end
 
   # Excludes all definitions of this function besides this one from wrapping.
   # The optional first argument overwrites the original argument array.

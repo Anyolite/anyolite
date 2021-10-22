@@ -232,7 +232,6 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 #### Features
 
 * [X] Methods for undefining Ruby methods
-* [ ] Helper methods for specs
 
 #### Breaking changes
 
@@ -240,7 +239,9 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 
 #### Usability
 
-* [X] Respect exclusions of `dup` and `clone`
+* [X] Anyolite now respects exclusions of `dup` and `clone`
+* [X] Exclude annotations on `Object` will exclude these methods from all classes
+* [X] Include annotations can reverse global exclusions
 
 ### Version 1.0.0
 

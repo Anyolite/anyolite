@@ -22,8 +22,11 @@ module Anyolite
       {% how_many_times_wrapped = {} of String => UInt32 %}
 
       {% for method, index in method_source.resolve.methods %}
-        {% all_annotations_exclude_im = crystal_class.resolve.annotations(Anyolite::ExcludeInstanceMethod) + method_source.resolve.annotations(Anyolite::ExcludeInstanceMethod) %}
+        {% all_annotations_exclude_im = crystal_class.resolve.annotations(Anyolite::ExcludeInstanceMethod) + method_source.resolve.annotations(Anyolite::ExcludeInstanceMethod) + crystal_class.resolve.ancestors[-1].resolve.annotations(Anyolite::ExcludeInstanceMethod) %}
         {% annotation_exclude_im = all_annotations_exclude_im.find { |element| element[0].id.stringify == method.name.stringify } %}
+
+        {% all_annotations_include_im = crystal_class.resolve.annotations(Anyolite::IncludeInstanceMethod) + method_source.resolve.annotations(Anyolite::IncludeInstanceMethod) %}
+        {% annotation_include_im = all_annotations_include_im.find { |element| element[0].id.stringify == method.name.stringify } %}
 
         {% all_annotations_specialize_im = crystal_class.resolve.annotations(Anyolite::SpecializeInstanceMethod) + method_source.resolve.annotations(Anyolite::SpecializeInstanceMethod) %}
         {% annotation_specialize_im = all_annotations_specialize_im.find { |element| element[0].id.stringify == method.name.stringify } %}
@@ -130,7 +133,7 @@ module Anyolite
         {% elsif exclusions.includes?(method.name.symbolize) || exclusions.includes?(method.name.stringify) %}
           {% puts "--> Excluding #{crystal_class}::#{method.name} (Exclusion argument)" if verbose %}
         # Exclude methods which were annotated to be excluded
-        {% elsif method.annotation(Anyolite::Exclude) || (annotation_exclude_im) %}
+        {% elsif method.annotation(Anyolite::Exclude) || (annotation_exclude_im && !annotation_include_im && !method.annotation(Anyolite::Include)) %}
           {% puts "--> Excluding #{crystal_class}::#{method.name} (Exclusion annotation)" if verbose %}
         # Exclude methods which are not the specialized methods
         {% elsif has_specialized_method[method.name.stringify] && !(method.annotation(Anyolite::Specialize) || (annotation_specialize_im && (method.args.stringify == annotation_specialize_im[1].stringify || (method.args.stringify == "[]" && annotation_specialize_im[1] == nil)))) %}
