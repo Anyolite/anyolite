@@ -168,8 +168,8 @@ module Anyolite
 
         {% all_annotations_exclude_im = crystal_class.resolve.annotations(Anyolite::ExcludeInstanceMethod) + method_source.resolve.annotations(Anyolite::ExcludeInstanceMethod) %}
         {% if all_annotations_exclude_im.find { |element| element[0].id.stringify == "dup" || element[0].id.stringify == "clone" } %}
-          # TODO: Undef dup in the future
-          # TODO: Define a dummy method which just yields nil or something else
+          Anyolite::RbCore.rb_undef_method({{rb_interpreter}}, Anyolite::RbClassCache.get({{crystal_class}}), "dup")
+          Anyolite::RbCore.rb_undef_method({{rb_interpreter}}, Anyolite::RbClassCache.get({{crystal_class}}), "clone")
         {% else %}
           Anyolite::Macro.add_copy_constructor({{rb_interpreter}}, {{crystal_class}}, {{context}}, {{verbose}})
         {% end %}

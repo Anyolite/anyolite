@@ -213,6 +213,9 @@ module Anyolite
     fun rb_gv_set = mrb_gv_set(rb : State*, name : LibC::Char*, value : RbValue) : Void
     fun rb_gv_get = mrb_gv_get(rb : State*, name : LibC::Char*) : RbValue
 
+    fun rb_undef_method = mrb_undef_method(rb : State*, class_ptr : RClassPtr, name : LibC::Char*) : Void
+    fun rb_undef_class_method = mrb_undef_class_method(rb : State*, class_ptr : RClassPtr, name : LibC::Char*) : Void
+
     fun load_script_from_file(rb : State*, filename : LibC::Char*) : RbValue
     fun execute_script_line(rb : State*, str : LibC::Char*) : RbValue
     fun execute_bytecode(rb : State*, bytecode : UInt8*) : RbValue

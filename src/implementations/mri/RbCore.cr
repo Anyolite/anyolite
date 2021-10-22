@@ -226,6 +226,9 @@ module Anyolite
     fun rb_gv_set = rb_gv_set_helper(rb : State*, name : LibC::Char*, value : RbValue) : Void
     fun rb_gv_get = rb_gv_get_helper(rb : State*, name : LibC::Char*) : RbValue
 
+    fun rb_undef_method = rb_undef_method_helper(rb : State*, class_ptr : RClassPtr, name : LibC::Char*) : Void
+    fun rb_undef_class_method = rb_undef_method_helper(rb : State*, class_ptr : RClassPtr, name : LibC::Char*) : Void
+
     fun load_script_from_file(rb : State*, filename : LibC::Char*) : Void
 
     fun execute_script_line(rb : State*, str : LibC::Char*) : RbValue

@@ -439,6 +439,7 @@ module SomeModule
       end
     end
 
+    @[Anyolite::ExcludeInstanceMethod("dup")]
     class TestChild < Test
       property y : String
       

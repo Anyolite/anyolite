@@ -281,3 +281,9 @@ extern VALUE get_constant(void* rb, const char* name) {
   rb_const_get(rb_cObject, rb_intern(name));
 
 }
+
+extern VALUE rb_undef_method_helper(void* rb, VALUE mod, const char* name) {
+
+  rb_undef_method(mod, name);
+
+}

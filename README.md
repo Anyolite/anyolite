@@ -227,11 +227,20 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 
 ## Upcoming releases
 
-### Version 0.14.1
+### Version 0.15.0
+
+#### Features
+
+* [X] Methods for undefining Ruby methods
+* [ ] Helper methods for specs
+
+#### Breaking changes
+
+* [X] Excluding copy methods manually will undefine them from Ruby
 
 #### Usability
 
-* [ ] Respect exclusions of `dup` and `clone` by letting them return `nil`
+* [X] Respect exclusions of `dup` and `clone`
 
 ### Version 1.0.0
 
