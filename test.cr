@@ -419,6 +419,11 @@ module SomeModule
       213345
     end
 
+    @[Anyolite::WrapWithoutKeywords]
+    def num_test(n : Number)
+      puts n
+    end
+
     def ptr_return_test
       pointerof(@x)
     end

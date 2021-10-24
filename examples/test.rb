@@ -261,6 +261,8 @@ puts a.get_instance_variable(name: "hello")
 a.set_instance_variable_to_int(name: "hello", value: 15667)
 puts a.get_instance_variable(name: "hello")
 
+a.num_test(1.0)
+
 puts "Testing dup..."
 
 a_copy = a.dup

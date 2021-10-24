@@ -23,7 +23,7 @@ module Anyolite
             Anyolite::RbCore::RbBool
           {% elsif type.resolve <= Int || type.resolve <= Pointer %}
             Anyolite::RbCore::RbInt
-          {% elsif type.resolve <= Float %}
+          {% elsif type.resolve <= Float || type.resolve == Number %}
             Anyolite::RbCore::RbFloat
           {% elsif type.resolve <= String %}
             # Should actually never occur due to special handling before this function
