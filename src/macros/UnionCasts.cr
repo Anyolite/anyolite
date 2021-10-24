@@ -51,23 +51,48 @@ module Anyolite
         end
       {% elsif type.resolve == Number %}
         if Anyolite::RbCast.check_for_float({{value}})
-          final_value = Float64.new(Anyolite::RbCast.cast_to_float({{rb}}, {{value}}))
+          begin
+            final_value = Float64.new(Anyolite::RbCast.cast_to_float({{rb}}, {{value}}))
+          rescue OverflowError
+            Anyolite.raise_range_error("Overflow while casting #{Anyolite::RbCast.cast_to_float({{rb}}, {{value}})} to {{type}}.")
+            Float64.new(0.0)
+          end
         end
       {% elsif type.resolve == Int %}
         if Anyolite::RbCast.check_for_fixnum({{value}})
-          final_value = Int64.new(Anyolite::RbCast.cast_to_int({{rb}}, {{value}}))
+          begin
+            final_value = Int64.new(Anyolite::RbCast.cast_to_int({{rb}}, {{value}}))
+          rescue OverflowError
+            Anyolite.raise_range_error("Overflow while casting #{Anyolite::RbCast.cast_to_int({{rb}}, {{value}})} to {{type}}.")
+            Int64.new(0)
+          end
         end
       {% elsif type.resolve <= Int %}
         if Anyolite::RbCast.check_for_fixnum({{value}})
-          final_value = {{type}}.new(Anyolite::RbCast.cast_to_int({{rb}}, {{value}}))
+          begin
+            final_value = {{type}}.new(Anyolite::RbCast.cast_to_int({{rb}}, {{value}}))
+          rescue OverflowError
+            Anyolite.raise_range_error("Overflow while casting #{Anyolite::RbCast.cast_to_int({{rb}}, {{value}})} to {{type}}.")
+            {{type}}.new(0)
+          end
         end
       {% elsif type.resolve == Float %}
         if Anyolite::RbCast.check_for_float({{value}}) || Anyolite::RbCast.check_for_fixnum({{value}})
-          final_value = Float64.new(Anyolite::RbCast.cast_to_float({{rb}}, {{value}}))
+          begin
+            final_value = Float64.new(Anyolite::RbCast.cast_to_float({{rb}}, {{value}}))
+          rescue OverflowError
+            Anyolite.raise_range_error("Overflow while casting #{Anyolite::RbCast.cast_to_int({{rb}}, {{value}})} to {{type}}.")
+            Float64.new(0)
+          end
         end
       {% elsif type.resolve <= Float %}
         if Anyolite::RbCast.check_for_float({{value}}) || Anyolite::RbCast.check_for_fixnum({{value}})
-          final_value = {{type}}.new(Anyolite::RbCast.cast_to_float({{rb}}, {{value}}))
+          begin
+            final_value = {{type}}.new(Anyolite::RbCast.cast_to_float({{rb}}, {{value}}))
+          rescue OverflowError
+            Anyolite.raise_range_error("Overflow while casting #{Anyolite::RbCast.cast_to_int({{rb}}, {{value}})} to {{type}}.")
+            {{type}}.new(0)
+          end
         end
       {% elsif type.resolve <= Char %}
         if Anyolite::RbCast.check_for_string({{value}})

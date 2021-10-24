@@ -236,12 +236,14 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 #### Breaking changes
 
 * [X] Excluding copy methods manually will undefine them from Ruby
+* [X] Checks for overflow when casting numbers
 
 #### Usability
 
 * [X] Anyolite now respects exclusions of `dup` and `clone`
 * [X] Exclude annotations on `Object` will exclude these methods from all classes
 * [X] Include annotations can reverse global exclusions
+* [X] Ruby exceptions instead of Crystal exceptions for casting overflows
 
 ### Version 1.0.0
 
