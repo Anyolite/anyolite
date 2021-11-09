@@ -13,7 +13,7 @@
 <script type="text/javascript" src="../js/doc.js"></script>
 
   <meta name="repository-name" content="anyolite">
-  <title>Anyolite::RbClassCache - anyolite 0.15.0</title>
+  <title>Anyolite::IncludeInstanceMethod - anyolite 0.15.0</title>
   <script type="text/javascript">
     CrystalDocs.base_path = "../";
   </script>
@@ -131,7 +131,7 @@
       
     </li>
   
-  <li class=" " data-id="anyolite/Anyolite/IncludeInstanceMethod" data-name="anyolite::includeinstancemethod">
+  <li class=" current" data-id="anyolite/Anyolite/IncludeInstanceMethod" data-name="anyolite::includeinstancemethod">
       <a href="../Anyolite/IncludeInstanceMethod.html">IncludeInstanceMethod</a>
       
     </li>
@@ -176,7 +176,7 @@
       
     </li>
   
-  <li class=" current" data-id="anyolite/Anyolite/RbClassCache" data-name="anyolite::rbclasscache">
+  <li class=" " data-id="anyolite/Anyolite/RbClassCache" data-name="anyolite::rbclasscache">
       <a href="../Anyolite/RbClassCache.html">RbClassCache</a>
       
     </li>
@@ -325,7 +325,7 @@
 <div class="main-content">
 <h1 class="type-name">
 
-  <span class="kind">module</span> Anyolite::RbClassCache
+  <span class="kind">annotation</span> Anyolite::IncludeInstanceMethod
 
 </h1>
 
@@ -342,7 +342,8 @@
     Overview
   </h2>
 
-  <p>Cache for mruby class and module references</p>
+  <p>Overrides <code><a href="../Anyolite/ExcludeInstanceMethod.html">ExcludeInstanceMethod</a></code> on <code>Object</code>
+the instance method given as the first argument.</p>
 
 
 
@@ -367,8 +368,8 @@
   </h2>
   
     
-      <a href="https://github.com/Anyolite/anyolite/blob/v0.15.0/src/RbClassCache.cr#L3" target="_blank">
-        RbClassCache.cr
+      <a href="https://github.com/Anyolite/anyolite/blob/v0.15.0/src/Main.cr#L669" target="_blank">
+        Main.cr
       </a>
     
     <br/>
@@ -379,48 +380,6 @@
 
 
 
-
-  <h2>
-    <a id="class-method-summary" class="anchor" href="#class-method-summary">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>
-    Class Method Summary
-  </h2>
-  <ul class="list-summary">
-    
-      <li class="entry-summary">
-        <a href="#check%28crystal_class%3AClass%7CRbModule%7CNil%29-class-method" class="signature"><strong>.check</strong>(crystal_class : Class | RbModule | Nil)</a>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#get%28n%3ANil%29-class-method" class="signature"><strong>.get</strong>(n : Nil)</a>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#get%28crystal_class%3AClass%29-class-method" class="signature"><strong>.get</strong>(crystal_class : Class)</a>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#get%28ruby_module%3ARbModule%29-class-method" class="signature"><strong>.get</strong>(ruby_module : RbModule)</a>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#register%28crystal_class%3AClass%2Crb_class%3ARbClass%29-class-method" class="signature"><strong>.register</strong>(crystal_class : Class, rb_class : RbClass)</a>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#register%28crystal_module%3AClass%2Crb_module%3ARbModule%29-class-method" class="signature"><strong>.register</strong>(crystal_module : Class, rb_module : RbModule)</a>
-        
-      </li>
-    
-  </ul>
 
 
 
@@ -434,112 +393,6 @@
 
 
 
-
-  <h2>
-    <a id="class-method-detail" class="anchor" href="#class-method-detail">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>
-    Class Method Detail
-  </h2>
-  
-    <div class="entry-detail" id="check(crystal_class:Class|RbModule|Nil)-class-method">
-      <div class="signature">
-        
-        def self.<strong>check</strong>(crystal_class : Class | <a href="../Anyolite/RbModule.html">RbModule</a> | Nil)
-
-        <a class="method-permalink" href="#check%28crystal_class%3AClass%7CRbModule%7CNil%29-class-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/Anyolite/anyolite/blob/v0.15.0/src/RbClassCache.cr#L30" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="get(n:Nil)-class-method">
-      <div class="signature">
-        
-        def self.<strong>get</strong>(n : Nil)
-
-        <a class="method-permalink" href="#get%28n%3ANil%29-class-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/Anyolite/anyolite/blob/v0.15.0/src/RbClassCache.cr#L14" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="get(crystal_class:Class)-class-method">
-      <div class="signature">
-        
-        def self.<strong>get</strong>(crystal_class : Class)
-
-        <a class="method-permalink" href="#get%28crystal_class%3AClass%29-class-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/Anyolite/anyolite/blob/v0.15.0/src/RbClassCache.cr#L22" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="get(ruby_module:RbModule)-class-method">
-      <div class="signature">
-        
-        def self.<strong>get</strong>(ruby_module : <a href="../Anyolite/RbModule.html">RbModule</a>)
-
-        <a class="method-permalink" href="#get%28ruby_module%3ARbModule%29-class-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/Anyolite/anyolite/blob/v0.15.0/src/RbClassCache.cr#L18" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="register(crystal_class:Class,rb_class:RbClass)-class-method">
-      <div class="signature">
-        
-        def self.<strong>register</strong>(crystal_class : Class, rb_class : <a href="../Anyolite/RbClass.html">RbClass</a>)
-
-        <a class="method-permalink" href="#register%28crystal_class%3AClass%2Crb_class%3ARbClass%29-class-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/Anyolite/anyolite/blob/v0.15.0/src/RbClassCache.cr#L6" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="register(crystal_module:Class,rb_module:RbModule)-class-method">
-      <div class="signature">
-        
-        def self.<strong>register</strong>(crystal_module : Class, rb_module : <a href="../Anyolite/RbModule.html">RbModule</a>)
-
-        <a class="method-permalink" href="#register%28crystal_module%3AClass%2Crb_module%3ARbModule%29-class-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/Anyolite/anyolite/blob/v0.15.0/src/RbClassCache.cr#L10" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
 
 
 
