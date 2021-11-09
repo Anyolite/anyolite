@@ -227,28 +227,6 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 
 ## Upcoming releases
 
-### Version 0.15.0
-
-#### Features
-
-* [X] Methods for undefining Ruby methods
-
-#### Breaking changes
-
-* [X] Excluding copy methods manually will undefine them from Ruby
-* [X] Checks for overflow when casting numbers
-
-#### Usability
-
-* [X] Anyolite now respects exclusions of `dup` and `clone`
-* [X] Instance method exclude annotations on classes or modules will exclude them from all inheriting classes
-* [X] Include annotations can reverse global exclusions
-
-#### Bugfixes
-
-* [X] Ruby exceptions instead of Crystal exceptions for casting overflows
-* [X] Casting to `Number` in mruby produced wrong values
-
 ### Version 1.0.0
 
 This release will mark the first full release of Anyolite, mostly

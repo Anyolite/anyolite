@@ -2,6 +2,28 @@
 
 ## Releases
 
+### Version 0.15.0
+
+#### Features
+
+* Methods for undefining Ruby methods
+
+#### Breaking changes
+
+* Excluding copy methods manually will undefine them from Ruby
+* Checks for overflow when casting numbers
+
+#### Usability
+
+* Anyolite now respects exclusions of `dup` and `clone`
+* Instance method exclude annotations on classes or modules will exclude them from all inheriting classes
+* Include annotations can reverse global exclusions
+
+#### Bugfixes
+
+* Ruby exceptions instead of Crystal exceptions for casting overflows
+* Casting to `Number` in mruby produced wrong values
+
 ### Version 0.14.0
 
 #### Features
