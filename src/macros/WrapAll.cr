@@ -22,7 +22,7 @@ module Anyolite
       {% how_many_times_wrapped = {} of String => UInt32 %}
 
       {% for method, index in method_source.resolve.methods %}
-        {% all_annotations_exclude_im = crystal_class.resolve.annotations(Anyolite::ExcludeInstanceMethod) + method_source.resolve.annotations(Anyolite::ExcludeInstanceMethod) + crystal_class.resolve.ancestors[-1].resolve.annotations(Anyolite::ExcludeInstanceMethod) %}
+        {% all_annotations_exclude_im = crystal_class.resolve.annotations(Anyolite::ExcludeInstanceMethod) + method_source.resolve.annotations(Anyolite::ExcludeInstanceMethod) + crystal_class.resolve.ancestors.map {|ancestor| ancestor.resolve.annotations(Anyolite::ExcludeInstanceMethod)} %}
         {% annotation_exclude_im = all_annotations_exclude_im.find { |element| element[0].id.stringify == method.name.stringify } %}
 
         {% all_annotations_include_im = crystal_class.resolve.annotations(Anyolite::IncludeInstanceMethod) + method_source.resolve.annotations(Anyolite::IncludeInstanceMethod) %}

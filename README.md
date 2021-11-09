@@ -241,7 +241,7 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 #### Usability
 
 * [X] Anyolite now respects exclusions of `dup` and `clone`
-* [X] Exclude annotations on `Object` will exclude these methods from all classes
+* [X] Instance method exclude annotations on classes or modules will exclude them from all inheriting classes
 * [X] Include annotations can reverse global exclusions
 
 #### Bugfixes
