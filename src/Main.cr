@@ -130,7 +130,7 @@ module Anyolite
 
         %block_return_value = Anyolite::RbCore.rb_call_block_with_args(%rb, %rb_block.value, %argc, %argv)
       {% else %}
-        %block_return_value = Anyolite::RbCore.rb_call_block(%rb, %rb_block.value)
+        %block_return_value = Anyolite::RbCore.rb_call_block(%rb, %rb_block.value, Anyolite::RbCast.return_nil)
       {% end %}
 
       {% if cast_to %}
