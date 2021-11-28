@@ -17,7 +17,6 @@ module Anyolite
       # Caches the Ruby script in *filename* directly as bytecode.
       macro load_bytecode_array_from_file(filename)
         {% ary = run("./BytecodeGetter.cr", filename) %}
-        puts "Array size: #{{{ary}}.size}"
         Anyolite::Preloader.add_content({{filename}}, {{ary}}.map(&.to_u8))
       end
 
