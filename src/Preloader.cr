@@ -14,10 +14,22 @@ module Anyolite
         {% end %}
       end
 
+      # Caches the Ruby script in *filename* directly as bytecode.
+      macro load_bytecode_array_from_file(filename)
+        {% ary = run("./BytecodeGetter.cr", filename) %}
+        puts "Array size: #{{{ary}}.size}"
+        Anyolite::Preloader.add_content({{filename}}, {{ary}}.map(&.to_u8))
+      end
+
       # Converts the Ruby script in *filename* to bytecode, which is
       # then stored in *target_filename*.
       macro transform_script_to_bytecode(filename, target_filename)
         {% run("./BytecodeCompiler.cr", filename, target_filename) %}
+      end
+
+      # Converts the Ruby script in *filename* to bytecode.
+      macro transform_script_to_bytecode_string(filename)
+        {% run("./BytecodeGetter.cr", filename) %}
       end
     end
 
@@ -41,11 +53,28 @@ module Anyolite
     # then stored in *target_filename*.
     def self.transform_script_to_bytecode(filename : String, target_filename : String)
       error_code = RbCore.transform_script_to_bytecode(filename, target_filename)
+
       case error_code
         when 1 then raise "Could not load script file #{filename}"
         when 2 then raise "Error when loading script file #{filename}"
         when 3 then raise "Could not write to target file #{target_filename}"
       end
+    end
+
+    # Converts the Ruby script in *filename* to bytecode.
+    def self.transform_script_to_bytecode_array(filename : String)
+      container = RbCore.transform_script_to_bytecode_container(filename)
+
+      case container.error_code
+        when 1 then raise "Could not load script file #{filename}"
+        when 2 then raise "Error when loading script file #{filename}"
+      end
+
+      safe_result = String.new(container.content, container.size)
+
+      RbCore.free_bytecode_container(container)
+
+      safe_result.bytes
     end
   end
 end

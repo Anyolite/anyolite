@@ -80,6 +80,13 @@ module Anyolite
       rest : RbValue*
     end
 
+    struct BytecodeContainer
+      content : UInt8*
+      size : LibC::SizeT
+      error_code : LibC::Int
+      result : LibC::Int
+    end
+
     fun rb_open = mrb_open : State*
     fun rb_close = mrb_close(rb : State*)
 
@@ -222,5 +229,7 @@ module Anyolite
     fun load_bytecode_from_file(rb : State*, filename : LibC::Char*) : RbValue
 
     fun transform_script_to_bytecode(filename : LibC::Char*, target_filename : LibC::Char*) : LibC::Int
+    fun transform_script_to_bytecode_container(filename : LibC::Char*) : BytecodeContainer
+    fun free_bytecode_container(container : BytecodeContainer) : Void
   end
 end

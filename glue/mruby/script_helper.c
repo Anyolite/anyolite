@@ -3,6 +3,8 @@
 #include <mruby/dump.h>
 #include <mruby/proc.h>
 
+#include <stdlib.h>
+
 extern mrb_value load_script_from_file(mrb_state* mrb, const char* filename) {
 
     mrbc_context* new_context = mrbc_context_new(mrb);
@@ -114,5 +116,65 @@ extern int transform_script_to_bytecode(const char* filename, const char* target
     mrb_free(mrb, new_context);
 
     return 0;
+
+}
+
+typedef struct bytecode_container {
+
+    uint8_t* content;
+    size_t size;
+    int error_code;
+    int result;
+
+} bytecode_container_t;
+
+extern bytecode_container_t transform_script_to_bytecode_container(const char* filename) {
+
+    mrb_state *mrb = mrb_open_core(NULL, NULL);
+
+    mrbc_context* new_context = mrbc_context_new(mrb);
+    new_context->no_exec = TRUE;
+    mrbc_filename(mrb, new_context, filename);
+
+    bytecode_container_t container = {NULL, 0, 0, 0};
+
+    FILE* file = fopen(filename, "rb");
+
+    if(!file) {
+
+        container.error_code = 1;
+        return container;
+
+    }
+
+    mrb_value result = mrb_load_file_cxt(mrb, file, new_context);
+
+    if (mrb_undef_p(result)) {
+
+        container.error_code = 2;
+        return container;
+
+    }
+
+    if(file) fclose(file);
+
+    const mrb_irep *irep = mrb_proc_ptr(result)->body.irep;
+
+    uint8_t *bin = NULL;
+    size_t bin_size = 0;
+
+    container.result = mrb_dump_irep(mrb, irep, 4, &bin, &bin_size);
+
+    container.content = (uint8_t*) malloc(bin_size * sizeof(uint8_t));
+    memcpy(container.content, bin, bin_size);
+    container.size = bin_size;
+
+    return container;
+
+}
+
+extern void free_bytecode_container(bytecode_container_t container) {
+
+    free(container.content);
 
 }
