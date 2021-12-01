@@ -86,14 +86,15 @@ end
 
 task :build_ruby => [:load_config] do
     temp_path = Dir.pwd
+    temp_rb_config_path = get_value("ANYOLITE_RB_CONFIG_RELATIVE_PATH", Dir.pwd)
 
     if $config.implementation == "mruby"
         if ANYOLITE_COMPILER == :msvc
-            system "cd #{$config.rb_dir}/#{$config.implementation} & ruby minirake MRUBY_BUILD_DIR=\"#{temp_path}/#{$config.build_path}/#{$config.implementation}\" MRUBY_CONFIG=\"#{temp_path}/#{$config.rb_config}\""
+            system "cd #{$config.rb_dir}/#{$config.implementation} & ruby minirake MRUBY_BUILD_DIR=\"#{temp_path}/#{$config.build_path}/#{$config.implementation}\" MRUBY_CONFIG=\"#{temp_rb_config_path}/#{$config.rb_config}\""
         elsif ANYOLITE_COMPILER == :gcc
-            system "cd #{$config.rb_dir}/#{$config.implementation}; ruby minirake MRUBY_BUILD_DIR=\"#{temp_path}/#{$config.build_path}/#{$config.implementation}\" MRUBY_CONFIG=\"#{temp_path}/#{$config.rb_config}\""
+            system "cd #{$config.rb_dir}/#{$config.implementation}; ruby minirake MRUBY_BUILD_DIR=\"#{temp_path}/#{$config.build_path}/#{$config.implementation}\" MRUBY_CONFIG=\"#{temp_rb_config_path}/#{$config.rb_config}\""
         else
-            system "cd #{$config.rb_dir}/#{$config.implementation}; ruby minirake MRUBY_BUILD_DIR=\"#{temp_path}/#{$config.build_path}/#{$config.implementation}\" MRUBY_CONFIG=\"#{temp_path}/#{$config.rb_config}\""
+            system "cd #{$config.rb_dir}/#{$config.implementation}; ruby minirake MRUBY_BUILD_DIR=\"#{temp_path}/#{$config.build_path}/#{$config.implementation}\" MRUBY_CONFIG=\"#{temp_rb_config_path}/#{$config.rb_config}\""
         end
     elsif $config.implementation == "mri"
         if ANYOLITE_COMPILER == :msvc
@@ -149,7 +150,9 @@ task :build_glue => [:load_config] do
 end
 
 task :clean => [:load_config] do
+    temp_path = get_value("ANYOLITE_RB_CONFIG_RELATIVE_PATH", Dir.pwd)
+
     FileUtils.remove_dir($config.rb_dir, force: true)
     FileUtils.remove_dir($config.build_path, force: true)
-    FileUtils.remove_entry($config.rb_config + ".lock", force: true)
+    FileUtils.remove_entry(temp_path + "/" + $config.rb_config + ".lock", force: true)
 end
