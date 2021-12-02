@@ -234,6 +234,10 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 * [X] Added option to include bytecode as an array at compiletime
 * [X] Added environment variable for changing the mruby config path
 
+#### Usability
+
+* [X] Added more debug information
+
 #### Bugfixes
 
 * [X] Fixed argument error for block methods without arguments

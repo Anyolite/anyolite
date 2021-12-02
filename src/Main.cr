@@ -41,7 +41,7 @@ module Anyolite
         c
       else
         # This should not be called theoretically
-        raise("Content of struct wrapper is undefined!")
+        raise("Content of struct wrapper for #{T} is undefined!")
       end
     end
 
