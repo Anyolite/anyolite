@@ -260,6 +260,7 @@ Anyolite are already implemented.
 
 * [ ] Crystal specs for testing
 * [ ] Documentation of all relevant features and wrappers
+* [ ] Automated generation of Ruby documentations for wrapped functions
 
 #### Configuration options
 
