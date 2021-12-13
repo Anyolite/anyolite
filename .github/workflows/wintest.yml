@@ -15,6 +15,9 @@ jobs:
 
     steps:
     - uses: actions/setup-ruby@v1
+    - uses: microsoft/setup-msbuild@v1.1
+    - uses: seanmiddleditch/gha-setup-vsdevenv@master
+     
     - name: Download source
       uses: actions/checkout@v2
     - name: Set up environment
