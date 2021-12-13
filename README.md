@@ -241,6 +241,7 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 #### Bugfixes
 
 * [X] Fixed argument error for block methods without arguments
+* [X] Fixed build error on Windows while running Github Actions
 
 ### Version 1.0.0
 
