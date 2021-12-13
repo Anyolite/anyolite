@@ -21,12 +21,9 @@ jobs:
     - name: Download source
       uses: actions/checkout@v2
     - name: Install Crystal
-      uses: oprypin/install-crystal@v1
+      uses: crystal-lang/install-crystal@v1
       with:
         crystal: nightly
-    - name: Set up environment
-      run: |
-        echo "CRYSTAL_PATH=$(pwd)\..;${env:CRYSTAL_PATH}" >>${env:GITHUB_ENV}
     - name: Build shard
       run: rake build_shard
     - name: Test directories
