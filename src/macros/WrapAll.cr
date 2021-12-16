@@ -6,6 +6,18 @@ module Anyolite
 
       {% method_source = other_source ? other_source : crystal_class %}
 
+      {% default_optional_args_to_keyword_args = false %}
+
+      {% if !crystal_class.resolve.annotations(Anyolite::DefaultOptionalArgsToKeywordArgs).empty? %}
+        {% default_optional_args_to_keyword_args = true %}
+      {% else %}
+        {% for class_ancestor in crystal_class.resolve.ancestors %}
+          {% if !class_ancestor.resolve.annotations(Anyolite::DefaultOptionalArgsToKeywordArgs).empty? %}
+            {% default_optional_args_to_keyword_args = true %}
+          {% end %}
+        {% end %}
+      {% end %}
+
       {% for method in method_source.resolve.methods %}
         {% all_annotations_specialize_im = crystal_class.resolve.annotations(Anyolite::SpecializeInstanceMethod) + method_source.resolve.annotations(Anyolite::SpecializeInstanceMethod) %}
         {% annotation_specialize_im = all_annotations_specialize_im.find { |element| element[0].stringify == method.name.stringify || element[0] == method.name.stringify } %}
@@ -90,6 +102,8 @@ module Anyolite
           {% without_keywords = method.annotation(Anyolite::WrapWithoutKeywords)[0] ? method.annotation(Anyolite::WrapWithoutKeywords)[0] : -1 %}
         {% elsif annotation_without_keyword_im %}
           {% without_keywords = annotation_without_keyword_im[1] ? annotation_without_keyword_im[1] : -1 %}
+        {% elsif default_optional_args_to_keyword_args %}
+          {% without_keywords = -2 %}
         {% end %}
 
         {% return_nil = false %}
@@ -201,6 +215,18 @@ module Anyolite
 
       {% how_many_times_wrapped = {} of String => UInt32 %}
 
+      {% default_optional_args_to_keyword_args = false %}
+
+      {% if !crystal_class.resolve.annotations(Anyolite::DefaultOptionalArgsToKeywordArgs).empty? %}
+        {% default_optional_args_to_keyword_args = true %}
+      {% else %}
+        {% for class_ancestor in crystal_class.resolve.ancestors %}
+          {% if !class_ancestor.resolve.annotations(Anyolite::DefaultOptionalArgsToKeywordArgs).empty? %}
+            {% default_optional_args_to_keyword_args = true %}
+          {% end %}
+        {% end %}
+      {% end %}
+
       # TODO: Replace all im here with cm
       {% for method, index in crystal_class.resolve.class.methods %}
         {% all_annotations_exclude_im = crystal_class.resolve.annotations(Anyolite::ExcludeClassMethod) %}
@@ -268,6 +294,8 @@ module Anyolite
           {% without_keywords = method.annotation(Anyolite::WrapWithoutKeywords)[0] ? method.annotation(Anyolite::WrapWithoutKeywords)[0] : -1 %}
         {% elsif annotation_without_keyword_im %}
           {% without_keywords = annotation_without_keyword_im[1] ? annotation_without_keyword_im[1] : -1 %}
+        {% elsif default_optional_args_to_keyword_args %}
+          {% without_keywords = -2 %}
         {% end %}
 
         {% return_nil = false %}
