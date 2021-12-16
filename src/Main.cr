@@ -775,6 +775,14 @@ module Anyolite
   # or similar was used.
   annotation NoKeywordArgs; end
 
+  # All methods of the respective class have their required arguments
+  # wrapped as regular arguments and their optional arguments wrapped
+  # as keyword arguments.
+  # 
+  # The annotation can be overwritten with the respective 
+  # `WrapWithoutKeywords` annotations for specific methods.
+  annotation DefaultOptionalArgsToKeywordArgs; end
+
   # Wraps a whole class structure under a module into mruby.
   #
   # The `Class` *crystal_class* will be integrated into the `RbInterpreter` *rb_interpreter*,
