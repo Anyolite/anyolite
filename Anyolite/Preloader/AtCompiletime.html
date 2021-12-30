@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8" />
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="generator" content="Crystal Docs 1.2.0">
-<meta name="crystal_docs.project_version" content="0.15.0">
+<meta name="generator" content="Crystal Docs 1.2.2">
+<meta name="crystal_docs.project_version" content="0.16.0">
 <meta name="crystal_docs.project_name" content="anyolite">
 
 
@@ -13,7 +13,7 @@
 <script type="text/javascript" src="../../js/doc.js"></script>
 
   <meta name="repository-name" content="anyolite">
-  <title>Anyolite::Preloader::AtCompiletime - anyolite 0.15.0</title>
+  <title>Anyolite::Preloader::AtCompiletime - anyolite 0.16.0</title>
   <script type="text/javascript">
     CrystalDocs.base_path = "../../";
   </script>
@@ -39,7 +39,7 @@
       </h1>
 
       <span class="project-version">
-        0.15.0
+        0.16.0
       </span>
     </div>
   </div>
@@ -68,6 +68,11 @@
   
   <li class=" " data-id="anyolite/Anyolite/AddBlockArgInstanceMethod" data-name="anyolite::addblockarginstancemethod">
       <a href="../../Anyolite/AddBlockArgInstanceMethod.html">AddBlockArgInstanceMethod</a>
+      
+    </li>
+  
+  <li class=" " data-id="anyolite/Anyolite/DefaultOptionalArgsToKeywordArgs" data-name="anyolite::defaultoptionalargstokeywordargs">
+      <a href="../../Anyolite/DefaultOptionalArgsToKeywordArgs.html">DefaultOptionalArgsToKeywordArgs</a>
       
     </li>
   
@@ -356,7 +361,7 @@
   </h2>
   
     
-      <a href="https://github.com/Anyolite/anyolite/blob/v0.15.0/src/Preloader.cr#L5" target="_blank">
+      <a href="https://github.com/Anyolite/anyolite/blob/v0.16.0/src/Preloader.cr#L5" target="_blank">
         Preloader.cr
       </a>
     
@@ -384,6 +389,13 @@
   <ul class="list-summary">
     
       <li class="entry-summary">
+        <a href="#load_bytecode_array_from_file%28filename%29-macro" class="signature"><strong>load_bytecode_array_from_file</strong>(filename)</a>
+        
+          <div class="summary"><p>Caches the Ruby script in <em>filename</em> directly as bytecode.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
         <a href="#load_bytecode_file%28filename%29-macro" class="signature"><strong>load_bytecode_file</strong>(filename)</a>
         
           <div class="summary"><p>Caches the bytecode from <em>filename</em>, so it is automatically included  into the final application.</p></div>
@@ -394,6 +406,13 @@
         <a href="#transform_script_to_bytecode%28filename%2Ctarget_filename%29-macro" class="signature"><strong>transform_script_to_bytecode</strong>(filename, target_filename)</a>
         
           <div class="summary"><p>Converts the Ruby script in <em>filename</em> to bytecode, which is then stored in <em>target_filename</em>.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#transform_script_to_bytecode_string%28filename%29-macro" class="signature"><strong>transform_script_to_bytecode_string</strong>(filename)</a>
+        
+          <div class="summary"><p>Converts the Ruby script in <em>filename</em> to bytecode.</p></div>
         
       </li>
     
@@ -421,6 +440,27 @@
     Macro Detail
   </h2>
   
+    <div class="entry-detail" id="load_bytecode_array_from_file(filename)-macro">
+      <div class="signature">
+        
+        macro <strong>load_bytecode_array_from_file</strong>(filename)
+
+        <a class="method-permalink" href="#load_bytecode_array_from_file%28filename%29-macro">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Caches the Ruby script in <em>filename</em> directly as bytecode.</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.16.0/src/Preloader.cr#L18" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
     <div class="entry-detail" id="load_bytecode_file(filename)-macro">
       <div class="signature">
         
@@ -438,7 +478,7 @@ into the final application.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/Anyolite/anyolite/blob/v0.15.0/src/Preloader.cr#L8" target="_blank">View source</a>]
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.16.0/src/Preloader.cr#L8" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -460,7 +500,28 @@ then stored in <em>target_filename</em>.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/Anyolite/anyolite/blob/v0.15.0/src/Preloader.cr#L19" target="_blank">View source</a>]
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.16.0/src/Preloader.cr#L25" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="transform_script_to_bytecode_string(filename)-macro">
+      <div class="signature">
+        
+        macro <strong>transform_script_to_bytecode_string</strong>(filename)
+
+        <a class="method-permalink" href="#transform_script_to_bytecode_string%28filename%29-macro">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Converts the Ruby script in <em>filename</em> to bytecode.</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/Anyolite/anyolite/blob/v0.16.0/src/Preloader.cr#L30" target="_blank">View source</a>]
         
       </div>
     </div>

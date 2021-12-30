@@ -13,7 +13,7 @@
 <script type="text/javascript" src="../js/doc.js"></script>
 
   <meta name="repository-name" content="anyolite">
-  <title>Anyolite::AddBlockArgInstanceMethod - anyolite 0.16.0</title>
+  <title>Anyolite::DefaultOptionalArgsToKeywordArgs - anyolite 0.16.0</title>
   <script type="text/javascript">
     CrystalDocs.base_path = "../";
   </script>
@@ -66,12 +66,12 @@
       
     </li>
   
-  <li class=" current" data-id="anyolite/Anyolite/AddBlockArgInstanceMethod" data-name="anyolite::addblockarginstancemethod">
+  <li class=" " data-id="anyolite/Anyolite/AddBlockArgInstanceMethod" data-name="anyolite::addblockarginstancemethod">
       <a href="../Anyolite/AddBlockArgInstanceMethod.html">AddBlockArgInstanceMethod</a>
       
     </li>
   
-  <li class=" " data-id="anyolite/Anyolite/DefaultOptionalArgsToKeywordArgs" data-name="anyolite::defaultoptionalargstokeywordargs">
+  <li class=" current" data-id="anyolite/Anyolite/DefaultOptionalArgsToKeywordArgs" data-name="anyolite::defaultoptionalargstokeywordargs">
       <a href="../Anyolite/DefaultOptionalArgsToKeywordArgs.html">DefaultOptionalArgsToKeywordArgs</a>
       
     </li>
@@ -330,7 +330,7 @@
 <div class="main-content">
 <h1 class="type-name">
 
-  <span class="kind">annotation</span> Anyolite::AddBlockArgInstanceMethod
+  <span class="kind">annotation</span> Anyolite::DefaultOptionalArgsToKeywordArgs
 
 </h1>
 
@@ -347,10 +347,11 @@
     Overview
   </h2>
 
-  <p>Specifies the instance method given as the first argument
-to require a block argument with the second argument
-being the number of values yielded and the third argument the return
-type of the block.</p>
+  <p>All methods of the respective class have their required arguments
+wrapped as regular arguments and their optional arguments wrapped
+as keyword arguments.</p>
+<p>The annotation can be overwritten with the respective
+<code><a href="../Anyolite/WrapWithoutKeywords.html">WrapWithoutKeywords</a></code> annotations for specific methods.</p>
 
 
 
@@ -375,7 +376,7 @@ type of the block.</p>
   </h2>
   
     
-      <a href="https://github.com/Anyolite/anyolite/blob/v0.16.0/src/Main.cr#L745" target="_blank">
+      <a href="https://github.com/Anyolite/anyolite/blob/v0.16.0/src/Main.cr#L784" target="_blank">
         Main.cr
       </a>
     
