@@ -219,9 +219,11 @@ module SomeModule
     end
 
     # TODO: This method does not work in MRI for some encoding reason - fix this if possible
+    # Also emojis in method names seem not to work in recent Crystal releases :(
 
+    @[Anyolite::Rename("happy😀emoji😀test😀😀😀")]
     {% unless flag?(:anyolite_implementation_ruby_3) %}
-      def happy😀emoji😀test😀😀😀(arg : Int32)
+      def happy_emoji_test(arg : Int32)
         puts "😀 for number #{arg}"
       end
     {% end %}
