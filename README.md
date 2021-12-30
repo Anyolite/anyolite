@@ -227,23 +227,6 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 
 ## Upcoming releases
 
-### Version 0.16.0
-
-#### Features
-
-* [X] Added annotation `DefaultOptionalArgsToKeywordArgs`
-* [X] Added option to include bytecode as an array at compiletime
-* [X] Added environment variable for changing the mruby config path
-
-#### Usability
-
-* [X] Added more debug information
-
-#### Bugfixes
-
-* [X] Fixed argument error for block methods without arguments
-* [X] Fixed build error on Windows while running Github Actions
-
 ### Version 1.0.0
 
 This release will mark the first full release of Anyolite, mostly

@@ -2,6 +2,24 @@
 
 ## Releases
 
+
+### Version 0.16.0
+
+#### Features
+
+* Added annotation `DefaultOptionalArgsToKeywordArgs`
+* Added option to include bytecode as an array at compiletime
+* Added environment variable for changing the mruby config path
+
+#### Usability
+
+* Added more debug information
+
+#### Bugfixes
+
+* Fixed argument error for block methods without arguments
+* Fixed build error on Windows while running Github Actions
+
 ### Version 0.15.0
 
 #### Features

@@ -104,7 +104,7 @@ puts "Results of complicated method: #{a.complicated_method(99, 0.999, 0.9, arg_
 puts "Results of complicated method: #{a.complicated_method(100, 0.000, 1.0)}"
 puts "Results of complicated method: #{a.complicated_method(0, 0.0, 0.0, TestModule::Test::GTIntInt.new(u: 1, v: 1))}"
 
-a.happy😀emoji😀test😀😀😀(1234567) unless a.inside_mri?
+a.happy😀emoji😀test😀😀😀(arg: 1234567) unless a.inside_mri?
 
 same_as_a = TestModule::Test.new(x: a.x)
 
