@@ -2,6 +2,11 @@
 
 ## Releases
 
+### Version 0.16.1
+
+#### Bugfixes
+
+* Fixed typo in keyword module function wrappers
 
 ### Version 0.16.0
 
