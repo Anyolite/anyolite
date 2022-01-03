@@ -18,181 +18,185 @@ module Anyolite
         {% end %}
       {% end %}
 
-      {% for method in method_source.resolve.methods %}
-        {% all_annotations_specialize_im = crystal_class.resolve.annotations(Anyolite::SpecializeInstanceMethod) + method_source.resolve.annotations(Anyolite::SpecializeInstanceMethod) %}
-        {% annotation_specialize_im = all_annotations_specialize_im.find { |element| element[0].stringify == method.name.stringify || element[0] == method.name.stringify } %}
+      {% if !method_source.resolve? %}
+        {% puts "> Skipping #{method_source} due to private visibility." if verbose %}
+      {% else %}
+        {% for method in method_source.resolve.methods %}
+          {% all_annotations_specialize_im = crystal_class.resolve.annotations(Anyolite::SpecializeInstanceMethod) + method_source.resolve.annotations(Anyolite::SpecializeInstanceMethod) %}
+          {% annotation_specialize_im = all_annotations_specialize_im.find { |element| element[0].stringify == method.name.stringify || element[0] == method.name.stringify } %}
 
-        {% if method.annotation(Anyolite::Specialize) %}
-          {% has_specialized_method[method.name.stringify] = true %}
+          {% if method.annotation(Anyolite::Specialize) %}
+            {% has_specialized_method[method.name.stringify] = true %}
+          {% end %}
+
+          {% if annotation_specialize_im %}
+            {% has_specialized_method[annotation_specialize_im[0].id.stringify] = true %}
+          {% end %}
         {% end %}
 
-        {% if annotation_specialize_im %}
-          {% has_specialized_method[annotation_specialize_im[0].id.stringify] = true %}
+        {% how_many_times_wrapped = {} of String => UInt32 %}
+
+        {% for method, index in method_source.resolve.methods %}
+          {% all_annotations_exclude_im = crystal_class.resolve.annotations(Anyolite::ExcludeInstanceMethod) + method_source.resolve.annotations(Anyolite::ExcludeInstanceMethod) + crystal_class.resolve.ancestors.map {|ancestor| ancestor.resolve.annotations(Anyolite::ExcludeInstanceMethod)} %}
+          {% annotation_exclude_im = all_annotations_exclude_im.find { |element| element[0].id.stringify == method.name.stringify } %}
+
+          {% all_annotations_include_im = crystal_class.resolve.annotations(Anyolite::IncludeInstanceMethod) + method_source.resolve.annotations(Anyolite::IncludeInstanceMethod) %}
+          {% annotation_include_im = all_annotations_include_im.find { |element| element[0].id.stringify == method.name.stringify } %}
+
+          {% all_annotations_specialize_im = crystal_class.resolve.annotations(Anyolite::SpecializeInstanceMethod) + method_source.resolve.annotations(Anyolite::SpecializeInstanceMethod) %}
+          {% annotation_specialize_im = all_annotations_specialize_im.find { |element| element[0].id.stringify == method.name.stringify } %}
+
+          {% all_annotations_rename_im = crystal_class.resolve.annotations(Anyolite::RenameInstanceMethod) + method_source.resolve.annotations(Anyolite::RenameInstanceMethod) %}
+          {% annotation_rename_im = all_annotations_rename_im.find { |element| element[0].id.stringify == method.name.stringify } %}
+
+          {% all_annotations_without_keywords_im = crystal_class.resolve.annotations(Anyolite::WrapWithoutKeywordsInstanceMethod) + method_source.resolve.annotations(Anyolite::WrapWithoutKeywordsInstanceMethod) %}
+          {% annotation_without_keyword_im = all_annotations_without_keywords_im.find { |element| element[0].id.stringify == method.name.stringify } %}
+
+          {% all_annotations_return_nil_im = crystal_class.resolve.annotations(Anyolite::ReturnNilInstanceMethod) + method_source.resolve.annotations(Anyolite::ReturnNilInstanceMethod) %}
+          {% annotation_return_nil_im = all_annotations_return_nil_im.find { |element| element[0].id.stringify == method.name.stringify } %}
+
+          {% all_annotations_add_block_arg_im = crystal_class.resolve.annotations(Anyolite::AddBlockArgInstanceMethod) + method_source.resolve.annotations(Anyolite::AddBlockArgInstanceMethod) %}
+          {% annotation_add_block_arg_im = all_annotations_add_block_arg_im.find { |element| element[0].id.stringify == method.name.stringify } %}
+
+          {% all_annotations_store_block_arg_im = crystal_class.resolve.annotations(Anyolite::StoreBlockArgInstanceMethod) + method_source.resolve.annotations(Anyolite::StoreBlockArgInstanceMethod) %}
+          {% annotation_store_block_arg_im = all_annotations_store_block_arg_im.find { |element| element[0].id.stringify == method.name.stringify } %}
+
+          {% all_annotations_force_keyword_arg_im = crystal_class.resolve.annotations(Anyolite::ForceKeywordArgInstanceMethod) + method_source.resolve.annotations(Anyolite::ForceKeywordArgInstanceMethod) %}
+          {% annotation_force_keyword_arg_im = all_annotations_force_keyword_arg_im.find { |element| element[0].id.stringify == method.name.stringify } %}
+
+          {% if crystal_class.resolve.annotation(Anyolite::NoKeywordArgs) || method_source.resolve.annotation(Anyolite::NoKeywordArgs) %}
+            {% no_keyword_args = true %}
+          {% else %}
+            {% no_keyword_args = false %}
+          {% end %}
+
+          {% if method.annotation(Anyolite::Rename) %}
+            {% ruby_name = method.annotation(Anyolite::Rename)[0].id %}
+          {% elsif annotation_rename_im && method.name.stringify == annotation_rename_im[0].stringify %}
+            {% ruby_name = annotation_rename_im[1].id %}
+          {% else %}
+            {% ruby_name = method.name %}
+          {% end %}
+
+          {% if method.annotation(Anyolite::AddBlockArg) %}
+            {% block_arg_number = method.annotation(Anyolite::AddBlockArg)[0] %}
+            {% block_return_type = method.annotation(Anyolite::AddBlockArg)[1] %}
+          {% elsif annotation_add_block_arg_im && method.name.stringify == annotation_add_block_arg_im[0].stringify %}
+            {% block_arg_number = annotation_add_block_arg_im[1] %}
+            {% block_return_type = annotation_add_block_arg_im[2] %}
+          {% else %}
+            {% block_arg_number = nil %}
+            {% block_return_type = nil %}
+          {% end %}
+
+          {% added_keyword_args = nil %}
+
+          {% if method.annotation(Anyolite::Specialize) && method.annotation(Anyolite::Specialize)[0] %}
+            {% added_keyword_args = method.annotation(Anyolite::Specialize)[0] %}
+          {% end %}
+
+          {% if annotation_specialize_im && (method.args.stringify == annotation_specialize_im[1].stringify || (method.args.stringify == "[]" && annotation_specialize_im[1] == nil)) %}
+            {% added_keyword_args = annotation_specialize_im[2] %}
+          {% end %}
+
+          {% without_keywords = false %}
+
+          {% if method.annotation(Anyolite::WrapWithoutKeywords) %}
+            {% without_keywords = method.annotation(Anyolite::WrapWithoutKeywords)[0] ? method.annotation(Anyolite::WrapWithoutKeywords)[0] : -1 %}
+          {% elsif annotation_without_keyword_im %}
+            {% without_keywords = annotation_without_keyword_im[1] ? annotation_without_keyword_im[1] : -1 %}
+          {% elsif default_optional_args_to_keyword_args %}
+            {% without_keywords = -2 %}
+          {% end %}
+
+          {% return_nil = false %}
+          {% if method.annotation(Anyolite::ReturnNil) || (annotation_return_nil_im) %}
+            {% return_nil = true %}
+          {% end %}
+
+          {% store_block_arg = false %}
+          {% if method.annotation(Anyolite::StoreBlockArg) || (annotation_store_block_arg_im) %}
+            {% store_block_arg = true %}
+          {% end %}
+
+          {% force_keyword_arg = false %}
+          {% if method.annotation(Anyolite::ForceKeywordArg) || (annotation_force_keyword_arg_im) %}
+            {% force_keyword_arg = true %}
+          {% end %}
+
+          {% puts "> Processing instance method #{crystal_class}::#{method.name} to #{ruby_name}\n--> Args: #{method.args}" if verbose %}
+
+          {% if method.accepts_block? %}
+            {% puts "--> Block arg possible for #{crystal_class}::#{method.name}" if verbose %}
+          {% end %}
+
+          # Ignore private and protected methods (can't be called from outside, they'd need to be wrapped for this to work)
+          {% if method.name == "dup" || method.name == "clone" %}
+            {% puts "--> Excluding #{crystal_class}::#{method.name} (Exclusion due to copy property)" if verbose %}
+          {% elsif crystal_class.resolve.abstract? && method.name == "initialize" %}
+            {% puts "--> Excluding #{crystal_class}::#{method.name} (Exclusion due to abstract class)" if verbose %}
+          {% elsif method.visibility != :public && method.name != "initialize" %}
+            {% puts "--> Excluding #{crystal_class}::#{method.name} (Exclusion due to visibility)" if verbose %}
+          {% elsif crystal_class != method_source && (later_ancestors ? later_ancestors + [crystal_class] : [crystal_class]).find{|later_ancestor| later_ancestor.resolve? ? later_ancestor.resolve.methods.find{|orig_methods| orig_methods.name == method.name} : [] of Def} %}
+            {% puts "--> Excluding #{crystal_class}::#{method.name} (Exclusion due to finalization)" if verbose %}
+          # Ignore rb hooks, to_unsafe and finalize (unless specialized, but this is not recommended)
+          {% elsif (method.name.starts_with?("rb_") || method.name == "finalize" || method.name == "to_unsafe") && !has_specialized_method[method.name.stringify] %}
+            {% puts "--> Excluding #{crystal_class}::#{method.name} (Exclusion by default)" if verbose %}
+          # These methods are a bit tricky and technically require an argument, but usually they are called without one, so we just do it here, too
+          {% elsif method.name == "inspect" || method.name == "to_s" || method.name == "hash" %}
+            Anyolite::Macro.wrap_method_index({{rb_interpreter}}, {{crystal_class}}, {{index}}, "{{ruby_name}}", without_keywords: {{without_keywords || (no_keyword_args && !force_keyword_arg)}}, added_keyword_args: [] of NoReturn, context: {{context}}, return_nil: {{return_nil}}, block_arg_number: {{block_arg_number}}, block_return_type: {{block_return_type}}, store_block_arg: {{store_block_arg}}, other_source: {{other_source}})
+            {% how_many_times_wrapped[ruby_name.stringify] = how_many_times_wrapped[ruby_name.stringify] ? how_many_times_wrapped[ruby_name.stringify] + 1 : 1 %} 
+          # Exclude methods if given as arguments
+          {% elsif exclusions.includes?(method.name.symbolize) || exclusions.includes?(method.name.stringify) %}
+            {% puts "--> Excluding #{crystal_class}::#{method.name} (Exclusion argument)" if verbose %}
+          # Exclude methods which were annotated to be excluded
+          {% elsif method.annotation(Anyolite::Exclude) || (annotation_exclude_im && !annotation_include_im && !method.annotation(Anyolite::Include)) %}
+            {% puts "--> Excluding #{crystal_class}::#{method.name} (Exclusion annotation)" if verbose %}
+          # Exclude methods which are not the specialized methods
+          {% elsif has_specialized_method[method.name.stringify] && !(method.annotation(Anyolite::Specialize) || (annotation_specialize_im && (method.args.stringify == annotation_specialize_im[1].stringify || (method.args.stringify == "[]" && annotation_specialize_im[1] == nil)))) %}
+            {% puts "--> Excluding #{crystal_class}::#{method.name} #{method.args} (Specialization)" if verbose %}
+          # Handle operator methods (including setters) by just transferring the original name into the operator
+          # TODO: This might still be a source for potential bugs, so this code might need some reworking in the future
+          {% elsif method.name[-1..-1] =~ /\W/ %}
+            {% operator = ruby_name %}
+
+            Anyolite::Macro.wrap_method_index({{rb_interpreter}}, {{crystal_class}}, {{index}}, "{{ruby_name}}", operator: "{{operator}}", without_keywords: {{force_keyword_arg ? false : -1}}, added_keyword_args: {{added_keyword_args}}, context: {{context}}, return_nil: {{return_nil}}, block_arg_number: {{block_arg_number}}, block_return_type: {{block_return_type}}, store_block_arg: {{store_block_arg}}, other_source: {{other_source}})
+            {% how_many_times_wrapped[ruby_name.stringify] = how_many_times_wrapped[ruby_name.stringify] ? how_many_times_wrapped[ruby_name.stringify] + 1 : 1 %}
+          # Handle constructors
+          {% elsif method.name == "initialize" && use_enum_constructor == false %}
+            Anyolite::Macro.wrap_method_index({{rb_interpreter}}, {{crystal_class}}, {{index}}, "{{ruby_name}}", is_constructor: true, without_keywords: {{without_keywords || (no_keyword_args && !force_keyword_arg)}}, added_keyword_args: {{added_keyword_args}}, context: {{context}}, return_nil: {{return_nil}}, block_arg_number: {{block_arg_number}}, block_return_type: {{block_return_type}}, store_block_arg: {{store_block_arg}}, other_source: {{other_source}})
+            {% how_many_times_wrapped[ruby_name.stringify] = how_many_times_wrapped[ruby_name.stringify] ? how_many_times_wrapped[ruby_name.stringify] + 1 : 1 %}
+          # Handle other instance methods
+          {% else %}
+            Anyolite::Macro.wrap_method_index({{rb_interpreter}}, {{crystal_class}}, {{index}}, "{{ruby_name}}", without_keywords: {{without_keywords || (no_keyword_args && !force_keyword_arg)}}, added_keyword_args: {{added_keyword_args}}, context: {{context}}, return_nil: {{return_nil}}, block_arg_number: {{block_arg_number}}, block_return_type: {{block_return_type}}, store_block_arg: {{store_block_arg}}, other_source: {{other_source}})
+            {% how_many_times_wrapped[ruby_name.stringify] = how_many_times_wrapped[ruby_name.stringify] ? how_many_times_wrapped[ruby_name.stringify] + 1 : 1 %}
+          {% end %}
+
+          {% if how_many_times_wrapped[ruby_name.stringify] && how_many_times_wrapped[ruby_name.stringify] > 1 %}
+            {% puts "\e[31m> WARNING: Method #{crystal_class}::#{ruby_name}\n--> New arguments: #{method.args}\n--> Wrapped more than once (#{how_many_times_wrapped[ruby_name.stringify]}).\e[0m" %}
+          {% end %}
+          {% puts "" if verbose %}
         {% end %}
-      {% end %}
+        
+        {% if method_source == crystal_class && !crystal_class.resolve.abstract? %}
+          # Make sure to add a default constructor if none was specified with Crystal
+          {% if !how_many_times_wrapped["initialize"] && !use_enum_constructor %}
+            Anyolite::Macro.add_default_constructor({{rb_interpreter}}, {{crystal_class}}, {{verbose}})
+          {% elsif !how_many_times_wrapped["initialize"] && use_enum_constructor %}
+            Anyolite::Macro.add_enum_constructor({{rb_interpreter}}, {{crystal_class}}, {{verbose}})
+          {% end %}
 
-      {% how_many_times_wrapped = {} of String => UInt32 %}
+          {% all_annotations_exclude_im = crystal_class.resolve.annotations(Anyolite::ExcludeInstanceMethod) + method_source.resolve.annotations(Anyolite::ExcludeInstanceMethod) %}
+          {% if all_annotations_exclude_im.find { |element| element[0].id.stringify == "dup" || element[0].id.stringify == "clone" } %}
+            Anyolite::RbCore.rb_undef_method({{rb_interpreter}}, Anyolite::RbClassCache.get({{crystal_class}}), "dup")
+            Anyolite::RbCore.rb_undef_method({{rb_interpreter}}, Anyolite::RbClassCache.get({{crystal_class}}), "clone")
+          {% else %}
+            Anyolite::Macro.add_copy_constructor({{rb_interpreter}}, {{crystal_class}}, {{context}}, {{verbose}})
+          {% end %}
 
-      {% for method, index in method_source.resolve.methods %}
-        {% all_annotations_exclude_im = crystal_class.resolve.annotations(Anyolite::ExcludeInstanceMethod) + method_source.resolve.annotations(Anyolite::ExcludeInstanceMethod) + crystal_class.resolve.ancestors.map {|ancestor| ancestor.resolve.annotations(Anyolite::ExcludeInstanceMethod)} %}
-        {% annotation_exclude_im = all_annotations_exclude_im.find { |element| element[0].id.stringify == method.name.stringify } %}
-
-        {% all_annotations_include_im = crystal_class.resolve.annotations(Anyolite::IncludeInstanceMethod) + method_source.resolve.annotations(Anyolite::IncludeInstanceMethod) %}
-        {% annotation_include_im = all_annotations_include_im.find { |element| element[0].id.stringify == method.name.stringify } %}
-
-        {% all_annotations_specialize_im = crystal_class.resolve.annotations(Anyolite::SpecializeInstanceMethod) + method_source.resolve.annotations(Anyolite::SpecializeInstanceMethod) %}
-        {% annotation_specialize_im = all_annotations_specialize_im.find { |element| element[0].id.stringify == method.name.stringify } %}
-
-        {% all_annotations_rename_im = crystal_class.resolve.annotations(Anyolite::RenameInstanceMethod) + method_source.resolve.annotations(Anyolite::RenameInstanceMethod) %}
-        {% annotation_rename_im = all_annotations_rename_im.find { |element| element[0].id.stringify == method.name.stringify } %}
-
-        {% all_annotations_without_keywords_im = crystal_class.resolve.annotations(Anyolite::WrapWithoutKeywordsInstanceMethod) + method_source.resolve.annotations(Anyolite::WrapWithoutKeywordsInstanceMethod) %}
-        {% annotation_without_keyword_im = all_annotations_without_keywords_im.find { |element| element[0].id.stringify == method.name.stringify } %}
-
-        {% all_annotations_return_nil_im = crystal_class.resolve.annotations(Anyolite::ReturnNilInstanceMethod) + method_source.resolve.annotations(Anyolite::ReturnNilInstanceMethod) %}
-        {% annotation_return_nil_im = all_annotations_return_nil_im.find { |element| element[0].id.stringify == method.name.stringify } %}
-
-        {% all_annotations_add_block_arg_im = crystal_class.resolve.annotations(Anyolite::AddBlockArgInstanceMethod) + method_source.resolve.annotations(Anyolite::AddBlockArgInstanceMethod) %}
-        {% annotation_add_block_arg_im = all_annotations_add_block_arg_im.find { |element| element[0].id.stringify == method.name.stringify } %}
-
-        {% all_annotations_store_block_arg_im = crystal_class.resolve.annotations(Anyolite::StoreBlockArgInstanceMethod) + method_source.resolve.annotations(Anyolite::StoreBlockArgInstanceMethod) %}
-        {% annotation_store_block_arg_im = all_annotations_store_block_arg_im.find { |element| element[0].id.stringify == method.name.stringify } %}
-
-        {% all_annotations_force_keyword_arg_im = crystal_class.resolve.annotations(Anyolite::ForceKeywordArgInstanceMethod) + method_source.resolve.annotations(Anyolite::ForceKeywordArgInstanceMethod) %}
-        {% annotation_force_keyword_arg_im = all_annotations_force_keyword_arg_im.find { |element| element[0].id.stringify == method.name.stringify } %}
-
-        {% if crystal_class.resolve.annotation(Anyolite::NoKeywordArgs) || method_source.resolve.annotation(Anyolite::NoKeywordArgs) %}
-          {% no_keyword_args = true %}
-        {% else %}
-          {% no_keyword_args = false %}
-        {% end %}
-
-        {% if method.annotation(Anyolite::Rename) %}
-          {% ruby_name = method.annotation(Anyolite::Rename)[0].id %}
-        {% elsif annotation_rename_im && method.name.stringify == annotation_rename_im[0].stringify %}
-          {% ruby_name = annotation_rename_im[1].id %}
-        {% else %}
-          {% ruby_name = method.name %}
-        {% end %}
-
-        {% if method.annotation(Anyolite::AddBlockArg) %}
-          {% block_arg_number = method.annotation(Anyolite::AddBlockArg)[0] %}
-          {% block_return_type = method.annotation(Anyolite::AddBlockArg)[1] %}
-        {% elsif annotation_add_block_arg_im && method.name.stringify == annotation_add_block_arg_im[0].stringify %}
-          {% block_arg_number = annotation_add_block_arg_im[1] %}
-          {% block_return_type = annotation_add_block_arg_im[2] %}
-        {% else %}
-          {% block_arg_number = nil %}
-          {% block_return_type = nil %}
-        {% end %}
-
-        {% added_keyword_args = nil %}
-
-        {% if method.annotation(Anyolite::Specialize) && method.annotation(Anyolite::Specialize)[0] %}
-          {% added_keyword_args = method.annotation(Anyolite::Specialize)[0] %}
-        {% end %}
-
-        {% if annotation_specialize_im && (method.args.stringify == annotation_specialize_im[1].stringify || (method.args.stringify == "[]" && annotation_specialize_im[1] == nil)) %}
-          {% added_keyword_args = annotation_specialize_im[2] %}
-        {% end %}
-
-        {% without_keywords = false %}
-
-        {% if method.annotation(Anyolite::WrapWithoutKeywords) %}
-          {% without_keywords = method.annotation(Anyolite::WrapWithoutKeywords)[0] ? method.annotation(Anyolite::WrapWithoutKeywords)[0] : -1 %}
-        {% elsif annotation_without_keyword_im %}
-          {% without_keywords = annotation_without_keyword_im[1] ? annotation_without_keyword_im[1] : -1 %}
-        {% elsif default_optional_args_to_keyword_args %}
-          {% without_keywords = -2 %}
-        {% end %}
-
-        {% return_nil = false %}
-        {% if method.annotation(Anyolite::ReturnNil) || (annotation_return_nil_im) %}
-          {% return_nil = true %}
-        {% end %}
-
-        {% store_block_arg = false %}
-        {% if method.annotation(Anyolite::StoreBlockArg) || (annotation_store_block_arg_im) %}
-          {% store_block_arg = true %}
-        {% end %}
-
-        {% force_keyword_arg = false %}
-        {% if method.annotation(Anyolite::ForceKeywordArg) || (annotation_force_keyword_arg_im) %}
-          {% force_keyword_arg = true %}
-        {% end %}
-
-        {% puts "> Processing instance method #{crystal_class}::#{method.name} to #{ruby_name}\n--> Args: #{method.args}" if verbose %}
-
-        {% if method.accepts_block? %}
-          {% puts "--> Block arg possible for #{crystal_class}::#{method.name}" if verbose %}
-        {% end %}
-
-        # Ignore private and protected methods (can't be called from outside, they'd need to be wrapped for this to work)
-        {% if method.name == "dup" || method.name == "clone" %}
-          {% puts "--> Excluding #{crystal_class}::#{method.name} (Exclusion due to copy property)" if verbose %}
-        {% elsif crystal_class.resolve.abstract? && method.name == "initialize" %}
-          {% puts "--> Excluding #{crystal_class}::#{method.name} (Exclusion due to abstract class)" if verbose %}
-        {% elsif method.visibility != :public && method.name != "initialize" %}
-          {% puts "--> Excluding #{crystal_class}::#{method.name} (Exclusion due to visibility)" if verbose %}
-        {% elsif crystal_class != method_source && (later_ancestors ? later_ancestors + [crystal_class] : [crystal_class]).find{|later_ancestor| later_ancestor.resolve.methods.find{|orig_methods| orig_methods.name == method.name}} %}
-          {% puts "--> Excluding #{crystal_class}::#{method.name} (Exclusion due to finalization)" if verbose %}
-        # Ignore rb hooks, to_unsafe and finalize (unless specialized, but this is not recommended)
-        {% elsif (method.name.starts_with?("rb_") || method.name == "finalize" || method.name == "to_unsafe") && !has_specialized_method[method.name.stringify] %}
-          {% puts "--> Excluding #{crystal_class}::#{method.name} (Exclusion by default)" if verbose %}
-        # These methods are a bit tricky and technically require an argument, but usually they are called without one, so we just do it here, too
-        {% elsif method.name == "inspect" || method.name == "to_s" || method.name == "hash" %}
-          Anyolite::Macro.wrap_method_index({{rb_interpreter}}, {{crystal_class}}, {{index}}, "{{ruby_name}}", without_keywords: {{without_keywords || (no_keyword_args && !force_keyword_arg)}}, added_keyword_args: [] of NoReturn, context: {{context}}, return_nil: {{return_nil}}, block_arg_number: {{block_arg_number}}, block_return_type: {{block_return_type}}, store_block_arg: {{store_block_arg}}, other_source: {{other_source}})
-          {% how_many_times_wrapped[ruby_name.stringify] = how_many_times_wrapped[ruby_name.stringify] ? how_many_times_wrapped[ruby_name.stringify] + 1 : 1 %} 
-        # Exclude methods if given as arguments
-        {% elsif exclusions.includes?(method.name.symbolize) || exclusions.includes?(method.name.stringify) %}
-          {% puts "--> Excluding #{crystal_class}::#{method.name} (Exclusion argument)" if verbose %}
-        # Exclude methods which were annotated to be excluded
-        {% elsif method.annotation(Anyolite::Exclude) || (annotation_exclude_im && !annotation_include_im && !method.annotation(Anyolite::Include)) %}
-          {% puts "--> Excluding #{crystal_class}::#{method.name} (Exclusion annotation)" if verbose %}
-        # Exclude methods which are not the specialized methods
-        {% elsif has_specialized_method[method.name.stringify] && !(method.annotation(Anyolite::Specialize) || (annotation_specialize_im && (method.args.stringify == annotation_specialize_im[1].stringify || (method.args.stringify == "[]" && annotation_specialize_im[1] == nil)))) %}
-          {% puts "--> Excluding #{crystal_class}::#{method.name} #{method.args} (Specialization)" if verbose %}
-        # Handle operator methods (including setters) by just transferring the original name into the operator
-        # TODO: This might still be a source for potential bugs, so this code might need some reworking in the future
-        {% elsif method.name[-1..-1] =~ /\W/ %}
-          {% operator = ruby_name %}
-
-          Anyolite::Macro.wrap_method_index({{rb_interpreter}}, {{crystal_class}}, {{index}}, "{{ruby_name}}", operator: "{{operator}}", without_keywords: {{force_keyword_arg ? false : -1}}, added_keyword_args: {{added_keyword_args}}, context: {{context}}, return_nil: {{return_nil}}, block_arg_number: {{block_arg_number}}, block_return_type: {{block_return_type}}, store_block_arg: {{store_block_arg}}, other_source: {{other_source}})
-          {% how_many_times_wrapped[ruby_name.stringify] = how_many_times_wrapped[ruby_name.stringify] ? how_many_times_wrapped[ruby_name.stringify] + 1 : 1 %}
-        # Handle constructors
-        {% elsif method.name == "initialize" && use_enum_constructor == false %}
-          Anyolite::Macro.wrap_method_index({{rb_interpreter}}, {{crystal_class}}, {{index}}, "{{ruby_name}}", is_constructor: true, without_keywords: {{without_keywords || (no_keyword_args && !force_keyword_arg)}}, added_keyword_args: {{added_keyword_args}}, context: {{context}}, return_nil: {{return_nil}}, block_arg_number: {{block_arg_number}}, block_return_type: {{block_return_type}}, store_block_arg: {{store_block_arg}}, other_source: {{other_source}})
-          {% how_many_times_wrapped[ruby_name.stringify] = how_many_times_wrapped[ruby_name.stringify] ? how_many_times_wrapped[ruby_name.stringify] + 1 : 1 %}
-        # Handle other instance methods
-        {% else %}
-          Anyolite::Macro.wrap_method_index({{rb_interpreter}}, {{crystal_class}}, {{index}}, "{{ruby_name}}", without_keywords: {{without_keywords || (no_keyword_args && !force_keyword_arg)}}, added_keyword_args: {{added_keyword_args}}, context: {{context}}, return_nil: {{return_nil}}, block_arg_number: {{block_arg_number}}, block_return_type: {{block_return_type}}, store_block_arg: {{store_block_arg}}, other_source: {{other_source}})
-          {% how_many_times_wrapped[ruby_name.stringify] = how_many_times_wrapped[ruby_name.stringify] ? how_many_times_wrapped[ruby_name.stringify] + 1 : 1 %}
-        {% end %}
-
-        {% if how_many_times_wrapped[ruby_name.stringify] && how_many_times_wrapped[ruby_name.stringify] > 1 %}
-          {% puts "\e[31m> WARNING: Method #{crystal_class}::#{ruby_name}\n--> New arguments: #{method.args}\n--> Wrapped more than once (#{how_many_times_wrapped[ruby_name.stringify]}).\e[0m" %}
-        {% end %}
-        {% puts "" if verbose %}
-      {% end %}
-      
-      {% if method_source == crystal_class && !crystal_class.resolve.abstract? %}
-        # Make sure to add a default constructor if none was specified with Crystal
-        {% if !how_many_times_wrapped["initialize"] && !use_enum_constructor %}
-          Anyolite::Macro.add_default_constructor({{rb_interpreter}}, {{crystal_class}}, {{verbose}})
-        {% elsif !how_many_times_wrapped["initialize"] && use_enum_constructor %}
-          Anyolite::Macro.add_enum_constructor({{rb_interpreter}}, {{crystal_class}}, {{verbose}})
-        {% end %}
-
-        {% all_annotations_exclude_im = crystal_class.resolve.annotations(Anyolite::ExcludeInstanceMethod) + method_source.resolve.annotations(Anyolite::ExcludeInstanceMethod) %}
-        {% if all_annotations_exclude_im.find { |element| element[0].id.stringify == "dup" || element[0].id.stringify == "clone" } %}
-          Anyolite::RbCore.rb_undef_method({{rb_interpreter}}, Anyolite::RbClassCache.get({{crystal_class}}), "dup")
-          Anyolite::RbCore.rb_undef_method({{rb_interpreter}}, Anyolite::RbClassCache.get({{crystal_class}}), "clone")
-        {% else %}
-          Anyolite::Macro.add_copy_constructor({{rb_interpreter}}, {{crystal_class}}, {{context}}, {{verbose}})
-        {% end %}
-
-        {% if wrap_equality_method && !how_many_times_wrapped["=="] %}
-          Anyolite::Macro.add_equality_method({{rb_interpreter}}, {{crystal_class}}, {{context}}, {{verbose}})
+          {% if wrap_equality_method && !how_many_times_wrapped["=="] %}
+            Anyolite::Macro.add_equality_method({{rb_interpreter}}, {{crystal_class}}, {{context}}, {{verbose}})
+          {% end %}
         {% end %}
       {% end %}
     end

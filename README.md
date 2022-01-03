@@ -233,6 +233,10 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 
 * [X] Added annotation to ignore class ancestors
 
+#### Usability
+
+* [X] Private ancestors will now be ignored automatically
+
 ### Version 1.0.0
 
 This release will mark the first full release of Anyolite, mostly
