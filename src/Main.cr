@@ -783,6 +783,10 @@ module Anyolite
   # `WrapWithoutKeywords` annotations for specific methods.
   annotation DefaultOptionalArgsToKeywordArgs; end
 
+  # Specifies that only the directly defined methods of the respective
+  # class are wrapped, and no inherited methods.
+  annotation IgnoreAncestorMethods; end
+
   # Wraps a whole class structure under a module into mruby.
   #
   # The `Class` *crystal_class* will be integrated into the `RbInterpreter` *rb_interpreter*,
@@ -858,13 +862,17 @@ module Anyolite
 
             {% puts "> Ancestors for #{resolved_class}: #{reversed_ancestors}" if !reversed_ancestors.empty? && verbose %}
 
-            {% for ancestor, ancestor_index in reversed_ancestors %}
-              {% puts "> Going into ancestor #{ancestor} for #{resolved_class}..." if verbose %}
-              {% later_ancestors = reversed_ancestors[ancestor_index + 1 .. -1] %}
+            {% if resolved_class.annotation(Anyolite::IgnoreAncestorMethods) %}
+              {% puts "> Ignoring ancestors due to annotation." if !reversed_ancestors.empty? && verbose %}
+            {% else %}
+              {% for ancestor, ancestor_index in reversed_ancestors %}
+                {% puts "> Going into ancestor #{ancestor} for #{resolved_class}..." if verbose %}
+                {% later_ancestors = reversed_ancestors[ancestor_index + 1 .. -1] %}
 
-              Anyolite::Macro.wrap_all_instance_methods({{rb_interpreter}}, {{crystal_class}}, {{instance_method_exclusions}}, 
-                verbose: {{verbose}}, context: {{new_context}}, use_enum_constructor: {{use_enum_constructor}}, wrap_equality_method: {{wrap_equality_method}}, 
-                other_source: {{ancestor}}, later_ancestors: {{later_ancestors.empty? ? nil : later_ancestors}})
+                Anyolite::Macro.wrap_all_instance_methods({{rb_interpreter}}, {{crystal_class}}, {{instance_method_exclusions}}, 
+                  verbose: {{verbose}}, context: {{new_context}}, use_enum_constructor: {{use_enum_constructor}}, wrap_equality_method: {{wrap_equality_method}}, 
+                  other_source: {{ancestor}}, later_ancestors: {{later_ancestors.empty? ? nil : later_ancestors}})
+              {% end %}
             {% end %}
           {% end %}
 
