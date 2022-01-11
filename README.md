@@ -229,6 +229,11 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 
 ### Version 0.17.0
 
+Release 0.17.0 will rename the main branch to `main` and get rid of the outdated `master` tag.
+
+Make sure to update all dependencies to the old `master` tag before 0.17.0 drops. Keep in mind
+that Anyolite is still potentially subject to change before it reaches version 1.0.0.
+
 #### Features
 
 * [X] Added annotation to ignore class ancestors
