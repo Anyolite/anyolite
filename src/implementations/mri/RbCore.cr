@@ -7,11 +7,11 @@ module Anyolite
     {% build_path = env("ANYOLITE_BUILD_PATH") ? env("ANYOLITE_BUILD_PATH") : "build" %}
     
     {% if flag?(:win32) %}
-      @[Link(ldflags: "#{__DIR__}/../../../{{build_path.id}}/mri/lib/libruby-static.lib -lgmp -lcrypt -lz msvcrt.lib Ws2_32.lib")]
-      @[Link(ldflags: "#{__DIR__}/../../../{{build_path.id}}/glue/mri/return_functions.obj -lgmp -lcrypt -lz")]
-      @[Link(ldflags: "#{__DIR__}/../../../{{build_path.id}}/glue/mri/data_helper.obj -lgmp -lcrypt -lz")]
-      @[Link(ldflags: "#{__DIR__}/../../../{{build_path.id}}/glue/mri/script_helper.obj -lgmp -lcrypt -lz")]
-      @[Link(ldflags: "#{__DIR__}/../../../{{build_path.id}}/glue/mri/error_helper.obj -lgmp -lcrypt -lz")]
+      @[Link(ldflags: "#{__DIR__}/../../../{{build_path.id}}/mri/lib/x64-vcruntime140-ruby300-static.lib msvcrt.lib Ws2_32.lib iphlpapi.lib dbghelp.lib Shell32.lib User32.lib")]
+      @[Link(ldflags: "#{__DIR__}/../../../{{build_path.id}}/glue/mri/return_functions.obj")]
+      @[Link(ldflags: "#{__DIR__}/../../../{{build_path.id}}/glue/mri/data_helper.obj")]
+      @[Link(ldflags: "#{__DIR__}/../../../{{build_path.id}}/glue/mri/script_helper.obj")]
+      @[Link(ldflags: "#{__DIR__}/../../../{{build_path.id}}/glue/mri/error_helper.obj")]
     {% else %}
       @[Link(ldflags: "#{__DIR__}/../../../{{build_path.id}}/mri/lib/libruby-static.a -lgmp -lcrypt -lz")]
       @[Link(ldflags: "#{__DIR__}/../../../{{build_path.id}}/glue/mri/return_functions.o -lgmp -lcrypt -lz")]

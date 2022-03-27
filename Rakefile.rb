@@ -84,6 +84,9 @@ task :install_ruby => [:load_config] do
     end
 end
 
+# RUBY_OPT_DIR="C:/vcpkg/installed/x64-windows"
+# NOTE: This will be relevant for MRI on Windows
+
 task :build_ruby => [:load_config] do
     temp_path = Dir.pwd
     temp_rb_config_path = get_value("ANYOLITE_RB_CONFIG_RELATIVE_PATH", Dir.pwd)
@@ -99,7 +102,16 @@ task :build_ruby => [:load_config] do
     elsif $config.implementation == "mri"
         if ANYOLITE_COMPILER == :msvc
             raise "MSVC compilation of MRI is not supported yet."
-            # TODO
+            
+            # TODO: Fix MRI on Windows
+            # FileUtils.cp_r("#{$config.rb_dir}/#{$config.implementation}", "#{temp_path}/#{$config.build_path}/src_#{$config.implementation}")
+            # FileUtils.cd "#{$config.build_path}/src_#{$config.implementation}"
+            # system "./win32/configure.bat --prefix=\"#{temp_path}/#{$config.build_path}/#{$config.implementation}\" --with-opt-dir=#{RUBY_OPT_DIR}"
+            # system "nmake incs"
+            # system "nmake extract-extlibs"
+            # system "nmake"
+            # system "nmake install"
+            
         elsif ANYOLITE_COMPILER == :gcc
             system "cp -r #{$config.rb_dir}/#{$config.implementation} #{temp_path}/#{$config.build_path}/src_#{$config.implementation}"
             system "cd #{$config.build_path}/src_#{$config.implementation}; ./autogen.sh"
@@ -133,7 +145,7 @@ task :build_glue => [:load_config] do
     elsif $config.implementation == "mri"
         if ANYOLITE_COMPILER == :msvc
             GLUE_FILES.each do |name|
-                system "cl /I #{$config.rb_dir}/#{$config.implementation}/include /c #{$config.glue_dir}/#{name}.c /Fo\"#{$config.build_path}/glue/#{$config.implementation}/#{name}.obj\""
+                system "cl /I #{$config.build_path}/#{$config.implementation}/include/ruby-3.0.0 /I #{$config.build_path}/#{$config.implementation}/include/ruby-3.0.0/x64-mswin64_140 /c #{$config.glue_dir}/#{name}.c /Fo\"#{$config.build_path}/glue/#{$config.implementation}/#{name}.obj\""
             end
         elsif ANYOLITE_COMPILER == :gcc
             GLUE_FILES.each do |name|

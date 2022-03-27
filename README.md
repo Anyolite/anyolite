@@ -49,6 +49,12 @@ You need to have the following programs installed (and in your PATH variable, if
 If you want to test MRI as implementation, you need these additional programs:
 * Autoconf
 
+For MRI on Windows, you also need:
+* sed
+* patch
+* vcpkg with libffi, libyaml, openssl, readline and zlib installed
+Note that MRI on Windows is currently not functional.
+
 Compiling Anyolite for MRI requires setting the environment variable `ANYOLITE_CONFIG_PATH` to a valid MRI configuration path (like `config_files/anyolite_config_mri.json`), building the shard and then setting the `anyolite_implementation_ruby_3` and `use_general_object_format_chars` flags for the final compilation.
 
 Support for MRI is still not as fleshed out as mruby. 
