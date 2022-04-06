@@ -30,7 +30,7 @@ Useful links for an overview:
 * Simple system to prevent garbage collector conflicts
 * Support for keyword arguments and default values
 * Objects, arrays, hashes, structs, enums and unions as function arguments and return values are completely valid
-* Ruby methods can be called at runtime as long as all their possible return values are known
+* Ruby methods can be called at runtime as long as all their possible return value types are known
 * Ruby closures can be handled as regular variables
 * Methods and constants can be excluded, modified or renamed with annotations
 * Options to compile scripts directly into the executable
@@ -241,6 +241,7 @@ Make sure to update all dependencies to the old `master` tag to `main`.
 #### Features
 
 * [X] Added annotation to ignore class ancestors
+* [ ] Support for new features from Crystal 1.4.0 (like Int128)
 
 #### Breaking changes
 
@@ -291,3 +292,4 @@ Anyolite are already implemented.
 * [ ] Class inheritance wrapping can be disabled for any class using annotations
 * [ ] General improvement of type resolving
 * [ ] Return values from evaluated script lines
+* [ ] Bignum support
