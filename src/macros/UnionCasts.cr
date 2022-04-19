@@ -131,7 +131,7 @@ module Anyolite
       {% elsif type.resolve <= Pointer %}
         if Anyolite::RbCast.check_for_data({{value}}) && Anyolite::RbCast.check_custom_type({{rb}}, {{value}}, Anyolite::HelperClasses::AnyolitePointer)
           %helper_ptr = Anyolite::Macro.convert_from_ruby_object({{rb}}, {{value}}, Anyolite::HelperClasses::AnyolitePointer).value
-          final_value = {{type}}.new(address: %helper_ptr.address)
+          final_value = Box({{type}}).unbox(%helper_ptr.retrieve_ptr)
         end
       {% elsif type.resolve <= Struct || type.resolve <= Enum %}
         if Anyolite::RbCast.check_for_data({{value}}) && Anyolite::RbCast.check_custom_type({{rb}}, {{value}}, {{type}})

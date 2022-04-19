@@ -167,7 +167,7 @@ These limitations can not be circumvented using other methods.
 It might be possible to remove them in future versions, but for
 now they are potential roadblocks.
 
-* Only GCC and Visual Studio are officially supported as compilers (others might work)
+* Only GCC and Visual Studio are officially supported as compilers (others might work if the Rakefile is modified)
 * Anyolite for Windows does only work with Crystal version 1.2.0 or higher
 * MRI is currently not supported on Windows
 
@@ -219,7 +219,12 @@ Use the `ExcludeConstant` annotation to exclude private constants.
 
 ### Pointers given to Ruby are weak references and therefore not tracked by the garbage collector
 
-Try to avoid pointers wherever possible, otherwise keep track of the referenced objects.
+Try to avoid exposed pointers wherever possible, otherwise keep track of the referenced objects.
+
+### Integers passed to Ruby are larger than 64 bit
+
+Especially mruby does not directly support large numbers. If really needed, the config file
+can be modified to include a BigNum mrbgem, but this is not tested.
 
 # Why this name?
 
@@ -241,11 +246,11 @@ Make sure to update all dependencies to the old `master` tag to `main`.
 #### Features
 
 * [X] Added annotation to ignore class ancestors
-* [ ] Support for new features from Crystal 1.4.0 (like Int128)
 
 #### Breaking changes
 
 * [X] Renamed `master` branch to `main`
+* [X] Changed internal representation of wrapped pointers
 
 #### Usability
 
@@ -286,7 +291,7 @@ Anyolite are already implemented.
 ### Future feature ideas (might not actually be possible to implement)
 
 * [ ] Splat argument and/or arbitrary keyword passing
-* [ ] Support for slices
+* [ ] Support for slices and bytes
 * [ ] Classes as argument type
 * [ ] Resolve context even in generic type union arguments
 * [ ] Class inheritance wrapping can be disabled for any class using annotations

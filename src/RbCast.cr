@@ -112,7 +112,7 @@ module Anyolite
       elsif value.is_a?(Hash)
         RbCast.return_hash(rb, value)
       elsif value.is_a?(Pointer)
-        RbCast.return_object(rb, HelperClasses::AnyolitePointer.new(value.address))
+        RbCast.return_object(rb, HelperClasses::AnyolitePointer.new(value))
       elsif value.is_a?(Struct) || value.is_a?(Enum)
         RbCast.return_struct_or_enum(rb, value)
       else

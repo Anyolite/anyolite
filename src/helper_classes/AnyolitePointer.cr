@@ -1,14 +1,28 @@
 module Anyolite
   module HelperClasses
     class AnyolitePointer
-      property address : UInt64 = 0
+      property ptr : Void* = Pointer(Void).null
 
-      def initialize(address : UInt64)
-        @address = address
+      @[Anyolite::Specialize]
+      def initialize
+        Anyolite.raise_runtime_error("Crystal pointers can not be created in Ruby")
+      end
+
+      def initialize(obj)
+        @ptr = Box.box(obj)
       end
 
       def to_s
-        @address.to_s
+        @ptr.address.to_s
+      end
+
+      @[Anyolite::Exclude]
+      def retrieve_ptr
+        if !@ptr
+          raise "Anyolite pointer was not initialized"
+        else
+          @ptr
+        end
       end
     end
   end

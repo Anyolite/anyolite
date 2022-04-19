@@ -263,7 +263,7 @@ module Anyolite
           converted_hash
         {% elsif arg_type.resolve <= Pointer %}
           %helper_ptr = Anyolite::Macro.convert_from_ruby_object({{rb}}, {{arg}}, Anyolite::HelperClasses::AnyolitePointer).value
-          {{arg_type}}.new(address: %helper_ptr.address)
+          Box({{arg_type}}).unbox(%helper_ptr.retrieve_ptr)
         {% elsif arg_type.resolve <= Struct || arg_type.resolve <= Enum %}
           Anyolite::Macro.convert_from_ruby_struct({{rb}}, {{arg}}, {{arg_type}}).value.content
         {% elsif arg_type.resolve? %}

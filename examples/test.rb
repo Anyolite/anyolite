@@ -164,6 +164,9 @@ end
 a.x = 1001
 
 ptr = a.ptr_return_test
+
+puts ptr
+
 puts "Pointer test 1: #{a.ptr_arg_test(arg: ptr)}"
 puts "Pointer test 2: #{a.ptr_star_arg_test(arg: ptr)}"
 puts "Pointer test 3: #{a.test_int_or_ptr(arg: ptr)}"
