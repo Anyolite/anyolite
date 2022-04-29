@@ -110,6 +110,9 @@ same_as_a = TestModule::Test.new(x: a.x)
 
 puts "Are a and b equal? #{a == b}"
 puts "Are a and same_as_a equal? #{a == same_as_a}"
+puts "Are a and 10 equal? #{a == 10}"
+puts "Are a and similar subtest equal? #{a == TestModule::Test::TestChild.new(x: a.x)}"
+puts "Are a and other subtest equal? #{a == TestModule::Test::TestChild.new(x: a.x + 1)}"
 
 puts a.uint_test(arg: 123)
 puts a.noreturn_test.class

@@ -170,7 +170,7 @@ module SomeModule
       puts "Object registered in Ruby"
     end
 
-    def ==(other : Test)
+    def ==(other)
       (self.x == other.x)
     end
 

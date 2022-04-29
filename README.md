@@ -251,6 +251,7 @@ Make sure to update all dependencies to the old `master` tag to `main`.
 
 * [X] Renamed `master` branch to `main`
 * [X] Changed internal representation of wrapped pointers
+* [X] Methods named `==` with no type specification will now return `false` instead of an error if types are incompatible
 
 #### Usability
 

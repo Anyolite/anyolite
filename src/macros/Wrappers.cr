@@ -511,6 +511,39 @@ module Anyolite
       {{rb_interpreter}}.define_method("initialize", Anyolite::RbClassCache.get({{crystal_class}}), wrapped_method)
     end
 
+    macro wrap_equality_function(rb_interpreter, crystal_class, name, proc, operator = "", context = nil)
+      regular_arg_array = nil
+
+      {% type_vars = crystal_class.resolve.type_vars %}
+      {% type_var_names_annotation = crystal_class.resolve.annotation(Anyolite::SpecifyGenericTypes) %}
+      {% type_var_names = type_var_names_annotation ? type_var_names_annotation[0] : nil %}
+
+      wrapped_method = Anyolite::Macro.new_rb_func do
+        %args = Anyolite::Macro.generate_arg_tuple(_rb, [other : {{crystal_class}}], context: {{context}})
+        %format_string = Anyolite::Macro.format_string([other : {{crystal_class}}], context: {{context}})
+      
+        Anyolite::Macro.load_args_into_vars([other : {{crystal_class}}], %format_string, %args)
+
+        if !Anyolite::RbCast.check_custom_type(_rb, %args[0].value, {{crystal_class}})
+          Anyolite::RbCast.return_false
+        else
+          converted_args = Anyolite::Macro.convert_regular_args(_rb, %args, [other : {{crystal_class}}], context: {{context}}, type_vars: {{type_vars}}, type_var_names: {{type_var_names}})
+
+          if {{crystal_class}} <= Struct || {{crystal_class}} <= Enum
+            converted_obj = Anyolite::Macro.convert_from_ruby_struct(_rb, _obj, {{crystal_class}}).value
+          else
+            converted_obj = Anyolite::Macro.convert_from_ruby_object(_rb, _obj, {{crystal_class}}).value
+          end
+
+          return_value = Anyolite::Macro.call_and_return_instance_method(_rb, {{proc}}, converted_obj, converted_args, operator: {{operator}})
+
+          return_value
+        end
+      end
+
+      {{rb_interpreter}}.define_method({{name}}, Anyolite::RbClassCache.get({{crystal_class}}), wrapped_method)
+    end
+
     macro wrap_constant_or_class(rb_interpreter, under_class_or_module, ruby_name, value, overwrite = false, verbose = false)
       {% actual_constant = under_class_or_module.resolve.constant(value.id) %}
       {% if actual_constant.is_a?(TypeNode) %}
