@@ -238,25 +238,6 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 
 ## Upcoming releases
 
-### Version 0.17.0
-
-Note: Release 0.17.0 will rename the main branch to `main` and get rid of the outdated `master` tag.
-Make sure to update all dependencies to the old `master` tag to `main`.
-
-#### Features
-
-* [X] Added annotation to ignore class ancestors
-
-#### Breaking changes
-
-* [X] Renamed `master` branch to `main`
-* [X] Changed internal representation of wrapped pointers
-* [X] Methods named `==` with no type specification will now return `false` instead of an error if types are incompatible
-
-#### Usability
-
-* [X] Private ancestors will now be ignored automatically
-
 ### Version 1.0.0
 
 This release will mark the first full release of Anyolite, mostly

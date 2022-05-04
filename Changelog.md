@@ -2,6 +2,22 @@
 
 ## Releases
 
+### Version 0.17.0
+
+#### Features
+
+* Added annotation to ignore class ancestors
+
+#### Breaking changes
+
+* Renamed `master` branch to `main`
+* Changed internal representation of wrapped pointers
+* Methods named `==` with no type specification will now return `false` instead of an error if types are incompatible
+
+#### Usability
+
+* Private ancestors will now be ignored automatically
+
 ### Version 0.16.1
 
 #### Bugfixes
