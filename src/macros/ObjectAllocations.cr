@@ -2,8 +2,8 @@ module Anyolite
   module Macro
     macro allocate_constructed_object(rb, crystal_class, obj, new_obj)
       # Call initializer method if available
-      if new_obj.responds_to?(:rb_initialize)
-        new_obj.rb_initialize({{rb}})
+      if {{new_obj}}.responds_to?(:rb_initialize)
+        {{new_obj}}.rb_initialize({{rb}})
       end
 
       # Allocate memory so we do not lose this object
