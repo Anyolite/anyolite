@@ -4,9 +4,12 @@ class BytecodeTestClass
   end
 
   def do_test(some_number)
+    ret_array = [@str]
     some_number.times do |i|
-      puts "#{@str} test number #{i + 1}"
+      ret_array.push i + 1
     end
+
+    ret_array
   end
 end
 

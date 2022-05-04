@@ -265,6 +265,10 @@ Anyolite are already implemented.
 * [ ] Code cleanup (especially in the macro section)
 * [ ] More compatibility between methods accepting `RbRef` and `RbValue`
 
+#### Bugfixes
+
+* [X] Fixed error when passing blocks to certain method types
+
 ### Future feature ideas (might not actually be possible to implement)
 
 * [ ] MRI support on Windows (does currently not work for some reason)

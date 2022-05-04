@@ -8,7 +8,7 @@ require "./anyolite.cr"
 
 module SomeModule
   def self.test_method(int : Int32, str : String)
-    puts "#{str} and #{int}"
+    [str, int]
   end
 
   @[Anyolite::RenameClass("TestStructRenamed")]
@@ -134,11 +134,8 @@ module SomeModule
 
     @[Anyolite::Rename("test")]
     def test_instance_method(int : Int32, bool : Bool, str : String, float : Float32 = 0.4f32)
-      puts "Old value is #{@x}"
-      a = "Args given for instance method: #{int}, #{bool}, #{str}, #{float}"
       @x += int
-      puts "New value is #{@x}"
-      return a
+      return [int, bool, str, float, @x]
     end
 
     def inspect(io : IO)
@@ -539,6 +536,7 @@ end
     Anyolite::Preloader.execute_bytecode_from_cache_or_file(rb, "examples/bytecode_test.mrb")
     load_test_module()
 
+    rb.load_script_from_file("examples/test_framework.rb")
     rb.load_script_from_file("examples/test.rb")
   end
 

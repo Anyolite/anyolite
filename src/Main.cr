@@ -497,7 +497,14 @@ module Anyolite
   # respectively, in order to require a block argument. If *store_block_arg* is set to `true`,
   # any block argument given will be stored in a cache.
   macro wrap_module_function(rb_interpreter, under_module, name, proc, proc_args = nil, operator = "", context = nil, return_nil = false, block_arg_number = nil, block_return_type = nil, store_block_arg = false)
-    Anyolite::Macro.wrap_module_function_with_args({{rb_interpreter}}, {{under_module}}, {{name}}, {{proc}}, {{proc_args}}, operator: {{operator}}, context: {{context}}, return_nil: {{return_nil}}, block_arg_number: {{block_arg_number}}, block_return_type: {{block_return_type}}, store_block_arg: {{store_block_arg}})
+    {% options = {
+         :context           => context,
+         :return_nil        => return_nil,
+         :block_arg_number  => block_arg_number,
+         :block_return_type => block_return_type,
+         :store_block_arg   => store_block_arg,
+       } %}
+    Anyolite::Macro.wrap_module_function_with_args({{rb_interpreter}}, {{under_module}}, {{name}}, {{proc}}, {{proc_args}}, options: {{options}})
   end
 
   # Wraps a module function into mruby, using keyword arguments.
@@ -515,7 +522,14 @@ module Anyolite
   # respectively, in order to require a block argument. If *store_block_arg* is set to `true`,
   # any block argument given will be stored in a cache.
   macro wrap_module_function_with_keywords(rb_interpreter, under_module, name, proc, keyword_args, regular_args = nil, operator = "", context = nil, return_nil = false, block_arg_number = nil, block_return_type = nil, store_block_arg = false)
-    Anyolite::Macro.wrap_module_function_with_keyword_args({{rb_interpreter}}, {{under_module}}, {{name}}, {{proc}}, {{keyword_args}}, {{regular_args}}, operator: {{operator}}, context: {{context}}, return_nil: {{return_nil}}, block_arg_number: {{block_arg_number}}, block_return_type: {{block_return_type}}, store_block_arg: {{store_block_arg}})
+    {% options = {
+         :context           => context,
+         :return_nil        => return_nil,
+         :block_arg_number  => block_arg_number,
+         :block_return_type => block_return_type,
+         :store_block_arg   => store_block_arg,
+       } %}
+    Anyolite::Macro.wrap_module_function_with_keyword_args({{rb_interpreter}}, {{under_module}}, {{name}}, {{proc}}, {{keyword_args}}, {{regular_args}}, operator: {{operator}}, options: {{options}})
   end
 
   # Wraps a class method into mruby.

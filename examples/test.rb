@@ -2,7 +2,47 @@ start_time = Time.now
 
 puts "Initiate testing script..."
 
-BytecodeTestClass.new("Hello world").do_test(5)
+# Testing bytecode if enabled
+TestFramework.check(test_no: 1, should_be: ["Hello world", 1, 2, 3, 4, 5]) do
+  BytecodeTestClass.new("Hello world").do_test(5)
+end
+
+# Testing attributes
+TestFramework.check(test_no: 2, should_be: 5) do
+  a = TestModule::Test.new(x: 5)
+  a.x
+end
+
+# Testing instance methods and returned arrays
+TestFramework.check(test_no: 3, should_be: [19, false, "Example string", 0.4, 5 + 19]) do
+  a = TestModule::Test.new(x: 5)
+  a.test(int: 19, bool: false, str: 'Example string')
+end
+
+# Testing attribute changes using an instance method
+TestFramework.check(test_no: 4, should_be: 5 + 19) do
+  a = TestModule::Test.new(x: 5)
+  a.test(int: 19, bool: false, str: 'Example string')
+  a.x
+end
+
+# Testing instance methods with keyword arguments
+TestFramework.check(test_no: 5, should_be: [19, false, "Example string", 0.5, 5 + 19]) do
+  a = TestModule::Test.new(x: 5)
+  a.test(int: 19, bool: false, str: 'Example string', float: 0.5)
+end
+
+# Testing module methods
+TestFramework.check(test_no: 6, should_be: ["Hello", 3]) do
+  TestModule.test_method(int: 3, str: "Hello")
+end
+
+# Testing custom keyword arguments implemented using Anyolite
+TestFramework.check(test_no: 7, should_be: ["World", 19]) do
+  TestModule.test_method(str: "World")
+end
+
+# TODO: More tests
 
 a = TestModule::Test.new(x: 5)
 
@@ -19,11 +59,8 @@ b = TestModule::Test.new(x: 32)
 
 s = TestModule::Bla.new
 
-puts a.test(int: 19, bool: false, str: 'Example string')
+puts 
 puts a.test(int: 19, bool: false, str: 'Example string', float: 0.5)
-
-TestModule.test_method(int: 3, str: "Hello")
-TestModule.test_method(str: "World")
 
 puts "Value getter returns #{a.x}"
 puts "Adding..."
