@@ -13,7 +13,7 @@
 <script type="text/javascript" src="../js/doc.js"></script>
 
   <meta name="repository-name" content="anyolite">
-  <title>Anyolite::RbInterpreter - anyolite 0.17.0</title>
+  <title>Anyolite::IgnoreAncestorMethods - anyolite 0.17.0</title>
   <script type="text/javascript">
     CrystalDocs.base_path = "../";
   </script>
@@ -131,7 +131,7 @@
       
     </li>
   
-  <li class=" " data-id="anyolite/Anyolite/IgnoreAncestorMethods" data-name="anyolite::ignoreancestormethods">
+  <li class=" current" data-id="anyolite/Anyolite/IgnoreAncestorMethods" data-name="anyolite::ignoreancestormethods">
       <a href="../Anyolite/IgnoreAncestorMethods.html">IgnoreAncestorMethods</a>
       
     </li>
@@ -191,7 +191,7 @@
       
     </li>
   
-  <li class=" current" data-id="anyolite/Anyolite/RbInterpreter" data-name="anyolite::rbinterpreter">
+  <li class=" " data-id="anyolite/Anyolite/RbInterpreter" data-name="anyolite::rbinterpreter">
       <a href="../Anyolite/RbInterpreter.html">RbInterpreter</a>
       
     </li>
@@ -335,12 +335,10 @@
 <div class="main-content">
 <h1 class="type-name">
 
-  <span class="kind">class</span> Anyolite::RbInterpreter
+  <span class="kind">annotation</span> Anyolite::IgnoreAncestorMethods
 
 </h1>
 
-
-  <ul class="superclass-hierarchy"><li class="superclass"><a href="../Anyolite/RbInterpreter.html">Anyolite::RbInterpreter</a></li><li class="superclass">Reference</li><li class="superclass">Object</li></ul>
 
 
 
@@ -354,8 +352,8 @@
     Overview
   </h2>
 
-  <p>Wrapper for an mruby state reference</p>
-<p><span class="flag purple">NOTE</span>  Do not create more than one at a time!</p>
+  <p>Specifies that only the directly defined methods of the respective
+class are wrapped, and no inherited methods.</p>
 
 
 
@@ -380,8 +378,8 @@
   </h2>
   
     
-      <a href="https://github.com/Anyolite/anyolite/blob/v0.17.0/src/RbInterpreter.cr#L4" target="_blank">
-        RbInterpreter.cr
+      <a href="https://github.com/Anyolite/anyolite/blob/v0.17.0/src/Main.cr#L788" target="_blank">
+        Main.cr
       </a>
     
     <br/>
@@ -391,102 +389,9 @@
 
 
 
-  <h2>
-    <a id="constructors" class="anchor" href="#constructors">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>
-    Constructors
-  </h2>
-  <ul class="list-summary">
-    
-      <li class="entry-summary">
-        <a href="#new-class-method" class="signature"><strong>.new</strong></a>
-        
-      </li>
-    
-  </ul>
 
 
 
-  <h2>
-    <a id="class-method-summary" class="anchor" href="#class-method-summary">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>
-    Class Method Summary
-  </h2>
-  <ul class="list-summary">
-    
-      <li class="entry-summary">
-        <a href="#create%28%26%29-class-method" class="signature"><strong>.create</strong>(&)</a>
-        
-      </li>
-    
-  </ul>
-
-
-
-  <h2>
-    <a id="instance-method-summary" class="anchor" href="#instance-method-summary">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>
-    Instance Method Summary
-  </h2>
-  <ul class="list-summary">
-    
-      <li class="entry-summary">
-        <a href="#close-instance-method" class="signature"><strong>#close</strong></a>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#define_class_method%28name%3AString%2Cc%3ARbClass%7CRbModule%2Cproc%3ARbCore%3A%3ARbFunc%29-instance-method" class="signature"><strong>#define_class_method</strong>(name : String, c : RbClass | RbModule, proc : RbCore::RbFunc)</a>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#define_method%28name%3AString%2Cc%3ARbClass%7CRbModule%2Cproc%3ARbCore%3A%3ARbFunc%29-instance-method" class="signature"><strong>#define_method</strong>(name : String, c : RbClass | RbModule, proc : RbCore::RbFunc)</a>
-        
-          <div class="summary"><p><span class="flag orange">TODO</span>  Use internal mruby arg count in future versions</p></div>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#define_module_function%28name%3AString%2Cmod%3ARbModule%7CRbClass%2Cproc%3ARbCore%3A%3ARbFunc%29-instance-method" class="signature"><strong>#define_module_function</strong>(name : String, mod : RbModule | RbClass, proc : RbCore::RbFunc)</a>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#execute_bytecode%28bytecode%3AArray%28UInt8%29%29-instance-method" class="signature"><strong>#execute_bytecode</strong>(bytecode : Array(UInt8))</a>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#execute_script_line%28str%3AString%29-instance-method" class="signature"><strong>#execute_script_line</strong>(str : String)</a>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#load_bytecode_from_file%28filename%3AString%29-instance-method" class="signature"><strong>#load_bytecode_from_file</strong>(filename : String)</a>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#load_script_from_file%28filename%3AString%29-instance-method" class="signature"><strong>#load_script_from_file</strong>(filename : String)</a>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#to_unsafe-instance-method" class="signature"><strong>#to_unsafe</strong></a>
-        
-      </li>
-    
-  </ul>
 
 
 
@@ -494,243 +399,12 @@
 
 <div class="methods-inherited">
   
-    
-
-
-    
-
-
-    
-
-
-  
-    
-
-
-    
-
-
-    
-
-
-  
 </div>
 
 
-  <h2>
-    <a id="constructor-detail" class="anchor" href="#constructor-detail">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>
-    Constructor Detail
-  </h2>
-  
-    <div class="entry-detail" id="new-class-method">
-      <div class="signature">
-        
-        def self.<strong>new</strong>
-
-        <a class="method-permalink" href="#new-class-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/Anyolite/anyolite/blob/v0.17.0/src/RbInterpreter.cr#L16" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
 
 
 
-  <h2>
-    <a id="class-method-detail" class="anchor" href="#class-method-detail">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>
-    Class Method Detail
-  </h2>
-  
-    <div class="entry-detail" id="create(&amp;)-class-method">
-      <div class="signature">
-        
-        def self.<strong>create</strong>(&)
-
-        <a class="method-permalink" href="#create%28%26%29-class-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/Anyolite/anyolite/blob/v0.17.0/src/RbInterpreter.cr#L7" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-
-
-
-  <h2>
-    <a id="instance-method-detail" class="anchor" href="#instance-method-detail">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>
-    Instance Method Detail
-  </h2>
-  
-    <div class="entry-detail" id="close-instance-method">
-      <div class="signature">
-        
-        def <strong>close</strong>
-
-        <a class="method-permalink" href="#close-instance-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/Anyolite/anyolite/blob/v0.17.0/src/RbInterpreter.cr#L21" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="define_class_method(name:String,c:RbClass|RbModule,proc:RbCore::RbFunc)-instance-method">
-      <div class="signature">
-        
-        def <strong>define_class_method</strong>(name : String, c : <a href="../Anyolite/RbClass.html">RbClass</a> | <a href="../Anyolite/RbModule.html">RbModule</a>, proc : RbCore::RbFunc)
-
-        <a class="method-permalink" href="#define_class_method%28name%3AString%2Cc%3ARbClass%7CRbModule%2Cproc%3ARbCore%3A%3ARbFunc%29-instance-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/Anyolite/anyolite/blob/v0.17.0/src/RbInterpreter.cr#L63" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="define_method(name:String,c:RbClass|RbModule,proc:RbCore::RbFunc)-instance-method">
-      <div class="signature">
-        
-        def <strong>define_method</strong>(name : String, c : <a href="../Anyolite/RbClass.html">RbClass</a> | <a href="../Anyolite/RbModule.html">RbModule</a>, proc : RbCore::RbFunc)
-
-        <a class="method-permalink" href="#define_method%28name%3AString%2Cc%3ARbClass%7CRbModule%2Cproc%3ARbCore%3A%3ARbFunc%29-instance-method">#</a>
-      </div>
-      
-        <div class="doc">
-          
-          <p><span class="flag orange">TODO</span>  Use internal mruby arg count in future versions</p>
-        </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/Anyolite/anyolite/blob/v0.17.0/src/RbInterpreter.cr#L47" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="define_module_function(name:String,mod:RbModule|RbClass,proc:RbCore::RbFunc)-instance-method">
-      <div class="signature">
-        
-        def <strong>define_module_function</strong>(name : String, mod : <a href="../Anyolite/RbModule.html">RbModule</a> | <a href="../Anyolite/RbClass.html">RbClass</a>, proc : RbCore::RbFunc)
-
-        <a class="method-permalink" href="#define_module_function%28name%3AString%2Cmod%3ARbModule%7CRbClass%2Cproc%3ARbCore%3A%3ARbFunc%29-instance-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/Anyolite/anyolite/blob/v0.17.0/src/RbInterpreter.cr#L55" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="execute_bytecode(bytecode:Array(UInt8))-instance-method">
-      <div class="signature">
-        
-        def <strong>execute_bytecode</strong>(bytecode : Array(UInt8))
-
-        <a class="method-permalink" href="#execute_bytecode%28bytecode%3AArray%28UInt8%29%29-instance-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/Anyolite/anyolite/blob/v0.17.0/src/RbInterpreter.cr#L38" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="execute_script_line(str:String)-instance-method">
-      <div class="signature">
-        
-        def <strong>execute_script_line</strong>(str : String)
-
-        <a class="method-permalink" href="#execute_script_line%28str%3AString%29-instance-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/Anyolite/anyolite/blob/v0.17.0/src/RbInterpreter.cr#L30" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="load_bytecode_from_file(filename:String)-instance-method">
-      <div class="signature">
-        
-        def <strong>load_bytecode_from_file</strong>(filename : String)
-
-        <a class="method-permalink" href="#load_bytecode_from_file%28filename%3AString%29-instance-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/Anyolite/anyolite/blob/v0.17.0/src/RbInterpreter.cr#L42" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="load_script_from_file(filename:String)-instance-method">
-      <div class="signature">
-        
-        def <strong>load_script_from_file</strong>(filename : String)
-
-        <a class="method-permalink" href="#load_script_from_file%28filename%3AString%29-instance-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/Anyolite/anyolite/blob/v0.17.0/src/RbInterpreter.cr#L34" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="to_unsafe-instance-method">
-      <div class="signature">
-        
-        def <strong>to_unsafe</strong>
-
-        <a class="method-permalink" href="#to_unsafe-instance-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/Anyolite/anyolite/blob/v0.17.0/src/RbInterpreter.cr#L26" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
 
 
 
