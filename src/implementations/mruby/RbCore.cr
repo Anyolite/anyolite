@@ -16,7 +16,7 @@ module Anyolite
       @[Link(ldflags: "#{__DIR__}/../../../{{build_path.id}}/glue/mruby/error_helper.o -DMRB_INT64")]
     {% end %}
   end
-  
+
   Anyolite.link_libraries
 
   lib RbCore
@@ -34,7 +34,7 @@ module Anyolite
     alias RClassPtr = RClass*
 
     enum MrbVType
-      MRB_TT_FALSE = 0
+      MRB_TT_FALSE     = 0
       MRB_TT_TRUE
       MRB_TT_SYMBOL
       MRB_TT_UNDEF
@@ -115,7 +115,7 @@ module Anyolite
     fun rb_raise_key_error = mrb_raise_key_error(rb : State*, msg : LibC::Char*)
 
     fun rb_get_args = mrb_get_args(rb : State*, format : LibC::Char*, ...) : RbInt
-    
+
     fun rb_get_argc = mrb_get_argc(rb : State*) : RbInt
     fun rb_get_argv = mrb_get_argv(rb : State*) : RbValue*
 
@@ -157,7 +157,7 @@ module Anyolite
     fun check_rb_hash = check_mrb_hash(value : RbValue) : LibC::Int
     fun check_rb_data = check_mrb_data(value : RbValue) : LibC::Int
 
-    fun get_rb_fixnum = get_mrb_fixnum(value : RbValue) : RbInt 
+    fun get_rb_fixnum = get_mrb_fixnum(value : RbValue) : RbInt
     fun get_rb_float = get_mrb_float(value : RbValue) : RbFloat
     fun get_rb_bool = get_mrb_bool(value : RbValue) : RbBool
     fun get_rb_string = get_mrb_string(rb : State*, value : RbValue) : LibC::Char*

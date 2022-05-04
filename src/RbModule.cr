@@ -23,7 +23,7 @@ module Anyolite
       end
 
       return nil if !available
-      
+
       if under
         ruby_module = RbCore.rb_module_get_under(rb, under, name)
       else

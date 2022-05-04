@@ -60,7 +60,7 @@ module Anyolite
       RbCore.rb_gc_register(RbRefTable.get_current_interpreter, value)
     end
 
-    # Return the contained value 
+    # Return the contained value
     def value
       @value
     end
@@ -112,7 +112,7 @@ module Anyolite
 
   # Calls the Ruby block *block_value*, given as a `RbRef`, with the arguments *args*
   # as an `Array` of castable Crystal values (`nil` for none).
-  # 
+  #
   # If *cast_to* is set to a `Class` or similar, it will automatically cast
   # the result to a Crystal value of that class, otherwise, it will return
   # a `RbRef` value containing the result.
@@ -156,7 +156,7 @@ module Anyolite
     %rb = Anyolite::RbRefTable.get_current_interpreter
     Anyolite::RbCore.rb_raise_runtime_error(%rb.to_unsafe, {{message}}.to_unsafe)
   end
-  
+
   # Raises a Ruby type error with `String` *message*.
   macro raise_type_error(message)
     %rb = Anyolite::RbRefTable.get_current_interpreter
@@ -234,10 +234,10 @@ module Anyolite
   end
 
   # TODO: Is it possible to add block args to the two methods below?
-  
+
   # Calls the Ruby method with `String` or `Symbol` *name* for the Crystal object *value* and the
   # arguments *args* as an `Array` of castable Crystal values (`nil` for none).
-  # 
+  #
   # If *cast_to* is set to a `Class` or similar, it will automatically cast
   # the result to a Crystal value of that class, otherwise, it will return
   # a `RbRef` value containing the result.
@@ -273,7 +273,7 @@ module Anyolite
 
   # Calls the Ruby method with `String` or `Symbol` *name* for `self` and the
   # arguments *args* as an `Array` of castable Crystal values (`nil` for none).
-  # 
+  #
   # If *cast_to* is set to a `Class` or similar, it will automatically cast
   # the result to a Crystal value of that class, otherwise, it will return
   # a `RbRef` value containing the result.
@@ -285,7 +285,7 @@ module Anyolite
 
   # Calls the Ruby method with `String` or `Symbol` *name* for `self.class` and the
   # arguments *args* as an `Array` of castable Crystal values (`nil` for none).
-  # 
+  #
   # If *cast_to* is set to a `Class` or similar, it will automatically cast
   # the result to a Crystal value of that class, otherwise, it will return
   # a `RbRef` value containing the result.
@@ -295,10 +295,10 @@ module Anyolite
     Anyolite.call_rb_method_of_class(self.class, {{name}}, {{args}}, cast_to: {{cast_to}}, context: {{context}})
   end
 
-  # Calls the Ruby method with `String` or `Symbol` *name* 
+  # Calls the Ruby method with `String` or `Symbol` *name*
   # for the Crystal `Class` or `Module` *crystal_class* and the
   # arguments *args* as an `Array` of castable Crystal values (`nil` for none).
-  # 
+  #
   # If *cast_to* is set to a `Class` or similar, it will automatically cast
   # the result to a Crystal value of that class, otherwise, it will return
   # a `RbRef` value containing the result.
@@ -316,7 +316,7 @@ module Anyolite
   end
 
   # Gets the Ruby instance variable with `String` or `Symbol` *name* for the Crystal object *object*.
-  # 
+  #
   # If *cast_to* is set to a `Class` or similar, it will automatically cast
   # the result to a Crystal value of that class, otherwise, it will return
   # a `RbRef` value containing the result.
@@ -338,7 +338,7 @@ module Anyolite
 
   # Sets the Ruby instance variable with `String` or `Symbol` *name* for the Crystal object *object*
   # to the Crystal value *value*.
-  # 
+  #
   # If *cast_to* is set to a `Class` or similar, it will automatically cast
   # the result to a Crystal value of that class, otherwise, it will return
   # a `RbRef` value containing the result.
@@ -354,7 +354,7 @@ module Anyolite
   end
 
   # Gets the Ruby class variable with `String` or `Symbol` *name* for the Crystal `Class` or `Module` *crystal_class*.
-  # 
+  #
   # If *cast_to* is set to a `Class` or similar, it will automatically cast
   # the result to a Crystal value of that class, otherwise, it will return
   # a `RbRef` value containing the result.
@@ -376,7 +376,7 @@ module Anyolite
 
   # Sets the Ruby class variable with `String` or `Symbol` *name* for the Crystal `Class` or `Module` *crystal_class*
   # to the value *value*.
-  # 
+  #
   # If *cast_to* is set to a `Class` or similar, it will automatically cast
   # the result to a Crystal value of that class, otherwise, it will return
   # a `RbRef` value containing the result.
@@ -392,7 +392,7 @@ module Anyolite
   end
 
   # Gets the Ruby global variable with `String` or `Symbol` *name*.
-  # 
+  #
   # If *cast_to* is set to a `Class` or similar, it will automatically cast
   # the result to a Crystal value of that class, otherwise, it will return
   # a `RbRef` value containing the result.
@@ -412,7 +412,7 @@ module Anyolite
 
   # Sets the Ruby global variable with `String` or `Symbol` *name*
   # to the Crystal value *value*.
-  # 
+  #
   # If *cast_to* is set to a `Class` or similar, it will automatically cast
   # the result to a Crystal value of that class, otherwise, it will return
   # a `RbRef` value containing the result.
@@ -455,14 +455,14 @@ module Anyolite
   # Wraps the constructor of a Crystal class into mruby.
   #
   # The constructor for the Crystal `Class` *crystal_class* will be integrated into the `RbInterpreter` *rb_interpreter*,
-  # with the arguments *proc_args* as an `Array of Class`. 
-  # 
+  # with the arguments *proc_args* as an `Array of Class`.
+  #
   # The value *operator* will append the specified `String`
   # to the final name and *context* can give the function a `Path` for resolving types correctly.
   #
   # The arguments *block_arg_number* and *block_return_type* can be set to an `Int` and a `Class`,
   # respectively, in order to require a block argument. If *store_block_arg* is set to `true`,
-  # any block argument given will be stored in a cache. 
+  # any block argument given will be stored in a cache.
   macro wrap_constructor(rb_interpreter, crystal_class, proc_args = nil, operator = "", context = nil, block_arg_number = nil, block_return_type = nil, store_block_arg = false)
     Anyolite::Macro.wrap_constructor_function_with_args({{rb_interpreter}}, {{crystal_class}}, {{crystal_class}}.new, {{proc_args}}, operator: {{operator}}, context: {{context}}, block_arg_number: {{block_arg_number}}, block_return_type: {{block_return_type}}, store_block_arg: {{store_block_arg}})
   end
@@ -477,7 +477,7 @@ module Anyolite
   #
   # The arguments *block_arg_number* and *block_return_type* can be set to an `Int` and a `Class`,
   # respectively, in order to require a block argument. If *store_block_arg* is set to `true`,
-  # any block argument given will be stored in a cache. 
+  # any block argument given will be stored in a cache.
   macro wrap_constructor_with_keywords(rb_interpreter, crystal_class, keyword_args, regular_args = nil, operator = "", context = nil, block_arg_number = nil, block_return_type = nil, store_block_arg = false)
     Anyolite::Macro.wrap_constructor_function_with_keyword_args({{rb_interpreter}}, {{crystal_class}}, {{crystal_class}}.new, {{keyword_args}}, {{regular_args}}, operator: {{operator}}, context: {{context}}, block_arg_number: {{block_arg_number}}, block_return_type: {{block_return_type}}, store_block_arg: {{store_block_arg}})
   end
@@ -495,7 +495,7 @@ module Anyolite
   #
   # The arguments *block_arg_number* and *block_return_type* can be set to an `Int` and a `Class`,
   # respectively, in order to require a block argument. If *store_block_arg* is set to `true`,
-  # any block argument given will be stored in a cache. 
+  # any block argument given will be stored in a cache.
   macro wrap_module_function(rb_interpreter, under_module, name, proc, proc_args = nil, operator = "", context = nil, return_nil = false, block_arg_number = nil, block_return_type = nil, store_block_arg = false)
     Anyolite::Macro.wrap_module_function_with_args({{rb_interpreter}}, {{under_module}}, {{name}}, {{proc}}, {{proc_args}}, operator: {{operator}}, context: {{context}}, return_nil: {{return_nil}}, block_arg_number: {{block_arg_number}}, block_return_type: {{block_return_type}}, store_block_arg: {{store_block_arg}})
   end
@@ -513,7 +513,7 @@ module Anyolite
   #
   # The arguments *block_arg_number* and *block_return_type* can be set to an `Int` and a `Class`,
   # respectively, in order to require a block argument. If *store_block_arg* is set to `true`,
-  # any block argument given will be stored in a cache. 
+  # any block argument given will be stored in a cache.
   macro wrap_module_function_with_keywords(rb_interpreter, under_module, name, proc, keyword_args, regular_args = nil, operator = "", context = nil, return_nil = false, block_arg_number = nil, block_return_type = nil, store_block_arg = false)
     Anyolite::Macro.wrap_module_function_with_keyword_args({{rb_interpreter}}, {{under_module}}, {{name}}, {{proc}}, {{keyword_args}}, {{regular_args}}, operator: {{operator}}, context: {{context}}, return_nil: {{return_nil}}, block_arg_number: {{block_arg_number}}, block_return_type: {{block_return_type}}, store_block_arg: {{store_block_arg}})
   end
@@ -531,7 +531,7 @@ module Anyolite
   #
   # The arguments *block_arg_number* and *block_return_type* can be set to an `Int` and a `Class`,
   # respectively, in order to require a block argument. If *store_block_arg* is set to `true`,
-  # any block argument given will be stored in a cache. 
+  # any block argument given will be stored in a cache.
   macro wrap_class_method(rb_interpreter, crystal_class, name, proc, proc_args = nil, operator = "", context = nil, return_nil = false, block_arg_number = nil, block_return_type = nil, store_block_arg = false)
     Anyolite::Macro.wrap_class_method_with_args({{rb_interpreter}}, {{crystal_class}}, {{name}}, {{proc}}, {{proc_args}}, operator: {{operator}}, context: {{context}}, return_nil: {{return_nil}}, block_arg_number: {{block_arg_number}}, block_return_type: {{block_return_type}}, store_block_arg: {{store_block_arg}})
   end
@@ -549,7 +549,7 @@ module Anyolite
   #
   # The arguments *block_arg_number* and *block_return_type* can be set to an `Int` and a `Class`,
   # respectively, in order to require a block argument. If *store_block_arg* is set to `true`,
-  # any block argument given will be stored in a cache. 
+  # any block argument given will be stored in a cache.
   macro wrap_class_method_with_keywords(rb_interpreter, crystal_class, name, proc, keyword_args, regular_args = nil, operator = "", context = nil, return_nil = false, block_arg_number = nil, block_return_type = nil, store_block_arg = false)
     Anyolite::Macro.wrap_class_method_with_keyword_args({{rb_interpreter}}, {{crystal_class}}, {{name}}, {{proc}}, {{keyword_args}}, {{regular_args}}, operator: {{operator}}, context: {{context}}, return_nil: {{return_nil}}, block_arg_number: {{block_arg_number}}, block_return_type: {{block_return_type}}, store_block_arg: {{store_block_arg}})
   end
@@ -567,7 +567,7 @@ module Anyolite
   #
   # The arguments *block_arg_number* and *block_return_type* can be set to an `Int` and a `Class`,
   # respectively, in order to require a block argument. If *store_block_arg* is set to `true`,
-  # any block argument given will be stored in a cache. 
+  # any block argument given will be stored in a cache.
   macro wrap_instance_method(rb_interpreter, crystal_class, name, proc, proc_args = nil, operator = "", context = nil, return_nil = false, block_arg_number = nil, block_return_type = nil, store_block_arg = false)
     Anyolite::Macro.wrap_instance_function_with_args({{rb_interpreter}}, {{crystal_class}}, {{name}}, {{proc}}, {{proc_args}}, operator: {{operator}}, context: {{context}}, return_nil: {{return_nil}}, block_arg_number: {{block_arg_number}}, block_return_type: {{block_return_type}}, store_block_arg: {{store_block_arg}})
   end
@@ -585,7 +585,7 @@ module Anyolite
   #
   # The arguments *block_arg_number* and *block_return_type* can be set to an `Int` and a `Class`,
   # respectively, in order to require a block argument. If *store_block_arg* is set to `true`,
-  # any block argument given will be stored in a cache. 
+  # any block argument given will be stored in a cache.
   macro wrap_instance_method_with_keywords(rb_interpreter, crystal_class, name, proc, keyword_args, regular_args = nil, operator = "", context = nil, return_nil = false, block_arg_number = nil, block_return_type = nil, store_block_arg = false)
     Anyolite::Macro.wrap_instance_function_with_keyword_args({{rb_interpreter}}, {{crystal_class}}, {{name}}, {{proc}}, {{keyword_args}}, {{regular_args}}, operator: {{operator}}, context: {{context}}, return_nil: {{return_nil}}, block_arg_number: {{block_arg_number}}, block_return_type: {{block_return_type}}, store_block_arg: {{store_block_arg}})
   end
@@ -672,12 +672,12 @@ module Anyolite
   # The optional first argument overwrites the original argument array.
   annotation Specialize; end
 
-  # Excludes all definitions of the instance method given as the first argument 
+  # Excludes all definitions of the instance method given as the first argument
   # besides the one with the arguments given in the second argument (`nil` for none) from wrapping.
   # The optional third argument overwrites the original argument array.
   annotation SpecializeInstanceMethod; end
 
-  # Excludes all definitions of the class method given as the first argument 
+  # Excludes all definitions of the class method given as the first argument
   # besides the one with the arguments given in the second argument (`nil` for none) from wrapping.
   # The optional third argument overwrites the original argument array.
   annotation SpecializeClassMethod; end
@@ -738,13 +738,13 @@ module Anyolite
   # type of the block.
   annotation AddBlockArg; end
 
-  # Specifies the instance method given as the first argument 
+  # Specifies the instance method given as the first argument
   # to require a block argument with the second argument
   # being the number of values yielded and the third argument the return
   # type of the block.
   annotation AddBlockArgInstanceMethod; end
 
-  # Specifies the class method given as the first argument 
+  # Specifies the class method given as the first argument
   # to require a block argument with the second argument
   # being the number of values yielded and the third argument the return
   # type of the block.
@@ -778,8 +778,8 @@ module Anyolite
   # All methods of the respective class have their required arguments
   # wrapped as regular arguments and their optional arguments wrapped
   # as keyword arguments.
-  # 
-  # The annotation can be overwritten with the respective 
+  #
+  # The annotation can be overwritten with the respective
   # `WrapWithoutKeywords` annotations for specific methods.
   annotation DefaultOptionalArgsToKeywordArgs; end
 
@@ -791,10 +791,10 @@ module Anyolite
   #
   # The `Class` *crystal_class* will be integrated into the `RbInterpreter` *rb_interpreter*,
   # with the optional parent module *under*.
-  # Methods or constants to be excluded can be specified as 
-  # `Symbol` or `String` in the `Array` 
+  # Methods or constants to be excluded can be specified as
+  # `Symbol` or `String` in the `Array`
   # *instance_method_exclusions* (for instance methods),
-  # *class_method_exclusions* (for class methods) or 
+  # *class_method_exclusions* (for class methods) or
   # *constant_exclusions* (for constants).
   #
   # Enum classes can be wrapped by setting *use_enum_constructor*.
@@ -856,7 +856,7 @@ module Anyolite
 
           {% if include_ancestor_methods %}
             {% reversed_ancestors = [] of TypeNode %}
-            {% for ancestor in resolved_class.ancestors.reject{|ancestor| [Object, Reference, Struct, Enum, Value, Comparable(Enum), Enumerable].includes?(ancestor)} %}
+            {% for ancestor in resolved_class.ancestors.reject { |ancestor| [Object, Reference, Struct, Enum, Value, Comparable(Enum), Enumerable].includes?(ancestor) } %}
               {% reversed_ancestors = [ancestor] + reversed_ancestors %}
             {% end %}
 
@@ -867,7 +867,7 @@ module Anyolite
             {% else %}
               {% for ancestor, ancestor_index in reversed_ancestors %}
                 {% puts "> Going into ancestor #{ancestor} for #{resolved_class}..." if verbose %}
-                {% later_ancestors = reversed_ancestors[ancestor_index + 1 .. -1] %}
+                {% later_ancestors = reversed_ancestors[ancestor_index + 1..-1] %}
 
                 Anyolite::Macro.wrap_all_instance_methods({{rb_interpreter}}, {{crystal_class}}, {{instance_method_exclusions}}, 
                   verbose: {{verbose}}, context: {{new_context}}, use_enum_constructor: {{use_enum_constructor}}, wrap_equality_method: {{wrap_equality_method}}, 
@@ -889,9 +889,9 @@ module Anyolite
   #
   # The module *crystal_module* will be integrated into the `RbInterpreter` *rb_interpreter*,
   # with the optional parent module *under*.
-  # Methods or constants to be excluded can be specified as 
-  # `Symbol` or `String` in the `Array` 
-  # *class_method_exclusions* (for class methods) or 
+  # Methods or constants to be excluded can be specified as
+  # `Symbol` or `String` in the `Array`
+  # *class_method_exclusions* (for class methods) or
   # *constant_exclusions* (for constants).
   # The option *overwrite* will iterate through all functions and
   # constants again if set to `true`.
@@ -924,12 +924,12 @@ module Anyolite
 
   # Wraps a whole class or module structure under a module into mruby.
   #
-  # The class or module *crystal_module_or_class* will be integrated 
+  # The class or module *crystal_module_or_class* will be integrated
   # into the `RbInterpreter` *rb_interpreter*,
   # with the optional parent module *under*.
-  # Methods or constants to be excluded can be specified as 
-  # `Symbol` or `String` in the `Array` 
-  # *class_method_exclusions* (for class methods) or 
+  # Methods or constants to be excluded can be specified as
+  # `Symbol` or `String` in the `Array`
+  # *class_method_exclusions* (for class methods) or
   # *constant_exclusions* (for constants).
   #
   # If *wrap_equality_method* is set, the `==` method will be wrapped
@@ -940,7 +940,7 @@ module Anyolite
   # from nontrivial ancestor classes.
   # The option *overwrite* will iterate through all functions and
   # constants again if set to `true`.
-  # If *verbose* is set, wrapping information will be displayed. 
+  # If *verbose* is set, wrapping information will be displayed.
   macro wrap(rb_interpreter, crystal_module_or_class, under = nil,
              instance_method_exclusions = [] of String | Symbol,
              class_method_exclusions = [] of String | Symbol,

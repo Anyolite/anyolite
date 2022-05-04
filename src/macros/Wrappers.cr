@@ -354,7 +354,7 @@ module Anyolite
       {% elsif block_arg_number == 0 %}
         {% proc_arg_string = "do" %}
       {% else %}
-        {% proc_arg_string = "do |" + (0..block_arg_number-1).map{|x| "block_arg_#{x}"}.join(", ") + "|" %}
+        {% proc_arg_string = "do |" + (0..block_arg_number - 1).map { |x| "block_arg_#{x}" }.join(", ") + "|" %}
       {% end %}
 
       {% type_vars = crystal_class.resolve.type_vars %}
@@ -395,7 +395,7 @@ module Anyolite
           end
         {% elsif block_arg_number %}
             block_arg_array = [
-              {% for i in 0..block_arg_number-1 %}
+              {% for i in 0..block_arg_number - 1 %}
                 Anyolite::RbCast.return_value(_rb, {{"block_arg_#{i}".id}}),
               {% end %}
             ]
@@ -430,7 +430,7 @@ module Anyolite
       {% elsif block_arg_number == 0 %}
         {% proc_arg_string = "do" %}
       {% else %}
-        {% proc_arg_string = "do |" + (0..block_arg_number-1).map{|x| "block_arg_#{x}"}.join(", ") + "|" %}
+        {% proc_arg_string = "do |" + (0..block_arg_number - 1).map { |x| "block_arg_#{x}" }.join(", ") + "|" %}
       {% end %}
 
       {% type_vars = crystal_class.resolve.type_vars %}
@@ -490,7 +490,7 @@ module Anyolite
           end
         {% elsif block_arg_number %}
             block_arg_array = [
-              {% for i in 0..block_arg_number-1 %}
+              {% for i in 0..block_arg_number - 1 %}
                 Anyolite::RbCast.return_value(_rb, {{"block_arg_#{i}".id}}),
               {% end %}
             ]

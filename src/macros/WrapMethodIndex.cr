@@ -99,8 +99,8 @@ module Anyolite
               {% first_optional_arg = 0 %}
               {% final_arg_array.each { |arg| first_optional_arg += 1 unless (arg.is_a?(TypeDeclaration) && !arg.value.is_a?(Nop)) || (arg.is_a?(Arg) && !arg.default_value.is_a?(Nop)) } %}
 
-              {% regular_arg_partition = final_arg_array[0 .. first_optional_arg - 1] %}
-              {% keyword_arg_partition = final_arg_array[first_optional_arg .. -1] %}
+              {% regular_arg_partition = final_arg_array[0..first_optional_arg - 1] %}
+              {% keyword_arg_partition = final_arg_array[first_optional_arg..-1] %}
 
               {% regular_arg_partition = nil if first_optional_arg == 0 || regular_arg_partition.empty? %}
               {% keyword_arg_partition = nil if keyword_arg_partition.empty? %}
@@ -108,8 +108,8 @@ module Anyolite
               {% regular_arg_partition = final_arg_array %}
               {% keyword_arg_partition = nil %}
             {% else %}
-              {% regular_arg_partition = final_arg_array[0 .. without_keywords - 1] %}
-              {% keyword_arg_partition = final_arg_array[without_keywords .. -1] %}
+              {% regular_arg_partition = final_arg_array[0..without_keywords - 1] %}
+              {% keyword_arg_partition = final_arg_array[without_keywords..-1] %}
 
               {% regular_arg_partition = nil if without_keywords == 0 || regular_arg_partition.empty? %}
               {% keyword_arg_partition = nil if keyword_arg_partition.empty? %}

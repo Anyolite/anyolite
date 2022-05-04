@@ -3,7 +3,7 @@ module Anyolite
     @@content = {} of String => Array(UInt8)
 
     module AtCompiletime
-      # Caches the bytecode from *filename*, so it is automatically included 
+      # Caches the bytecode from *filename*, so it is automatically included
       # into the final application.
       macro load_bytecode_file(filename)
         {% file_content = read_file?(filename) %}
@@ -54,9 +54,9 @@ module Anyolite
       error_code = RbCore.transform_script_to_bytecode(filename, target_filename)
 
       case error_code
-        when 1 then raise "Could not load script file #{filename}"
-        when 2 then raise "Error when loading script file #{filename}"
-        when 3 then raise "Could not write to target file #{target_filename}"
+      when 1 then raise "Could not load script file #{filename}"
+      when 2 then raise "Error when loading script file #{filename}"
+      when 3 then raise "Could not write to target file #{target_filename}"
       end
     end
 
@@ -65,8 +65,8 @@ module Anyolite
       container = RbCore.transform_script_to_bytecode_container(filename)
 
       case container.error_code
-        when 1 then raise "Could not load script file #{filename}"
-        when 2 then raise "Error when loading script file #{filename}"
+      when 1 then raise "Could not load script file #{filename}"
+      when 2 then raise "Error when loading script file #{filename}"
       end
 
       safe_result = String.new(container.content, container.size)

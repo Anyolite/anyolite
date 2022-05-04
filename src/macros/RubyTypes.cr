@@ -8,7 +8,7 @@ module Anyolite
           Anyolite::Macro.type_in_ruby({{type.type}})
         {% end %}
       {% elsif context %}
-        Anyolite::Macro.resolve_type_in_ruby({{context}}::{{type.stringify.starts_with?("::") ? type.stringify[2..-1].id  : type}}, {{type}}, {{context}})
+        Anyolite::Macro.resolve_type_in_ruby({{context}}::{{type.stringify.starts_with?("::") ? type.stringify[2..-1].id : type}}, {{type}}, {{context}})
       {% else %}
         Anyolite::Macro.resolve_type_in_ruby({{type}}, {{type}})
       {% end %}

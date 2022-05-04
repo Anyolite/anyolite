@@ -20,7 +20,7 @@ module Anyolite
       @[Link(ldflags: "#{__DIR__}/../../../{{build_path.id}}/glue/mri/error_helper.o -lgmp -lcrypt -lz")]
     {% end %}
   end
-  
+
   Anyolite.link_libraries
 
   lib RbCore
@@ -37,7 +37,7 @@ module Anyolite
     alias RbSymbol = LibC::ULong
 
     enum MrbVType
-      MRB_TT_FALSE = 0
+      MRB_TT_FALSE     = 0
       MRB_TT_TRUE
       MRB_TT_SYMBOL
       MRB_TT_UNDEF
@@ -119,7 +119,7 @@ module Anyolite
     fun rb_raise_key_error = rb_raise_key_error(rb : State*, msg : LibC::Char*)
 
     fun rb_get_args = rb_scan_args(argc : RbInt, argv : RbValue*, format : LibC::Char*, ...) : RbInt
-    
+
     # UNUSED
     # fun rb_get_argc = mrb_get_argc(rb : State*) : RbInt
     # fun rb_get_argv = mrb_get_argv(rb : State*) : RbValue*
@@ -152,7 +152,7 @@ module Anyolite
 
     fun check_rb_fixnum(value : RbValue) : LibC::Int
     fun check_rb_float(value : RbValue) : LibC::Int
-    fun check_rb_true (value : RbValue) : LibC::Int
+    fun check_rb_true(value : RbValue) : LibC::Int
     fun check_rb_false(value : RbValue) : LibC::Int
     fun check_rb_nil(value : RbValue) : LibC::Int
     fun check_rb_undef(value : RbValue) : LibC::Int
@@ -162,7 +162,7 @@ module Anyolite
     fun check_rb_hash(value : RbValue) : LibC::Int
     fun check_rb_data(value : RbValue) : LibC::Int
 
-    fun get_rb_fixnum(value : RbValue) : RbInt 
+    fun get_rb_fixnum(value : RbValue) : RbInt
     fun get_rb_float(value : RbValue) : RbFloat
     fun get_rb_bool(value : RbValue) : RbBool
     fun get_rb_string(rb : State*, value : RbValue) : LibC::Char*
@@ -213,7 +213,7 @@ module Anyolite
 
     fun rb_module_get = get_constant(rb : State*, name : LibC::Char*) : RClassPtr
     fun rb_module_get_under = get_constant_under(rb : State*, under : RClassPtr, name : LibC::Char*) : RClassPtr
-    
+
     fun rb_module_defined = does_constant_exist(rb : State*, name : LibC::Char*) : RbBool
     fun rb_module_defined_under = does_constant_exist_under(rb : State*, under : RClassPtr, name : LibC::Char*) : RbBool
 

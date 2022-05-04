@@ -247,36 +247,30 @@ Other versions might still come before this, especially for
 bugfixes, but most of the features for a full release of
 Anyolite are already implemented.
 
-#### Platform support
+#### Features
 
-* [ ] Mac support (might be possible, not tested yet)
-* [ ] MRI support on Windows
-
-#### Documentation
-
-* [ ] Crystal specs for testing
-* [ ] Documentation of all relevant features and wrappers
 * [ ] Automated generation of Ruby documentations for wrapped functions
+* [ ] Return values from evaluated script lines
 
-#### Configuration options
+#### Breaking changes
 
-* [ ] More configuration options for the Rakefile
+* [ ] Compacted macro function options into hashes
 
-#### Code quality
+#### Usability
 
+* [ ] Mac support and continuous integration
+* [ ] Unit tests
+* [ ] Documentation of all relevant features and wrappers
 * [ ] Convert macro body variables to fresh variables wherever possible
-* [ ] Put macro function arguments as options in a hash
 * [ ] Code cleanup (especially in the macro section)
 * [ ] More compatibility between methods accepting `RbRef` and `RbValue`
-* [ ] Better overloads between Ruby and Crystal classes, where possible
 
 ### Future feature ideas (might not actually be possible to implement)
 
+* [ ] MRI support on Windows (does currently not work for some reason)
 * [ ] Splat argument and/or arbitrary keyword passing
 * [ ] Support for slices and bytes
 * [ ] Classes as argument type
 * [ ] Resolve context even in generic type union arguments
-* [ ] Class inheritance wrapping can be disabled for any class using annotations
-* [ ] General improvement of type resolving
-* [ ] Return values from evaluated script lines
+* [ ] General improvement of type resolution
 * [ ] Bignum support

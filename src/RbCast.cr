@@ -173,7 +173,7 @@ module Anyolite
     def self.casting_error(rb : RbCore::State*, value, crystal_class, rescue_value)
       rb_inspect_string = RbCore.rb_inspect(rb, value)
       rb_class = RbCore.get_class_of_obj(rb, value)
-      
+
       class_name = String.new(RbCore.rb_class_name(rb, rb_class))
 
       value_debug = RbCast.cast_to_string(rb, rb_inspect_string)

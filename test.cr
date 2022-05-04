@@ -33,7 +33,7 @@ module SomeModule
       property i : Int32 = 1234
       property f : Float32 = 0.1234
       property s : String = "Empty"
-  
+
       @[Anyolite::WrapWithoutKeywords]
       def initialize(new_i : Int = 5678, new_f : Float = 0.5678, new_s : String = "Default")
         @i = new_i.to_i32
@@ -69,8 +69,7 @@ module SomeModule
 
     @[Anyolite::SpecifyGenericTypes([U, V])]
     struct GenericTest(U, V)
-
-      property u : U 
+      property u : U
       property v : V
 
       def initialize(u : U, v : V)
@@ -156,7 +155,7 @@ module SomeModule
     # end
 
     # def slice_test(s : Slice(Int32))
-      
+
     # end
 
     # Gets called in Crystal and Ruby
@@ -220,7 +219,7 @@ module SomeModule
 
     # TODO: This method does not work in MRI for some encoding reason - fix this if possible
     # Also emojis in method names seem not to work in recent Crystal releases :(
-    
+
     {% unless flag?(:anyolite_implementation_ruby_3) %}
       @[Anyolite::Rename("happy😀emoji😀test😀😀😀")]
       def happy_emoji_test(arg : Int32)
@@ -280,7 +279,7 @@ module SomeModule
       if arg.is_a?(String)
         [arg]
       else
-        arg.map{|element| element.to_s * 2}
+        arg.map { |element| element.to_s * 2 }
       end
     end
 
@@ -451,7 +450,7 @@ module SomeModule
     @[Anyolite::ExcludeInstanceMethod("dup")]
     class TestChild < Test
       property y : String
-      
+
       def initialize(x : Int32 = 0)
         super(x: x)
         @y = x.to_s
@@ -525,7 +524,7 @@ module RPGTest
   end
 end
 
-macro load_test_module()
+macro load_test_module
   Anyolite.wrap_module(rb, SomeModule, "TestModule")
   Anyolite.wrap_module_function_with_keywords(rb, SomeModule, "test_method", SomeModule.test_method, [int : Int32 = 19, str : String])
   Anyolite.wrap_constant(rb, SomeModule, "SOME_CONSTANT", "Smile! 😊")

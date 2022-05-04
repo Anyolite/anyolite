@@ -1,7 +1,7 @@
 module Anyolite
   module Macro
-    macro wrap_all_instance_methods(rb_interpreter, crystal_class, exclusions, verbose, context = nil, 
-      use_enum_constructor = false, wrap_equality_method = false, other_source = nil, later_ancestors = nil)
+    macro wrap_all_instance_methods(rb_interpreter, crystal_class, exclusions, verbose, context = nil,
+                                    use_enum_constructor = false, wrap_equality_method = false, other_source = nil, later_ancestors = nil)
       {% has_specialized_method = {} of String => Bool %}
 
       {% method_source = other_source ? other_source : crystal_class %}
@@ -37,7 +37,7 @@ module Anyolite
         {% how_many_times_wrapped = {} of String => UInt32 %}
 
         {% for method, index in method_source.resolve.methods %}
-          {% all_annotations_exclude_im = crystal_class.resolve.annotations(Anyolite::ExcludeInstanceMethod) + method_source.resolve.annotations(Anyolite::ExcludeInstanceMethod) + crystal_class.resolve.ancestors.map {|ancestor| ancestor.resolve.annotations(Anyolite::ExcludeInstanceMethod)} %}
+          {% all_annotations_exclude_im = crystal_class.resolve.annotations(Anyolite::ExcludeInstanceMethod) + method_source.resolve.annotations(Anyolite::ExcludeInstanceMethod) + crystal_class.resolve.ancestors.map { |ancestor| ancestor.resolve.annotations(Anyolite::ExcludeInstanceMethod) } %}
           {% annotation_exclude_im = all_annotations_exclude_im.find { |element| element[0].id.stringify == method.name.stringify } %}
 
           {% all_annotations_include_im = crystal_class.resolve.annotations(Anyolite::IncludeInstanceMethod) + method_source.resolve.annotations(Anyolite::IncludeInstanceMethod) %}
@@ -137,7 +137,7 @@ module Anyolite
             {% puts "--> Excluding #{crystal_class}::#{method.name} (Exclusion due to abstract class)" if verbose %}
           {% elsif method.visibility != :public && method.name != "initialize" %}
             {% puts "--> Excluding #{crystal_class}::#{method.name} (Exclusion due to visibility)" if verbose %}
-          {% elsif crystal_class != method_source && (later_ancestors ? later_ancestors + [crystal_class] : [crystal_class]).find{|later_ancestor| later_ancestor.resolve? ? later_ancestor.resolve.methods.find{|orig_methods| orig_methods.name == method.name} : [] of Def} %}
+          {% elsif crystal_class != method_source && (later_ancestors ? later_ancestors + [crystal_class] : [crystal_class]).find { |later_ancestor| later_ancestor.resolve? ? later_ancestor.resolve.methods.find { |orig_methods| orig_methods.name == method.name } : [] of Def } %}
             {% puts "--> Excluding #{crystal_class}::#{method.name} (Exclusion due to finalization)" if verbose %}
           # Ignore rb hooks, to_unsafe and finalize (unless specialized, but this is not recommended)
           {% elsif (method.name.starts_with?("rb_") || method.name == "finalize" || method.name == "to_unsafe") && !has_specialized_method[method.name.stringify] %}

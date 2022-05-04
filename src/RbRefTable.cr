@@ -12,14 +12,14 @@ module Anyolite
 
     @@options = {
       # Log every change in the reference table
-      :logging                      => false,
-      
+      :logging => false,
+
       # Display warning messages
-      :warnings                     => true,
-      
+      :warnings => true,
+
       # Throw an exception if any warning occurs
-      :pedantic                     => true,
-      
+      :pedantic => true,
+
       # If true, values with same object IDs can overwrite each other
       :replace_conflicting_pointers => false,
     }

@@ -24,7 +24,7 @@ module Anyolite
           Anyolite::Macro.format_char({{arg.type}}, optional_values: {{optional_values}}, context: {{context}})
         {% end %}
       {% elsif context %}
-        Anyolite::Macro.resolve_format_char({{context}}::{{arg.stringify.starts_with?("::") ? arg.stringify[2..-1].id  : arg}}, {{arg}}, {{context}})
+        Anyolite::Macro.resolve_format_char({{context}}::{{arg.stringify.starts_with?("::") ? arg.stringify[2..-1].id : arg}}, {{arg}}, {{context}})
       {% else %}
         Anyolite::Macro.resolve_format_char({{arg}}, {{arg}})
       {% end %}
@@ -54,7 +54,7 @@ module Anyolite
       {% elsif context %}
         {% if context.names[0..-2].size > 0 %}
           {% new_context = context.names[0..-2].join("::").gsub(/(::)+/, "::").id %}
-          Anyolite::Macro.resolve_format_char({{new_context}}::{{raw_arg.stringify.starts_with?("::") ? raw_arg.stringify[2..-1].id  : raw_arg}}, {{raw_arg}}, {{new_context}})
+          Anyolite::Macro.resolve_format_char({{new_context}}::{{raw_arg.stringify.starts_with?("::") ? raw_arg.stringify[2..-1].id : raw_arg}}, {{raw_arg}}, {{new_context}})
         {% else %}
           Anyolite::Macro.resolve_format_char({{raw_arg}}, {{raw_arg}})
         {% end %}

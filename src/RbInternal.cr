@@ -4,5 +4,5 @@
   require "./implementations/mri/Implementation.cr"
 {% else %}
   # Default is mruby 3
-  require "./implementations/mruby/Implementation.cr" 
+  require "./implementations/mruby/Implementation.cr"
 {% end %}

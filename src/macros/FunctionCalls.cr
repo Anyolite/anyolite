@@ -6,7 +6,7 @@ module Anyolite
       {% elsif block_arg_number == 0 %}
         {% proc_arg_string = "do" %}
       {% else %}
-        {% proc_arg_string = "do |" + (0..block_arg_number-1).map{|x| "block_arg_#{x}"}.join(", ") + "|" %}
+        {% proc_arg_string = "do |" + (0..block_arg_number - 1).map { |x| "block_arg_#{x}" }.join(", ") + "|" %}
       {% end %}
 
       {% if proc.stringify == "Anyolite::Empty" %}
@@ -21,7 +21,7 @@ module Anyolite
         end
       {% elsif block_arg_number %}
           block_arg_array = [
-            {% for i in 0..block_arg_number-1 %}
+            {% for i in 0..block_arg_number - 1 %}
               Anyolite::RbCast.return_value({{rb}}, {{"block_arg_#{i}".id}}),
             {% end %}
           ]
@@ -37,14 +37,14 @@ module Anyolite
       {% end %}
     end
 
-    macro call_and_return_keyword_method(rb, proc, converted_regular_args, keyword_args, kw_args, operator = "", 
-        empty_regular = false, context = nil, type_vars = nil, type_var_names = nil, return_nil = false, block_arg_number = nil, block_return_type = nil, block_ptr = nil)
+    macro call_and_return_keyword_method(rb, proc, converted_regular_args, keyword_args, kw_args, operator = "",
+                                         empty_regular = false, context = nil, type_vars = nil, type_var_names = nil, return_nil = false, block_arg_number = nil, block_return_type = nil, block_ptr = nil)
       {% if !block_arg_number %}
         {% proc_arg_string = "" %}
       {% elsif block_arg_number == 0 %}
         {% proc_arg_string = "do" %}
       {% else %}
-        {% proc_arg_string = "do |" + (0..block_arg_number-1).map{|x| "block_arg_#{x}"}.join(", ") + "|" %}
+        {% proc_arg_string = "do |" + (0..block_arg_number - 1).map { |x| "block_arg_#{x}" }.join(", ") + "|" %}
       {% end %}
 
       {% if proc.stringify == "Anyolite::Empty" %}
@@ -76,7 +76,7 @@ module Anyolite
         end
       {% elsif block_arg_number %}
           block_arg_array = [
-            {% for i in 0..block_arg_number-1 %}
+            {% for i in 0..block_arg_number - 1 %}
               Anyolite::RbCast.return_value({{rb}}, {{"block_arg_#{i}".id}}),
             {% end %}
           ]
@@ -98,7 +98,7 @@ module Anyolite
       {% elsif block_arg_number == 0 %}
         {% proc_arg_string = "do" %}
       {% else %}
-        {% proc_arg_string = "do |" + (0..block_arg_number-1).map{|x| "block_arg_#{x}"}.join(", ") + "|" %}
+        {% proc_arg_string = "do |" + (0..block_arg_number - 1).map { |x| "block_arg_#{x}" }.join(", ") + "|" %}
       {% end %}
       
       if {{converted_obj}}.is_a?(Anyolite::StructWrapper)
@@ -116,7 +116,7 @@ module Anyolite
           end
         {% elsif block_arg_number %}
             block_arg_array = [
-              {% for i in 0..block_arg_number-1 %}
+              {% for i in 0..block_arg_number - 1 %}
                 Anyolite::RbCast.return_value({{rb}}, {{"block_arg_#{i}".id}}),
               {% end %}
             ]
@@ -139,7 +139,7 @@ module Anyolite
           end
         {% elsif block_arg_number %}
             block_arg_array = [
-              {% for i in 0..block_arg_number-1 %}
+              {% for i in 0..block_arg_number - 1 %}
                 Anyolite::RbCast.return_value({{rb}}, {{"block_arg_#{i}".id}}),
               {% end %}
             ]
@@ -163,7 +163,7 @@ module Anyolite
       {% elsif block_arg_number == 0 %}
         {% proc_arg_string = "do" %}
       {% else %}
-        {% proc_arg_string = "do |" + (0..block_arg_number-1).map{|x| "block_arg_#{x}"}.join(", ") + "|" %}
+        {% proc_arg_string = "do |" + (0..block_arg_number - 1).map { |x| "block_arg_#{x}" }.join(", ") + "|" %}
       {% end %}
 
       if {{converted_obj}}.is_a?(Anyolite::StructWrapper)
@@ -198,7 +198,7 @@ module Anyolite
           end
         {% elsif block_arg_number %}
             block_arg_array = [
-              {% for i in 0..block_arg_number-1 %}
+              {% for i in 0..block_arg_number - 1 %}
                 Anyolite::RbCast.return_value({{rb}}, {{"block_arg_#{i}".id}}),
               {% end %}
             ]
@@ -239,7 +239,7 @@ module Anyolite
           end
         {% elsif block_arg_number %}
             block_arg_array = [
-              {% for i in 0..block_arg_number-1 %}
+              {% for i in 0..block_arg_number - 1 %}
                 Anyolite::RbCast.return_value({{rb}}, {{"block_arg_#{i}".id}}),
               {% end %}
             ]
