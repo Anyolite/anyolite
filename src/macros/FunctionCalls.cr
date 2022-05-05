@@ -54,16 +54,14 @@ module Anyolite
         {% if options[:empty_regular] %}
           {% c = 0 %}
           {% for keyword in keyword_args %}
-            {{keyword.var.id}}: Anyolite::Macro.convert_from_ruby_to_crystal({{rb}}, {{kw_args}}.values[{{c}}], {{keyword}}, context: {{options[:context]}}, 
-              type_vars: {{options[:type_vars]}}, type_var_names: {{options[:type_var_names]}}, debug_information: {{proc.stringify + " - " + keyword_args.stringify}}),
+            {{keyword.var.id}}: Anyolite::Macro.convert_from_ruby_to_crystal({{rb}}, {{kw_args}}.values[{{c}}], {{keyword}}, options: {{options}}, debug_information: {{proc.stringify + " - " + keyword_args.stringify}}),
             {% c += 1 %}
           {% end %}
         {% else %}
           *{{converted_regular_args}},
           {% c = 0 %}
           {% for keyword in keyword_args %}
-            {{keyword.var.id}}: Anyolite::Macro.convert_from_ruby_to_crystal({{rb}}, {{kw_args}}.values[{{c}}], {{keyword}}, context: {{options[:context]}}, 
-              type_vars: {{options[:type_vars]}}, type_var_names: {{options[:type_var_names]}}, debug_information: {{proc.stringify + " - " + keyword_args.stringify}}),
+            {{keyword.var.id}}: Anyolite::Macro.convert_from_ruby_to_crystal({{rb}}, {{kw_args}}.values[{{c}}], {{keyword}}, options: {{options}}, debug_information: {{proc.stringify + " - " + keyword_args.stringify}}),
             {% c += 1 %}
           {% end %}
         {% end %}
@@ -71,7 +69,7 @@ module Anyolite
 
       {% if options[:block_arg_number] == 0 %}
           %yield_value = Anyolite::RbCore.rb_yield({{rb}}, {{block_ptr}}.value, Anyolite::RbCast.return_nil)
-          Anyolite::Macro.convert_from_ruby_to_crystal({{rb}}, %yield_value, {{block_return_type}})
+          Anyolite::Macro.convert_from_ruby_to_crystal({{rb}}, %yield_value, {{options[:block_return_type]}})
         end
       {% elsif options[:block_arg_number] %}
           %block_arg_array = [
@@ -175,16 +173,14 @@ module Anyolite
           {% if options[:empty_regular] %}
             {% c = 0 %}
             {% for keyword in keyword_args %}
-              {{keyword.var.id}}: Anyolite::Macro.convert_from_ruby_to_crystal({{rb}}, {{kw_args}}.values[{{c}}], {{keyword}}, context: {{options[:context]}}, 
-                type_vars: {{options[:type_vars]}}, type_var_names: {{options[:type_var_names]}}, debug_information: {{proc.stringify + " - " + keyword_args.stringify}}),
+              {{keyword.var.id}}: Anyolite::Macro.convert_from_ruby_to_crystal({{rb}}, {{kw_args}}.values[{{c}}], {{keyword}}, options: {{options}}, debug_information: {{proc.stringify + " - " + keyword_args.stringify}}),
               {% c += 1 %}
             {% end %}
           {% else %}
             *{{converted_regular_args}},
             {% c = 0 %}
             {% for keyword in keyword_args %}
-              {{keyword.var.id}}: Anyolite::Macro.convert_from_ruby_to_crystal({{rb}}, {{kw_args}}.values[{{c}}], {{keyword}}, context: {{options[:context]}},
-                type_vars: {{options[:type_vars]}}, type_var_names: {{options[:type_var_names]}}, debug_information: {{proc.stringify + " - " + keyword_args.stringify}}),
+              {{keyword.var.id}}: Anyolite::Macro.convert_from_ruby_to_crystal({{rb}}, {{kw_args}}.values[{{c}}], {{keyword}}, options: {{options}}, debug_information: {{proc.stringify + " - " + keyword_args.stringify}}),
               {% c += 1 %}
             {% end %}
           {% end %}
@@ -216,16 +212,14 @@ module Anyolite
           {% if options[:empty_regular] %}
             {% c = 0 %}
             {% for keyword in keyword_args %}
-              {{keyword.var.id}}: Anyolite::Macro.convert_from_ruby_to_crystal({{rb}}, {{kw_args}}.values[{{c}}], {{keyword}}, context: {{options[:context]}},
-                type_vars: {{options[:type_vars]}}, type_var_names: {{options[:type_var_names]}}, debug_information: {{proc.stringify + " - " + keyword_args.stringify}}),
+              {{keyword.var.id}}: Anyolite::Macro.convert_from_ruby_to_crystal({{rb}}, {{kw_args}}.values[{{c}}], {{keyword}}, options: {{options}}, debug_information: {{proc.stringify + " - " + keyword_args.stringify}}),
               {% c += 1 %}
             {% end %}
           {% else %}
             *{{converted_regular_args}},
             {% c = 0 %}
             {% for keyword in keyword_args %}
-              {{keyword.var.id}}: Anyolite::Macro.convert_from_ruby_to_crystal({{rb}}, {{kw_args}}.values[{{c}}], {{keyword}}, context: {{options[:context]}},
-                type_vars: {{options[:type_vars]}}, type_var_names: {{options[:type_var_names]}}, debug_information: {{proc.stringify + " - " + keyword_args.stringify}}),
+              {{keyword.var.id}}: Anyolite::Macro.convert_from_ruby_to_crystal({{rb}}, {{kw_args}}.values[{{c}}], {{keyword}}, options: {{options}}, debug_information: {{proc.stringify + " - " + keyword_args.stringify}}),
               {% c += 1 %}
             {% end %}
           {% end %}

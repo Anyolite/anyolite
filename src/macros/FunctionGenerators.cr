@@ -22,14 +22,16 @@ module Anyolite
 
     macro add_equality_method(rb_interpreter, crystal_class, context, verbose)
       {% puts "> Adding equality method for #{crystal_class}\n\n" if verbose %}
-      Anyolite::Macro.wrap_equality_function({{rb_interpreter}}, {{crystal_class}}, "==", Anyolite::Empty, operator: "==", context: {{context}})
+      {% options = {:context => context} %}
+      Anyolite::Macro.wrap_equality_function({{rb_interpreter}}, {{crystal_class}}, "==", Anyolite::Empty, operator: "==", options: {{options}})
     end
 
     macro add_copy_constructor(rb_interpreter, crystal_class, context, verbose)
       {% puts "> Adding copy constructor for #{crystal_class}\n\n" if verbose %}
+      {% options = {:context => context} %}
 
       %copy_proc = Anyolite::Macro.new_rb_func do
-        %converted_args = Anyolite::Macro.get_converted_args(_rb, [other : {{crystal_class}}], context: {{context}})
+        %converted_args = Anyolite::Macro.get_converted_args(_rb, [other : {{crystal_class}}], options: {{options}})
         %new_obj = %converted_args[0].dup
         Anyolite::Macro.allocate_constructed_object(_rb, {{crystal_class}}, _obj, %new_obj)
         _obj

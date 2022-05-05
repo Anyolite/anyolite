@@ -1,20 +1,20 @@
 module Anyolite
   module Macro
-    macro type_in_ruby(type, context = nil)
+    macro type_in_ruby(type, options = {} of Symbol => NoReturn)
       {% if type.is_a?(TypeDeclaration) %}
         {% if type.type.is_a?(Union) %}
           Anyolite::RbCore::RbValue
         {% else %}
           Anyolite::Macro.type_in_ruby({{type.type}})
         {% end %}
-      {% elsif context %}
-        Anyolite::Macro.resolve_type_in_ruby({{context}}::{{type.stringify.starts_with?("::") ? type.stringify[2..-1].id : type}}, {{type}}, {{context}})
+      {% elsif options[:context] %}
+        Anyolite::Macro.resolve_type_in_ruby({{options[:context]}}::{{type.stringify.starts_with?("::") ? type.stringify[2..-1].id : type}}, {{type}}, options: {{options}})
       {% else %}
         Anyolite::Macro.resolve_type_in_ruby({{type}}, {{type}})
       {% end %}
     end
 
-    macro resolve_type_in_ruby(type, raw_type, context = nil)
+    macro resolve_type_in_ruby(type, raw_type, options = {} of Symbol => NoReturn)
       {% if type.resolve? %}
         {% if flag?(:use_general_object_format_chars) %}
           Anyolite::RbCore::RbValue
@@ -36,10 +36,11 @@ module Anyolite
             Anyolite::RbCore::RbValue
           {% end %}
         {% end %}
-      {% elsif context %}
-        {% if context.names[0..-2].size > 0 %}
-          {% new_context = context.names[0..-2].join("::").gsub(/(\:\:)+/, "::").id %}
-          Anyolite::Macro.resolve_type_in_ruby({{new_context}}::{{raw_type.stringify.starts_with?("::") ? raw_type.stringify[2..-1].id : raw_type}}, {{raw_type}}, {{new_context}})
+      {% elsif options[:context] %}
+        {% if options[:context].names[0..-2].size > 0 %}
+          {% new_context = options[:context].names[0..-2].join("::").gsub(/(\:\:)+/, "::").id %}
+          {% options[:context] = new_context %}
+          Anyolite::Macro.resolve_type_in_ruby({{new_context}}::{{raw_type.stringify.starts_with?("::") ? raw_type.stringify[2..-1].id : raw_type}}, {{raw_type}}, options: {{options}})
         {% else %}
           Anyolite::Macro.resolve_type_in_ruby({{raw_type}}, {{raw_type}})
         {% end %}
@@ -48,21 +49,21 @@ module Anyolite
       {% end %}
     end
 
-    macro pointer_type(type, context = nil)
+    macro pointer_type(type, options = {} of Symbol => NoReturn)
       {% if type.is_a?(TypeDeclaration) %}
         {% if type.type.is_a?(Union) %}
           Pointer(Anyolite::RbCore::RbValue)
         {% else %}
-          Anyolite::Macro.pointer_type({{type.type}}, context: {{context}})
+          Anyolite::Macro.pointer_type({{type.type}}, options: {{options}})
         {% end %}
-      {% elsif context %}
-        Anyolite::Macro.resolve_pointer_type({{context}}::{{type.stringify.starts_with?("::") ? type.stringify[2..-1].id : type}}, {{type}}, {{context}})
+      {% elsif options[:context] %}
+        Anyolite::Macro.resolve_pointer_type({{options[:context]}}::{{type.stringify.starts_with?("::") ? type.stringify[2..-1].id : type}}, {{type}}, options: {{options}})
       {% else %}
         Anyolite::Macro.resolve_pointer_type({{type}}, {{type}})
       {% end %}
     end
 
-    macro resolve_pointer_type(type, raw_type, context = nil)
+    macro resolve_pointer_type(type, raw_type, options = {} of Symbol => NoReturn)
       {% if type.resolve? %}
         {% if flag?(:use_general_object_format_chars) %}
           Pointer(Anyolite::RbCore::RbValue)
@@ -83,10 +84,11 @@ module Anyolite
             Pointer(Anyolite::RbCore::RbValue)
           {% end %}
         {% end %}
-      {% elsif context %}
-        {% if context.names[0..-2].size > 0 %}
-          {% new_context = context.names[0..-2].join("::").gsub(/(\:\:)+/, "::").id %}
-          Anyolite::Macro.resolve_pointer_type({{new_context}}::{{raw_type.stringify.starts_with?("::") ? raw_type.stringify[2..-1].id : raw_type}}, {{raw_type}}, {{new_context}})
+      {% elsif options[:context] %}
+        {% if options[:context].names[0..-2].size > 0 %}
+          {% new_context = options[:context].names[0..-2].join("::").gsub(/(\:\:)+/, "::").id %}
+          {% options[:context] = new_context %}
+          Anyolite::Macro.resolve_pointer_type({{new_context}}::{{raw_type.stringify.starts_with?("::") ? raw_type.stringify[2..-1].id : raw_type}}, {{raw_type}}, options: {{options}})
         {% else %}
           Anyolite::Macro.resolve_pointer_type({{raw_type}}, {{raw_type}})
         {% end %}

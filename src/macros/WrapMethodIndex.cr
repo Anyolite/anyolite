@@ -152,7 +152,8 @@ module Anyolite
           {% end %}
 
         {% elsif !is_class_method && operator == "==" && final_arg_array[0] && !final_arg_array[1] %}
-          Anyolite::Macro.wrap_equality_function({{rb_interpreter}}, {{crystal_class}}, {{ruby_name}}, {{final_method_name}}, operator: {{final_operator}}, context: {{context}})
+          {% options = {:context => context} %}
+          Anyolite::Macro.wrap_equality_function({{rb_interpreter}}, {{crystal_class}}, {{ruby_name}}, {{final_method_name}}, operator: {{final_operator}}, options: {{options}})
         {% else %}
           {% if is_class_method %}
             {% puts "\e[33m> INFO: Could not wrap function '#{crystal_class}.#{method.name}' with args #{method.args}.\e[0m" %}

@@ -1,35 +1,36 @@
 module Anyolite
   module Macro
-    macro cast_to_union_value(rb, value, types, context = nil, debug_information = nil)
+    macro cast_to_union_value(rb, value, types, options = {} of Symbol => NoReturn, debug_information = nil)
       _final_value = :invalid
 
       {% for type in types %}
         {% if type.resolve? %}
-          Anyolite::Macro.check_and_cast_union_type({{rb}}, {{value}}, {{type}}, {{type}}, context: {{context}})
-        {% elsif context %}
-          Anyolite::Macro.check_and_cast_union_type({{rb}}, {{value}}, {{context}}::{{type.stringify.starts_with?("::") ? type.stringify[2..-1].id : type}}, {{type}}, context: {{context}})
+          Anyolite::Macro.check_and_cast_union_type({{rb}}, {{value}}, {{type}}, {{type}}, options: {{options}})
+        {% elsif options[:context] %}
+          Anyolite::Macro.check_and_cast_union_type({{rb}}, {{value}}, {{options[:context]}}::{{type.stringify.starts_with?("::") ? type.stringify[2..-1].id : type}}, {{type}}, options: {{options}})
         {% else %}
-          {% raise "Could not resolve type #{type}, which is a #{type.class_name}, in context #{context} (#{debug_information.id})" %}
+          {% raise "Could not resolve type #{type}, which is a #{type.class_name}, in context #{options[:context]} (#{debug_information.id})" %}
         {% end %}
       {% end %}
       
       if _final_value.is_a?(Symbol)
         # TODO: Better value description
         Anyolite::RbCast.casting_error({{rb}}, {{value}}, "{{types}}", nil)
-        #Anyolite.raise_argument_error("Could not determine any value for #{{{value}}} with types {{types}} in context {{context}}")
+        #Anyolite.raise_argument_error("Could not determine any value for #{{{value}}} with types {{types}} in context {{options[:context]}}")
         raise("Should not be reached")
       else
         _final_value
       end
     end
 
-    macro check_and_cast_union_type(rb, value, type, raw_type, context = nil, debug_information = nil)
+    macro check_and_cast_union_type(rb, value, type, raw_type, options = {} of Symbol => NoReturn, debug_information = nil)
       {% if type.resolve? %}
         Anyolite::Macro.check_and_cast_resolved_union_type({{rb}}, {{value}}, {{type}}, {{type}})
-      {% elsif context %}
-        {% if context.names[0..-2].size > 0 %}
-          {% new_context = context.names[0..-2].join("::").gsub(/(\:\:)+/, "::").id %}
-          Anyolite::Macro.check_and_cast_union_type({{rb}}, {{value}}, {{new_context}}::{{raw_type.stringify.starts_with?("::") ? raw_type[2..-1] : raw_type}}, {{raw_type}}, {{new_context}})
+      {% elsif options[:context] %}
+        {% if options[:context].names[0..-2].size > 0 %}
+          {% new_context = options[:context].names[0..-2].join("::").gsub(/(\:\:)+/, "::").id %}
+          {% options[:context] = new_context %}
+          Anyolite::Macro.check_and_cast_union_type({{rb}}, {{value}}, {{options[:context]}}::{{raw_type.stringify.starts_with?("::") ? raw_type[2..-1] : raw_type}}, {{raw_type}}, options: {{options}})
         {% else %}
           Anyolite::Macro.check_and_cast_union_type({{rb}}, {{value}}, {{raw_type}}, {{raw_type}})
         {% end %}
@@ -40,7 +41,7 @@ module Anyolite
 
     # TODO: Some double checks could be omitted
 
-    macro check_and_cast_resolved_union_type(rb, value, type, raw_type, context = nil, debug_information = nil)
+    macro check_and_cast_resolved_union_type(rb, value, type, raw_type, options = {} of Symbol => NoReturn, debug_information = nil)
       {% if type.resolve <= Nil %}
         if Anyolite::RbCast.check_for_nil({{value}})
           _final_value = Anyolite::RbCast.cast_to_nil({{rb}}, {{value}})
@@ -117,13 +118,13 @@ module Anyolite
         %hash_size = Anyolite::RbCore.rb_hash_size({{rb}}, {{value}})
 
           %all_rb_hash_keys = Anyolite::RbCore.rb_hash_keys({{rb}}, {{value}})
-          %all_converted_hash_keys = Anyolite::Macro.convert_from_ruby_to_crystal({{rb}}, %all_rb_hash_keys, Array({{type.type_vars[0]}}), context: {{context}})
+          %all_converted_hash_keys = Anyolite::Macro.convert_from_ruby_to_crystal({{rb}}, %all_rb_hash_keys, Array({{type.type_vars[0]}}), options: {{options}})
 
           %converted_hash = {{type}}.new(initial_capacity: %hash_size)
           %all_converted_hash_keys.each_with_index do |%key, %index|
             %rb_key = Anyolite::RbCore.rb_ary_entry(%all_rb_hash_keys, %index)
             %rb_value = Anyolite::RbCore.rb_hash_get({{rb}}, {{value}}, %rb_key)
-            %converted_hash[%key] = Anyolite::Macro.convert_from_ruby_to_crystal({{rb}}, %rb_value, {{type.type_vars[1]}}, context: {{context}})
+            %converted_hash[%key] = Anyolite::Macro.convert_from_ruby_to_crystal({{rb}}, %rb_value, {{type.type_vars[1]}}, options: {{options}})
           end
 
           _final_value = %converted_hash

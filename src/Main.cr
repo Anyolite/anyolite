@@ -120,6 +120,7 @@ module Anyolite
   # If needed, *context* can be set to a `Path` in order to specify *cast_to*.
   macro call_rb_block(block_value, args = nil, cast_to = nil, context = nil)
     %rb = Anyolite::RbRefTable.get_current_interpreter
+    {% options = {:context => context} %}
 
     if %rb_block = {{block_value}}
       {% if args %}
@@ -134,7 +135,7 @@ module Anyolite
       {% end %}
 
       {% if cast_to %}
-        Anyolite::Macro.convert_from_ruby_to_crystal(%rb.to_unsafe, %block_return_value, {{cast_to}}, context: {{context}})
+        Anyolite::Macro.convert_from_ruby_to_crystal(%rb.to_unsafe, %block_return_value, {{cast_to}}, options: {{options}})
       {% else %}
         Anyolite::RbRef.new(%block_return_value)
       {% end %}
@@ -148,7 +149,9 @@ module Anyolite
   # If needed, *context* can be set to a `Path` in order to specify *cast_to*.
   macro cast_to_crystal(rbref, cast_type, context = nil)
     %rb = Anyolite::RbRefTable.get_current_interpreter
-    Anyolite::Macro.convert_from_ruby_to_crystal(%rb.to_unsafe, {{rbref}}.value, {{cast_type}}, context: {{context}})
+    {% options = {:context => context} %}
+
+    Anyolite::Macro.convert_from_ruby_to_crystal(%rb.to_unsafe, {{rbref}}.value, {{cast_type}}, options: {{options}})
   end
 
   # Raises a Ruby runtime error with `String` *message*.
@@ -252,6 +255,8 @@ module Anyolite
     %obj = {{value}}.is_a?(Anyolite::RbCore::RbValue) ? {{value}} : Anyolite::RbCast.return_value(%rb.to_unsafe, {{value}})
     %name = Anyolite::RbCore.convert_to_rb_sym(%rb, {{name}}.to_s)
 
+    {% options = {:context => context} %}
+
     {% if args %}
       %argc = {{args}}.size
       %argv = Pointer(Anyolite::RbCore::RbValue).malloc(size: %argc) do |i|
@@ -265,7 +270,7 @@ module Anyolite
     %call_result = Anyolite::RbCore.rb_funcall_argv(%rb, %obj, %name, %argc, %argv)
     
     {% if cast_to %}
-      Anyolite::Macro.convert_from_ruby_to_crystal(%rb.to_unsafe, %call_result, {{cast_to}}, context: {{context}})
+      Anyolite::Macro.convert_from_ruby_to_crystal(%rb.to_unsafe, %call_result, {{cast_to}}, options: {{options}})
     {% else %}
       Anyolite::RbRef.new(%call_result)
     {% end %}
@@ -327,10 +332,12 @@ module Anyolite
     %obj = {{object}}.is_a?(Anyolite::RbCore::RbValue) ? {{object}} : Anyolite::RbCast.return_value(%rb.to_unsafe, {{object}})
     %name = Anyolite::RbCore.convert_to_rb_sym(%rb, {{name}}.to_s)
 
+    {% options = {:context => context} %}
+
     %result = Anyolite::RbCore.rb_iv_get(%rb, %obj, %name)
 
     {% if cast_to %}
-      Anyolite::Macro.convert_from_ruby_to_crystal(%rb.to_unsafe, %result, {{cast_to}}, context: {{context}})
+      Anyolite::Macro.convert_from_ruby_to_crystal(%rb.to_unsafe, %result, {{cast_to}}, options: {{options}})
     {% else %}
       Anyolite::RbRef.new(%result)
     {% end %}
@@ -365,10 +372,12 @@ module Anyolite
     %rb_class = Anyolite.get_rb_class_obj_of({{crystal_class}})
     %name = Anyolite::RbCore.convert_to_rb_sym(%rb, {{name}}.to_s)
 
+    {% options = {:context => context} %}
+
     %result = Anyolite::RbCore.rb_cv_get(%rb, %rb_class, %name)
 
     {% if cast_to %}
-      Anyolite::Macro.convert_from_ruby_to_crystal(%rb.to_unsafe, %result, {{cast_to}}, context: {{context}})
+      Anyolite::Macro.convert_from_ruby_to_crystal(%rb.to_unsafe, %result, {{cast_to}}, options: {{options}})
     {% else %}
       Anyolite::RbRef.new(%result)
     {% end %}
@@ -400,11 +409,12 @@ module Anyolite
   # If needed, *context* can be set to a `Path` in order to specify *cast_to*.
   macro get_gv(name, cast_to = nil, context = nil)
     %rb = Anyolite::RbRefTable.get_current_interpreter
+    {% options = {:context => context} %}
 
     %result = Anyolite::RbCore.rb_gv_get(%rb, {{name}}.to_s)
 
     {% if cast_to %}
-      Anyolite::Macro.convert_from_ruby_to_crystal(%rb.to_unsafe, %result, {{cast_to}}, context: {{context}})
+      Anyolite::Macro.convert_from_ruby_to_crystal(%rb.to_unsafe, %result, {{cast_to}}, options: {{options}})
     {% else %}
       Anyolite::RbRef.new(%result)
     {% end %}
@@ -670,7 +680,8 @@ module Anyolite
   # The value *operator* will append the specified `String`
   # to the final name and *context* can give the function a `Path` for resolving types correctly.
   macro wrap_setter(rb_interpreter, crystal_class, name, proc, proc_arg, operator = "=", context = nil)
-    Anyolite::Macro.wrap_instance_function_with_args({{rb_interpreter}}, {{crystal_class}}, {{name}}, {{proc}}, {{proc_arg}}, operator: {{operator}}, context: {{context}})
+    {% options = {:context => context} %}
+    Anyolite::Macro.wrap_instance_function_with_args({{rb_interpreter}}, {{crystal_class}}, {{name}}, {{proc}}, {{proc_arg}}, operator: {{operator}}, options: {{options}})
   end
 
   # Wraps a getter into mruby.
@@ -682,7 +693,8 @@ module Anyolite
   # The value *operator* will append the specified `String`
   # to the final name and *context* can give the function a `Path` for resolving types correctly.
   macro wrap_getter(rb_interpreter, crystal_class, name, proc, operator = "", context = nil)
-    Anyolite::Macro.wrap_instance_function_with_args({{rb_interpreter}}, {{crystal_class}}, {{name}}, {{proc}}, operator: {{operator}}, context: {{context}})
+    {% options = {:context => context} %}
+    Anyolite::Macro.wrap_instance_function_with_args({{rb_interpreter}}, {{crystal_class}}, {{name}}, {{proc}}, operator: {{operator}}, options: {{options}})
   end
 
   # Wraps a property into mruby.
