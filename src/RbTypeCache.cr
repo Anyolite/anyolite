@@ -19,28 +19,28 @@ module Anyolite
     macro destructor_method(crystal_class)
       Anyolite::Macro.new_rb_data_func do
         if {{crystal_class}} <= Struct || {{crystal_class}} <= Enum
-          crystal_ptr = __ptr.as(Anyolite::StructWrapper({{crystal_class}})*)
-          obj_id = Anyolite::RbRefTable.get_object_id(crystal_ptr.value)
+          %crystal_ptr = __ptr.as(Anyolite::StructWrapper({{crystal_class}})*)
+          %obj_id = Anyolite::RbRefTable.get_object_id(%crystal_ptr.value)
 
           # Call optional mruby callback
-          if (crystal_value = crystal_ptr.value.content).responds_to?(:rb_finalize)
-            if Anyolite::RbRefTable.may_delete?(obj_id)
-              crystal_value.rb_finalize(__rb)
+          if (%crystal_value = %crystal_ptr.value.content).responds_to?(:rb_finalize)
+            if Anyolite::RbRefTable.may_delete?(%obj_id)
+              %crystal_value.rb_finalize(__rb)
             end
           end
         else
-          crystal_ptr = __ptr.as({{crystal_class}}*)
-          obj_id = Anyolite::RbRefTable.get_object_id(crystal_ptr.value)
+          %crystal_ptr = __ptr.as({{crystal_class}}*)
+          %obj_id = Anyolite::RbRefTable.get_object_id(%crystal_ptr.value)
 
-          if (crystal_value = crystal_ptr.value).responds_to?(:rb_finalize)
-            if Anyolite::RbRefTable.may_delete?(obj_id)
-              crystal_value.rb_finalize(__rb)
+          if (%crystal_value = %crystal_ptr.value).responds_to?(:rb_finalize)
+            if Anyolite::RbRefTable.may_delete?(%obj_id)
+              %crystal_value.rb_finalize(__rb)
             end
           end
         end
 
         # Delete the Crystal reference to this object
-        Anyolite::RbRefTable.delete(obj_id)
+        Anyolite::RbRefTable.delete(%obj_id)
       end
     end
   end

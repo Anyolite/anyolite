@@ -25,15 +25,15 @@ module Anyolite
     end
 
     macro load_kw_args_into_vars(regular_args, keyword_args, format_string, regular_arg_tuple, block_ptr = nil)
-      kw_args = Anyolite::Macro.generate_keyword_argument_struct(_rb, {{keyword_args}})
+      %kw_args = Anyolite::Macro.generate_keyword_argument_struct(_rb, {{keyword_args}})
 
       {% if block_ptr %}
-        Anyolite::RbCore.rb_get_args(_rb, {{format_string}}, *{{regular_arg_tuple}}, pointerof(kw_args), {{block_ptr}})
+        Anyolite::RbCore.rb_get_args(_rb, {{format_string}}, *{{regular_arg_tuple}}, pointerof(%kw_args), {{block_ptr}})
       {% else %}
-        Anyolite::RbCore.rb_get_args(_rb, {{format_string}}, *{{regular_arg_tuple}}, pointerof(kw_args))
+        Anyolite::RbCore.rb_get_args(_rb, {{format_string}}, *{{regular_arg_tuple}}, pointerof(%kw_args))
       {% end %}
 
-      kw_args
+      %kw_args
     end
   end
 end

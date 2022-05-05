@@ -261,7 +261,7 @@ Anyolite are already implemented.
 * [ ] Mac support and continuous integration
 * [ ] Unit tests
 * [ ] Documentation of all relevant features and wrappers
-* [ ] Convert macro body variables to fresh variables wherever possible
+* [X] Converted macro body variables to fresh variables wherever possible
 * [ ] Code cleanup (especially in the macro section)
 * [ ] More compatibility between methods accepting `RbRef` and `RbValue`
 

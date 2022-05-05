@@ -18,14 +18,14 @@ module Anyolite
     macro add_copy_constructor(rb_interpreter, crystal_class, context, verbose)
       {% puts "> Adding copy constructor for #{crystal_class}\n\n" if verbose %}
 
-      copy_proc = Anyolite::Macro.new_rb_func do
-        converted_args = Anyolite::Macro.get_converted_args(_rb, [other : {{crystal_class}}], context: {{context}})
-        new_obj = converted_args[0].dup
-        Anyolite::Macro.allocate_constructed_object(_rb, {{crystal_class}}, _obj, new_obj)
+      %copy_proc = Anyolite::Macro.new_rb_func do
+        %converted_args = Anyolite::Macro.get_converted_args(_rb, [other : {{crystal_class}}], context: {{context}})
+        %new_obj = %converted_args[0].dup
+        Anyolite::Macro.allocate_constructed_object(_rb, {{crystal_class}}, _obj, %new_obj)
         _obj
       end
 
-      {{rb_interpreter}}.define_method("initialize_copy", Anyolite::RbClassCache.get({{crystal_class}}), copy_proc)
+      {{rb_interpreter}}.define_method("initialize_copy", Anyolite::RbClassCache.get({{crystal_class}}), %copy_proc)
     end
   end
 end

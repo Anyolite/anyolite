@@ -434,9 +434,9 @@ module Anyolite
   #
   # Each class can be defined in a specifiy module by setting *under* to a `Anyolite::RbModule`.
   macro wrap_class(rb_interpreter, crystal_class, name, under = nil, superclass = nil)
-    new_class = Anyolite::RbClass.new({{rb_interpreter}}, {{name}}, under: Anyolite::RbClassCache.get({{under}}), superclass: Anyolite::RbClassCache.get({{superclass}}))
-    Anyolite::RbCore.set_instance_tt_as_data(new_class)
-    Anyolite::RbClassCache.register({{crystal_class}}, new_class)
+    %new_class = Anyolite::RbClass.new({{rb_interpreter}}, {{name}}, under: Anyolite::RbClassCache.get({{under}}), superclass: Anyolite::RbClassCache.get({{superclass}}))
+    Anyolite::RbCore.set_instance_tt_as_data(%new_class)
+    Anyolite::RbClassCache.register({{crystal_class}}, %new_class)
     Anyolite::RbClassCache.get({{crystal_class}})
   end
 
@@ -447,8 +447,8 @@ module Anyolite
   #
   # The parent module can be specified with the module argument *under*.
   macro wrap_module(rb_interpreter, crystal_module, name, under = nil)
-    new_module = Anyolite::RbModule.new({{rb_interpreter}}, {{name}}, under: Anyolite::RbClassCache.get({{under}}))
-    Anyolite::RbClassCache.register({{crystal_module}}, new_module)
+    %new_module = Anyolite::RbModule.new({{rb_interpreter}}, {{name}}, under: Anyolite::RbClassCache.get({{under}}))
+    Anyolite::RbClassCache.register({{crystal_module}}, %new_module)
     Anyolite::RbClassCache.get({{crystal_module}})
   end
 
@@ -858,7 +858,7 @@ module Anyolite
       {% if superclass %}
         if !Anyolite::RbClassCache.check({{superclass.resolve}})
           puts "Note: Superclass {{superclass}} to {{resolved_class}} was not wrapped before. Trying to find it..."
-          needs_more_iterations.push("{{superclass}}") if needs_more_iterations
+          _needs_more_iterations.push("{{superclass}}") if _needs_more_iterations
         else
       {% else %}
         if false
@@ -966,13 +966,13 @@ module Anyolite
              overwrite = false,
              verbose = false)
 
-    needs_more_iterations = [] of String
-    previous_iterations = [] of String
-    first_run = true
+    _needs_more_iterations = [] of String
+    %previous_iterations = [] of String
+    %first_run = true
 
-    while first_run || !needs_more_iterations.empty?
-      previous_iterations = needs_more_iterations
-      needs_more_iterations = [] of String
+    while %first_run || !_needs_more_iterations.empty?
+      %previous_iterations = _needs_more_iterations
+      _needs_more_iterations = [] of String
 
       {% if !crystal_module_or_class.is_a?(Path) %}
         {% puts "\e[31m> WARNING: Object #{crystal_module_or_class} of #{crystal_module_or_class.class_name.id} is neither a class nor module, so it will be skipped\e[0m" %}
@@ -1025,10 +1025,10 @@ module Anyolite
         {% puts "\e[31m> WARNING: Could not resolve #{crystal_module_or_class}, so it will be skipped\e[0m" %}
       {% end %}
 
-      first_run = false
+      %first_run = false
 
-      if !needs_more_iterations.empty? && needs_more_iterations == previous_iterations
-        raise "Could not wrap the following classes: #{needs_more_iterations.inspect}"
+      if !_needs_more_iterations.empty? && _needs_more_iterations == %previous_iterations
+        raise "Could not wrap the following classes: #{_needs_more_iterations.inspect}"
       end
     end
   end
