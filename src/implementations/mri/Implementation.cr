@@ -80,7 +80,7 @@ module Anyolite
       %return_hash = {} of Symbol => Anyolite::RbCore::RbValue
       {% for keyword_arg in keyword_args %}
         {% if keyword_arg.is_a? TypeDeclaration %}
-          if hash_key_values.includes?(":{{keyword_arg.var.id}}")
+          if %hash_key_values.includes?(":{{keyword_arg.var.id}}")
             %ruby_hash_value = Anyolite::RbCore.rb_hash_get(_rb, %kw_ptr.value, Anyolite::RbCore.get_symbol_value_of_string(_rb, "{{keyword_arg.var.id}}"))
             %return_hash[:{{keyword_arg.var.id}}] = %ruby_hash_value
           else
