@@ -1,12 +1,12 @@
 module Anyolite
   module Macro
-    macro call_and_return(rb, proc, regular_args, converted_args, operator = "", return_nil = false, block_arg_number = nil, block_return_type = nil, block_ptr = nil)
-      {% if !block_arg_number %}
+    macro call_and_return(rb, proc, regular_args, converted_args, operator = "", options = {} of Symbol => NoReturn, block_ptr = nil)
+      {% if !options[:block_arg_number] %}
         {% proc_arg_string = "" %}
-      {% elsif block_arg_number == 0 %}
+      {% elsif options[:block_arg_number] == 0 %}
         {% proc_arg_string = "do" %}
       {% else %}
-        {% proc_arg_string = "do |" + (0..block_arg_number - 1).map { |x| "block_arg_#{x}" }.join(", ") + "|" %}
+        {% proc_arg_string = "do |" + (0..options[:block_arg_number] - 1).map { |x| "block_arg_#{x}" }.join(", ") + "|" %}
       {% end %}
 
       {% if proc.stringify == "Anyolite::Empty" %}
@@ -15,22 +15,22 @@ module Anyolite
         %return_value = {{proc}}{{operator.id}}(*{{converted_args}}) {{proc_arg_string.id}}
       {% end %}
 
-      {% if block_arg_number == 0 %}
+      {% if options[:block_arg_number] == 0 %}
           %yield_value = Anyolite::RbCore.rb_yield({{rb}}, {{block_ptr}}.value, Anyolite::RbCast.return_nil)
-          Anyolite::Macro.convert_from_ruby_to_crystal({{rb}}, %yield_value, {{block_return_type}})
+          Anyolite::Macro.convert_from_ruby_to_crystal({{rb}}, %yield_value, {{options[:block_return_type]}})
         end
-      {% elsif block_arg_number %}
+      {% elsif options[:block_arg_number] %}
           %block_arg_array = [
-            {% for i in 0..block_arg_number - 1 %}
+            {% for i in 0..options[:block_arg_number] - 1 %}
               Anyolite::RbCast.return_value({{rb}}, {{"block_arg_#{i}".id}}),
             {% end %}
           ]
-          %yield_value = Anyolite::RbCore.rb_yield_argv({{rb}}, {{block_ptr}}.value, {{block_arg_number}}, %block_arg_array)
-          Anyolite::Macro.convert_from_ruby_to_crystal({{rb}}, %yield_value, {{block_return_type}})
+          %yield_value = Anyolite::RbCore.rb_yield_argv({{rb}}, {{block_ptr}}.value, {{options[:block_arg_number]}}, %block_arg_array)
+          Anyolite::Macro.convert_from_ruby_to_crystal({{rb}}, %yield_value, {{options[:block_return_type]}})
         end
       {% end %}
 
-      {% if return_nil %}
+      {% if options[:return_nil] %}
         Anyolite::RbCast.return_nil
       {% else %}
         Anyolite::RbCast.return_value({{rb}}, %return_value)

@@ -22,7 +22,7 @@ module Anyolite
             Anyolite::RbArgCache.set_block_cache(%block_ptr)
           {% end %}
 
-          %args = Anyolite::Macro.generate_arg_tuple(_rb, {{regular_args}}, context: {{options[:context]}})
+          %args = Anyolite::Macro.generate_arg_tuple(_rb, {{regular_args}}, options: {{options}})
           %format_string = Anyolite::Macro.format_string({{regular_args}}, options: {{options}}) + "&"
           
           Anyolite::Macro.load_args_into_vars({{regular_args}}, %format_string, %args, %block_ptr)
@@ -40,7 +40,7 @@ module Anyolite
           %converted_args = Anyolite::Macro.get_converted_args(_rb, {{regular_arg_array}}, context: {{options[:context]}}, type_vars: {{type_vars}}, type_var_names: {{type_var_names}})
         {% end %}
 
-        %return_value = Anyolite::Macro.call_and_return(_rb, {{proc}}, {{regular_arg_array}}, %converted_args, operator: {{operator}}, return_nil: {{options[:return_nil]}}, block_arg_number: {{options[:block_arg_number]}}, block_return_type: {{options[:block_return_type]}}, block_ptr: %block_ptr)
+        %return_value = Anyolite::Macro.call_and_return(_rb, {{proc}}, {{regular_arg_array}}, %converted_args, operator: {{operator}}, options: {{options}}, block_ptr: %block_ptr)
 
         {% if options[:store_block_arg] %}
           Anyolite::RbArgCache.reset_block_cache
@@ -66,7 +66,7 @@ module Anyolite
       {% type_var_names = type_var_names_annotation ? type_var_names_annotation[0] : nil %}
 
       %wrapped_method = Anyolite::Macro.new_rb_func do
-        %regular_arg_tuple = Anyolite::Macro.generate_arg_tuple(_rb, {{regular_arg_array}}, context: {{options[:context]}})
+        %regular_arg_tuple = Anyolite::Macro.generate_arg_tuple(_rb, {{regular_arg_array}}, options: {{options}})
 
         {% if options[:block_arg_number] || options[:store_block_arg] %}
           %block_ptr = Pointer(Anyolite::RbCore::RbValue).malloc(size: 1)
@@ -129,7 +129,7 @@ module Anyolite
             Anyolite::RbArgCache.set_block_cache(%block_ptr)
           {% end %}
 
-          %args = Anyolite::Macro.generate_arg_tuple(_rb, {{regular_args}}, context: {{options[:context]}})
+          %args = Anyolite::Macro.generate_arg_tuple(_rb, {{regular_args}}, options: {{options}})
           %format_string = Anyolite::Macro.format_string({{regular_args}}, options: {{options}}) + "&"
 
           Anyolite::Macro.load_args_into_vars({{regular_args}}, %format_string, %args, %block_ptr)
@@ -147,7 +147,7 @@ module Anyolite
           %converted_args = Anyolite::Macro.get_converted_args(_rb, {{regular_arg_array}}, context: {{options[:context]}}, type_vars: {{type_vars}}, type_var_names: {{type_var_names}})
         {% end %}
 
-        %return_value = Anyolite::Macro.call_and_return(_rb, {{proc}}, {{regular_arg_array}}, %converted_args, operator: {{operator}}, return_nil: {{options[:return_nil]}}, block_arg_number: {{options[:block_arg_number]}}, block_return_type: {{options[:block_return_type]}}, block_ptr: %block_ptr)
+        %return_value = Anyolite::Macro.call_and_return(_rb, {{proc}}, {{regular_arg_array}}, %converted_args, operator: {{operator}}, options: {{options}}, block_ptr: %block_ptr)
 
         {% if options[:store_block_arg] %}
           Anyolite::RbArgCache.reset_block_cache
@@ -173,7 +173,7 @@ module Anyolite
       {% type_var_names = type_var_names_annotation ? type_var_names_annotation[0] : nil %}
 
       %wrapped_method = Anyolite::Macro.new_rb_func do
-        %regular_arg_tuple = Anyolite::Macro.generate_arg_tuple(_rb, {{regular_arg_array}}, context: {{options[:context]}})
+        %regular_arg_tuple = Anyolite::Macro.generate_arg_tuple(_rb, {{regular_arg_array}}, options: {{options}})
 
         {% if options[:block_arg_number] || options[:store_block_arg] %}
           %block_ptr = Pointer(Anyolite::RbCore::RbValue).malloc(size: 1)
@@ -238,7 +238,7 @@ module Anyolite
             Anyolite::RbArgCache.set_block_cache(%block_ptr)
           {% end %}
 
-          %args = Anyolite::Macro.generate_arg_tuple(_rb, {{regular_args}}, context: {{options[:context]}})
+          %args = Anyolite::Macro.generate_arg_tuple(_rb, {{regular_args}}, options: {{options}})
           %format_string = Anyolite::Macro.format_string({{regular_args}}, options: {{options}}) + "&"
           
           Anyolite::Macro.load_args_into_vars({{regular_args}}, %format_string, %args, %block_ptr)
@@ -288,7 +288,7 @@ module Anyolite
       {% type_var_names = type_var_names_annotation ? type_var_names_annotation[0] : nil %}
 
       %wrapped_method = Anyolite::Macro.new_rb_func do
-        %regular_arg_tuple = Anyolite::Macro.generate_arg_tuple(_rb, {{regular_arg_array}}, context: {{options[:context]}})
+        %regular_arg_tuple = Anyolite::Macro.generate_arg_tuple(_rb, {{regular_arg_array}}, options: {{options}})
 
         # TODO: Add annotation argument for required blocks ('&!' then)
 
@@ -369,7 +369,7 @@ module Anyolite
             Anyolite::RbArgCache.set_block_cache(%block_ptr)
           {% end %}
 
-          %args = Anyolite::Macro.generate_arg_tuple(_rb, {{regular_args}}, context: {{options[:context]}})
+          %args = Anyolite::Macro.generate_arg_tuple(_rb, {{regular_args}}, options: {{options}})
           %format_string = Anyolite::Macro.format_string({{regular_args}}, options: {{options}}) + "&"
 
           Anyolite::Macro.load_args_into_vars({{regular_args}}, %format_string, %args, %block_ptr)
@@ -438,7 +438,7 @@ module Anyolite
       {% type_var_names = type_var_names_annotation ? type_var_names_annotation[0] : nil %}
       
       %wrapped_method = Anyolite::Macro.new_rb_func do
-        %regular_arg_tuple = Anyolite::Macro.generate_arg_tuple(_rb, {{regular_arg_array}}, context: {{options[:context]}})
+        %regular_arg_tuple = Anyolite::Macro.generate_arg_tuple(_rb, {{regular_arg_array}}, options: {{options}})
 
         {% if options[:block_arg_number] || options[:store_block_arg] %}
           %block_ptr = Pointer(Anyolite::RbCore::RbValue).malloc(size: 1)
@@ -519,7 +519,7 @@ module Anyolite
       {% options = {:context => context} %}
 
       %wrapped_method = Anyolite::Macro.new_rb_func do
-        %args = Anyolite::Macro.generate_arg_tuple(_rb, [other : {{crystal_class}}], context: {{context}})
+        %args = Anyolite::Macro.generate_arg_tuple(_rb, [other : {{crystal_class}}], options: {{options}})
         %format_string = Anyolite::Macro.format_string([other : {{crystal_class}}], options: {{options}})
       
         Anyolite::Macro.load_args_into_vars([other : {{crystal_class}}], %format_string, %args)
