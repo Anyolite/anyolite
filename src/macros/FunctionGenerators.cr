@@ -10,9 +10,19 @@ module Anyolite
       Anyolite.wrap_constructor({{rb_interpreter}}, {{crystal_class}}, [Int32])
     end
 
+    macro add_enum_inspect(rb_interpreter, crystal_class, verbose)
+      {% puts "> Adding enum inspect method for #{crystal_class}\n\n" if verbose %}
+      Anyolite.wrap_instance_method({{rb_interpreter}}, {{crystal_class}}, "inspect", inspect)
+    end
+
+    macro add_enum_to_s(rb_interpreter, crystal_class, verbose)
+      {% puts "> Adding enum to_s method for #{crystal_class}\n\n" if verbose %}
+      Anyolite.wrap_instance_method({{rb_interpreter}}, {{crystal_class}}, "to_s", to_s)
+    end
+
     macro add_equality_method(rb_interpreter, crystal_class, context, verbose)
       {% puts "> Adding equality method for #{crystal_class}\n\n" if verbose %}
-      Anyolite.wrap_instance_method({{rb_interpreter}}, {{crystal_class}}, "==", Anyolite::Empty, [other : {{crystal_class}}], operator: "==", context: {{context}})
+      Anyolite::Macro.wrap_equality_function({{rb_interpreter}}, {{crystal_class}}, "==", Anyolite::Empty, operator: "==", context: {{context}})
     end
 
     macro add_copy_constructor(rb_interpreter, crystal_class, context, verbose)

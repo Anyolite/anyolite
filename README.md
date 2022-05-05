@@ -255,6 +255,7 @@ Anyolite are already implemented.
 #### Breaking changes
 
 * [ ] Compacted macro function options into hashes
+* [X] Adds default `inspect` and `to_s` methods to wrapped enums automatically
 
 #### Usability
 

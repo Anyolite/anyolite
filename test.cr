@@ -51,7 +51,7 @@ module SomeModule
 
         class VeryDeepUnderTest
           def nested_test
-            puts "This is a nested test"
+            "This is a nested test"
           end
         end
       end
@@ -65,6 +65,9 @@ module SomeModule
     end
 
     struct DeepTestStruct
+      def to_s
+        "DeepTestStruct"
+      end
     end
 
     @[Anyolite::SpecifyGenericTypes([U, V])]
@@ -112,8 +115,12 @@ module SomeModule
       @@counter += 1
     end
 
+    def self.reset_counter
+      @@counter = 0
+    end
+
     def self.-(other_value : Int)
-      @@counter + other_value
+      @@counter - other_value
     end
 
     def self.counter
@@ -206,11 +213,11 @@ module SomeModule
 
     def overload_test(arg : Int32 | String | Bool | Nil | Float32 | Test | TestEnum | GenericTest(Int32, Int32) = "Default String")
       if arg.is_a?(Test)
-        puts "Test: A test object with x = #{arg.x}"
+        "A test object with x = #{arg.x}"
       elsif arg.is_a?(GenericTest(Int32, Int32))
-        puts "Test: A generic test"
+        "A generic test"
       else
-        puts "Test: #{arg.inspect}"
+        "#{arg.inspect}"
       end
     end
 
@@ -229,7 +236,7 @@ module SomeModule
     end
 
     def nilable_test(arg : Int32?)
-      puts "Received argument #{arg.inspect}"
+      "Received argument #{arg.inspect}"
     end
 
     @[Anyolite::Specialize([arg1 : Int32, arg2 : Float32, arg_req : Float32, arg_opt_1 : String | Test | Bool | TestEnum | GenericTest(Int32, Int32) = "Cookies", arg_opt_2 : Int32 = 32])]
@@ -255,7 +262,6 @@ module SomeModule
     end
 
     def output_this_and_struct(str : TestStruct)
-      puts str
       "#{@x} #{str.value} #{str.test.x}"
     end
 
@@ -265,7 +271,7 @@ module SomeModule
 
     @[Anyolite::Specialize([strvar : String, intvar : Int32, floatvar : Float64 = 0.123, strvarkw : String = "nothing", boolvar : Bool = true, othervar : Test = SomeModule::Test.new(17)])]
     def keyword_test(strvar : String, intvar : Int32, floatvar : Float64 = 0.123, strvarkw : String = "nothing", boolvar : Bool = true, othervar : Test = Test.new(17))
-      puts "str = #{strvar}, int = #{intvar}, float = #{floatvar}, stringkw = #{strvarkw}, bool = #{boolvar}, other.x = #{othervar.x}"
+      "str = #{strvar}, int = #{intvar}, float = #{floatvar}, stringkw = #{strvarkw}, bool = #{boolvar}, other.x = #{othervar.x}"
     end
 
     def keyword_test(whatever)
@@ -334,11 +340,11 @@ module SomeModule
     end
 
     def method_with_various_args(int_arg : Int)
-      puts "Some args"
+      "Some args"
     end
 
     def method_with_various_args
-      puts "No args"
+      "No args"
     end
 
     @[Anyolite::Specialize([arg : Int | String])]

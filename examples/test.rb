@@ -42,6 +42,117 @@ TestFramework.check(test_no: 7, should_be: ["World", 19]) do
   TestModule.test_method(str: "World")
 end
 
+# Testing attribute setters
+TestFramework.check(test_no: 8, should_be: 123) do
+  a = TestModule::Test.new(x: 5)
+  a.x = 113
+  a.x += 10
+  a.x
+end
+
+# Testing struct attributes
+TestFramework.check(test_no: 9, should_be: [-123, -234]) do
+  ts = TestModule::TestStructRenamed.new
+  [ts.value, ts.test.x]
+end
+
+# Testing returned structs
+TestFramework.check(test_no: 10, should_be: [777, 999]) do
+  some_struct = TestModule::Test.give_me_a_struct
+  [some_struct.value, some_struct.test.x]
+end
+
+# Testing structs as arguments
+TestFramework.check(test_no: 11, should_be: ["5 -123 -234", "5 777 999"]) do
+  a = TestModule::Test.new(x: 5)
+  ts = TestModule::TestStructRenamed.new
+  some_struct = TestModule::Test.give_me_a_struct
+  [a.output_together_with(str: ts), a.output_together_with(str: some_struct)]
+end
+
+# Testing class methods
+TestFramework.check(test_no: 12, should_be: [2, -15]) do
+  TestModule::Test.reset_counter
+  a = TestModule::Test.new(x: 5)
+  b = TestModule::Test.new(x: 5)
+  [TestModule::Test.counter, TestModule::Test - 17]
+end
+
+# Testing module methods
+TestFramework.check(test_no: 13, should_be: "Well, you can't just subtract #{13} from a module...") do
+  TestModule::Test::UnderTestRenamed::DeepUnderTest - 13
+end
+
+# Testing constants
+TestFramework.check(test_no: 14, should_be: "Smile! 😊") do
+  TestModule::SOME_CONSTANT
+end
+
+# Testing operator methods
+TestFramework.check(test_no: 15, should_be: 37) do
+  a = TestModule::Test.new(x: 5)
+  b = TestModule::Test.new(x: 32)
+  (a + b).x
+end
+
+# Testing longer keyword methods
+TestFramework.check(test_no: 16, should_be: "str = Hi there, int = -121212, float = -0.313, stringkw = 💎, bool = true, other.x = 32") do
+  a = TestModule::Test.new(x: 5)
+  b = TestModule::Test.new(x: 32)
+  a.keyword_test(strvar: "Hi there", intvar: -121212, floatvar: -0.313, strvarkw: "💎", othervar: b)
+end
+
+# Testing constants in a more nested type tree
+TestFramework.check(test_no: 17, should_be: "Hello") do
+  TestModule::Test::RUBY_CONSTANT
+end
+
+# Testing methods without keywords
+TestFramework.check(test_no: 18, should_be: 120) do
+  TestModule::Test.without_keywords(12)
+end
+
+# Testing deeply nested type trees
+TestFramework.check(test_no: 19, should_be: "This is a nested test") do
+  # The absolute, ultimate and ridiculously complicated nesting test  
+  TestModule::Test::UnderTestRenamed::DeepUnderTest::VeryDeepUnderTest.new.nested_test
+end
+
+# Testing structs and enums
+TestFramework.check(test_no: 20, should_be: ["DeepTestStruct", true, true, "Seven"]) do
+  struct_test_var = TestModule::Test::DeepTestStruct.new
+  enum_test_var = TestModule::Test::TestEnum::Seven
+  [struct_test_var.to_s, enum_test_var == TestModule::Test::TestEnum.new(7), enum_test_var != TestModule::Test::TestEnum.new(5), enum_test_var.inspect]  
+end
+
+# Testing specialized method
+TestFramework.check(test_no: 21, should_be: "No args") do
+  a = TestModule::Test.new(x: 5)
+  a.method_with_various_args
+end
+
+# Testing overloaded methods
+TestFramework.check(test_no: 22, should_be: ["\"Test String\"", "12345.0", "true", "nil", "0.6", "A test object with x = 32", "Four", "A generic test", "\"Default String\""]) do
+  a = TestModule::Test.new(x: 5)
+  b = TestModule::Test.new(x: 32)
+  a_1 = a.overload_test(arg: "Test String")
+  a_2 = a.overload_test(arg: 12345)
+  a_3 = a.overload_test(arg: true)
+  a_4 = a.overload_test(arg: nil)
+  a_5 = a.overload_test(arg: 3.0 / 5.0)
+  a_6 = a.overload_test(arg: b)
+  a_7 = a.overload_test(arg: TestModule::Test::TestEnum::Four)
+  a_8 = a.overload_test(arg: TestModule::Test::GTIntInt.new(u: 1, v: 3))
+  a_9 = a.overload_test
+  [a_1, a_2, a_3, a_4, a_5, a_6, a_7, a_8, a_9]
+end
+
+# Testing nilable methods
+TestFramework.check(test_no: 23, should_be: ["Received argument 123", "Received argument nil"]) do
+  a = TestModule::Test.new(x: 5)
+  [a.nilable_test(arg: 123), a.nilable_test(arg: nil)]
+end
+
 # TODO: More tests
 
 a = TestModule::Test.new(x: 5)
@@ -59,62 +170,7 @@ b = TestModule::Test.new(x: 32)
 
 s = TestModule::Bla.new
 
-puts 
-puts a.test(int: 19, bool: false, str: 'Example string', float: 0.5)
-
-puts "Value getter returns #{a.x}"
-puts "Adding..."
-a.x = 123
-puts "Value getter returns #{a.x}"
-
-ts = TestModule::TestStructRenamed.new
-puts "Struct value: #{ts.value}"
-puts "Struct test: #{ts.test.x}"
-
-some_struct = TestModule::Test.give_me_a_struct
-puts "Some struct value: #{some_struct.value}"
-puts "Some struct test: #{some_struct.test.x}"
-
-puts "Output: #{a.output_together_with(str: ts)}"
-puts "Output: #{a.output_together_with(str: some_struct)}"
-
-puts "Value of Test: #{TestModule::Test.counter}"
-puts "Value of Test after subtracting 17: #{TestModule::Test - 17}"
-puts "Value of nested module: #{TestModule::Test::UnderTestRenamed::DeepUnderTest - 13}"
-
-puts "Test constant is: #{TestModule::SOME_CONSTANT}"
-
-puts "Sum is #{(a + b).x}"
-
-a.keyword_test(strvar: "Hi there", intvar: -121212, floatvar: -0.313, strvarkw: "💎", othervar: b)
-
-puts "Test constant: #{TestModule::Test::RUBY_CONSTANT}"
-
-puts TestModule::Test.without_keywords(12)
-
-# The absolute, ultimate and ridiculously complicated nesting test
-TestModule::Test::UnderTestRenamed::DeepUnderTest::VeryDeepUnderTest.new.nested_test
-
-struct_test_var = TestModule::Test::DeepTestStruct.new
-puts "Struct test var: #{struct_test_var}"
-
-enum_test_var = TestModule::Test::TestEnum::Seven
-puts "Enum test var: #{enum_test_var.value}"
-
-a.method_with_various_args
-
-a.overload_test(arg: "Test String")
-a.overload_test(arg: 12345)
-a.overload_test(arg: true)
-a.overload_test(arg: nil)
-a.overload_test(arg: 3.0 / 5.0)
-a.overload_test(arg: b)
-a.overload_test(arg: TestModule::Test::TestEnum::Four)
-a.overload_test(arg: TestModule::Test::GTIntInt.new(u: 1, v: 3))
-a.overload_test
-
-a.nilable_test(arg: 123)
-a.nilable_test(arg: nil)
+#####
 
 test_struct_thingy = TestModule::TestStructRenamed.new
 puts "Initial value: #{test_struct_thingy.value}"

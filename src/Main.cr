@@ -811,7 +811,7 @@ module Anyolite
   # *class_method_exclusions* (for class methods) or
   # *constant_exclusions* (for constants).
   #
-  # Enum classes can be wrapped by setting *use_enum_constructor*.
+  # Enum classes can be wrapped by setting *use_enum_methods*.
   # If *wrap_equality_method* is set, the `==` method will be wrapped
   # automatically.
   # Setting *connect_to_superclass* to `false` will force the algorithm
@@ -825,7 +825,7 @@ module Anyolite
                                 instance_method_exclusions = [] of String | Symbol,
                                 class_method_exclusions = [] of String | Symbol,
                                 constant_exclusions = [] of String | Symbol,
-                                use_enum_constructor = false,
+                                use_enum_methods = false,
                                 wrap_equality_method = false,
                                 connect_to_superclass = true,
                                 include_ancestor_methods = true,
@@ -884,14 +884,14 @@ module Anyolite
                 {% later_ancestors = reversed_ancestors[ancestor_index + 1..-1] %}
 
                 Anyolite::Macro.wrap_all_instance_methods({{rb_interpreter}}, {{crystal_class}}, {{instance_method_exclusions}}, 
-                  verbose: {{verbose}}, context: {{new_context}}, use_enum_constructor: {{use_enum_constructor}}, wrap_equality_method: {{wrap_equality_method}}, 
+                  verbose: {{verbose}}, context: {{new_context}}, use_enum_methods: {{use_enum_methods}}, wrap_equality_method: {{wrap_equality_method}}, 
                   other_source: {{ancestor}}, later_ancestors: {{later_ancestors.empty? ? nil : later_ancestors}})
               {% end %}
             {% end %}
           {% end %}
 
           Anyolite::Macro.wrap_all_instance_methods({{rb_interpreter}}, {{crystal_class}}, {{instance_method_exclusions}}, 
-            verbose: {{verbose}}, context: {{new_context}}, use_enum_constructor: {{use_enum_constructor}}, wrap_equality_method: {{wrap_equality_method}})
+            verbose: {{verbose}}, context: {{new_context}}, use_enum_methods: {{use_enum_methods}}, wrap_equality_method: {{wrap_equality_method}})
           Anyolite::Macro.wrap_all_class_methods({{rb_interpreter}}, {{crystal_class}}, {{class_method_exclusions}}, verbose: {{verbose}}, context: {{new_context}})
           Anyolite::Macro.wrap_all_constants({{rb_interpreter}}, {{crystal_class}}, {{constant_exclusions}}, verbose: {{verbose}}, context: {{new_context}})
         end
@@ -961,7 +961,7 @@ module Anyolite
              constant_exclusions = [] of String | Symbol,
              connect_to_superclass = false,
              include_ancestor_methods = true,
-             use_enum_constructor = false,
+             use_enum_methods = false,
              wrap_equality_method = false,
              overwrite = false,
              verbose = false)
@@ -988,7 +988,7 @@ module Anyolite
           instance_method_exclusions: {{instance_method_exclusions}},
           class_method_exclusions: {{class_method_exclusions}},
           constant_exclusions: {{constant_exclusions}},
-          use_enum_constructor: {{use_enum_constructor}},
+          use_enum_methods: {{use_enum_methods}},
           wrap_equality_method: {{wrap_equality_method || crystal_module_or_class.resolve.struct?}},
           connect_to_superclass: {{connect_to_superclass}},
           include_ancestor_methods: {{include_ancestor_methods}},
@@ -1002,7 +1002,7 @@ module Anyolite
           instance_method_exclusions: {{instance_method_exclusions}},
           class_method_exclusions: {{class_method_exclusions}},
           constant_exclusions: {{constant_exclusions}},
-          use_enum_constructor: true,
+          use_enum_methods: true,
           wrap_equality_method: true,
           connect_to_superclass: {{connect_to_superclass}},
           include_ancestor_methods: {{include_ancestor_methods}},
@@ -1014,7 +1014,7 @@ module Anyolite
           instance_method_exclusions: {{instance_method_exclusions}},
           class_method_exclusions: {{class_method_exclusions}},
           constant_exclusions: {{constant_exclusions}},
-          use_enum_constructor: {{use_enum_constructor}},
+          use_enum_methods: {{use_enum_methods}},
           wrap_equality_method: {{wrap_equality_method}},
           connect_to_superclass: {{connect_to_superclass}},
           include_ancestor_methods: {{include_ancestor_methods}},

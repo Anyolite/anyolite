@@ -1,7 +1,7 @@
 module Anyolite
   module Macro
     macro wrap_all_instance_methods(rb_interpreter, crystal_class, exclusions, verbose, context = nil,
-                                    use_enum_constructor = false, wrap_equality_method = false, other_source = nil, later_ancestors = nil)
+                                    use_enum_methods = false, wrap_equality_method = false, other_source = nil, later_ancestors = nil)
       {% has_specialized_method = {} of String => Bool %}
 
       {% method_source = other_source ? other_source : crystal_class %}
@@ -163,7 +163,7 @@ module Anyolite
             Anyolite::Macro.wrap_method_index({{rb_interpreter}}, {{crystal_class}}, {{index}}, "{{ruby_name}}", operator: "{{operator}}", without_keywords: {{force_keyword_arg ? false : -1}}, added_keyword_args: {{added_keyword_args}}, context: {{context}}, return_nil: {{return_nil}}, block_arg_number: {{block_arg_number}}, block_return_type: {{block_return_type}}, store_block_arg: {{store_block_arg}}, other_source: {{other_source}})
             {% how_many_times_wrapped[ruby_name.stringify] = how_many_times_wrapped[ruby_name.stringify] ? how_many_times_wrapped[ruby_name.stringify] + 1 : 1 %}
           # Handle constructors
-          {% elsif method.name == "initialize" && use_enum_constructor == false %}
+          {% elsif method.name == "initialize" && use_enum_methods == false %}
             Anyolite::Macro.wrap_method_index({{rb_interpreter}}, {{crystal_class}}, {{index}}, "{{ruby_name}}", is_constructor: true, without_keywords: {{without_keywords || (no_keyword_args && !force_keyword_arg)}}, added_keyword_args: {{added_keyword_args}}, context: {{context}}, return_nil: {{return_nil}}, block_arg_number: {{block_arg_number}}, block_return_type: {{block_return_type}}, store_block_arg: {{store_block_arg}}, other_source: {{other_source}})
             {% how_many_times_wrapped[ruby_name.stringify] = how_many_times_wrapped[ruby_name.stringify] ? how_many_times_wrapped[ruby_name.stringify] + 1 : 1 %}
           # Handle other instance methods
@@ -180,10 +180,14 @@ module Anyolite
         
         {% if method_source == crystal_class && !crystal_class.resolve.abstract? %}
           # Make sure to add a default constructor if none was specified with Crystal
-          {% if !how_many_times_wrapped["initialize"] && !use_enum_constructor %}
+          {% if !how_many_times_wrapped["initialize"] && !use_enum_methods %}
             Anyolite::Macro.add_default_constructor({{rb_interpreter}}, {{crystal_class}}, {{verbose}})
-          {% elsif !how_many_times_wrapped["initialize"] && use_enum_constructor %}
+          {% elsif !how_many_times_wrapped["initialize"] && use_enum_methods %}
             Anyolite::Macro.add_enum_constructor({{rb_interpreter}}, {{crystal_class}}, {{verbose}})
+          {% end %}
+
+          {%if !how_many_times_wrapped["inspect"] && use_enum_methods %}
+            Anyolite::Macro.add_enum_inspect({{rb_interpreter}}, {{crystal_class}}, {{verbose}})
           {% end %}
 
           {% all_annotations_exclude_im = crystal_class.resolve.annotations(Anyolite::ExcludeInstanceMethod) + method_source.resolve.annotations(Anyolite::ExcludeInstanceMethod) %}
