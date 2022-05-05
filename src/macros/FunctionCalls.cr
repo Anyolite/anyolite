@@ -37,14 +37,13 @@ module Anyolite
       {% end %}
     end
 
-    macro call_and_return_keyword_method(rb, proc, converted_regular_args, keyword_args, kw_args, operator = "",
-                                         empty_regular = false, context = nil, type_vars = nil, type_var_names = nil, return_nil = false, block_arg_number = nil, block_return_type = nil, block_ptr = nil)
-      {% if !block_arg_number %}
+    macro call_and_return_keyword_method(rb, proc, converted_regular_args, keyword_args, kw_args, operator = "", options = {} of Symbol => NoReturn, block_ptr = nil)
+      {% if !options[:block_arg_number] %}
         {% proc_arg_string = "" %}
-      {% elsif block_arg_number == 0 %}
+      {% elsif options[:block_arg_number] == 0 %}
         {% proc_arg_string = "do" %}
       {% else %}
-        {% proc_arg_string = "do |" + (0..block_arg_number - 1).map { |x| "block_arg_#{x}" }.join(", ") + "|" %}
+        {% proc_arg_string = "do |" + (0..options[:block_arg_number] - 1).map { |x| "block_arg_#{x}" }.join(", ") + "|" %}
       {% end %}
 
       {% if proc.stringify == "Anyolite::Empty" %}
@@ -52,40 +51,40 @@ module Anyolite
       {% else %}
         %return_value = {{proc}}{{operator.id}}(
       {% end %}
-        {% if empty_regular %}
+        {% if options[:empty_regular] %}
           {% c = 0 %}
           {% for keyword in keyword_args %}
-            {{keyword.var.id}}: Anyolite::Macro.convert_from_ruby_to_crystal({{rb}}, {{kw_args}}.values[{{c}}], {{keyword}}, context: {{context}}, 
-              type_vars: {{type_vars}}, type_var_names: {{type_var_names}}, debug_information: {{proc.stringify + " - " + keyword_args.stringify}}),
+            {{keyword.var.id}}: Anyolite::Macro.convert_from_ruby_to_crystal({{rb}}, {{kw_args}}.values[{{c}}], {{keyword}}, context: {{options[:context]}}, 
+              type_vars: {{options[:type_vars]}}, type_var_names: {{options[:type_var_names]}}, debug_information: {{proc.stringify + " - " + keyword_args.stringify}}),
             {% c += 1 %}
           {% end %}
         {% else %}
           *{{converted_regular_args}},
           {% c = 0 %}
           {% for keyword in keyword_args %}
-            {{keyword.var.id}}: Anyolite::Macro.convert_from_ruby_to_crystal({{rb}}, {{kw_args}}.values[{{c}}], {{keyword}}, context: {{context}}, 
-              type_vars: {{type_vars}}, type_var_names: {{type_var_names}}, debug_information: {{proc.stringify + " - " + keyword_args.stringify}}),
+            {{keyword.var.id}}: Anyolite::Macro.convert_from_ruby_to_crystal({{rb}}, {{kw_args}}.values[{{c}}], {{keyword}}, context: {{options[:context]}}, 
+              type_vars: {{options[:type_vars]}}, type_var_names: {{options[:type_var_names]}}, debug_information: {{proc.stringify + " - " + keyword_args.stringify}}),
             {% c += 1 %}
           {% end %}
         {% end %}
       ) {{proc_arg_string.id}}
 
-      {% if block_arg_number == 0 %}
+      {% if options[:block_arg_number] == 0 %}
           %yield_value = Anyolite::RbCore.rb_yield({{rb}}, {{block_ptr}}.value, Anyolite::RbCast.return_nil)
           Anyolite::Macro.convert_from_ruby_to_crystal({{rb}}, %yield_value, {{block_return_type}})
         end
-      {% elsif block_arg_number %}
+      {% elsif options[:block_arg_number] %}
           %block_arg_array = [
-            {% for i in 0..block_arg_number - 1 %}
+            {% for i in 0..options[:block_arg_number] - 1 %}
               Anyolite::RbCast.return_value({{rb}}, {{"block_arg_#{i}".id}}),
             {% end %}
           ]
-          %yield_value = Anyolite::RbCore.rb_yield_argv({{rb}}, {{block_ptr}}.value, {{block_arg_number}}, %block_arg_array)
-          Anyolite::Macro.convert_from_ruby_to_crystal({{rb}}, %yield_value, {{block_return_type}})
+          %yield_value = Anyolite::RbCore.rb_yield_argv({{rb}}, {{block_ptr}}.value, {{options[:block_arg_number]}}, %block_arg_array)
+          Anyolite::Macro.convert_from_ruby_to_crystal({{rb}}, %yield_value, {{options[:block_return_type]}})
         end
       {% end %}
 
-      {% if return_nil %}
+      {% if options[:return_nil] %}
         Anyolite::RbCast.return_nil
       {% else %}
         Anyolite::RbCast.return_value({{rb}}, %return_value)

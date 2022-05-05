@@ -93,11 +93,11 @@ module Anyolite
         %converted_regular_args = Anyolite::Macro.convert_regular_args(_rb, %regular_arg_tuple, {{regular_arg_array}}, context: {{options[:context]}}, type_vars: {{options[:type_vars]}}, type_var_names: {{options[:type_var_names]}})
 
         {% if !regular_arg_array || regular_arg_array.size == 0 %}
-          %return_value = Anyolite::Macro.call_and_return_keyword_method(_rb, {{proc}}, %converted_regular_args, {{keyword_args}}, %kw_args, operator: {{operator}}, empty_regular: true, context: {{options[:context]}}, return_nil: {{options[:return_nil]}}, block_arg_number: {{options[:block_arg_number]}}, block_return_type: {{options[:block_return_type]}}, block_ptr: %block_ptr)
-        {% else %}
-          %return_value = Anyolite::Macro.call_and_return_keyword_method(_rb, {{proc}}, %converted_regular_args, {{keyword_args}}, %kw_args, operator: {{operator}}, context: {{options[:context]}}, return_nil: {{options[:return_nil]}}, block_arg_number: {{options[:block_arg_number]}}, block_return_type: {{options[:block_return_type]}}, block_ptr: %block_ptr)
+          {% options[:empty_regular] = true %}
         {% end %}
 
+        %return_value = Anyolite::Macro.call_and_return_keyword_method(_rb, {{proc}}, %converted_regular_args, {{keyword_args}}, %kw_args, operator: {{operator}}, options: {{options}}, block_ptr: %block_ptr)
+        
         {% if options[:store_block_arg] %}
           Anyolite::RbArgCache.reset_block_cache
         {% end %}
@@ -200,12 +200,10 @@ module Anyolite
         %converted_regular_args = Anyolite::Macro.convert_regular_args(_rb, %regular_arg_tuple, {{regular_arg_array}}, context: {{options[:context]}}, type_vars: {{options[:type_vars]}}, type_var_names: {{options[:type_var_names]}})
 
         {% if !regular_arg_array || regular_arg_array.size == 0 %}
-          %return_value = Anyolite::Macro.call_and_return_keyword_method(_rb, {{proc}}, %converted_regular_args, {{keyword_args}}, %kw_args, operator: {{operator}}, 
-            empty_regular: true, context: {{options[:context]}}, type_vars: {{options[:type_vars]}}, type_var_names: {{options[:type_var_names]}}, return_nil: {{options[:return_nil]}}, block_arg_number: {{options[:block_arg_number]}}, block_return_type: {{options[:block_return_type]}}, block_ptr: %block_ptr)
-        {% else %}
-          %return_value = Anyolite::Macro.call_and_return_keyword_method(_rb, {{proc}}, %converted_regular_args, {{keyword_args}}, %kw_args, operator: {{operator}}, 
-            context: {{options[:context]}}, type_vars: {{options[:type_vars]}}, type_var_names: {{options[:type_var_names]}}, return_nil: {{options[:return_nil]}}, block_arg_number: {{options[:block_arg_number]}}, block_return_type: {{options[:block_return_type]}}, block_ptr: %block_ptr)
+          {% options[:empty_regular] = true %}
         {% end %}
+
+        %return_value = Anyolite::Macro.call_and_return_keyword_method(_rb, {{proc}}, %converted_regular_args, {{keyword_args}}, %kw_args, operator: {{operator}}, options: {{options}}, block_ptr: %block_ptr)
 
         {% if options[:store_block_arg] %}
           Anyolite::RbArgCache.reset_block_cache
