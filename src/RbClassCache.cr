@@ -34,5 +34,9 @@ module Anyolite
         crystal_class
       end
     end
+
+    def self.reset
+      @@cache.clear
+    end
   end
 end

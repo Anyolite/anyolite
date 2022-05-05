@@ -81,11 +81,11 @@ module SomeModule
       end
 
       def test(u1 : U, v1 : V)
-        puts "u1 is #{u1} and has class #{U}, v1 is #{v1} and has class #{V}."
+        "u1 = #{u1} of #{U}, v1 = #{v1} of #{V}."
       end
 
       def self.self_test(other : self)
-        puts "Value is #{other.u} and #{other.v}"
+        "Value is #{other.u} and #{other.v}"
       end
 
       @[Anyolite::WrapWithoutKeywords]
@@ -94,7 +94,7 @@ module SomeModule
       end
 
       def compare(other : GenericTest(U, V))
-        puts "This has #{@u} and #{@v}, the other has #{other.u} and #{other.v}."
+        "This has #{@u} and #{@v}, the other has #{other.u} and #{other.v}."
       end
     end
 
@@ -147,6 +147,10 @@ module SomeModule
 
     def inspect(io : IO)
       io.puts "x is #{@x}"
+    end
+
+    def inspect
+      "x is #{@x}"
     end
 
     # Would all trigger an error!
@@ -227,7 +231,7 @@ module SomeModule
     {% unless flag?(:anyolite_implementation_ruby_3) %}
       @[Anyolite::Rename("happy😀emoji😀test😀😀😀")]
       def happy_emoji_test(arg : Int32)
-        puts "😀 for number #{arg}"
+        "😀 for number #{arg}"
       end
     {% end %}
 
@@ -282,7 +286,7 @@ module SomeModule
       if arg.is_a?(String)
         [arg]
       else
-        arg.map { |element| element.to_s * 2 }
+        arg.map { |element| element * 2 }
       end
     end
 
@@ -393,11 +397,11 @@ module SomeModule
     @[Anyolite::Include]
     def call_test
       result = Anyolite.call_rb_method(:method_only_in_ruby, ["Hello", 3], cast_to: String)
-      puts result
+      result
     end
 
     def class_call_test
-      puts Anyolite.call_rb_method_of_class(self.class, :class_method_in_ruby, ["World", 4], cast_to: String)
+      Anyolite.call_rb_method_of_class(self.class, :class_method_in_ruby, ["World", 4], cast_to: String)
     end
 
     @[Anyolite::WrapWithoutKeywords]
@@ -416,7 +420,8 @@ module SomeModule
 
     def ref_test(str : String, ref : Anyolite::RbRef)
       converted_arg = Anyolite.cast_to_crystal(ref, Int32?)
-      "#{str} and a reference with #{ref.value} (which is #{converted_arg}) were given."
+      puts "Reference: #{ref.value}"
+      "#{str} and a reference with #{converted_arg} were given."
     end
 
     def hash
@@ -425,7 +430,7 @@ module SomeModule
 
     @[Anyolite::WrapWithoutKeywords]
     def num_test(n : Number)
-      puts n
+      n
     end
 
     def ptr_return_test
@@ -539,25 +544,20 @@ end
 
 {% unless flag?(:anyolite_implementation_ruby_3) %}
   Anyolite::RbInterpreter.create do |rb|
+    Anyolite.wrap(rb, RPGTest)
+
+    rb.load_script_from_file("examples/hp_example.rb")
+  end
+
+  puts "------------------------------"
+
+  Anyolite::RbInterpreter.create do |rb|
     Anyolite::Preloader.execute_bytecode_from_cache_or_file(rb, "examples/bytecode_test.mrb")
     load_test_module()
 
     rb.load_script_from_file("examples/test_framework.rb")
     rb.load_script_from_file("examples/test.rb")
   end
-
-  puts "Reference table: #{Anyolite::RbRefTable.inspect}"
-  Anyolite::RbRefTable.reset
-
-  puts "------------------------------"
-
-  Anyolite::RbInterpreter.create do |rb|
-    Anyolite.wrap(rb, RPGTest)
-
-    rb.load_script_from_file("examples/hp_example.rb")
-  end
-
-  puts "Reference table: #{Anyolite::RbRefTable.inspect}"
 {% else %}
   Anyolite::RbInterpreter.create do |rb|
     load_test_module()

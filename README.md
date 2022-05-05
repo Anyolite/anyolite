@@ -255,13 +255,17 @@ Anyolite are already implemented.
 
 #### Breaking changes
 
-* [ ] Compacted macro function options into hashes
+* [X] Compacted most macro function options into hashes
 * [X] Adds default `inspect` and `to_s` methods to wrapped enums automatically
+
+#### Security
+
+* [X] Closing an interpreter will now correctly clean class and type caches
 
 #### Usability
 
 * [ ] Mac support and continuous integration
-* [ ] Unit tests
+* [X] Unit tests in test script
 * [ ] Documentation of all relevant features and wrappers
 * [X] Converted macro body variables to fresh variables wherever possible
 * [ ] Code cleanup (especially in the macro section)

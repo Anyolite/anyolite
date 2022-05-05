@@ -21,6 +21,8 @@ module Anyolite
     def close
       RbCore.rb_close(@rb_ptr)
       RbRefTable.reset
+      RbTypeCache.reset
+      RbClassCache.reset
     end
 
     def to_unsafe

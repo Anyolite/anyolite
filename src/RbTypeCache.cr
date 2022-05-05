@@ -43,5 +43,9 @@ module Anyolite
         Anyolite::RbRefTable.delete(%obj_id)
       end
     end
+
+    def self.reset
+      @@cache.clear
+    end
   end
 end
