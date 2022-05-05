@@ -62,10 +62,11 @@ Many problems and errors might occur, so mruby is still recommended as the main 
 
 Please report any bugs with MRI, so development can progress smoothly.
 
-### Known issues
+### Known issues with MRI
 
 * Currently it is only possible to run a single actual Ruby script file
 * UTF-8 function and variable names defined in Crystal can lead to crashes in Ruby
+* UTF-8 in general fails test for some reason
 * Bytecode compilation functions are not available yet (and might never be)
 * Some utility functions from mruby are not available in MRI
 * Gems need to be installed manually after installing Ruby
