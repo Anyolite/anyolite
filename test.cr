@@ -28,6 +28,7 @@ module SomeModule
   @[Anyolite::RenameConstant(CONSTANT, RUBY_CONSTANT)]
   @[Anyolite::SpecializeInstanceMethod(method_without_keywords, [arg], [arg : String])]
   @[Anyolite::SpecializeInstanceMethod(method_with_various_args, nil)]
+  @[Anyolite::SpecializeInstanceMethod(inspect, nil)]
   class Test
     struct ValueStruct
       property i : Int32 = 1234

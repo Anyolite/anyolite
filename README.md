@@ -274,6 +274,7 @@ Anyolite are already implemented.
 #### Bugfixes
 
 * [X] Fixed error when passing blocks to certain method types
+* [X] Methods `inspect`, `to_s` and `hash` will now correctly respond to annotations
 
 ### Future feature ideas (might not actually be possible to implement)
 
