@@ -4,7 +4,7 @@
 
 module Anyolite
   module Macro
-    macro format_string(args, context = nil)
+    macro format_string(args, options = {} of Symbol => NoReturn)
       {% if args %}
         {% required_counter = 0 %}
         {% optional_counter = 0 %}

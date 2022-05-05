@@ -186,7 +186,7 @@ module Anyolite
             Anyolite::Macro.add_enum_constructor({{rb_interpreter}}, {{crystal_class}}, {{verbose}})
           {% end %}
 
-          {%if !how_many_times_wrapped["inspect"] && use_enum_methods %}
+          {% if !how_many_times_wrapped["inspect"] && use_enum_methods %}
             Anyolite::Macro.add_enum_inspect({{rb_interpreter}}, {{crystal_class}}, {{verbose}})
           {% end %}
 

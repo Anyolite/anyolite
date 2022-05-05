@@ -1,10 +1,10 @@
 module Anyolite
   module Macro
-    macro format_string(args, context = nil)
+    macro format_string(args, options = {} of Symbol => NoReturn)
       "" +
       {% if args %}
         {% for arg in args %}
-          Anyolite::Macro.format_char({{arg}}, context: {{context}}) +
+          Anyolite::Macro.format_char({{arg}}, context: {{options[:context]}}) +
         {% end %}
       {% end %}
       ""
