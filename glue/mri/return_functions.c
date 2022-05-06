@@ -44,7 +44,7 @@ extern VALUE get_float_value(void* mrb, double value) {
 
 extern VALUE get_string_value(void* mrb, char* value) {
 
-    return rb_str_new(value, strlen(value));
+    return rb_utf8_str_new(value, strlen(value));
 
 }
 

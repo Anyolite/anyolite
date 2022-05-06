@@ -224,6 +224,7 @@ end
 # Testing unicode strings
 TestFramework.check(test_no: 30, should_be: "😀 for number 1234567") do
   a = TestModule::Test.new(x: 5)
+  # TODO: For some reason, this does not work in MRI
   a.inside_mri? ? "😀 for number 1234567" : a.happy😀emoji😀test😀😀😀(arg: 1234567)
 end
 
@@ -532,5 +533,4 @@ final_time = Time.now
 puts "Tests done."
 puts "Total time for MRI test script: #{(final_time - start_time)} s"
 
-# TODO: This will be changed to true if the unicode issues with MRI are sorted out
-TestFramework.results(raise_if_failures: false)
+TestFramework.results(raise_if_failures: true)

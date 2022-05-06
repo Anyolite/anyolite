@@ -40,7 +40,6 @@ Useful links for an overview:
 You need to have the following programs installed (and in your PATH variable, if you are on Windows):
 * Ruby (for building mruby)
 * Rake (for building the whole project)
-* Bison (for building mruby)
 * Git (for downloading mruby)
 * GCC or Microsoft Visual Studio 19 (for building the object files required for Anyolite, depending on your OS)
 
@@ -48,6 +47,7 @@ You need to have the following programs installed (and in your PATH variable, if
 
 If you want to test MRI as implementation, you need these additional programs:
 * Autoconf
+* Bison
 
 For MRI on Windows, you also need:
 * sed
@@ -66,9 +66,9 @@ Please report any bugs with MRI, so development can progress smoothly.
 
 * Currently it is only possible to run a single actual Ruby script file
 * UTF-8 function and variable names defined in Crystal can lead to crashes in Ruby
-* UTF-8 in general fails test for some reason
+* UTF-8 in general might not work properly (this is no problem in mruby)
 * Bytecode compilation functions are not available yet (and might never be)
-* Some utility functions from mruby are not available in MRI
+* Some utility functions from mruby are not available
 * Gems need to be installed manually after installing Ruby
 * For now, only gcc is supported as compiler
 
