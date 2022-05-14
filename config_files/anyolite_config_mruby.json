@@ -3,6 +3,7 @@
   "build_path": "build",
   "rb_fork": "https://github.com/mruby/mruby",
   "rb_release": "3.1.0",
+  "rb_minor": "3.1.0",
   "rb_dir": "third_party",
   "rb_config": "utility/mruby_build_config.rb",
   "glue_dir": "glue/mruby"

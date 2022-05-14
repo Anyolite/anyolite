@@ -3,6 +3,7 @@
   "build_path": "build",
   "rb_fork": "https://github.com/ruby/ruby",
   "rb_release": "v3_1_2",
+  "rb_minor": "3.1.0",
   "rb_dir": "third_party",
   "rb_config": "",
   "glue_dir": "glue/mri"

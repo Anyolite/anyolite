@@ -18,7 +18,8 @@ class AnyoliteConfig
         :implementation => "mruby",
         :build_path => "build", 
         :rb_fork => "https://github.com/mruby/mruby",
-        :rb_release => "3.0.0",
+        :rb_release => "3.1.0",
+        :rb_minor => "3.1.0",
         :rb_dir => "third_party", 
         :rb_config => "utility/mruby_build_config.rb", 
         :glue_dir => "glue/mruby",
@@ -145,11 +146,11 @@ task :build_glue => [:load_config] do
     elsif $config.implementation == "mri"
         if ANYOLITE_COMPILER == :msvc
             GLUE_FILES.each do |name|
-                system "cl /I #{$config.build_path}/#{$config.implementation}/include/ruby-3.0.0 /I #{$config.build_path}/#{$config.implementation}/include/ruby-3.0.0/x64-mswin64_140 /c #{$config.glue_dir}/#{name}.c /Fo\"#{$config.build_path}/glue/#{$config.implementation}/#{name}.obj\""
+                system "cl /I #{$config.build_path}/#{$config.implementation}/include/ruby-#{$config.rb_minor} /I #{$config.build_path}/#{$config.implementation}/include/ruby-#{$config.rb_minor}/x64-mswin64_140 /c #{$config.glue_dir}/#{name}.c /Fo\"#{$config.build_path}/glue/#{$config.implementation}/#{name}.obj\""
             end
         elsif ANYOLITE_COMPILER == :gcc
             GLUE_FILES.each do |name|
-                system "cc -std=c99 -I#{$config.build_path}/#{$config.implementation}/include/ruby-3.0.0 -I#{$config.build_path}/#{$config.implementation}/include/ruby-3.0.0/x86_64-linux -I#{$config.build_path}/#{$config.implementation}/include/ruby-3.0.0/aarch64-linux -c #{$config.glue_dir}/#{name}.c -o #{$config.build_path}/glue/#{$config.implementation}/#{name}.o"
+                system "cc -std=c99 -I#{$config.build_path}/#{$config.implementation}/include/ruby-#{$config.rb_minor} -I#{$config.build_path}/#{$config.implementation}/include/ruby-#{$config.rb_minor}/x86_64-linux -I#{$config.build_path}/#{$config.implementation}/include/ruby-#{$config.rb_minor}/aarch64-linux -c #{$config.glue_dir}/#{name}.c -o #{$config.build_path}/glue/#{$config.implementation}/#{name}.o"
             end
         else
             GLUE_FILES.each do |name|
