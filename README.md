@@ -257,7 +257,7 @@ Anyolite are already implemented.
 
 * [X] Compacted most macro function options into hashes
 * [X] Adds default `inspect` and `to_s` methods to wrapped enums automatically
-* [X] Updated mruby to 3.1.0 and MRI to 3.1.2
+* [X] Updated mruby to 3.1.0 and MRI to 3.0.4
 * [X] Config files now require `rb_minor` argument for MRI specifically
 
 #### Security
