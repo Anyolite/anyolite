@@ -261,6 +261,7 @@ Anyolite are already implemented.
 #### Security
 
 * [X] Closing an interpreter will now correctly clean class and type caches
+* [X] Fixed segmentation fault when overwriting Crystal content of a class
 
 #### Usability
 

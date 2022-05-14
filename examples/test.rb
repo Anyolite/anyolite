@@ -391,10 +391,9 @@ TestFramework.check(test_no: 43, should_be: [789789, 3, 4]) do
   it = InheritedContentTest.new([InheritedTest.new(x: 123456, z: "Hello"), InheritedTest.new(x: 789789, z: "World")], InheritedTest.new(x: 111, z: "Nice day"))
   mt = TestModule::Test::NewContentTest.new(content: [TestModule::Test::TestChild.new(x: 1), InheritedTest.new(x: 2, z: "2")], more_content: [InheritedTest.new(x: 3, z: "3"), InheritedTest.new(x: 4, z: "4")])
   
-  # NOTE: This works, but only for methods directly inherited from Test
-  # Overloading is therefore possible, but the other content will be cut
-  # Overwriting the original content will most likely result in a segmentation fault
-  # TODO: Try to prevent this or throw an exception
+  # NOTE: This works, but only for methods directly inherited from Test.
+  # Overloading is therefore possible, but the other content will be cut.
+  # Overwriting the original content will result in errors.
   
   [it.overloaded_content[1].x, mt.more_content[0].x, mt.more_content[1].x]
 end
