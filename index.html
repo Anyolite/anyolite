@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="generator" content="Crystal Docs 1.4.1">
-<meta name="crystal_docs.project_version" content="0.17.0">
+<meta name="crystal_docs.project_version" content="1.0.0">
 <meta name="crystal_docs.project_name" content="anyolite">
 
 
@@ -13,7 +13,7 @@
 <script type="text/javascript" src="js/doc.js"></script>
 
   <meta name="repository-name" content="anyolite">
-  <title>anyolite 0.17.0</title>
+  <title>anyolite 1.0.0</title>
   <script type="text/javascript">
   CrystalDocs.base_path = "";
   </script>
@@ -39,7 +39,7 @@
       </h1>
 
       <span class="project-version">
-        0.17.0
+        1.0.0
       </span>
     </div>
   </div>
@@ -349,11 +349,10 @@
 </a>Description</h1>
 <p>Anyolite allows for wrapping Crystal classes and functions into Ruby with little effort.
 This way, Ruby can be used as a scripting language to Crystal projects, with the major advantage of a similar syntax.</p>
-<p>This project is currently in active development, so please report any bugs or missing relevant features.</p>
 <p>Useful links for an overview:</p>
 <ul>
 <li>Demo project: https://github.com/Anyolite/ScapoLite</li>
-<li>Wiki (under construction): https://github.com/Anyolite/anyolite/wiki</li>
+<li>Wiki: https://github.com/Anyolite/anyolite/wiki</li>
 <li>Documentation: https://anyolite.github.io/anyolite</li>
 </ul>
 <h1><a id="features" class="anchor" href="#features">
@@ -383,43 +382,15 @@ This way, Ruby can be used as a scripting language to Crystal projects, with the
 <ul>
 <li>Ruby (for building mruby)</li>
 <li>Rake (for building the whole project)</li>
-<li>Bison (for building mruby)</li>
 <li>Git (for downloading mruby)</li>
 <li>GCC or Microsoft Visual Studio 19 (for building the object files required for Anyolite, depending on your OS)</li>
 </ul>
-<h2><a id="using-mri-instead-of-mruby" class="anchor" href="#using-mri-instead-of-mruby">
+<h2><a id="using-regular-ruby-instead-of-mruby" class="anchor" href="#using-regular-ruby-instead-of-mruby">
   <svg class="octicon-link" aria-hidden="true">
     <use href="#octicon-link"/>
   </svg>
-</a>Using MRI instead of mruby</h2>
-<p>If you want to test MRI as implementation, you need these additional programs:</p>
-<ul>
-<li>Autoconf</li>
-</ul>
-<p>For MRI on Windows, you also need:</p>
-<ul>
-<li>sed</li>
-<li>patch</li>
-<li>vcpkg with libffi, libyaml, openssl, readline and zlib installed
-Note that MRI on Windows is currently not functional.</li>
-</ul>
-<p>Compiling Anyolite for MRI requires setting the environment variable <code>ANYOLITE_CONFIG_PATH</code> to a valid MRI configuration path (like <code>config_files/anyolite_config_mri.json</code>), building the shard and then setting the <code>anyolite_implementation_ruby_3</code> and <code>use_general_object_format_chars</code> flags for the final compilation.</p>
-<p>Support for MRI is still not as fleshed out as mruby.
-Many problems and errors might occur, so mruby is still recommended as the main Ruby implementation for now.</p>
-<p>Please report any bugs with MRI, so development can progress smoothly.</p>
-<h3><a id="known-issues" class="anchor" href="#known-issues">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>Known issues</h3>
-<ul>
-<li>Currently it is only possible to run a single actual Ruby script file</li>
-<li>UTF-8 function and variable names defined in Crystal can lead to crashes in Ruby</li>
-<li>Bytecode compilation functions are not available yet (and might never be)</li>
-<li>Some utility functions from mruby are not available in MRI</li>
-<li>Gems need to be installed manually after installing Ruby</li>
-<li>For now, only gcc is supported as compiler</li>
-</ul>
+</a>Using regular Ruby instead of mruby</h2>
+<p>It is possible to use Anyolite with regular Ruby (MRI) instead of mruby. An instruction to install MRI can be found at <a href="https://github.com/Anyolite/anyolite/wiki/Using-Ruby-instead-of-mruby">Using Ruby instead of mruby</a> in the wiki.</p>
 <h1><a id="installing" class="anchor" href="#installing">
   <svg class="octicon-link" aria-hidden="true">
     <use href="#octicon-link"/>
@@ -431,17 +402,7 @@ Many problems and errors might occur, so mruby is still recommended as the main 
 <p>Alternatively, you can clone this repository into the lib folder of your project and run</p>
 <pre><code class="language-bash">rake build_shard</code></pre>
 <p>manually to install the shard without using the crystal shards program.</p>
-<p>If you want to use other options for Anyolite, you can set <code>ANYOLITE_CONFIG_PATH</code> to the filename of a JSON config file,
-which allows for changing multiple options when installing the shard. Possible options are:</p>
-<ul>
-<li><code>ANYOLITE_BUILD_PATH</code> - The relative directory in which Anyolite will be built</li>
-<li><code>ANYOLITE_RUBY_FORK</code> - The web address of the Ruby repository</li>
-<li><code>ANYOLITE_RUBY_RELEASE</code> - The release tag of the Ruby version to be used</li>
-<li><code>ANYOLITE_RUBY_DIR</code> - The relative directory Ruby will be installed in</li>
-<li><code>ANYOLITE_RUBY_CONFIG</code> - The config file which is used for building Ruby</li>
-<li><code>ANYOLITE_GLUE_DIR</code> - The directory in which helper function C files are located</li>
-<li><code>ANYOLITE_COMPILER</code> - The C compiler used for building Anyolite</li>
-</ul>
+<p>If you want to use other options for Anyolite, visit <a href="https://github.com/Anyolite/anyolite/wiki/Changing-build-configurations">Changing build configurations</a> in the wiki.</p>
 <h1><a id="how-to-use" class="anchor" href="#how-to-use">
   <svg class="octicon-link" aria-hidden="true">
     <use href="#octicon-link"/>
@@ -500,100 +461,7 @@ More features will be added in the future.</p>
     <use href="#octicon-link"/>
   </svg>
 </a>Limitations</h1>
-<h2><a id="hard-limitations" class="anchor" href="#hard-limitations">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>Hard limitations</h2>
-<p>These limitations can not be circumvented using other methods.
-It might be possible to remove them in future versions, but for
-now they are potential roadblocks.</p>
-<ul>
-<li>Only GCC and Visual Studio are officially supported as compilers (others might work if the Rakefile is modified)</li>
-<li>Anyolite for Windows does only work with Crystal version 1.2.0 or higher</li>
-<li>MRI is currently not supported on Windows</li>
-</ul>
-<h2><a id="soft-limitations" class="anchor" href="#soft-limitations">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>Soft limitations</h2>
-<p>The limitations here do not have a trivial solution (yet), but with some tricks and
-tools from Anyolite it should technically be possible to circumvent them (possible solutions are written below each problem).
-If one of these does definitely not work, but you need them to, please feel free to open an issue.</p>
-<h3><a id="procs-as-arguments-are-possible-but-need-special-handling" class="anchor" href="#procs-as-arguments-are-possible-but-need-special-handling">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>Procs as arguments are possible, but need special handling</h3>
-<p>Either annotate the methods using <code>AddBlockArg</code> or <code>StoreBlockArg</code>.</p>
-<h3><a id="symbols-do-not-work-fully-due-to-their-compiletime-nature-in-crystal" class="anchor" href="#symbols-do-not-work-fully-due-to-their-compiletime-nature-in-crystal">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>Symbols do not work fully due to their compiletime nature in Crystal</h3>
-<p>If all symbols are known beforehand, they can be casted from strings.</p>
-<h3><a id="arrays-hashes-and-strings-passed-from-crystal-to-ruby-or-vice-versa-are-immutable" class="anchor" href="#arrays-hashes-and-strings-passed-from-crystal-to-ruby-or-vice-versa-are-immutable">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>Arrays, hashes and strings passed from Crystal to Ruby (or vice versa) are immutable</h3>
-<p>Do not pass the containers directly, but write special access methods.</p>
-<h3><a id="only-one-function-with-the-same-name-can-be-wrapped" class="anchor" href="#only-one-function-with-the-same-name-can-be-wrapped">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>Only one function with the same name can be wrapped</h3>
-<p>Overloading works if you specify the argument type as union and avoid illegal calls.</p>
-<h3><a id="splat-arguments-and-arbitrary-keywords-are-not-possible-due-to-their-reliance-on-symbols" class="anchor" href="#splat-arguments-and-arbitrary-keywords-are-not-possible-due-to-their-reliance-on-symbols">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>Splat arguments and arbitrary keywords are not possible due to their reliance on symbols</h3>
-<p>Passing a hash with strings as keys is a workaround.</p>
-<h3><a id="keywords-will-always-be-given-to-functions-even-if-optional-then-with-default-values" class="anchor" href="#keywords-will-always-be-given-to-functions-even-if-optional-then-with-default-values">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>Keywords will always be given to functions, even if optional (then with default values)</h3>
-<p>Try to avoid complex function calls in default arguments.</p>
-<h3><a id="non-keyword-function-arguments-are-always-set-to-their-default-values-before-receiving-their-final-values" class="anchor" href="#non-keyword-function-arguments-are-always-set-to-their-default-values-before-receiving-their-final-values">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>Non-keyword function arguments are always set to their default values before receiving their final values</h3>
-<p>Same as above.</p>
-<h3><a id="default-arguments-need-to-be-specialized-with-their-full-class-and-module-path-in-order-to-work" class="anchor" href="#default-arguments-need-to-be-specialized-with-their-full-class-and-module-path-in-order-to-work">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>Default arguments need to be specialized with their full class and module path in order to work</h3>
-<p>Use the <code>Specialize</code> annotations to change the default values, if needed.</p>
-<h3><a id="some-union-and-generic-types-need-to-be-specialized-with-their-full-path" class="anchor" href="#some-union-and-generic-types-need-to-be-specialized-with-their-full-path">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>Some union and generic types need to be specialized with their full path</h3>
-<p>Use the <code>Specialize</code> annotations to specify the full path if necessary.</p>
-<h3><a id="private-constants-trigger-errors-which-can-not-be-prevented-by-anyolite" class="anchor" href="#private-constants-trigger-errors-which-can-not-be-prevented-by-anyolite">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>Private constants trigger errors, which can not be prevented by Anyolite</h3>
-<p>Use the <code>ExcludeConstant</code> annotation to exclude private constants.</p>
-<h3><a id="pointers-given-to-ruby-are-weak-references-and-therefore-not-tracked-by-the-garbage-collector" class="anchor" href="#pointers-given-to-ruby-are-weak-references-and-therefore-not-tracked-by-the-garbage-collector">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>Pointers given to Ruby are weak references and therefore not tracked by the garbage collector</h3>
-<p>Try to avoid exposed pointers wherever possible, otherwise keep track of the referenced objects.</p>
-<h3><a id="integers-passed-to-ruby-are-larger-than-64-bit" class="anchor" href="#integers-passed-to-ruby-are-larger-than-64-bit">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>Integers passed to Ruby are larger than 64 bit</h3>
-<p>Especially mruby does not directly support large numbers. If really needed, the config file
-can be modified to include a BigNum mrbgem, but this is not tested.</p>
+<p>See <a href="https://github.com/Anyolite/anyolite/wiki/Limitations-and-solutions">Limitations and solutions</a> in the Wiki section for a detailed list.</p>
 <h1><a id="why-this-name" class="anchor" href="#why-this-name">
   <svg class="octicon-link" aria-hidden="true">
     <use href="#octicon-link"/>
@@ -612,68 +480,28 @@ can be modified to include a BigNum mrbgem, but this is not tested.</p>
     <use href="#octicon-link"/>
   </svg>
 </a>Upcoming releases</h2>
-<h3><a id="version-1.0.0" class="anchor" href="#version-1.0.0">
+<p>Currently none</p>
+<h3><a id="later-releases" class="anchor" href="#later-releases">
   <svg class="octicon-link" aria-hidden="true">
     <use href="#octicon-link"/>
   </svg>
-</a>Version 1.0.0</h3>
-<p>This release will mark the first full release of Anyolite, mostly
-focussed on platform support, more examples and code quality.</p>
-<p>Other versions might still come before this, especially for
-bugfixes, but most of the features for a full release of
-Anyolite are already implemented.</p>
-<h4><a id="platform-support" class="anchor" href="#platform-support">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>Platform support</h4>
+</a>Later releases</h3>
 <ul>
-<li>[ ] Mac support (might be possible, not tested yet)</li>
-<li>[ ] MRI support on Windows</li>
-</ul>
-<h4><a id="documentation" class="anchor" href="#documentation">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>Documentation</h4>
-<ul>
-<li>[ ] Crystal specs for testing</li>
-<li>[ ] Documentation of all relevant features and wrappers</li>
 <li>[ ] Automated generation of Ruby documentations for wrapped functions</li>
+<li>[ ] MRI support on Windows (does currently not work for some reason)</li>
+<li>[ ] Mac support and continuous integration</li>
 </ul>
-<h4><a id="configuration-options" class="anchor" href="#configuration-options">
+<h3><a id="wishlist-entries-might-not-be-possible-to-implement" class="anchor" href="#wishlist-entries-might-not-be-possible-to-implement">
   <svg class="octicon-link" aria-hidden="true">
     <use href="#octicon-link"/>
   </svg>
-</a>Configuration options</h4>
-<ul>
-<li>[ ] More configuration options for the Rakefile</li>
-</ul>
-<h4><a id="code-quality" class="anchor" href="#code-quality">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>Code quality</h4>
-<ul>
-<li>[ ] Convert macro body variables to fresh variables wherever possible</li>
-<li>[ ] Put macro function arguments as options in a hash</li>
-<li>[ ] Code cleanup (especially in the macro section)</li>
-<li>[ ] More compatibility between methods accepting <code>RbRef</code> and <code>RbValue</code></li>
-<li>[ ] Better overloads between Ruby and Crystal classes, where possible</li>
-</ul>
-<h3><a id="future-feature-ideas-might-not-actually-be-possible-to-implement" class="anchor" href="#future-feature-ideas-might-not-actually-be-possible-to-implement">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>Future feature ideas (might not actually be possible to implement)</h3>
+</a>Wishlist, entries might not be possible to implement</h3>
 <ul>
 <li>[ ] Splat argument and/or arbitrary keyword passing</li>
 <li>[ ] Support for slices and bytes</li>
 <li>[ ] Classes as argument type</li>
 <li>[ ] Resolve context even in generic type union arguments</li>
-<li>[ ] Class inheritance wrapping can be disabled for any class using annotations</li>
-<li>[ ] General improvement of type resolving</li>
-<li>[ ] Return values from evaluated script lines</li>
+<li>[ ] General improvement of type resolution</li>
 <li>[ ] Bignum support</li>
 </ul>
 </div>
