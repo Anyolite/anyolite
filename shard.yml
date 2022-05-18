@@ -1,5 +1,5 @@
 name: anyolite
-version: 0.17.0
+version: 1.0.0
 
 authors:
   - Hadeweka
@@ -12,4 +12,4 @@ scripts:
 
 license: MIT
 
-crystal: '>= 0.34.0'
+crystal: '>= 1.0.0'

@@ -14,8 +14,6 @@ Anyolite is a Crystal shard which adds a fully functional mruby (or even regular
 Anyolite allows for wrapping Crystal classes and functions into Ruby with little effort.
 This way, Ruby can be used as a scripting language to Crystal projects, with the major advantage of a similar syntax.
 
-This project is currently in active development, so please report any bugs or missing relevant features.
-
 Useful links for an overview:
 * Demo project: https://github.com/Anyolite/ScapoLite
 * Wiki: https://github.com/Anyolite/anyolite/wiki
@@ -142,46 +140,7 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 
 ## Upcoming releases
 
-### Version 1.0.0
-
-This release will mark the first full release of Anyolite, mostly
-focussed on platform support, more examples and code quality.
-
-Other versions might still come before this, especially for
-bugfixes, but most of the features for a full release of
-Anyolite are already implemented.
-
-#### Features
-
-* [X] `Anyolite.eval` can be used to get return values from script lines
-* [X] Added check methods for Ruby references
-
-#### Breaking changes
-
-* [X] Compacted most macro function options into hashes
-* [X] Adds default `inspect` and `to_s` methods to wrapped enums automatically
-* [X] Updated mruby to 3.1.0 and MRI to 3.0.4
-* [X] Config files now require `rb_minor` argument for MRI specifically
-
-#### Security
-
-* [X] Closing an interpreter will now correctly clean class and type caches
-* [X] Fixed segmentation fault when overwriting Crystal content of a class
-* [X] Changed block cache to a stack to avoid overwriting it
-
-#### Usability
-
-* [X] Completed all wiki entries
-* [X] Unit tests in test script
-* [X] Converted macro body variables to fresh variables wherever possible
-* [X] More compatibility between methods accepting `RbRef` and `RbValue`
-
-#### Bugfixes
-
-* [X] Fixed error when passing blocks to certain method types
-* [X] Methods `inspect`, `to_s` and `hash` will now correctly respond to annotations
-* [X] Fixed UTF-8 problems in MRI tests
-* [X] Fixed crash on returning a `RbRef`
+Currently none
 
 ### Later releases
 

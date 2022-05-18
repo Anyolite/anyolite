@@ -2,6 +2,43 @@
 
 ## Releases
 
+### Version 1.0.0
+
+This release marks the first full release of Anyolite, mostly
+focussed on code quality, specs and bugfixes.
+
+#### Features
+
+* `Anyolite.eval` can be used to get return values from script lines
+* Added check methods for Ruby references
+
+#### Breaking changes
+
+* Compacted most macro function options into hashes
+* Adds default `inspect` and `to_s` methods to wrapped enums automatically
+* Updated mruby to 3.1.0 and MRI to 3.0.4
+* Config files now require `rb_minor` argument for MRI specifically
+
+#### Security
+
+* Closing an interpreter will now correctly clean class and type caches
+* Fixed segmentation fault when overwriting Crystal content of a class
+* Changed block cache to a stack to avoid overwriting it
+
+#### Usability
+
+* Completed all wiki entries
+* Unit tests in test script
+* Converted macro body variables to fresh variables wherever possible
+* More compatibility between methods accepting `RbRef` and `RbValue`
+
+#### Bugfixes
+
+* Fixed error when passing blocks to certain method types
+* Methods `inspect`, `to_s` and `hash` will now correctly respond to annotations
+* Fixed UTF-8 problems in MRI tests
+* Fixed crash on returning a `RbRef`
+
 ### Version 0.17.0
 
 #### Features
