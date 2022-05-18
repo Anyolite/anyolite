@@ -18,7 +18,7 @@ This project is currently in active development, so please report any bugs or mi
 
 Useful links for an overview:
 * Demo project: https://github.com/Anyolite/ScapoLite
-* Wiki (under construction): https://github.com/Anyolite/anyolite/wiki
+* Wiki: https://github.com/Anyolite/anyolite/wiki
 * Documentation: https://anyolite.github.io/anyolite
 
 # Features
