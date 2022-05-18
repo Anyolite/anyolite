@@ -276,7 +276,7 @@ module Anyolite
     end
 
     %rb = Anyolite::RbRefTable.get_current_interpreter
-    %obj = {{value}}.is_a?(Anyolite::RbCore::RbValue) ? {{value}} : Anyolite::RbCast.return_value(%rb.to_unsafe, {{value}})
+    %obj = {{value}}.is_a?(Anyolite::RbCore::RbValue) || {{value}}.is_a?(Anyolite::RbRef) ? {{value}} : Anyolite::RbCast.return_value(%rb.to_unsafe, {{value}})
     %name = Anyolite::RbCore.convert_to_rb_sym(%rb, {{name}}.to_s)
 
     Anyolite::RbCore.rb_respond_to(%rb, %obj, %name) == 0 ? false : true
@@ -389,7 +389,7 @@ module Anyolite
   # If needed, *context* can be set to a `Path` in order to specify *cast_to*.
   macro get_iv(object, name, cast_to = nil, context = nil)
     %rb = Anyolite::RbRefTable.get_current_interpreter
-    %obj = {{object}}.is_a?(Anyolite::RbCore::RbValue) ? {{object}} : Anyolite::RbCast.return_value(%rb.to_unsafe, {{object}})
+    %obj = {{object}}.is_a?(Anyolite::RbCore::RbValue) || {{value}}.is_a?(Anyolite::RbRef) ? {{object}} : Anyolite::RbCast.return_value(%rb.to_unsafe, {{object}})
     %name = Anyolite::RbCore.convert_to_rb_sym(%rb, {{name}}.to_s)
 
     {% options = {:context => context} %}
@@ -413,7 +413,7 @@ module Anyolite
   # If needed, *context* can be set to a `Path` in order to specify *cast_to*.
   macro set_iv(object, name, value)
     %rb = Anyolite::RbRefTable.get_current_interpreter
-    %obj = {{object}}.is_a?(Anyolite::RbCore::RbValue) ? {{object}} : Anyolite::RbCast.return_value(%rb.to_unsafe, {{object}})
+    %obj = {{object}}.is_a?(Anyolite::RbCore::RbValue) || {{value}}.is_a?(Anyolite::RbRef) ? {{object}} : Anyolite::RbCast.return_value(%rb.to_unsafe, {{object}})
     %name = Anyolite::RbCore.convert_to_rb_sym(%rb, {{name}}.to_s)
     %value = Anyolite::RbCast.return_value(%rb.to_unsafe, {{value}})
 
