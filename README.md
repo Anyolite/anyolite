@@ -189,6 +189,7 @@ Anyolite are already implemented.
 
 * [ ] Automated generation of Ruby documentations for wrapped functions
 * [ ] Return values from evaluated script lines
+* [X] Added check methods for Ruby references
 
 #### Breaking changes
 
@@ -209,7 +210,7 @@ Anyolite are already implemented.
 * [ ] Documentation of all relevant features and wrappers
 * [X] Converted macro body variables to fresh variables wherever possible
 * [ ] Code cleanup (especially in the macro section)
-* [ ] More compatibility between methods accepting `RbRef` and `RbValue`
+* [X] More compatibility between methods accepting `RbRef` and `RbValue`
 
 #### Bugfixes
 

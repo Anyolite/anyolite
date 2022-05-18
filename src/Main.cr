@@ -65,9 +65,69 @@ module Anyolite
       @value
     end
 
+    # Return `true` if the value is undefined, otherwise `false`
+    def is_undef?
+      RbCast.check_for_undef(@value)
+    end
+
+    # Return `true` if the value is a Ruby bool, otherwise `false`
+    def is_bool?
+      RbCast.check_for_bool(@value)
+    end
+
+    # Return `true` if the value is a Ruby nil, otherwise `false`
+    def is_nil?
+      RbCast.check_for_nil(@value)
+    end
+
+    # Return `true` if the value is a Ruby fixnum, otherwise `false`
+    def is_fixnum?
+      RbCast.check_for_fixnum(@value)
+    end
+
+    # Return `true` if the value is a Ruby float, otherwise `false`
+    def is_float?
+      RbCast.check_for_float(@value)
+    end
+
+    # Return `true` if the value is a Ruby string, otherwise `false`
+    def is_string?
+      RbCast.check_for_string(@value)
+    end
+
+    # Return `true` if the value is a Ruby symbol, otherwise `false`
+    def is_symbol?
+      RbCast.check_for_symbol(@value)
+    end
+
+    # Return `true` if the value is a Ruby array, otherwise `false`
+    def is_array?
+      RbCast.check_for_array(@value)
+    end
+
+    # Return `true` if the value is a Ruby hash, otherwise `false`
+    def is_hash?
+      RbCast.check_for_hash(@value)
+    end
+
+    # Return `true` if the value is a wrapped objects, otherwise `false`
+    def is_custom?
+      RbCast.check_for_data(@value)
+    end
+
+    # Return `true` if the value is a wrapped object of class *class_name*, otherwise `false`
+    def is_custom?(class_name)
+      RbCast.check_custom_type(RbRefTable.get_current_interpreter, value, class_name)
+    end
+
     # :nodoc:
     def finalize
       RbCore.rb_gc_unregister(RbRefTable.get_current_interpreter, value) if RbRefTable.check_interpreter
+    end
+
+    # :nodoc:
+    def to_unsafe
+      @value
     end
   end
 
@@ -252,7 +312,7 @@ module Anyolite
     end
     
     %rb = Anyolite::RbRefTable.get_current_interpreter
-    %obj = {{value}}.is_a?(Anyolite::RbCore::RbValue) ? {{value}} : Anyolite::RbCast.return_value(%rb.to_unsafe, {{value}})
+    %obj = {{value}}.is_a?(Anyolite::RbCore::RbValue) || {{value}}.is_a?(Anyolite::RbRef) ? {{value}} : Anyolite::RbCast.return_value(%rb.to_unsafe, {{value}})
     %name = Anyolite::RbCore.convert_to_rb_sym(%rb, {{name}}.to_s)
 
     {% options = {:context => context} %}
