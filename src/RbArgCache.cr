@@ -1,21 +1,21 @@
 module Anyolite
   module RbArgCache
-    @@block_cache : Pointer(RbCore::RbValue) | Nil = nil
+    @@block_cache : Deque(Pointer(RbCore::RbValue)) = Deque(Pointer(RbCore::RbValue)).new
 
     def self.get_block_cache
-      if b = @@block_cache
-        b
+      if @@block_cache.size > 0
+        @@block_cache.last
       else
         nil
       end
     end
 
-    def self.set_block_cache(value)
-      @@block_cache = value
+    def self.push_block_cache(value)
+      @@block_cache.push(value)
     end
 
-    def self.reset_block_cache
-      @@block_cache = nil
+    def self.pop_block_cache
+      @@block_cache.pop
     end
   end
 end

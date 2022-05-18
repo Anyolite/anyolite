@@ -19,7 +19,7 @@ module Anyolite
           %block_ptr = Pointer(Anyolite::RbCore::RbValue).malloc(size: 1)
           
           {% if options[:store_block_arg] %}
-            Anyolite::RbArgCache.set_block_cache(%block_ptr)
+            Anyolite::RbArgCache.push_block_cache(%block_ptr)
           {% end %}
 
           %args = Anyolite::Macro.generate_arg_tuple(_rb, {{regular_args}}, options: {{options}})
@@ -43,7 +43,7 @@ module Anyolite
         %return_value = Anyolite::Macro.call_and_return(_rb, {{proc}}, {{regular_arg_array}}, %converted_args, operator: {{operator}}, options: {{options}}, block_ptr: %block_ptr)
 
         {% if options[:store_block_arg] %}
-          Anyolite::RbArgCache.reset_block_cache
+          Anyolite::RbArgCache.pop_block_cache
         {% end %}
 
         %return_value
@@ -72,7 +72,7 @@ module Anyolite
           %block_ptr = Pointer(Anyolite::RbCore::RbValue).malloc(size: 1)
 
           {% if options[:store_block_arg] %}
-            Anyolite::RbArgCache.set_block_cache(%block_ptr)
+            Anyolite::RbArgCache.push_block_cache(%block_ptr)
           {% end %}
 
           %format_string = Anyolite::Macro.format_string({{regular_arg_array}}, options: {{options}}) + ":&"
@@ -99,7 +99,7 @@ module Anyolite
         %return_value = Anyolite::Macro.call_and_return_keyword_method(_rb, {{proc}}, %converted_regular_args, {{keyword_args}}, %kw_args, operator: {{operator}}, options: {{options}}, block_ptr: %block_ptr)
         
         {% if options[:store_block_arg] %}
-          Anyolite::RbArgCache.reset_block_cache
+          Anyolite::RbArgCache.pop_block_cache
         {% end %}
 
         %return_value
@@ -126,7 +126,7 @@ module Anyolite
           %block_ptr = Pointer(Anyolite::RbCore::RbValue).malloc(size: 1)
 
           {% if options[:store_block_arg] %}
-            Anyolite::RbArgCache.set_block_cache(%block_ptr)
+            Anyolite::RbArgCache.push_block_cache(%block_ptr)
           {% end %}
 
           %args = Anyolite::Macro.generate_arg_tuple(_rb, {{regular_args}}, options: {{options}})
@@ -150,7 +150,7 @@ module Anyolite
         %return_value = Anyolite::Macro.call_and_return(_rb, {{proc}}, {{regular_arg_array}}, %converted_args, operator: {{operator}}, options: {{options}}, block_ptr: %block_ptr)
 
         {% if options[:store_block_arg] %}
-          Anyolite::RbArgCache.reset_block_cache
+          Anyolite::RbArgCache.pop_block_cache
         {% end %}
 
         %return_value
@@ -179,7 +179,7 @@ module Anyolite
           %block_ptr = Pointer(Anyolite::RbCore::RbValue).malloc(size: 1)
 
           {% if options[:store_block_arg] %}
-            Anyolite::RbArgCache.set_block_cache(%block_ptr)
+            Anyolite::RbArgCache.push_block_cache(%block_ptr)
           {% end %}
 
           %format_string = Anyolite::Macro.format_string({{regular_arg_array}}, options: {{options}}) + ":&"
@@ -206,7 +206,7 @@ module Anyolite
         %return_value = Anyolite::Macro.call_and_return_keyword_method(_rb, {{proc}}, %converted_regular_args, {{keyword_args}}, %kw_args, operator: {{operator}}, options: {{options}}, block_ptr: %block_ptr)
 
         {% if options[:store_block_arg] %}
-          Anyolite::RbArgCache.reset_block_cache
+          Anyolite::RbArgCache.pop_block_cache
         {% end %}
 
         %return_value
@@ -233,7 +233,7 @@ module Anyolite
           %block_ptr = Pointer(Anyolite::RbCore::RbValue).malloc(size: 1)
 
           {% if options[:store_block_arg] %}
-            Anyolite::RbArgCache.set_block_cache(%block_ptr)
+            Anyolite::RbArgCache.push_block_cache(%block_ptr)
           {% end %}
 
           %args = Anyolite::Macro.generate_arg_tuple(_rb, {{regular_args}}, options: {{options}})
@@ -263,7 +263,7 @@ module Anyolite
         %return_value = Anyolite::Macro.call_and_return_instance_method(_rb, {{proc}}, %converted_obj, %converted_args, operator: {{operator}}, options: {{options}}, block_ptr: %block_ptr)
         
         {% if options[:store_block_arg] %}
-          Anyolite::RbArgCache.reset_block_cache
+          Anyolite::RbArgCache.pop_block_cache
         {% end %}
 
         %return_value
@@ -294,7 +294,7 @@ module Anyolite
           %block_ptr = Pointer(Anyolite::RbCore::RbValue).malloc(size: 1)
 
           {% if options[:store_block_arg] %}
-            Anyolite::RbArgCache.set_block_cache(%block_ptr)
+            Anyolite::RbArgCache.push_block_cache(%block_ptr)
           {% end %}
 
           %format_string = Anyolite::Macro.format_string({{regular_arg_array}}, options: {{options}}) + ":&"
@@ -327,7 +327,7 @@ module Anyolite
         %return_value = Anyolite::Macro.call_and_return_keyword_instance_method(_rb, {{proc}}, %converted_obj, %converted_regular_args, {{keyword_args}}, %kw_args, operator: {{operator}}, options: {{options}}, block_ptr: %block_ptr)
 
         {% if options[:store_block_arg] %}
-          Anyolite::RbArgCache.reset_block_cache
+          Anyolite::RbArgCache.pop_block_cache
         {% end %}
 
         %return_value
@@ -362,7 +362,7 @@ module Anyolite
           %block_ptr = Pointer(Anyolite::RbCore::RbValue).malloc(size: 1)
 
           {% if options[:store_block_arg] %}
-            Anyolite::RbArgCache.set_block_cache(%block_ptr)
+            Anyolite::RbArgCache.push_block_cache(%block_ptr)
           {% end %}
 
           %args = Anyolite::Macro.generate_arg_tuple(_rb, {{regular_args}}, options: {{options}})
@@ -403,7 +403,7 @@ module Anyolite
         Anyolite::Macro.allocate_constructed_object(_rb, {{crystal_class}}, _obj, %new_obj)
 
         {% if options[:store_block_arg] %}
-          Anyolite::RbArgCache.reset_block_cache
+          Anyolite::RbArgCache.pop_block_cache
         {% end %}
 
         _obj
@@ -440,7 +440,7 @@ module Anyolite
           %block_ptr = Pointer(Anyolite::RbCore::RbValue).malloc(size: 1)
 
           {% if options[:store_block_arg] %}
-            Anyolite::RbArgCache.set_block_cache(%block_ptr)
+            Anyolite::RbArgCache.push_block_cache(%block_ptr)
           {% end %}
 
           %format_string = Anyolite::Macro.format_string({{regular_arg_array}}, options: {{options}}) + ":&"
@@ -496,7 +496,7 @@ module Anyolite
         Anyolite::Macro.allocate_constructed_object(_rb, {{crystal_class}}, _obj, %new_obj)
 
         {% if options[:store_block_arg] %}
-          Anyolite::RbArgCache.reset_block_cache
+          Anyolite::RbArgCache.pop_block_cache
         {% end %}
         
         _obj

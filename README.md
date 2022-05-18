@@ -168,10 +168,11 @@ Anyolite are already implemented.
 
 * [X] Closing an interpreter will now correctly clean class and type caches
 * [X] Fixed segmentation fault when overwriting Crystal content of a class
+* [X] Changed block cache to a stack to avoid overwriting it
 
 #### Usability
 
-* [ ] Completed all wiki entries
+* [X] Completed all wiki entries
 * [ ] Mac support and continuous integration
 * [X] Unit tests in test script
 * [X] Converted macro body variables to fresh variables wherever possible
