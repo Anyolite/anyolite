@@ -162,70 +162,7 @@ More features will be added in the future.
 
 # Limitations
 
-## Hard limitations
-
-These limitations can not be circumvented using other methods.
-It might be possible to remove them in future versions, but for
-now they are potential roadblocks.
-
-* Only GCC and Visual Studio are officially supported as compilers (others might work if the Rakefile is modified)
-* Anyolite for Windows does only work with Crystal version 1.2.0 or higher
-* MRI is currently not supported on Windows
-
-## Soft limitations
-
-The limitations here do not have a trivial solution (yet), but with some tricks and
-tools from Anyolite it should technically be possible to circumvent them (possible solutions are written below each problem).
-If one of these does definitely not work, but you need them to, please feel free to open an issue.
-
-### Procs as arguments are possible, but need special handling
-
-Either annotate the methods using `AddBlockArg` or `StoreBlockArg`.
-  
-### Symbols do not work fully due to their compiletime nature in Crystal
-
-If all symbols are known beforehand, they can be casted from strings.
-  
-### Arrays, hashes and strings passed from Crystal to Ruby (or vice versa) are immutable
-
-Do not pass the containers directly, but write special access methods.
-  
-### Only one function with the same name can be wrapped
-
-Overloading works if you specify the argument type as union and avoid illegal calls.
-  
-### Splat arguments and arbitrary keywords are not possible due to their reliance on symbols
-
-Passing a hash with strings as keys is a workaround.
-  
-### Keywords will always be given to functions, even if optional (then with default values)
-
-Try to avoid complex function calls in default arguments.
-  
-### Non-keyword function arguments are always set to their default values before receiving their final values
-
-Same as above.
-  
-### Default arguments need to be specialized with their full class and module path in order to work
-
-Use the `Specialize` annotations to change the default values, if needed.
-  
-### Some union and generic types need to be specialized with their full path
-
-Use the `Specialize` annotations to specify the full path if necessary.
-  
-### Private constants trigger errors, which can not be prevented by Anyolite
-
-Use the `ExcludeConstant` annotation to exclude private constants.
-
-### Pointers given to Ruby are weak references and therefore not tracked by the garbage collector
-
-Try to avoid exposed pointers wherever possible, otherwise keep track of the referenced objects.
-
-### Integers passed to Ruby are larger than 64 bit
-
-Especially mruby does not directly support large numbers. If really needed, the config file
-can be modified to include a BigNum mrbgem, but this is not tested.
+See [Limitations and solutions](https://github.com/Anyolite/anyolite/wiki/Limitations-and-solutions) in the Wiki section for a detailed list.
 
 # Why this name?
 
