@@ -113,6 +113,8 @@ module Anyolite
         RbCast.return_hash(rb, value)
       elsif value.is_a?(Pointer)
         RbCast.return_object(rb, HelperClasses::AnyolitePointer.new(value))
+      elsif value.is_a?(RbRef)
+        value.to_unsafe
       elsif value.is_a?(Struct) || value.is_a?(Enum)
         RbCast.return_struct_or_enum(rb, value)
       else

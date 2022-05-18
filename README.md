@@ -217,6 +217,7 @@ Anyolite are already implemented.
 * [X] Fixed error when passing blocks to certain method types
 * [X] Methods `inspect`, `to_s` and `hash` will now correctly respond to annotations
 * [X] Fixed UTF-8 problems in MRI tests
+* [X] Fixed crash on returning a `RbRef`
 
 ### Future feature ideas (might not actually be possible to implement)
 
