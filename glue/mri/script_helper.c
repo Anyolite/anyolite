@@ -79,10 +79,10 @@ extern void load_script_from_file(void* rb, const char* filename) {
 
 }
 
-extern void execute_script_line(void* rb, const char* text) {
+extern VALUE execute_script_line(void* rb, const char* text) {
 
   int status;
-  rb_eval_string_protect(text, &status);
+  VALUE result = rb_eval_string_protect(text, &status);
 
   if(status) {
 
@@ -94,5 +94,7 @@ extern void execute_script_line(void* rb, const char* text) {
     printf("%s\n", rb_string_value_cstr(&exception_str));
 
   }
+
+  return result;
 
 }

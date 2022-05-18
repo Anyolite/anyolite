@@ -374,6 +374,26 @@ module Anyolite
     Anyolite.call_rb_method_of_object(%rb_class, {{name}}, {{args}}, cast_to: {{cast_to}}, context: {{context}})
   end
 
+  # Calls the Ruby expression *str*.
+  #
+  # If *cast_to* is set to a `Class` or similar, it will automatically cast
+  # the result to a Crystal value of that class, otherwise, it will return
+  # a `RbRef` value containing the result.
+  #
+  # If needed, *context* can be set to a `Path` in order to specify *cast_to*.
+  macro eval(str, cast_to = nil, context = nil)
+    %rb = Anyolite::RbRefTable.get_current_interpreter
+    {% options = {:context => context} %}
+
+    %call_result = %rb.execute_script_line({{str}})
+    
+    {% if cast_to %}
+      Anyolite::Macro.convert_from_ruby_to_crystal(%rb.to_unsafe, %call_result, {{cast_to}}, options: {{options}})
+    {% else %}
+      Anyolite::RbRef.new(%call_result)
+    {% end %}
+  end
+
   # Returns current object as a `RbRef`
   macro self_in_rb
     %rb = Anyolite::RbRefTable.get_current_interpreter

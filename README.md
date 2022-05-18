@@ -153,8 +153,7 @@ Anyolite are already implemented.
 
 #### Features
 
-* [ ] Automated generation of Ruby documentations for wrapped functions
-* [ ] Return values from evaluated script lines
+* [X] `Anyolite.eval` can be used to get return values from script lines
 * [X] Added check methods for Ruby references
 
 #### Breaking changes
@@ -173,7 +172,6 @@ Anyolite are already implemented.
 #### Usability
 
 * [X] Completed all wiki entries
-* [ ] Mac support and continuous integration
 * [X] Unit tests in test script
 * [X] Converted macro body variables to fresh variables wherever possible
 * [X] More compatibility between methods accepting `RbRef` and `RbValue`
@@ -185,9 +183,14 @@ Anyolite are already implemented.
 * [X] Fixed UTF-8 problems in MRI tests
 * [X] Fixed crash on returning a `RbRef`
 
-### Future feature ideas (might not actually be possible to implement)
+### Later releases
 
+* [ ] Automated generation of Ruby documentations for wrapped functions
 * [ ] MRI support on Windows (does currently not work for some reason)
+* [ ] Mac support and continuous integration
+
+### Wishlist, entries might not be possible to implement
+
 * [ ] Splat argument and/or arbitrary keyword passing
 * [ ] Support for slices and bytes
 * [ ] Classes as argument type
