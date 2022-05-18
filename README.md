@@ -43,34 +43,9 @@ You need to have the following programs installed (and in your PATH variable, if
 * Git (for downloading mruby)
 * GCC or Microsoft Visual Studio 19 (for building the object files required for Anyolite, depending on your OS)
 
-## Using MRI instead of mruby
+## Using regular Ruby instead of mruby
 
-If you want to test MRI as implementation, you need these additional programs:
-* Autoconf
-* Bison
-
-For MRI on Windows, you also need:
-* sed
-* patch
-* vcpkg with libffi, libyaml, openssl, readline and zlib installed
-Note that MRI on Windows is currently not functional.
-
-Compiling Anyolite for MRI requires setting the environment variable `ANYOLITE_CONFIG_PATH` to a valid MRI configuration path (like `config_files/anyolite_config_mri.json`), building the shard and then setting the `anyolite_implementation_ruby_3` and `use_general_object_format_chars` flags for the final compilation.
-
-Support for MRI is still not as fleshed out as mruby. 
-Many problems and errors might occur, so mruby is still recommended as the main Ruby implementation for now.
-
-Please report any bugs with MRI, so development can progress smoothly.
-
-### Known issues with MRI
-
-* Currently it is only possible to run a single actual Ruby script file
-* UTF-8 function and variable names defined in Crystal can lead to crashes in Ruby
-* UTF-8 in general might not work properly (this is no problem in mruby)
-* Bytecode compilation functions are not available yet (and might never be)
-* Some utility functions from mruby are not available
-* Gems need to be installed manually after installing Ruby
-* For now, only gcc is supported as compiler
+It is possible to use Anyolite with regular Ruby (MRI) instead of mruby. An instruction to install MRI can be found at [Using Ruby instead of mruby](https://github.com/Anyolite/anyolite/wiki/Using-Ruby-instead-of-mruby) in the wiki.
 
 # Installing
 
@@ -86,7 +61,7 @@ rake build_shard
 ```
 manually to install the shard without using the crystal shards program.
 
-If you want to use other options for Anyolite, visit [Changing build configuration](https://github.com/Anyolite/anyolite/wiki/Changing-build-configurations) in the wiki.
+If you want to use other options for Anyolite, visit [Changing build configurations](https://github.com/Anyolite/anyolite/wiki/Changing-build-configurations) in the wiki.
 
 # How to use
 
