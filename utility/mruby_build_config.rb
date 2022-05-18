@@ -2,11 +2,6 @@ MRuby::Build.new do |conf|
 
   if ENV['VisualStudioVersion'] || ENV['VSINSTALLDIR']
     toolchain :visualcpp
-    
-    conf.yacc do |yacc|
-      yacc.command = ENV['YACC'] || 'bison.exe'
-      yacc.compile_options = %q[-o "%{outfile}" "%{infile}"]
-    end
   else
     toolchain :gcc
   end

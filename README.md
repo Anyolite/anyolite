@@ -86,16 +86,7 @@ rake build_shard
 ```
 manually to install the shard without using the crystal shards program.
 
-If you want to use other options for Anyolite, you can set `ANYOLITE_CONFIG_PATH` to the filename of a JSON config file,
-which allows for changing multiple options when installing the shard. Possible options are:
-
-* `ANYOLITE_BUILD_PATH` - The relative directory in which Anyolite will be built
-* `ANYOLITE_RUBY_FORK` - The web address of the Ruby repository
-* `ANYOLITE_RUBY_RELEASE` - The release tag of the Ruby version to be used
-* `ANYOLITE_RUBY_DIR` - The relative directory Ruby will be installed in
-* `ANYOLITE_RUBY_CONFIG` - The config file which is used for building Ruby
-* `ANYOLITE_GLUE_DIR` - The directory in which helper function C files are located
-* `ANYOLITE_COMPILER` - The C compiler used for building Anyolite
+If you want to use other options for Anyolite, visit [Changing build configuration](https://github.com/Anyolite/anyolite/wiki/Changing-build-configurations) in the wiki.
 
 # How to use
 
@@ -205,11 +196,10 @@ Anyolite are already implemented.
 
 #### Usability
 
+* [ ] Completed all wiki entries
 * [ ] Mac support and continuous integration
 * [X] Unit tests in test script
-* [ ] Documentation of all relevant features and wrappers
 * [X] Converted macro body variables to fresh variables wherever possible
-* [ ] Code cleanup (especially in the macro section)
 * [X] More compatibility between methods accepting `RbRef` and `RbValue`
 
 #### Bugfixes
