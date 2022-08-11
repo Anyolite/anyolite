@@ -140,6 +140,13 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 
 ## Upcoming releases
 
+### Version 1.0.1
+
+#### Bugfixes
+
+* [ ] Fix error when running `shards install` on Windows
+* [ ] Fix compilation warning messages for Windows
+
 Currently none
 
 ### Later releases
