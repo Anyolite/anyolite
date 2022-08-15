@@ -1,1 +1,1 @@
-system("rake build_shard")
+`rake build_shard`
