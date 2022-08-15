@@ -51,13 +51,13 @@ Put this shard as a requirement into your shard.yml project file and then call
 ```bash
 shards install
 ```
-from a terminal or the MSVC Developer Console (on Windows).
+from a terminal (NOTE: this does NOT work on Windows yet due to shards not allowing non-executable files).
 
 Alternatively, you can clone this repository into the lib folder of your project and run
 ```bash
 rake build_shard
 ```
-manually to install the shard without using the crystal shards program.
+manually from a terminal or the MSVC Developer Console (on Windows) to install the shard without using the crystal shards program.
 
 If you want to use other options for Anyolite, visit [Changing build configurations](https://github.com/Anyolite/anyolite/wiki/Changing-build-configurations) in the wiki.
 
