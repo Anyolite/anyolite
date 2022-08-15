@@ -51,7 +51,9 @@ Put this shard as a requirement into your shard.yml project file and then call
 ```bash
 shards install
 ```
-from a terminal (NOTE: this does NOT work on Windows yet due to shards not allowing non-executable files).
+from a terminal.
+
+If you are on Windows, this does currently not work, unless you use the experimental `working-shards` branch of Anyolite.
 
 Alternatively, you can clone this repository into the lib folder of your project and run
 ```bash
