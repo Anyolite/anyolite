@@ -150,8 +150,6 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 * [ ] Fix compilation warning messages for Windows
 * [ ] Fix problems with Regexes due to PCRE conflicts
 
-Currently none
-
 ### Later releases
 
 * [ ] Automated generation of Ruby documentations for wrapped functions
