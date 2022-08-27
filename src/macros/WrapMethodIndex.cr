@@ -90,7 +90,7 @@ module Anyolite
           {% end %}
 
         # A complicated check, but it is more stable than simply checking for colons
-        {% elsif final_arg_array.find { |m| (m.is_a?(TypeDeclaration) && m.type) || (m.is_a?(Arg) && m.restriction) } %}
+        {% elsif !final_arg_array.find { |m| !((m.is_a?(TypeDeclaration) && m.type) || (m.is_a?(Arg) && m.restriction)) } %}
           {% if without_keywords %}
             {% if without_keywords >= final_arg_array.size %}
               {% regular_arg_partition = nil %}
