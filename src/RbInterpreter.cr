@@ -14,12 +14,19 @@ module Anyolite
     end
 
     def initialize
-      @rb_ptr = RbCore.rb_open
+      @rb_ptr = 
+      {% if flag?(:external_ruby) %}
+        Pointer(Anyolite::RbCore::State).null
+      {% else %}
+        RbCore.rb_open
+      {% end %}
       RbRefTable.set_current_interpreter(self)
     end
 
     def close
-      RbCore.rb_close(@rb_ptr)
+      {% unless flag?(:external_ruby) %}
+        RbCore.rb_close(@rb_ptr)
+      {% end %}
       RbRefTable.reset
       RbTypeCache.reset
       RbClassCache.reset
