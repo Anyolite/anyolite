@@ -2,6 +2,7 @@ MRuby::Build.new do |conf|
 
   if ENV['VisualStudioVersion'] || ENV['VSINSTALLDIR']
     toolchain :visualcpp
+    conf.cc.flags = "/nologo /W3 /MT /O2 /D_CRT_SECURE_NO_WARNINGS"
   else
     toolchain :gcc
   end

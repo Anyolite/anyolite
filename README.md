@@ -142,13 +142,22 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 
 ## Upcoming releases
 
-### Version 1.0.1
+### Version 1.1.0
+
+#### Features
+
+* [ ] Added option to use a separate Ruby interpreter
+
+#### Usability
+
+* [X] Updated mruby config file to use `libucrt` instead of `msvcrt`
 
 #### Bugfixes
 
 * [ ] Fix error when running `shards install` on Windows
 * [ ] Fix compilation warning messages for Windows
 * [ ] Fix problems with Regexes due to PCRE conflicts
+* [X] Fixed problems with Anyolite on Crystal 1.5.1
 * [X] Unspecified arguments now always correctly throw warnings instead of confusing errors
 
 ### Later releases
