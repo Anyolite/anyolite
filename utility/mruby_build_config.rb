@@ -11,7 +11,6 @@ MRuby::Build.new do |conf|
 
   conf.gem :mgem => 'json'
   conf.gem :mgem => 'dir'
-  conf.gem :mgem => 'regexp-pcre'
 
   conf.cc.flags << '-DMRB_UTF8_STRING -DMRB_INT64'
 

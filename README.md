@@ -144,6 +144,11 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 
 ### Version 1.1.0
 
+IMPORTANT NOTE: This version has no regex support for mruby, as the previously
+used regex gem does not work with the current version of Anyolite.
+
+There are plans to bring back regexes in the future, however.
+
 #### Features
 
 * [ ] Added option to use a separate Ruby interpreter
@@ -154,9 +159,9 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 
 #### Bugfixes
 
-* [ ] Fix error when running `shards install` on Windows
-* [X] Fix compilation warning messages for Windows
-* [ ] Fix problems with Regexes due to PCRE conflicts
+* [ ] Fixed error when running `shards install` on Windows
+* [X] Fixed compilation warning messages for Windows
+* [X] Fixed problems with Regexes due to PCRE conflicts
 * [X] Fixed problems with Anyolite on Crystal 1.5.1
 * [X] Unspecified arguments now always correctly throw warnings instead of confusing errors
 
