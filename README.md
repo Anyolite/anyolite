@@ -152,6 +152,7 @@ There are plans to bring back regexes in the future, however.
 #### Features
 
 * [ ] Added option to use a separate Ruby interpreter
+* [X] Added safeguard to catch non-fatal Crystal exceptions and raise them as Ruby errors
 
 #### Usability
 

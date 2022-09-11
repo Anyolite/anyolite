@@ -6,7 +6,12 @@ module Anyolite
   module Macro
     macro new_rb_func(&b)
       Anyolite::RbCore::RbFunc.new do |_rb, _obj|
-        {{b.body}}
+        begin
+          {{b.body}}
+        rescue ex
+          Anyolite.raise_runtime_error("#{ex.message} (raised from Crystal)")
+          Anyolite::RbCast.return_nil
+        end
       end
     end
 

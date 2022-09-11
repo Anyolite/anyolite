@@ -530,6 +530,6 @@ end
 final_time = Time.now
 
 puts "Tests done."
-puts "Total time for MRI test script: #{(final_time - start_time)} s"
+puts "Total time for Ruby test script: #{(final_time - start_time)} s"
 
 TestFramework.results(raise_if_failures: true)

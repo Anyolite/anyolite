@@ -14,7 +14,12 @@ module Anyolite
     macro new_rb_func(&b)
       Anyolite::RbCore::RbFunc.new do |_argc, _argv, _obj|
         _rb = Pointer(Anyolite::RbCore::State).null
-        {{b.body}}
+        begin
+          {{b.body}}
+        rescue ex
+          Anyolite.raise_runtime_error("#{ex.message} (raised from Crystal)")
+          Anyolite::RbCast.return_nil
+        end
       end
     end
 
