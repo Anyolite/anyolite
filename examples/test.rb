@@ -500,6 +500,7 @@ TestFramework.check(test_no: 56, should_be: 1.3) do
   a.num_test(1.3)
 end
 
+# Testing duplications
 TestFramework.check(test_no: 57, should_be: [5, 8, 2, 3, 1, 0]) do
   a = TestModule::Test.new(x: 5)
   a_copy = a.dup
@@ -525,6 +526,18 @@ TestFramework.check(test_no: 57, should_be: [5, 8, 2, 3, 1, 0]) do
   a_6 = intfloat_copy.u
 
   [a_1, a_2, a_3, a_4, a_5, a_6]
+end
+
+# Testing regular expressions
+TestFramework.check(test_no: 58, should_be: true) do
+  reg = /([\S]+) [\S]+/
+  reg.matches?("Hello World")
+end
+
+# Testing regular expression match data
+TestFramework.check(test_no: 59, should_be: "Hello") do
+  reg = /([\S]+) [\S]+/
+  reg.match("Hello World")[1]
 end
 
 final_time = Time.now

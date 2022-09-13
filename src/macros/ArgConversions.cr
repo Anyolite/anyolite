@@ -71,7 +71,7 @@ module Anyolite
             {{arg_type}}.new(0.0)
           end
         {% elsif arg_type.resolve <= Char %}
-          ({{arg}}.size > 0 ? {{arg_type}}.new({{arg}}[0] : '\0')
+          Anyolite::RbCast.cast_to_char({{rb}}, {{arg}})
         {% elsif arg_type.resolve <= String %}
           {{arg_type}}.new({{arg}})
         {% elsif arg_type.resolve <= Anyolite::RbRef %}

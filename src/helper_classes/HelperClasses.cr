@@ -1,4 +1,5 @@
 require "./AnyolitePointer.cr"
+require "./Regex.cr"
 
 module Anyolite
   module HelperClasses
@@ -8,6 +9,7 @@ module Anyolite
 
     def self.load_all(rb)
       load_helper_class(rb, AnyolitePointer)
+      Anyolite.wrap(rb, Regex, verbose: true)
     end
   end
 end

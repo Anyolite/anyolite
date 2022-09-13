@@ -144,19 +144,16 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 
 ### Version 1.1.0
 
-IMPORTANT NOTE: This version has no regex support for mruby, as the previously
-used regex gem does not work with the current version of Anyolite.
-
-There are plans to bring back regexes in the future, however.
-
 #### Features
 
+* [X] Added direct bindings to `Regex` from Crystal (`Regexp` in Ruby)
 * [ ] Added option to use a separate Ruby interpreter
 * [X] Added safeguard to catch non-fatal Crystal exceptions and raise them as Ruby errors
 
 #### Usability
 
 * [X] Updated mruby config file to use `libucrt` instead of `msvcrt`
+* [X] Discarded old and problematic Regex mruby gem
 
 #### Bugfixes
 
@@ -165,6 +162,7 @@ There are plans to bring back regexes in the future, however.
 * [X] Fixed problems with Regexes due to PCRE conflicts
 * [X] Fixed problems with Anyolite on Crystal 1.5.1
 * [X] Unspecified arguments now always correctly throw warnings instead of confusing errors
+* [X] Fixed compiletime error when casting to `Char`
 
 ### Later releases
 
