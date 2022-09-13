@@ -9,7 +9,11 @@ module Anyolite
 
     def self.load_all(rb)
       load_helper_class(rb, AnyolitePointer)
-      Anyolite.wrap(rb, Regex, verbose: true)
+
+      # We don't need two conflicting Regex classes in MRI
+      {% unless flag?(:anyolite_implementation_ruby_3) %}
+        Anyolite.wrap(rb, Regex, verbose: true)
+      {% end %}
     end
   end
 end

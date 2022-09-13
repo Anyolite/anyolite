@@ -531,7 +531,7 @@ end
 # Testing regular expressions
 TestFramework.check(test_no: 58, should_be: true) do
   reg = /([\S]+) [\S]+/
-  reg.matches?("Hello World")
+  reg.match?("Hello World")
 end
 
 # Testing regular expression match data
