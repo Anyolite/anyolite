@@ -21,7 +21,9 @@ module Anyolite
     {% end %}
   end
 
-  Anyolite.link_libraries
+  {% unless flag?(:external_ruby) %}
+    Anyolite.link_libraries
+  {% end %}
 
   lib RbCore
     alias RbFunc = Proc(RbInt, RbValue*, RbValue, RbValue) # argc, argv, self -> VALUE
