@@ -15,7 +15,7 @@ module Anyolite
 
     def initialize
       @rb_ptr = 
-      {% if flag?(:external_ruby) %}
+      {% if flag?(:anyolite_external_ruby) %}
         Pointer(Anyolite::RbCore::State).null
       {% else %}
         RbCore.rb_open
@@ -24,7 +24,7 @@ module Anyolite
     end
 
     def close
-      {% unless flag?(:external_ruby) %}
+      {% unless flag?(:anyolite_external_ruby) %}
         RbCore.rb_close(@rb_ptr)
       {% end %}
       RbRefTable.reset

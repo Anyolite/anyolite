@@ -147,7 +147,7 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 #### Features
 
 * [X] Added direct bindings to `Regex` from Crystal (`Regexp` in Ruby)
-* [ ] Added option to use a separate Ruby interpreter
+* [X] Added option to use a separate Ruby interpreter
 * [X] Added safeguard to catch non-fatal Crystal exceptions and raise them as Ruby errors
 
 #### Usability

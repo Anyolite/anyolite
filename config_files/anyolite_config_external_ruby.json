@@ -1,0 +1,10 @@
+{
+  "implementation": "mri",
+  "build_path": "build",
+  "rb_fork": "___EXTERNAL___",
+  "rb_release": "",
+  "rb_minor": "",
+  "rb_dir": "___EMPTY___",
+  "rb_config": "",
+  "glue_dir": "glue/mri"
+}

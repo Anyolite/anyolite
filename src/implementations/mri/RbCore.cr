@@ -21,7 +21,7 @@ module Anyolite
     {% end %}
   end
 
-  {% unless flag?(:external_ruby) %}
+  {% unless flag?(:anyolite_external_ruby) %}
     Anyolite.link_libraries
   {% end %}
 
