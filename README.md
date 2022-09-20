@@ -53,8 +53,6 @@ shards install
 ```
 from a terminal.
 
-If you are on Windows, this does currently not work, unless you use the experimental `working-shards` branch of Anyolite.
-
 Alternatively, you can clone this repository into the lib folder of your project and run
 ```bash
 rake build_shard
