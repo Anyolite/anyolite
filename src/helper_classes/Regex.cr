@@ -6,6 +6,7 @@
 @[Anyolite::SpecializeInstanceMethod("matches_at_byte_index?", [str, byte_index = 0, options = Regex::Options::None], [str : String, byte_index : Int32 = 0, options : Regex::Options = Regex::Options::None])]
 @[Anyolite::SpecializeInstanceMethod("+", [other], [other : Regex])]
 @[Anyolite::SpecializeInstanceMethod("=~", [other], [other : String | Regex])]
+@[Anyolite::SpecializeInstanceMethod("===", [other : String])]
 @[Anyolite::ExcludeClassMethod("union")]
 @[Anyolite::ExcludeClassMethod("append_source")]
 @[Anyolite::SpecializeClassMethod("error?", [source], [source : String])]
