@@ -167,6 +167,7 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 * [ ] Add backtrace to Ruby exceptions
 * [ ] Add bindings for MRI Regex objects
 * [ ] Add method callers which check whether the object is from Crystal or Ruby
+* [ ] Add different Ruby exceptions for triggered Crystal exceptions
 
 ### Later releases
 
