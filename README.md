@@ -162,6 +162,12 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 * [X] Unspecified arguments now always correctly throw warnings instead of confusing errors
 * [X] Fixed compiletime error when casting to `Char`
 
+#### Todo list
+
+* [ ] Add backtrace to Ruby exceptions
+* [ ] Add bindings for MRI Regex objects
+* [ ] Add method callers which check whether the object is from Crystal or Ruby
+
 ### Later releases
 
 * [ ] Automated generation of Ruby documentations for wrapped functions
@@ -176,3 +182,4 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 * [ ] Resolve context even in generic type union arguments
 * [ ] General improvement of type resolution
 * [ ] Bignum support
+* [ ] Range support
