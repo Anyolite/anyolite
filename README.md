@@ -152,6 +152,9 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 
 * [X] Updated mruby config file to use `libucrt` instead of `msvcrt`
 * [X] Discarded old and problematic Regex mruby gem
+* [X] Made arguments for `Anyolite.call_rb_method_of_object` optional
+* [X] Added automatic conversion from Ruby class names to class objects in method callers
+* [X] Improved testing script
 
 #### Bugfixes
 
@@ -161,11 +164,6 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 * [X] Fixed problems with Anyolite on Crystal 1.5.1
 * [X] Unspecified arguments now always correctly throw warnings instead of confusing errors
 * [X] Fixed compiletime error when casting to `Char`
-
-#### Todo list
-
-* [ ] Add bindings for MRI Regex objects
-* [ ] Add method callers which check whether the object is from Crystal or Ruby
 
 ### Later releases
 

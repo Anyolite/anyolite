@@ -30,6 +30,8 @@ module Anyolite
             Pointer(LibC::Char)
           {% elsif type.resolve <= Anyolite::RbRef %}
             Anyolite::RbCore::RbValue
+          {% elsif type.resolve <= Regex %}
+            Anyolite::RbCore::RbValue
           {% elsif type.resolve <= Array %}
             Anyolite::RbCore::RbValue
           {% else %}

@@ -45,6 +45,10 @@ module Anyolite
       return RbCore.get_symbol_value_of_string(rb, value.to_s)
     end
 
+    def self.return_regex(rb : RbCore::State*, value)
+      Anyolite::Macro.convert_regex_from_crystal_to_ruby(rb, value)
+    end
+
     def self.return_hash(rb : RbCore::State*, value)
       hash_size = value.size
 
@@ -107,6 +111,8 @@ module Anyolite
         RbCast.return_string(rb, value)
       elsif value.is_a?(Symbol)
         RbCast.return_symbol(rb, value)
+      elsif value.is_a?(Regex)
+        RbCast.return_regex(rb, value)
       elsif value.is_a?(Array)
         RbCast.return_array(rb, value)
       elsif value.is_a?(Hash)

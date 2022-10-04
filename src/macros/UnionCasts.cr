@@ -113,6 +113,8 @@ module Anyolite
           end
           _final_value = %converted_array
         end
+      {% elsif type.resolve <= Regex %}
+        Anyolite::Macro.convert_regex_from_ruby_to_crystal({{rb}}, {{value}}, {{type}})
       {% elsif type.resolve <= Hash %}
         if Anyolite::RbCast.check_for_hash({{value}})
         %hash_size = Anyolite::RbCore.rb_hash_size({{rb}}, {{value}})

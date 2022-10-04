@@ -76,6 +76,8 @@ module Anyolite
           {{arg_type}}.new({{arg}})
         {% elsif arg_type.resolve <= Anyolite::RbRef %}
           {{arg_type}}.new({{arg}})
+        {% elsif arg_type.resolve <= Regex %}
+          Anyolite::Macro.convert_regex_from_ruby_to_crystal({{rb}}, {{arg}}, {{arg_type}})
         {% elsif arg_type.resolve <= Array %}
           %array_size = Anyolite::RbCore.array_length({{arg}})
           %converted_array = {{arg_type}}.new(size: %array_size) do |%index|
@@ -240,6 +242,8 @@ module Anyolite
           Anyolite::RbCast.cast_to_char({{rb}}, {{arg}})
         {% elsif arg_type.resolve <= String %}
           Anyolite::RbCast.cast_to_string({{rb}}, {{arg}})
+        {% elsif arg_type.resolve <= Regex %}
+          Anyolite::Macro.convert_regex_from_ruby_to_crystal({{rb}}, {{arg}}, {{arg_type}})
         {% elsif arg_type.resolve <= Anyolite::RbRef %}
           {{arg_type}}.new({{arg}})
         {% elsif arg_type.resolve <= Array %}

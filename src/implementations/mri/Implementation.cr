@@ -57,6 +57,19 @@ module Anyolite
       end
     end
 
+    macro convert_regex_from_ruby_to_crystal(rb, arg, arg_type)
+      {{arg_type}}.new(Anyolite.call_rb_method_of_object({{arg}}, :to_s, cast_to: String))
+    end
+
+    # TODO: This can potentially be done in a simpler way, but for now this is okay
+    # Why are you passing Regex values between Crystal and Ruby anyway?
+    macro convert_regex_from_crystal_to_ruby(rb, value)
+      %rb_class = Anyolite.get_rb_class_obj_of("Regexp")
+      %new_method = Anyolite::RbCore.convert_to_rb_sym({{rb}}, "new")
+      %args = [Anyolite::RbCast.return_string({{rb}}, value.source)]
+      Anyolite::RbCore.rb_funcall_argv({{rb}}, %rb_class, %new_method, 1, %args)
+    end
+
     macro set_default_args_for_regular_args(args, regular_arg_tuple, number_of_args)
       {% c = 0 %}
       {% if args %}

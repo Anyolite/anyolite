@@ -154,6 +154,19 @@ module SomeModule
       "x is #{@x}"
     end
 
+    def give_some_regex
+      /([\S]+) [\S]+/
+    end
+
+    def check_some_regex(r : Regex, str : String)
+      match_data = r.match(str)
+      if match_data
+        match_data[1]?
+      else
+        nil
+      end
+    end
+
     # Would all trigger an error!
     # def proc_test(pr : Int32 | (Int32 -> Int32))
     #   pr.call(12)

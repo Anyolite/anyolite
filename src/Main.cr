@@ -148,9 +148,14 @@ module Anyolite
     !!Anyolite::RbRefTable.is_registered?(Anyolite::RbRefTable.get_object_id({{value}}))
   end
 
-  # Returns the `RbValue` of the `Class` or `Module` *crystal_class*.
+  # Returns the `RbValue` of the `Class`, `Module` pr `String` *crystal_class*.
   macro get_rb_class_obj_of(crystal_class)
-    Anyolite::RbCore.get_rb_obj_value(Anyolite::RbClassCache.get({{crystal_class}}))
+    {% if crystal_class.is_a?(StringLiteral) %}
+      %rb = Anyolite::RbRefTable.get_current_interpreter
+      Anyolite::RbCore.get_rb_obj_value(Anyolite::RbCore.rb_class_get(%rb, {{crystal_class}}))
+    {% else %}
+      Anyolite::RbCore.get_rb_obj_value(Anyolite::RbClassCache.get({{crystal_class}}))
+    {% end %}
   end
 
   # Returns a cached block argument (or `nil`, if none given) in form of a `RbRef`, if enabled.
@@ -283,7 +288,7 @@ module Anyolite
   end
 
   # Checks whether the Ruby function *name* (`String` or `Symbol`) is defined
-  # for the Crystal `Class` or `Module` *crystal_class*.
+  # for the Crystal `Class`, `Module` or `String` *crystal_class*.
   macro does_class_respond_to(crystal_class, name)
     if !{{name}}.is_a?(Symbol) && !{{name}}.is_a?(String)
       raise "Given name {{name}} is neither a String nor a Symbol."
@@ -306,7 +311,7 @@ module Anyolite
   # a `RbRef` value containing the result.
   #
   # If needed, *context* can be set to a `Path` in order to specify *cast_to*.
-  macro call_rb_method_of_object(value, name, args, cast_to = nil, context = nil)
+  macro call_rb_method_of_object(value, name, args = nil, cast_to = nil, context = nil)
     if !{{name}}.is_a?(Symbol) && !{{name}}.is_a?(String)
       raise "Given name {{name}} is neither a String nor a Symbol."
     end
@@ -361,7 +366,7 @@ module Anyolite
   end
 
   # Calls the Ruby method with `String` or `Symbol` *name*
-  # for the Crystal `Class` or `Module` *crystal_class* and the
+  # for the Crystal `Class`, `Module` or `String` *crystal_class* and the
   # arguments *args* as an `Array` of castable Crystal values (`nil` for none).
   #
   # If *cast_to* is set to a `Class` or similar, it will automatically cast
@@ -440,7 +445,7 @@ module Anyolite
     Anyolite::RbCore.rb_iv_set(%rb, %obj, %name, %value)
   end
 
-  # Gets the Ruby class variable with `String` or `Symbol` *name* for the Crystal `Class` or `Module` *crystal_class*.
+  # Gets the Ruby class variable with `String` or `Symbol` *name* for the Crystal `Class`, `Module` or `String` *crystal_class*.
   #
   # If *cast_to* is set to a `Class` or similar, it will automatically cast
   # the result to a Crystal value of that class, otherwise, it will return
@@ -463,7 +468,7 @@ module Anyolite
     {% end %}
   end
 
-  # Sets the Ruby class variable with `String` or `Symbol` *name* for the Crystal `Class` or `Module` *crystal_class*
+  # Sets the Ruby class variable with `String` or `Symbol` *name* for the Crystal `Class`, `Module` or `String` *crystal_class*
   # to the value *value*.
   #
   # If *cast_to* is set to a `Class` or similar, it will automatically cast
