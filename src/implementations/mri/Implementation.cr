@@ -16,8 +16,35 @@ module Anyolite
         _rb = Pointer(Anyolite::RbCore::State).null
         begin
           {{b.body}}
+        rescue ex : ArgumentError
+          Anyolite.raise_argument_error("#{ex.inspect_with_backtrace} (raised from Crystal)")
+          Anyolite::RbCast.return_nil
+        rescue ex : DivisionByZeroError
+          Anyolite.raise_runtime_error("#{ex.inspect_with_backtrace} (raised from Crystal)")
+          Anyolite::RbCast.return_nil
+        rescue ex : IndexError
+          Anyolite.raise_index_error("#{ex.inspect_with_backtrace} (raised from Crystal)")
+          Anyolite::RbCast.return_nil
+        rescue ex : KeyError
+          Anyolite.raise_key_error("#{ex.inspect_with_backtrace} (raised from Crystal)")
+          Anyolite::RbCast.return_nil
+        rescue ex : NilAssertionError
+          Anyolite.raise_runtime_error("#{ex.inspect_with_backtrace} (raised from Crystal)")
+          Anyolite::RbCast.return_nil
+        rescue ex : NotImplementedError
+          Anyolite.raise_not_implemented_error("#{ex.inspect_with_backtrace} (raised from Crystal)")
+          Anyolite::RbCast.return_nil
+        rescue ex : OverflowError
+          Anyolite.raise_runtime_error("#{ex.inspect_with_backtrace} (raised from Crystal)")
+          Anyolite::RbCast.return_nil
+        rescue ex : RuntimeError
+          Anyolite.raise_runtime_error("#{ex.inspect_with_backtrace} (raised from Crystal)")
+          Anyolite::RbCast.return_nil
+        rescue ex : TypeCastError
+          Anyolite.raise_type_error("#{ex.inspect_with_backtrace} (raised from Crystal)")
+          Anyolite::RbCast.return_nil
         rescue ex
-          Anyolite.raise_runtime_error("#{ex.message} (raised from Crystal)")
+          Anyolite.raise_runtime_error("#{ex.inspect_with_backtrace} (raised from Crystal)")
           Anyolite::RbCast.return_nil
         end
       end
