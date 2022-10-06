@@ -12,7 +12,7 @@ module Anyolite
 
       # We don't need two conflicting Regex classes in MRI
       {% unless flag?(:anyolite_implementation_ruby_3) %}
-        Anyolite.wrap(rb, Regex, verbose: true)
+        Anyolite.wrap(rb, Regex)
       {% end %}
     end
   end
