@@ -164,6 +164,8 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 * [X] Fixed problems with Anyolite on Crystal 1.5.1
 * [X] Unspecified arguments now always correctly throw warnings instead of confusing errors
 * [X] Fixed compiletime error when casting to `Char`
+* [ ] Macros for calling Ruby functions from Crystal throw unintuitive errors
+* [ ] `Anyolite.call_rb_method_of_object` requires optional `args` argument for some reason
 
 ### Later releases
 
