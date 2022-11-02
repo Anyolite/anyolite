@@ -276,13 +276,15 @@ module Anyolite
   # Checks whether the Ruby function *name* (`String` or `Symbol`) is defined
   # for the Crystal object *value*.
   macro does_obj_respond_to(value, name)
-    if !{{name}}.is_a?(Symbol) && !{{name}}.is_a?(String)
-      raise "Given name {{name}} is neither a String nor a Symbol."
+    %method_name = {{name}}
+    
+    if !%method_name.is_a?(Symbol) && !%method_name.is_a?(String)
+      raise "Given name #{%method_name} is neither a String nor a Symbol."
     end
 
     %rb = Anyolite::RbRefTable.get_current_interpreter
     %obj = {{value}}.is_a?(Anyolite::RbCore::RbValue) || {{value}}.is_a?(Anyolite::RbRef) ? {{value}} : Anyolite::RbCast.return_value(%rb.to_unsafe, {{value}})
-    %name = Anyolite::RbCore.convert_to_rb_sym(%rb, {{name}}.to_s)
+    %name = Anyolite::RbCore.convert_to_rb_sym(%rb, %method_name.to_s)
 
     Anyolite::RbCore.rb_respond_to(%rb, %obj, %name) == 0 ? false : true
   end
@@ -290,13 +292,15 @@ module Anyolite
   # Checks whether the Ruby function *name* (`String` or `Symbol`) is defined
   # for the Crystal `Class`, `Module` or `String` *crystal_class*.
   macro does_class_respond_to(crystal_class, name)
-    if !{{name}}.is_a?(Symbol) && !{{name}}.is_a?(String)
-      raise "Given name {{name}} is neither a String nor a Symbol."
+    %method_name = {{name}}
+    
+    if !%method_name.is_a?(Symbol) && !%method_name.is_a?(String)
+      raise "Given name #{%method_name} is neither a String nor a Symbol."
     end
 
     %rb = Anyolite::RbRefTable.get_current_interpreter
     %rb_class = Anyolite.get_rb_class_obj_of({{crystal_class}})
-    %name = Anyolite::RbCore.convert_to_rb_sym(%rb, {{name}}.to_s)
+    %name = Anyolite::RbCore.convert_to_rb_sym(%rb, %method_name.to_s)
 
     Anyolite::RbCore.rb_respond_to(%rb, %rb_class, %name) == 0 ? false : true
   end
@@ -312,13 +316,15 @@ module Anyolite
   #
   # If needed, *context* can be set to a `Path` in order to specify *cast_to*.
   macro call_rb_method_of_object(value, name, args = nil, cast_to = nil, context = nil)
-    if !{{name}}.is_a?(Symbol) && !{{name}}.is_a?(String)
-      raise "Given name {{name}} is neither a String nor a Symbol."
+    %method_name = {{name}}
+    
+    if !%method_name.is_a?(Symbol) && !%method_name.is_a?(String)
+      raise "Given name #{%method_name} is neither a String nor a Symbol."
     end
     
     %rb = Anyolite::RbRefTable.get_current_interpreter
     %obj = {{value}}.is_a?(Anyolite::RbCore::RbValue) || {{value}}.is_a?(Anyolite::RbRef) ? {{value}} : Anyolite::RbCast.return_value(%rb.to_unsafe, {{value}})
-    %name = Anyolite::RbCore.convert_to_rb_sym(%rb, {{name}}.to_s)
+    %name = Anyolite::RbCore.convert_to_rb_sym(%rb, %method_name.to_s)
 
     {% options = {:context => context} %}
 
