@@ -142,11 +142,14 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 
 ### Version 1.1.0
 
+NOTE: This version requires recompilation of the C glue.
+
 #### Features
 
 * [X] Added direct bindings to `Regex` from Crystal (`Regexp` in Ruby)
 * [X] Added option to use a separate Ruby interpreter
 * [X] Added safeguard to catch non-fatal Crystal exceptions and raise them as Ruby errors
+* [X] Added option to transform procs into bytecode
 
 #### Usability
 
@@ -155,6 +158,7 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 * [X] Made arguments for `Anyolite.call_rb_method_of_object` optional
 * [X] Added automatic conversion from Ruby class names to class objects in method callers
 * [X] Improved testing script
+* [ ] Added check for `RbValue` and `RbRef` to macro methods
 
 #### Bugfixes
 
@@ -166,6 +170,7 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 * [X] Fixed compiletime error when casting to `Char`
 * [X] Fixed errors when passing certain name arguments to Macros for calling Ruby functions 
 * [X] Fixed `Anyolite.call_rb_method_of_object` argument `args` not being optional
+* [ ] Fixed segmentation fault when `eval` of Ruby code fails
 
 ### Later releases
 

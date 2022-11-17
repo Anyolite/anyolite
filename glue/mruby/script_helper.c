@@ -173,6 +173,25 @@ extern bytecode_container_t transform_script_to_bytecode_container(const char* f
 
 }
 
+extern bytecode_container_t transform_proc_to_bytecode_container(mrb_state* mrb, mrb_value proc_object) {
+
+    bytecode_container_t container = {NULL, 0, 0, 0};
+
+    const mrb_irep *irep = mrb_proc_ptr(proc_object)->body.irep;
+
+    uint8_t *bin = NULL;
+    size_t bin_size = 0;
+
+    container.result = mrb_dump_irep(mrb, irep, 4, &bin, &bin_size);
+
+    container.content = (uint8_t*) malloc(bin_size * sizeof(uint8_t));
+    memcpy(container.content, bin, bin_size);
+    container.size = bin_size;
+
+    return container;
+
+}
+
 extern void free_bytecode_container(bytecode_container_t container) {
 
     free(container.content);

@@ -238,6 +238,7 @@ module Anyolite
 
     fun transform_script_to_bytecode(filename : LibC::Char*, target_filename : LibC::Char*) : LibC::Int
     fun transform_script_to_bytecode_container(filename : LibC::Char*) : BytecodeContainer
+    fun transform_proc_to_bytecode_container(rb : State*, proc_object : RbValue) : BytecodeContainer
     fun free_bytecode_container(container : BytecodeContainer) : Void
   end
 end
