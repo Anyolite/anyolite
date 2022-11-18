@@ -240,5 +240,7 @@ module Anyolite
     fun transform_script_to_bytecode_container(filename : LibC::Char*) : BytecodeContainer
     fun transform_proc_to_bytecode_container(rb : State*, proc_object : RbValue) : BytecodeContainer
     fun free_bytecode_container(container : BytecodeContainer) : Void
+
+    fun rb_fiber_resume = mrb_fiber_resume(rb : State*, fiber : RbValue, argc : RbInt, argv : RbValue*) : RbValue
   end
 end
