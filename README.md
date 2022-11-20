@@ -150,7 +150,7 @@ NOTE: This version requires recompilation of the C glue.
 * [X] Added option to use a separate Ruby interpreter
 * [X] Added safeguard to catch non-fatal Crystal exceptions and raise them as Ruby errors
 * [X] Added option to transform procs into bytecode
-* [ ] Added option to resume fibers
+* [ ] Added some methods to handle fibers
 * [ ] Updated to mruby 3.2.0 (as soon as it releases)
 
 #### Usability

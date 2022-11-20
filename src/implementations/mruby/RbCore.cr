@@ -242,5 +242,7 @@ module Anyolite
     fun free_bytecode_container(container : BytecodeContainer) : Void
 
     fun rb_fiber_resume = mrb_fiber_resume(rb : State*, fiber : RbValue, argc : RbInt, argv : RbValue*) : RbValue
+    fun rb_fiber_yield = mrb_fiber_yield(rb : State*, argc : RbInt, argv : RbValue*) : RbValue
+    fun rb_fiber_alive = mrb_fiber_alive_p(rb : State*, fiber : RbValue) : RbValue
   end
 end
