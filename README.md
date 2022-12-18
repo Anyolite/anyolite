@@ -176,6 +176,7 @@ release or the master branch of mruby.
 * [X] Fixed compiletime error when casting to `Char`
 * [X] Fixed errors when passing certain name arguments to Macros for calling Ruby functions 
 * [X] Fixed `Anyolite.call_rb_method_of_object` argument `args` not being optional
+* [X] Fixed problems with Regex in recent Crystal commits
 * [ ] Fixed segmentation fault when `eval` of Ruby code fails
 
 ### Later releases

@@ -24,7 +24,19 @@ class Regex
   @[Anyolite::ExcludeInstanceMethod("pretty_print")]
   @[Anyolite::DefaultOptionalArgsToKeywordArgs]
   struct MatchData
+    {% if compare_versions(Crystal::VERSION, "1.6.2") > 0 %}
+      @[Anyolite::Specialize]
+      def initialize(@regex : ::Regex, @code : LibPCRE::Pcre, @string : String, @pos : Int32, @ovector : Int32*, @group_size : Int32)
+        super
+      end
+    {% end %}
   end
+
+  {% if compare_versions(Crystal::VERSION, "1.6.2") > 0 %}
+    def initialize(source : String, options : Options = Options::None)
+      super(_source: source, _options: options)
+    end
+  {% end %}
 
   def self.compile(str : String, options : Regex::Options = Regex::Options::None)
     self.new(str, options)
