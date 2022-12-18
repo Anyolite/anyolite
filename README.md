@@ -142,7 +142,11 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 
 ### Version 1.1.0
 
-NOTE: This version requires recompilation of the C glue.
+NOTE: This version requires recompilation of mruby and the C files.
+
+NOTE: This version will only work with mruby 3.2.0 and above.
+Since 3.2.0 is not out yet, it is highly recommended to either use an older Anyolite
+release or the master branch of mruby.
 
 #### Features
 
@@ -179,6 +183,7 @@ NOTE: This version requires recompilation of the C glue.
 * [ ] Automated generation of Ruby documentations for wrapped functions
 * [ ] MRI support on Windows (does currently not work for some reason)
 * [ ] Mac support and continuous integration
+* [ ] Ruby `Data` support?
 
 ### Wishlist, entries might not be possible to implement
 

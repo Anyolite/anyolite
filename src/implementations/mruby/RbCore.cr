@@ -81,8 +81,8 @@ module Anyolite
     end
 
     struct KWArgs
-      num : UInt32
-      required : UInt32
+      num : RbInt
+      required : RbInt
       table : RbSymbol*
       values : RbValue*
       rest : RbValue*
