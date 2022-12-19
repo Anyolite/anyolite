@@ -187,7 +187,7 @@ release or the master branch of mruby.
 * [ ] Automated generation of Ruby documentations for wrapped functions
 * [ ] MRI support on Windows (does currently not work for some reason)
 * [ ] Mac support and continuous integration
-* [ ] Ruby `Data` support?
+* [ ] Support for bindings using `Data` and `Struct` from Ruby
 
 ### Wishlist, entries might not be possible to implement
 
