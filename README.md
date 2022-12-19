@@ -166,7 +166,7 @@ release or the master branch of mruby.
 * [X] Added automatic conversion from Ruby class names to class objects in method callers
 * [X] Improved testing script
 * [X] Added check for `RbValue` and `RbRef` to some macro methods
-* [ ] Added ability to pass blocks for function evaluation 
+* [X] Added ability to pass Ruby blocks via Crystal to Ruby function calls 
 
 #### Bugfixes
 
@@ -179,6 +179,8 @@ release or the master branch of mruby.
 * [X] Fixed errors when passing certain name arguments to Macros for calling Ruby functions 
 * [X] Fixed `Anyolite.call_rb_method_of_object` argument `args` not being optional
 * [X] Fixed problems with Regex in recent Crystal commits
+* [X] Fixed linker error due to typo in mruby bindings for block functions
+* [X] Fixed crash when casting Ruby numbers into objects in some cases
 
 ### Later releases
 

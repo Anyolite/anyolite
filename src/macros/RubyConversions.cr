@@ -1,6 +1,13 @@
 module Anyolite
   module Macro
     macro convert_from_ruby_object(rb, obj, crystal_type)
+      if !Anyolite::RbCast.check_for_data({{obj}})
+        %obj_class = Anyolite::RbCore.get_class_of_obj({{rb}}, {{obj}})
+
+        %rb_class_name = String.new(Anyolite::RbCore.rb_class_name({{rb}}, %obj_class))
+        Anyolite.raise_argument_error "Could not convert data type #{%rb_class_name} into object class #{{{crystal_type.stringify}}}."
+      end
+
       if !Anyolite::RbCore.get_data_ptr({{obj}})
         %obj_class = Anyolite::RbCore.get_class_of_obj({{rb}}, {{obj}})
 
@@ -12,7 +19,7 @@ module Anyolite
         %obj_class = Anyolite::RbCore.get_class_of_obj({{rb}}, {{obj}})
 
         %rb_class_name = String.new(Anyolite::RbCore.rb_class_name({{rb}}, %obj_class))
-        Anyolite.raise_argument_error("Invalid data type #{%rb_class_name} for object class #{{{crystal_type.stringify}}}.")
+        Anyolite.raise_argument_error "Invalid data type #{%rb_class_name} for object class #{{{crystal_type.stringify}}}."
       end
 
       %ptr = Anyolite::RbCore.get_data_ptr({{obj}})
@@ -20,6 +27,13 @@ module Anyolite
     end
 
     macro convert_from_ruby_struct(rb, obj, crystal_type)
+      if !Anyolite::RbCast.check_for_data({{obj}})
+        %obj_class = Anyolite::RbCore.get_class_of_obj({{rb}}, {{obj}})
+
+        %rb_class_name = String.new(Anyolite::RbCore.rb_class_name({{rb}}, %obj_class))
+        Anyolite.raise_argument_error "Could not convert data type #{%rb_class_name} into struct class #{{{crystal_type.stringify}}}."
+      end
+
       if !Anyolite::RbCore.get_data_ptr({{obj}})
         %obj_class = Anyolite::RbCore.get_class_of_obj({{rb}}, {{obj}})
 
@@ -31,7 +45,7 @@ module Anyolite
         %obj_class = Anyolite::RbCore.get_class_of_obj({{rb}}, {{obj}})
 
         %rb_class_name = String.new(Anyolite::RbCore.rb_class_name({{rb}}, %obj_class))
-        Anyolite.raise_argument_error("Invalid data type #{%rb_class_name} for struct class #{{{crystal_type.stringify}}}")
+        Anyolite.raise_argument_error "Invalid data type #{%rb_class_name} for struct class #{{{crystal_type.stringify}}}"
       end
       
       %ptr = Anyolite::RbCore.get_data_ptr({{obj}})

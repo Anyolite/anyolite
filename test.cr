@@ -167,6 +167,12 @@ module SomeModule
       end
     end
 
+    @[Anyolite::StoreBlockArg]
+    def pass_a_ruby_block_to_another_method
+      block_arg = Anyolite.obtain_given_rb_block
+      Anyolite.call_rb_method("block_test", block: block_arg, cast_to: String).to_i
+    end
+
     # Would all trigger an error!
     # def proc_test(pr : Int32 | (Int32 -> Int32))
     #   pr.call(12)

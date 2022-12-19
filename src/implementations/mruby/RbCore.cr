@@ -200,7 +200,7 @@ module Anyolite
     fun get_class_of_obj(rb : State*, obj : RbValue) : RClassPtr
 
     fun rb_funcall_argv = mrb_funcall_argv(rb : State*, value : RbValue, name : RbSymbol, argc : RbInt, argv : RbValue*) : RbValue
-    fun rb_funcall_argv_with_block = mrb_funcall_argv_with_block(rb : State*, value : RbValue, name : RbSymbol, argc : RbInt, argv : RbValue*, block : RbValue) : RbValue
+    fun rb_funcall_argv_with_block = mrb_funcall_with_block(rb : State*, value : RbValue, name : RbSymbol, argc : RbInt, argv : RbValue*, block : RbValue) : RbValue
 
     fun rb_respond_to = mrb_respond_to(rb : State*, obj : RbValue, name : RbSymbol) : RbBool
 

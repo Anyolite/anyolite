@@ -553,6 +553,14 @@ begin
     a.give_some_regex.match("Hello World")[1]
   end
 
+  # Testing passing a Ruby block to Crystal and then to Ruby again
+  TestFramework.check(test_no: 62, should_be: 11) do
+    a = TestModule::Test.new(x: 5)
+    a.pass_a_ruby_block_to_another_method do |value|
+      value.x + 6
+    end
+  end
+
   final_time = Time.now
 
   puts "Tests done."
