@@ -264,6 +264,16 @@ module Anyolite
       end
     end
 
+    def self.convert_to_unsafe_rb_value(rb : RbCore::State*, value)
+      if value.is_a?(Anyolite::RbRef)
+        value.to_unsafe
+      elsif value.is_a?(Anyolite::RbCore::RbValue)
+        value
+      else
+        RbCast.return_value(rb, value)
+      end
+    end
+
     # TODO: Conversions of other objects like arrays and hashes
   end
 end

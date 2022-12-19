@@ -143,6 +143,12 @@ module Anyolite
     {% end %}
   end
 
+  # Disables any function that allows for running external programs 
+  def self.disable_program_execution
+    Anyolite.eval("class IO; def self._popen(command, mode, **opts); raise \"No system commands allowed!\"; end; end")
+    Anyolite.eval("class IO; def self.popen(command, mode = 'r', **opts, &block); raise \"No system commands allowed!\"; end; end")
+  end
+
   # Checks whether *value* is referenced in the current reference table.
   macro referenced_in_ruby?(value)
     !!Anyolite::RbRefTable.is_registered?(Anyolite::RbRefTable.get_object_id({{value}}))
@@ -274,7 +280,7 @@ module Anyolite
   end
 
   # Checks whether the Ruby function *name* (`String` or `Symbol`) is defined
-  # for the Crystal object *value*.
+  # for the Crystal object or `RbRef` *value*.
   macro does_obj_respond_to(value, name)
     %method_name = {{name}}
     
@@ -283,7 +289,7 @@ module Anyolite
     end
 
     %rb = Anyolite::RbRefTable.get_current_interpreter
-    %obj = {{value}}.is_a?(Anyolite::RbCore::RbValue) || {{value}}.is_a?(Anyolite::RbRef) ? {{value}} : Anyolite::RbCast.return_value(%rb.to_unsafe, {{value}})
+    %obj = Anyolite::RbCast.convert_to_unsafe_rb_value(%rb.to_unsafe, {{value}})
     %name = Anyolite::RbCore.convert_to_rb_sym(%rb, %method_name.to_s)
 
     Anyolite::RbCore.rb_respond_to(%rb, %obj, %name) == 0 ? false : true
@@ -307,7 +313,7 @@ module Anyolite
 
   # TODO: Is it possible to add block args to the two methods below?
 
-  # Calls the Ruby method with `String` or `Symbol` *name* for the Crystal object *value* and the
+  # Calls the Ruby method with `String` or `Symbol` *name* for the Crystal object or `RbRef` *value* and the
   # arguments *args* as an `Array` of castable Crystal values (`nil` for none).
   #
   # If *cast_to* is set to a `Class` or similar, it will automatically cast
@@ -323,7 +329,7 @@ module Anyolite
     end
     
     %rb = Anyolite::RbRefTable.get_current_interpreter
-    %obj = {{value}}.is_a?(Anyolite::RbCore::RbValue) || {{value}}.is_a?(Anyolite::RbRef) ? {{value}} : Anyolite::RbCast.return_value(%rb.to_unsafe, {{value}})
+    %obj = Anyolite::RbCast.convert_to_unsafe_rb_value(%rb.to_unsafe, {{value}})
     %name = Anyolite::RbCore.convert_to_rb_sym(%rb, %method_name.to_s)
 
     {% options = {:context => context} %}
@@ -411,7 +417,7 @@ module Anyolite
     Anyolite::RbRef.new(Anyolite::RbCast.return_value(%rb.to_unsafe, self))
   end
 
-  # Gets the Ruby instance variable with `String` or `Symbol` *name* for the Crystal object *object*.
+  # Gets the Ruby instance variable with `String` or `Symbol` *name* for the Crystal object or `RbRef` *object*.
   #
   # If *cast_to* is set to a `Class` or similar, it will automatically cast
   # the result to a Crystal value of that class, otherwise, it will return
@@ -420,7 +426,7 @@ module Anyolite
   # If needed, *context* can be set to a `Path` in order to specify *cast_to*.
   macro get_iv(object, name, cast_to = nil, context = nil)
     %rb = Anyolite::RbRefTable.get_current_interpreter
-    %obj = {{object}}.is_a?(Anyolite::RbCore::RbValue) || {{object}}.is_a?(Anyolite::RbRef) ? {{object}} : Anyolite::RbCast.return_value(%rb.to_unsafe, {{object}})
+    %obj = Anyolite::RbCast.convert_to_unsafe_rb_value(%rb.to_unsafe, {{object}})
     %name = Anyolite::RbCore.convert_to_rb_sym(%rb, {{name}}.to_s)
 
     {% options = {:context => context} %}
@@ -434,7 +440,7 @@ module Anyolite
     {% end %}
   end
 
-  # Sets the Ruby instance variable with `String` or `Symbol` *name* for the Crystal object *object*
+  # Sets the Ruby instance variable with `String` or `Symbol` *name* for the Crystal object or `RbRef` *object*
   # to the Crystal value *value*.
   #
   # If *cast_to* is set to a `Class` or similar, it will automatically cast
@@ -444,7 +450,7 @@ module Anyolite
   # If needed, *context* can be set to a `Path` in order to specify *cast_to*.
   macro set_iv(object, name, value)
     %rb = Anyolite::RbRefTable.get_current_interpreter
-    %obj = {{object}}.is_a?(Anyolite::RbCore::RbValue) || {{object}}.is_a?(Anyolite::RbRef) ? {{object}} : Anyolite::RbCast.return_value(%rb.to_unsafe, {{object}})
+    %obj = Anyolite::RbCast.convert_to_unsafe_rb_value(%rb.to_unsafe, {{object}})
     %name = Anyolite::RbCore.convert_to_rb_sym(%rb, {{name}}.to_s)
     %value = Anyolite::RbCast.return_value(%rb.to_unsafe, {{value}})
 

@@ -154,7 +154,8 @@ release or the master branch of mruby.
 * [X] Added option to use a separate Ruby interpreter
 * [X] Added safeguard to catch non-fatal Crystal exceptions and raise them as Ruby errors
 * [X] Added option to transform procs into bytecode
-* [ ] Added some methods to handle fibers
+* [X] Added function to disable external program execution
+* [X] Added some internal methods to mruby to handle fibers
 * [ ] Updated to mruby 3.2.0 (as soon as it releases)
 
 #### Usability
@@ -164,7 +165,8 @@ release or the master branch of mruby.
 * [X] Made arguments for `Anyolite.call_rb_method_of_object` optional
 * [X] Added automatic conversion from Ruby class names to class objects in method callers
 * [X] Improved testing script
-* [ ] Added check for `RbValue` and `RbRef` to macro methods
+* [X] Added check for `RbValue` and `RbRef` to some macro methods
+* [ ] Added ability to pass blocks for function evaluation 
 
 #### Bugfixes
 
@@ -177,7 +179,6 @@ release or the master branch of mruby.
 * [X] Fixed errors when passing certain name arguments to Macros for calling Ruby functions 
 * [X] Fixed `Anyolite.call_rb_method_of_object` argument `args` not being optional
 * [X] Fixed problems with Regex in recent Crystal commits
-* [ ] Fixed segmentation fault when `eval` of Ruby code fails
 
 ### Later releases
 
