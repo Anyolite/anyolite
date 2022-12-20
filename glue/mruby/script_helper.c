@@ -35,9 +35,16 @@ extern mrb_value load_script_from_file(mrb_state* mrb, const char* filename) {
 
 extern mrb_value execute_script_line(mrb_state* mrb, const char* str) {
 
+    mrbc_context* new_context = mrbc_context_new(mrb);
+    mrbc_filename(mrb, new_context, "Script");
+
     int ai = mrb_gc_arena_save(mrb);
-    mrb_value status = mrb_load_string(mrb, str);
+    mrb_value status = mrb_load_string_cxt(mrb, str, new_context);
     mrb_gc_arena_restore(mrb, ai);
+
+    if(mrb->exc) mrb_print_error(mrb);
+
+    mrb_free(mrb, new_context);
 
     return status;
     

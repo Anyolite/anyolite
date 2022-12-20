@@ -111,6 +111,9 @@ module Anyolite
 
     fun rb_print_error = mrb_print_error(rb : State*)
 
+    fun get_last_rb_error = get_last_mrb_error(rb : State*)
+    fun clear_last_rb_error = clear_last_mrb_error(rb : State*)
+
     fun rb_raise = mrb_raise(rb : State*, c : RClassPtr, msg : LibC::Char*)
     fun rb_raise_runtime_error = mrb_raise_runtime_error(rb : State*, msg : LibC::Char*)
     fun rb_raise_type_error = mrb_raise_type_error(rb : State*, msg : LibC::Char*)

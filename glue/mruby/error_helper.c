@@ -53,3 +53,15 @@ extern void mrb_raise_key_error(mrb_state* mrb, const char* msg) {
   mrb_raise(mrb, E_KEY_ERROR, msg);
 
 }
+
+extern void clear_last_mrb_error(mrb_state* mrb) {
+
+  mrb->exc = NULL;
+
+}
+
+extern mrb_value get_last_mrb_error(mrb_state* mrb) {
+
+  return mrb_obj_value(mrb->exc);
+
+}

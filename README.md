@@ -155,7 +155,6 @@ release or the master branch of mruby.
 * [X] Added safeguard to catch non-fatal Crystal exceptions and raise them as Ruby errors
 * [X] Added option to transform procs into bytecode
 * [X] Added function to disable external program execution
-* [X] Added some internal methods to mruby to handle fibers
 * [ ] Updated to mruby 3.2.0 (as soon as it releases)
 
 #### Usability
@@ -167,6 +166,8 @@ release or the master branch of mruby.
 * [X] Improved testing script
 * [X] Added check for `RbValue` and `RbRef` to some macro methods
 * [X] Added ability to pass Ruby blocks via Crystal to Ruby function calls 
+* [X] Added some internal methods to mruby to handle fibers
+* [X] Added some exception checking methods
 
 #### Bugfixes
 
@@ -181,6 +182,7 @@ release or the master branch of mruby.
 * [X] Fixed problems with Regex in recent Crystal commits
 * [X] Fixed linker error due to typo in mruby bindings for block functions
 * [X] Fixed crash when casting Ruby numbers into objects in some cases
+* [X] Fixed script lines not printing exceptions
 
 ### Later releases
 

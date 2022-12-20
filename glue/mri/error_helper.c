@@ -59,3 +59,15 @@ extern void rb_raise_helper(void* rb, VALUE exc, const char* msg) {
   rb_raise(exc, msg);
 
 }
+
+extern void clear_last_rb_error(void* rb) {
+
+  rb_set_errinfo(Qnil);
+
+}
+
+extern VALUE get_last_rb_error(void* rb) {
+
+  return rb_errinfo();
+
+}

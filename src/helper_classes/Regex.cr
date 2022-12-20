@@ -14,6 +14,7 @@
 @[Anyolite::SpecializeClassMethod("needs_escape?", [str : String], [str : String | Char])]
 @[Anyolite::DefaultOptionalArgsToKeywordArgs]
 @[Anyolite::RenameClass("Regexp")]
+@[Anyolite::ExcludeConstant("Engine")]
 class Regex
   @[Anyolite::SpecializeInstanceMethod("[]?", [n : Int])]
   @[Anyolite::SpecializeInstanceMethod("[]", [n : Int])]

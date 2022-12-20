@@ -36,8 +36,10 @@ module Anyolite
       return @rb_ptr
     end
 
-    def execute_script_line(str : String)
-      RbCore.execute_script_line(@rb_ptr, str)
+    def execute_script_line(str : String, clear_error : Bool = true)
+      value = RbCore.execute_script_line(@rb_ptr, str)
+      RbCore.clear_last_rb_error(@rb_ptr) if clear_error
+      value
     end
 
     def load_script_from_file(filename : String)
