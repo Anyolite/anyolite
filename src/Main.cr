@@ -143,6 +143,11 @@ module Anyolite
     {% end %}
   end
 
+  # Returns the depth of interpreter calls
+  def self.get_interpreter_depth
+    Anyolite::RbRefTable.get_current_interpreter.depth
+  end
+
   # Disables any function that allows for running external programs 
   def self.disable_program_execution
     Anyolite.eval("class IO; def self._popen(command, mode, **opts); raise \"No system commands allowed!\"; end; end")
@@ -346,11 +351,15 @@ module Anyolite
       %argv = [] of Anyolite::RbCore::RbValue
     {% end %}
 
+    %rb.depth += 1
+
     {% if block %}
       %call_result = Anyolite::RbCore.rb_funcall_argv_with_block(%rb, %obj, %name, %argc, %argv, {{block}}.not_nil!.to_unsafe)
     {% else %}
       %call_result = Anyolite::RbCore.rb_funcall_argv(%rb, %obj, %name, %argc, %argv)
     {% end %}
+
+    %rb.depth -= 1
 
     {% if cast_to %}
       Anyolite::Macro.convert_from_ruby_to_crystal(%rb.to_unsafe, %call_result, {{cast_to}}, options: {{options}})
