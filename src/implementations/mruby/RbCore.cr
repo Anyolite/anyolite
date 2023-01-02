@@ -111,7 +111,7 @@ module Anyolite
 
     fun rb_print_error = mrb_print_error(rb : State*)
 
-    fun get_last_rb_error = get_last_mrb_error(rb : State*)
+    fun get_last_rb_error = get_last_mrb_error(rb : State*) : RbValue
     fun clear_last_rb_error = clear_last_mrb_error(rb : State*)
 
     fun rb_raise = mrb_raise(rb : State*, c : RClassPtr, msg : LibC::Char*)
@@ -247,5 +247,8 @@ module Anyolite
     fun rb_fiber_resume = mrb_fiber_resume(rb : State*, fiber : RbValue, argc : RbInt, argv : RbValue*) : RbValue
     fun rb_fiber_yield = mrb_fiber_yield(rb : State*, argc : RbInt, argv : RbValue*) : RbValue
     fun rb_fiber_alive = mrb_fiber_alive_p(rb : State*, fiber : RbValue) : RbValue
+
+    fun rb_gc_arena_save = mrb_gc_arena_save_helper(rb : State*) : LibC::Int
+    fun rb_gc_arena_restore = mrb_gc_arena_restore_helper(rb : State*, idx : LibC::Int) : Void
   end
 end

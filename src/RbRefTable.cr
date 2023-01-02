@@ -105,6 +105,10 @@ module Anyolite
       @@content.inspect
     end
 
+    def self.number_of_references
+      @@content.size
+    end
+
     def self.reset
       if !@@content.empty?
         puts "WARNING: Reference table is not empty (#{@@content.size} elements will be deleted)." if option_active?(:warnings)

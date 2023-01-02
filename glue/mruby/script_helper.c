@@ -27,7 +27,7 @@ extern mrb_value load_script_from_file(mrb_state* mrb, const char* filename) {
 
     if(mrb->exc) mrb_print_error(mrb);
 
-    mrb_free(mrb, new_context);
+    mrbc_context_free(mrb, new_context);
 
     return status;
 
@@ -44,7 +44,7 @@ extern mrb_value execute_script_line(mrb_state* mrb, const char* str) {
 
     if(mrb->exc) mrb_print_error(mrb);
 
-    mrb_free(mrb, new_context);
+    mrbc_context_free(mrb, new_context);
 
     return status;
     
@@ -121,7 +121,7 @@ extern int transform_script_to_bytecode(const char* filename, const char* target
 
     if(outfile) fclose(outfile);
 
-    mrb_free(mrb, new_context);
+    mrbc_context_free(mrb, new_context);
 
     return 0;
 
@@ -203,5 +203,18 @@ extern bytecode_container_t transform_proc_to_bytecode_container(mrb_state* mrb,
 extern void free_bytecode_container(bytecode_container_t container) {
 
     free(container.content);
+
+}
+
+extern int mrb_gc_arena_save_helper(mrb_state* mrb) {
+
+    mrb_gc_arena_save(mrb);
+
+}
+
+
+extern void mrb_gc_arena_restore_helper(mrb_state* mrb, int* idx) {
+
+    mrb_gc_arena_restore(mrb, idx);
 
 }

@@ -169,6 +169,7 @@ release or the master branch of mruby.
 * [X] Added ability to pass Ruby blocks via Crystal to Ruby function calls 
 * [X] Added some internal methods to mruby to handle fibers
 * [X] Added some exception checking methods
+* [X] Added methods to check reference table size
 * [ ] Removed now optional `Dir` gem 
 
 #### Bugfixes
@@ -185,6 +186,7 @@ release or the master branch of mruby.
 * [X] Fixed linker error due to typo in mruby bindings for block functions
 * [X] Fixed crash when casting Ruby numbers into objects in some cases
 * [X] Fixed script lines not printing exceptions
+* [X] Fixed memory leak when calling Ruby scripts and script lines
 
 ### Later releases
 

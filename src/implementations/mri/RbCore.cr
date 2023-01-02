@@ -109,7 +109,7 @@ module Anyolite
     # UNUSED
     # fun rb_print_error = mrb_print_error(rb : State*)
 
-    fun get_last_rb_error(rb : State*)
+    fun get_last_rb_error(rb : State*) : RbValue
     fun clear_last_rb_error(rb : State*)
 
     fun rb_raise = rb_raise_helper(rb : State*, c : RClassPtr, msg : LibC::Char*)
