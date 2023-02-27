@@ -16,6 +16,7 @@
 @[Anyolite::DefaultOptionalArgsToKeywordArgs]
 @[Anyolite::RenameClass("Regexp")]
 @[Anyolite::ExcludeConstant("Engine")]
+@[Anyolite::ExcludeConstant("PCRE2")]
 class Regex
   @[Anyolite::SpecializeInstanceMethod("[]?", [n : Int])]
   @[Anyolite::SpecializeInstanceMethod("[]", [n : Int])]
@@ -26,7 +27,12 @@ class Regex
   @[Anyolite::ExcludeInstanceMethod("pretty_print")]
   @[Anyolite::DefaultOptionalArgsToKeywordArgs]
   struct MatchData
-    {% if compare_versions(Crystal::VERSION, "1.6.2") > 0 %}
+    {% if compare_versions(Crystal::VERSION, "1.7.2") > 0 %}
+      @[Anyolite::Specialize]
+      def initialize(@regex : ::Regex, @code : LibPCRE2::Code*, @string : String, @pos : Int32, @ovector : LibC::SizeT*, @group_size : Int32)
+        super
+      end
+    {% elsif compare_versions(Crystal::VERSION, "1.6.2") > 0 %}
       @[Anyolite::Specialize]
       def initialize(@regex : ::Regex, @code : LibPCRE::Pcre, @string : String, @pos : Int32, @ovector : Int32*, @group_size : Int32)
         super

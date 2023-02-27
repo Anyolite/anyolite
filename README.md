@@ -187,7 +187,8 @@ release or the master branch of mruby.
 * [X] Fixed crash when casting Ruby numbers into objects in some cases
 * [X] Fixed script lines not printing exceptions
 * [X] Fixed memory leak when calling Ruby scripts and script lines
-* [ ] Fixed Windows CI
+* [X] Fixed Regex wrapping problems with newer Crystal versions
+* [X] Updated tests to account for reworked `inspect` method for enums
 
 ### Later releases
 

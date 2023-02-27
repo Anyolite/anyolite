@@ -125,7 +125,7 @@ begin
   TestFramework.check(test_no: 20, should_be: ["DeepTestStruct", true, true, "Seven"]) do
     struct_test_var = TestModule::Test::DeepTestStruct.new
     enum_test_var = TestModule::Test::TestEnum::Seven
-    [struct_test_var.to_s, enum_test_var == TestModule::Test::TestEnum.new(7), enum_test_var != TestModule::Test::TestEnum.new(5), enum_test_var.inspect]  
+    [struct_test_var.to_s, enum_test_var == TestModule::Test::TestEnum.new(7), enum_test_var != TestModule::Test::TestEnum.new(5), enum_test_var.inspect.split("::")[-1]]  
   end
 
   # Testing specialized method
@@ -144,7 +144,7 @@ begin
     a_4 = a.overload_test(arg: nil)
     a_5 = a.overload_test(arg: 3.0 / 5.0)
     a_6 = a.overload_test(arg: b)
-    a_7 = a.overload_test(arg: TestModule::Test::TestEnum::Four)
+    a_7 = a.overload_test(arg: TestModule::Test::TestEnum::Four).split("::")[-1]
     a_8 = a.overload_test(arg: TestModule::Test::GTIntInt.new(u: 1, v: 3))
     a_9 = a.overload_test
     [a_1, a_2, a_3, a_4, a_5, a_6, a_7, a_8, a_9]
