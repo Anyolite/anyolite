@@ -78,7 +78,6 @@ extern void set_data_ptr_and_type(VALUE ruby_object, void* data, struct rb_data_
 
 extern VALUE new_empty_object(void* rb, VALUE ruby_class, void* data_ptr, struct rb_data_type_struct* data_type) {
 
-  rb_undef_alloc_func(ruby_class);
   rb_data_object_wrap(ruby_class, data_ptr, data_type->function.dmark, data_type->function.dfree);
 
 }
