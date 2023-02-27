@@ -5,23 +5,23 @@ module Anyolite
     {% if flag?(:win32) %}
       {% if flag?(:anyolite_use_msvcrt_lib) %}
         # Not recommended, might be removed in a later release
-        @[Link(ldflags: "#{__DIR__}/../../../{{build_path.id}}/mruby/lib/libmruby.lib msvcrt.lib")]
+        @[Link(ldflags: "\"#{__DIR__}/../../../{{build_path.id}}/mruby/lib/libmruby.lib\"" msvcrt.lib")]
       {% elsif compare_versions(Crystal::VERSION, "1.5.1") >= 0 %}
         # Crystal links against libucrt since 1.5.1
-        @[Link(ldflags: "#{__DIR__}/../../../{{build_path.id}}/mruby/lib/libmruby.lib")]
+        @[Link(ldflags: "\"#{__DIR__}/../../../{{build_path.id}}/mruby/lib/libmruby.lib\"")]
       {% else %}
-        @[Link(ldflags: "#{__DIR__}/../../../{{build_path.id}}/mruby/lib/libmruby.lib libucrt.lib ")]
+        @[Link(ldflags: "\"#{__DIR__}/../../../{{build_path.id}}/mruby/lib/libmruby.lib\" libucrt.lib ")]
       {% end %}
-      @[Link(ldflags: "#{__DIR__}/../../../{{build_path.id}}/glue/mruby/return_functions.obj")]
-      @[Link(ldflags: "#{__DIR__}/../../../{{build_path.id}}/glue/mruby/data_helper.obj")]
-      @[Link(ldflags: "#{__DIR__}/../../../{{build_path.id}}/glue/mruby/script_helper.obj")]
-      @[Link(ldflags: "#{__DIR__}/../../../{{build_path.id}}/glue/mruby/error_helper.obj")]
+      @[Link(ldflags: "\"#{__DIR__}/../../../{{build_path.id}}/glue/mruby/return_functions.obj\"")]
+      @[Link(ldflags: "\"#{__DIR__}/../../../{{build_path.id}}/glue/mruby/data_helper.obj\"")]
+      @[Link(ldflags: "\"#{__DIR__}/../../../{{build_path.id}}/glue/mruby/script_helper.obj\"")]
+      @[Link(ldflags: "\"#{__DIR__}/../../../{{build_path.id}}/glue/mruby/error_helper.obj\"")]
     {% else %}
-      @[Link(ldflags: "#{__DIR__}/../../../{{build_path.id}}/mruby/lib/libmruby.a")]
-      @[Link(ldflags: "#{__DIR__}/../../../{{build_path.id}}/glue/mruby/return_functions.o")]
-      @[Link(ldflags: "#{__DIR__}/../../../{{build_path.id}}/glue/mruby/data_helper.o")]
-      @[Link(ldflags: "#{__DIR__}/../../../{{build_path.id}}/glue/mruby/script_helper.o")]
-      @[Link(ldflags: "#{__DIR__}/../../../{{build_path.id}}/glue/mruby/error_helper.o")]
+      @[Link(ldflags: "\"#{__DIR__}/../../../{{build_path.id}}/mruby/lib/libmruby.a\"")]
+      @[Link(ldflags: "\"#{__DIR__}/../../../{{build_path.id}}/glue/mruby/return_functions.o\"")]
+      @[Link(ldflags: "\"#{__DIR__}/../../../{{build_path.id}}/glue/mruby/data_helper.o\"")]
+      @[Link(ldflags: "\"#{__DIR__}/../../../{{build_path.id}}/glue/mruby/script_helper.o\"")]
+      @[Link(ldflags: "\"#{__DIR__}/../../../{{build_path.id}}/glue/mruby/error_helper.o\"")]
     {% end %}
   end
 

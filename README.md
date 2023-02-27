@@ -188,6 +188,7 @@ NOTE: This version will only work with mruby 3.2.0 and above.
 * [X] Fixed memory leak when calling Ruby scripts and script lines
 * [X] Fixed Regex wrapping problems with newer Crystal versions
 * [X] Updated tests to account for reworked `inspect` method for enums
+* [X] Fixed errors when building Anyolite in patsh with spaces
 
 ### Later releases
 
