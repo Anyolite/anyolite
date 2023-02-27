@@ -27,7 +27,7 @@ class Regex
   @[Anyolite::ExcludeInstanceMethod("pretty_print")]
   @[Anyolite::DefaultOptionalArgsToKeywordArgs]
   struct MatchData
-    {% if compare_versions(Crystal::VERSION, "1.7.2") > 0 %}
+    {% if compare_versions(Crystal::VERSION, "1.7.2") > 0 && flag?(win32) %}
       @[Anyolite::Specialize]
       def initialize(@regex : ::Regex, @code : LibPCRE2::Code*, @string : String, @pos : Int32, @ovector : LibC::SizeT*, @group_size : Int32)
         super
