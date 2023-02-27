@@ -156,7 +156,7 @@ release or the master branch of mruby.
 * [X] Added option to transform procs into bytecode
 * [X] Added function to disable external program execution
 * [X] Added interpreter depth counter
-* [ ] Updated to mruby 3.2.0 (as soon as it releases)
+* [X] Updated to mruby 3.2.0
 
 #### Usability
 

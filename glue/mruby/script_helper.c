@@ -208,12 +208,12 @@ extern void free_bytecode_container(bytecode_container_t container) {
 
 extern int mrb_gc_arena_save_helper(mrb_state* mrb) {
 
-    mrb_gc_arena_save(mrb);
+    return mrb_gc_arena_save(mrb);
 
 }
 
 
-extern void mrb_gc_arena_restore_helper(mrb_state* mrb, int* idx) {
+extern void mrb_gc_arena_restore_helper(mrb_state* mrb, int idx) {
 
     mrb_gc_arena_restore(mrb, idx);
 
