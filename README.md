@@ -145,8 +145,6 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 NOTE: This version requires recompilation of mruby and the C files.
 
 NOTE: This version will only work with mruby 3.2.0 and above.
-Since 3.2.0 is not out yet, it is highly recommended to either use an older Anyolite
-release or the master branch of mruby.
 
 #### Features
 
@@ -157,6 +155,7 @@ release or the master branch of mruby.
 * [X] Added function to disable external program execution
 * [X] Added interpreter depth counter
 * [X] Updated to mruby 3.2.0
+* [ ] Updated to MRI 3.2.1
 
 #### Usability
 
@@ -170,7 +169,7 @@ release or the master branch of mruby.
 * [X] Added some internal methods to mruby to handle fibers
 * [X] Added some exception checking methods
 * [X] Added methods to check reference table size
-* [ ] Removed now optional `Dir` gem 
+* [X] Removed now optional `Dir` gem from default build config
 
 #### Bugfixes
 
