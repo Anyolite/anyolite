@@ -7,6 +7,7 @@
 @[Anyolite::SpecializeInstanceMethod("+", [other], [other : Regex])]
 @[Anyolite::SpecializeInstanceMethod("=~", [other], [other : String | Regex])]
 @[Anyolite::SpecializeInstanceMethod("===", [other : String])]
+@[Anyolite::ExcludeInstanceMethod("each_capture_group")
 @[Anyolite::ExcludeClassMethod("union")]
 @[Anyolite::ExcludeClassMethod("append_source")]
 @[Anyolite::SpecializeClassMethod("error?", [source], [source : String])]
