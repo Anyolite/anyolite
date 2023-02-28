@@ -195,7 +195,8 @@ NOTE: This version will only work with mruby 3.2.0 and above.
 
 * [ ] Automated generation of Ruby documentations for wrapped functions
 * [ ] MRI support on Windows (does currently not work for some reason)
-* [ ] Mac support and continuous integration
+* [ ] MRI support for version 3.1.0 and up
+* [ ] Support and continuous integration for Mac
 * [ ] Support for bindings using `Data` and `Struct` from Ruby
 
 ### Wishlist, entries might not be possible to implement
