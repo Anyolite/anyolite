@@ -26,4 +26,4 @@ jobs:
     - name: Build shard
       run: ANYOLITE_CONFIG_PATH="config_files/anyolite_config_mri.json" rake build_shard
     - name: Test script
-      run: crystal run test.cr --error-trace -Danyolite_implementation_ruby_3 -Duse_general_object_format_chars
+      run: crystal run test.cr --error-trace -Danyolite_implementation_ruby_3
