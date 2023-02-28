@@ -33,7 +33,7 @@ module Anyolite
 
     macro resolve_format_char(arg, raw_arg, options = {} of Symbol => NoReturn)
       {% if arg.resolve? %}
-        {% if flag?(:use_general_object_format_chars) %}
+        {% if ANYOLITE_INTERNAL_FLAG_USE_GENERAL_OBJECT_FORMAT_CHARS %}
           "o"
         {% else %}
           {% if arg.resolve <= Bool %}

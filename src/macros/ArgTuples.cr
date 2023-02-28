@@ -6,7 +6,7 @@ module Anyolite
           {% for arg in args %}
             {% if arg.is_a?(TypeDeclaration) %}
               {% if arg.value %}
-                {% if flag?(:use_general_object_format_chars) %}
+                {% if ANYOLITE_INTERNAL_FLAG_USE_GENERAL_OBJECT_FORMAT_CHARS %}
                   Anyolite::Macro.pointer_type({{arg}}, options: {{options}}).malloc(size: 1, value: Anyolite::RbCast.return_value({{rb}}, {{arg.value}})),
                 {% else %}
                   {% if arg.type.is_a?(Union) %}

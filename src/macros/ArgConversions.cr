@@ -295,7 +295,7 @@ module Anyolite
         {% c = 0 %}
         {% if regular_args %}
           {% for arg in regular_args %}
-            {% if flag?(:use_general_object_format_chars) %}
+            {% if ANYOLITE_INTERNAL_FLAG_USE_GENERAL_OBJECT_FORMAT_CHARS %}
               Anyolite::Macro.convert_from_ruby_to_crystal({{rb}}, {{args}}[{{c}}].value, {{arg}}, options: {{options}}, debug_information: {{debug_information}}),
             {% else %}
               Anyolite::Macro.convert_regular_arg({{rb}}, {{args}}[{{c}}].value, {{arg}}, options: {{options}}, debug_information: {{debug_information}}),

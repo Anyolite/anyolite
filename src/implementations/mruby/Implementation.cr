@@ -2,6 +2,10 @@ require "./RbCore.cr"
 require "./FormatString.cr"
 require "./KeywordArgStruct.cr"
 
+{% if flag?(:use_general_object_format_chars) %}
+  ANYOLITE_INTERNAL_FLAG_USE_GENERAL_OBJECT_FORMAT_CHARS = true
+{% end %}
+
 module Anyolite
   module Macro
     macro new_rb_func(&b)

@@ -16,7 +16,7 @@ module Anyolite
 
     macro resolve_type_in_ruby(type, raw_type, options = {} of Symbol => NoReturn)
       {% if type.resolve? %}
-        {% if flag?(:use_general_object_format_chars) %}
+        {% if ANYOLITE_INTERNAL_FLAG_USE_GENERAL_OBJECT_FORMAT_CHARS %}
           Anyolite::RbCore::RbValue
         {% else %}
           {% if type.resolve <= Bool %}
@@ -67,7 +67,7 @@ module Anyolite
 
     macro resolve_pointer_type(type, raw_type, options = {} of Symbol => NoReturn)
       {% if type.resolve? %}
-        {% if flag?(:use_general_object_format_chars) %}
+        {% if ANYOLITE_INTERNAL_FLAG_USE_GENERAL_OBJECT_FORMAT_CHARS %}
           Pointer(Anyolite::RbCore::RbValue)
         {% else %}
           {% if type.resolve <= Bool %}
