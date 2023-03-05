@@ -99,7 +99,7 @@ task :build_ruby => [:load_config] do
             if ANYOLITE_COMPILER == :msvc
                 system "cd #{$config.rb_dir}/#{$config.implementation} & ruby minirake MRUBY_BUILD_DIR=\"#{temp_path}/#{$config.build_path}/#{$config.implementation}\" MRUBY_CONFIG=\"#{temp_rb_config_path}/#{$config.rb_config}\""
             elsif ANYOLITE_COMPILER == :gcc
-                system "cd #{$config.rb_dir}/#{$config.implementation}; ruby minirake MRUBY_BUILD_DIR=\"#{temp_path}/#{$config.build_path}/#{$config.implementation}\" MRUBY_CONFIG=\"#{temp_rb_config_path}/#{$config.rb_config}\""
+                system "unset LD; cd #{$config.rb_dir}/#{$config.implementation}; ruby minirake MRUBY_BUILD_DIR=\"#{temp_path}/#{$config.build_path}/#{$config.implementation}\" MRUBY_CONFIG=\"#{temp_rb_config_path}/#{$config.rb_config}\""
             else
                 system "cd #{$config.rb_dir}/#{$config.implementation}; ruby minirake MRUBY_BUILD_DIR=\"#{temp_path}/#{$config.build_path}/#{$config.implementation}\" MRUBY_CONFIG=\"#{temp_rb_config_path}/#{$config.rb_config}\""
             end
