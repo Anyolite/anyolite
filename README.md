@@ -188,9 +188,8 @@ NOTE: This version will only work with mruby 3.2.0 and above.
 * [X] Fixed crash when casting Ruby numbers into objects in some cases
 * [X] Fixed script lines not printing exceptions
 * [X] Fixed memory leak when calling Ruby scripts and script lines
-* [X] Fixed Regex wrapping problems with newer Crystal versions
 * [X] Updated tests to account for reworked `inspect` method for enums
-* [X] Fixed errors when building Anyolite in patsh with spaces
+* [X] Fixed errors when building Anyolite in a path with spaces
 
 ### Later releases
 
@@ -199,6 +198,7 @@ NOTE: This version will only work with mruby 3.2.0 and above.
 * [ ] MRI support for version 3.1.0 and up
 * [ ] Support and continuous integration for Mac
 * [ ] Support for bindings using `Data` and `Struct` from Ruby
+* [ ] Multiple interpreters for mruby
 
 ### Wishlist, entries might not be possible to implement
 

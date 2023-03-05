@@ -1,3 +1,7 @@
+{% if flag?(:anyolite_implementation_ruby_3) %}
+  {% skip_file %}
+{% end %}
+
 @[Anyolite::SpecializeInstanceMethod("initialize", [source : String, options : Options = Options::None], [source : String, options : Regex::Options = Regex::Options::None])]
 @[Anyolite::ExcludeConstant("SPECIAL_CHARACTERS")]
 @[Anyolite::SpecializeInstanceMethod("match", [str, pos = 0, options = Regex::Options::None], [str : String, pos : Int32 = 0, options : Regex::Options = Regex::Options::None])]
