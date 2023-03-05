@@ -171,7 +171,6 @@ NOTE: This version will only work with mruby 3.2.0 and above.
 * [X] Added methods to check reference table size
 * [X] Removed now optional `Dir` gem from default build config
 * [X] Removed need for `use_general_object_format_chars` flag for MRI
-* [ ] Added option to make script calls thread-safe
 
 #### Bugfixes
 
@@ -199,6 +198,7 @@ NOTE: This version will only work with mruby 3.2.0 and above.
 * [ ] Support and continuous integration for Mac
 * [ ] Support for bindings using `Data` and `Struct` from Ruby
 * [ ] Multiple interpreters for mruby
+* [ ] Add option to make script calls thread-safe
 
 ### Wishlist, entries might not be possible to implement
 
