@@ -156,6 +156,7 @@ NOTE: This version will only work with mruby 3.2.0 and above.
 * [X] Added interpreter depth counter
 * [X] Updated to mruby 3.2.0
 * [X] Updated to MRI 3.0.5
+* [X] Added backtrace function for mruby
 
 #### Usability
 

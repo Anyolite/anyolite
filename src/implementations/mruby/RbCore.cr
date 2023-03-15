@@ -110,6 +110,7 @@ module Anyolite
     fun rb_define_const = mrb_define_const(rb : State*, c : RClassPtr, name : LibC::Char*, val : RbValue)
 
     fun rb_print_error = mrb_print_error(rb : State*)
+    fun rb_print_backtrace = mrb_print_backtrace(rb : State*)
 
     fun get_last_rb_error = get_last_mrb_error(rb : State*) : RbValue
     fun clear_last_rb_error = clear_last_mrb_error(rb : State*)
