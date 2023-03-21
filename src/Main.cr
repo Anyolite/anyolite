@@ -122,6 +122,7 @@ module Anyolite
 
     # :nodoc:
     def finalize
+      puts "Deleted reference: #{value}"
       RbCore.rb_gc_unregister(RbRefTable.get_current_interpreter, value) if RbRefTable.check_interpreter
     end
 
@@ -148,6 +149,16 @@ module Anyolite
     Anyolite::RbRefTable.get_current_interpreter.depth
   end
 
+  # Wraps any Crystal object into an `RbRef`, securing it from the Ruby GC.
+  # This prevents the object from being deleted in Ruby, as long as this reference exists in Crystal.
+  # 
+  # Note that this might lead to memory leaks if you close the Ruby interpreter before
+  # all of these objects are cleaned up properly using the Crystal GC.
+  # However, this is only a problem if you open much more than one interpreter while running a program.
+  def self.create_rb_ref(obj)
+    Anyolite::RbRef.new(Anyolite::RbCast.return_value(Anyolite::RbRefTable.get_current_interpreter.to_unsafe, obj))
+  end
+
   # Disables any function that allows for running external programs 
   def self.disable_program_execution
     Anyolite.eval("class IO; def self._popen(command, mode, **opts); raise \"No system commands allowed!\"; end; end")
@@ -159,7 +170,7 @@ module Anyolite
     !!Anyolite::RbRefTable.is_registered?(Anyolite::RbRefTable.get_object_id({{value}}))
   end
 
-  # Returns the `RbValue` of the `Class`, `Module` pr `String` *crystal_class*.
+  # Returns the `RbValue` of the `Class`, `Module` or `String` *crystal_class*.
   macro get_rb_class_obj_of(crystal_class)
     {% if crystal_class.is_a?(StringLiteral) %}
       %rb = Anyolite::RbRefTable.get_current_interpreter
