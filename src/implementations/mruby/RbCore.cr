@@ -229,8 +229,8 @@ module Anyolite
     # NOTE: These are differing due to global variable methods by ID being private in MRI
     # NOTE: You should not use globals that often, anyway
 
-    fun rb_gv_set = mrb_gv_set(rb : State*, name : LibC::Char*, value : RbValue) : Void
-    fun rb_gv_get = mrb_gv_get(rb : State*, name : LibC::Char*) : RbValue
+    fun rb_gv_set = mrb_gv_set_helper(rb : State*, name : LibC::Char*, value : RbValue) : Void
+    fun rb_gv_get = mrb_gv_get_helper(rb : State*, name : LibC::Char*) : RbValue
 
     fun rb_undef_method = mrb_undef_method(rb : State*, class_ptr : RClassPtr, name : LibC::Char*) : Void
     fun rb_undef_class_method = mrb_undef_class_method(rb : State*, class_ptr : RClassPtr, name : LibC::Char*) : Void

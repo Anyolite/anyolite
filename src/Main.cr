@@ -541,7 +541,7 @@ module Anyolite
     %rb = Anyolite::RbRefTable.get_current_interpreter
     {% options = {:context => context} %}
 
-    %result = Anyolite::RbCore.rb_gv_get(%rb, {{name}}.to_s)
+    %result = Anyolite::RbCore.rb_gv_get(%rb, {{name}}.to_s.to_unsafe)
 
     {% if cast_to %}
       Anyolite::Macro.convert_from_ruby_to_crystal(%rb.to_unsafe, %result, {{cast_to}}, options: {{options}})
@@ -562,7 +562,7 @@ module Anyolite
     %rb = Anyolite::RbRefTable.get_current_interpreter
     %value = Anyolite::RbCast.return_value(%rb.to_unsafe, {{value}})
 
-    Anyolite::RbCore.rb_gv_set(%rb, {{name}}.to_s, %value)
+    Anyolite::RbCore.rb_gv_set(%rb, {{name}}.to_s.to_unsafe, %value)
   end
 
   # Wraps a Crystal class directly into an mruby class.

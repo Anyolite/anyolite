@@ -192,6 +192,7 @@ NOTE: This version will only work with mruby 3.2.0 and above.
 * [X] Updated tests to account for reworked `inspect` method for enums
 * [X] Fixed errors when building Anyolite in a path with spaces
 * [X] Fixed problems on Linux when `LD` is set, but `gcc` should compile
+* [X] Fixed Crystal functions for accessing global variables in mruby
 
 ### Later releases
 

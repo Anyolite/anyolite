@@ -59,3 +59,17 @@ extern mrb_value get_mrb_obj_value(void* p) {
     return mrb_obj_value(p);
 
 }
+
+extern mrb_value mrb_gv_get_helper(mrb_state* mrb, const char* name) {
+
+  mrb_sym sym = convert_to_mrb_sym(mrb, name);
+  mrb_gv_get(mrb, sym);
+  
+}
+
+extern void mrb_gv_set_helper(mrb_state* mrb, const char* name, mrb_value value) {
+
+  mrb_sym sym = convert_to_mrb_sym(mrb, name);
+  mrb_gv_set(mrb, sym, value);
+  
+}
