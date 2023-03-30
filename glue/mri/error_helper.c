@@ -2,61 +2,61 @@
 
 extern void rb_raise_runtime_error(void* rb, const char* msg) {
 
-  rb_raise(rb_eRuntimeError, msg);
+  rb_raise(rb_eRuntimeError, "%s", msg);
 
 }
 
 extern void rb_raise_type_error(void* rb, const char* msg) {
 
-  rb_raise(rb_eTypeError, msg);
+  rb_raise(rb_eTypeError, "%s", msg);
 
 }
 
 extern void rb_raise_argument_error(void* rb, const char* msg) {
 
-  rb_raise(rb_eArgError, msg);
+  rb_raise(rb_eArgError, "%s", msg);
 
 }
 
 extern void rb_raise_index_error(void* rb, const char* msg) {
 
-  rb_raise(rb_eIndexError, msg);
+  rb_raise(rb_eIndexError, "%s", msg);
 
 }
 
 extern void rb_raise_range_error(void* rb, const char* msg) {
 
-  rb_raise(rb_eRangeError, msg);
+  rb_raise(rb_eRangeError, "%s", msg);
 
 }
 
 extern void rb_raise_name_error(void* rb, const char* msg) {
 
-  rb_raise(rb_eNameError, msg);
+  rb_raise(rb_eNameError, "%s", msg);
 
 }
 
 extern void rb_raise_script_error(void* rb, const char* msg) {
 
-  rb_raise(rb_eScriptError, msg);
+  rb_raise(rb_eScriptError, "%s", msg);
 
 }
 
 extern void rb_raise_not_implemented_error(void* rb, const char* msg) {
 
-  rb_raise(rb_eNotImpError, msg);
+  rb_raise(rb_eNotImpError, "%s", msg);
 
 }
 
 extern void rb_raise_key_error(void* rb, const char* msg) {
 
-  rb_raise(rb_eKeyError, msg);
+  rb_raise(rb_eKeyError, "%s", msg);
 
 }
 
 extern void rb_raise_helper(void* rb, VALUE exc, const char* msg) {
 
-  rb_raise(exc, msg);
+  rb_raise(exc, "%s", "%s", msg);
 
 }
 
