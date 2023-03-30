@@ -56,7 +56,7 @@ extern void rb_raise_key_error(void* rb, const char* msg) {
 
 extern void rb_raise_helper(void* rb, VALUE exc, const char* msg) {
 
-  rb_raise(exc, "%s", "%s", msg);
+  rb_raise(exc, "%s", msg);
 
 }
 
