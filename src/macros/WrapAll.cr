@@ -6,7 +6,7 @@ module Anyolite
 
       {% method_source = other_source ? other_source : crystal_class %}
 
-      {% default_optional_args_to_keyword_args = false %}
+      {% default_optional_args_to_keyword_args = parse_type("ANYOLITE_DEFAULT_OPTIONAL_ARGS_TO_KEYWORD_ARGS").resolve? %}
 
       {% if !crystal_class.resolve.annotations(Anyolite::DefaultOptionalArgsToKeywordArgs).empty? %}
         {% default_optional_args_to_keyword_args = true %}

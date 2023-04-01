@@ -174,6 +174,7 @@ NOTE: This version will only work with mruby 3.2.0 and above.
 * [X] Removed now optional `Dir` gem from default build config
 * [X] Removed need for `use_general_object_format_chars` flag for MRI
 * [X] Added annotation to allow enums with types different than `Int32`
+* [X] Added global option to use keyword args for optional arguments only
 
 #### Bugfixes
 
