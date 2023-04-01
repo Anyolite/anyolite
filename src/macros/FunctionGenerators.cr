@@ -5,9 +5,9 @@ module Anyolite
       Anyolite.wrap_constructor({{rb_interpreter}}, {{crystal_class}})
     end
 
-    macro add_enum_constructor(rb_interpreter, crystal_class, verbose)
+    macro add_enum_constructor(rb_interpreter, crystal_class, verbose, enum_type)
       {% puts "> Adding enum constructor for #{crystal_class}\n\n" if verbose %}
-      Anyolite.wrap_constructor({{rb_interpreter}}, {{crystal_class}}, [Int32])
+      Anyolite.wrap_constructor({{rb_interpreter}}, {{crystal_class}}, [{{enum_type}}])
     end
 
     macro add_enum_inspect(rb_interpreter, crystal_class, verbose)

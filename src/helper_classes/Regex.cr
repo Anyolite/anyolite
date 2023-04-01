@@ -31,7 +31,7 @@ class Regex
   @[Anyolite::ExcludeInstanceMethod("pretty_print")]
   @[Anyolite::DefaultOptionalArgsToKeywordArgs]
   struct MatchData
-    {% if compare_versions(Crystal::VERSION, "1.7.2") > 0 %}
+    {% if compare_versions(Crystal::VERSION, "1.7.3") > 0 %}
       @[Anyolite::Specialize]
       def initialize(@regex : ::Regex, @code : LibPCRE2::Code*, @string : String, @pos : Int32, @ovector : LibC::SizeT*, @group_size : Int32)
         super
@@ -61,4 +61,10 @@ class Regex
   def match_at_byte_index?(str : String, byte_index : Int32 = 0, options : Regex::Options = Regex::Options::None)
     matches_at_byte_index?(str, byte_index, options)
   end
+
+  {% if compare_versions(Crystal::VERSION, "1.7.3") > 0 %}
+    @[Anyolite::SpecifyEnumType(UInt64)]
+    enum Options 
+    end
+  {% end %}
 end

@@ -3,6 +3,7 @@
 #include <mruby/data.h>
 #include <mruby/array.h>
 #include <mruby/string.h>
+#include <mruby/variable.h>
 #include <string.h>
 
 extern const mrb_data_type* data_type(mrb_value value) {

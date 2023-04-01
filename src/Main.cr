@@ -999,6 +999,10 @@ module Anyolite
   # class are wrapped, and no inherited methods.
   annotation IgnoreAncestorMethods; end
 
+  # Marks an `Enum` with the type specified as the first argument.
+  # This is necessary to wrap any enums besides `Int32`.
+  annotation SpecifyEnumType; end
+
   # Wraps a whole class structure under a module into mruby.
   #
   # The `Class` *crystal_class* will be integrated into the `RbInterpreter` *rb_interpreter*,
