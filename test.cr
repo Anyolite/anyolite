@@ -58,7 +58,6 @@ module SomeModule
       end
     end
 
-    @[Anyolite::SpecifyEnumType(UInt64)]
     enum TestEnum : UInt64
       Three = 3
       Four

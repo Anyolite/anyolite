@@ -5,8 +5,10 @@ module Anyolite
       Anyolite.wrap_constructor({{rb_interpreter}}, {{crystal_class}})
     end
 
-    macro add_enum_constructor(rb_interpreter, crystal_class, verbose, enum_type)
+    macro add_enum_constructor(rb_interpreter, crystal_class, verbose)
       {% puts "> Adding enum constructor for #{crystal_class}\n\n" if verbose %}
+      {% type_hash = {:u8 => UInt8, :u16 => UInt16, :u32 => UInt32, :u64 => UInt64, :i8 => Int8, :i16 => Int16, :i32 => Int32, :i64 => Int64} %}
+      {% enum_type = type_hash[parse_type("#{crystal_class}::#{crystal_class.resolve.constants.first.id}").resolve.kind] %}
       Anyolite.wrap_constructor({{rb_interpreter}}, {{crystal_class}}, [{{enum_type}}])
     end
 

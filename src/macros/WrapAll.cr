@@ -64,8 +64,6 @@ module Anyolite
           {% all_annotations_force_keyword_arg_im = crystal_class.resolve.annotations(Anyolite::ForceKeywordArgInstanceMethod) + method_source.resolve.annotations(Anyolite::ForceKeywordArgInstanceMethod) %}
           {% annotation_force_keyword_arg_im = all_annotations_force_keyword_arg_im.find { |element| element[0].id.stringify == method.name.stringify } %}
 
-          {% special_enum_type_annotation = crystal_class.resolve.annotation(Anyolite::SpecifyEnumType) %}
-
           {% if crystal_class.resolve.annotation(Anyolite::NoKeywordArgs) || method_source.resolve.annotation(Anyolite::NoKeywordArgs) %}
             {% no_keyword_args = true %}
           {% else %}
@@ -185,11 +183,7 @@ module Anyolite
           {% if !how_many_times_wrapped["initialize"] && !use_enum_methods %}
             Anyolite::Macro.add_default_constructor({{rb_interpreter}}, {{crystal_class}}, {{verbose}})
           {% elsif !how_many_times_wrapped["initialize"] && use_enum_methods %}
-            {% if special_enum_type_annotation %}
-              Anyolite::Macro.add_enum_constructor({{rb_interpreter}}, {{crystal_class}}, {{verbose}}, {{special_enum_type_annotation[0]}})
-            {% else %}
-              Anyolite::Macro.add_enum_constructor({{rb_interpreter}}, {{crystal_class}}, {{verbose}}, Int32)
-            {% end %}
+          Anyolite::Macro.add_enum_constructor({{rb_interpreter}}, {{crystal_class}}, {{verbose}})
           {% end %}
 
           {% if !how_many_times_wrapped["inspect"] && use_enum_methods %}

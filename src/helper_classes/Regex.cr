@@ -61,10 +61,4 @@ class Regex
   def match_at_byte_index?(str : String, byte_index : Int32 = 0, options : Regex::Options = Regex::Options::None)
     matches_at_byte_index?(str, byte_index, options)
   end
-
-  {% if compare_versions(Crystal::VERSION, "1.7.3") > 0 %}
-    @[Anyolite::SpecifyEnumType(UInt64)]
-    enum Options 
-    end
-  {% end %}
 end
