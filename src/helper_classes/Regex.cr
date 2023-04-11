@@ -63,9 +63,6 @@ class Regex
   {% end %}
 
   {% if compare_versions(Crystal::VERSION, "1.7.3") > 0 %}
-    def self.compile(str : String, options : Regex::CompileOptions = Regex::CompileOptions::None)
-      self.new(str, options)
-    end
   {% else %}
     def self.compile(str : String, options : Regex::Options = Regex::Options::None)
       self.new(str, options)
@@ -73,9 +70,6 @@ class Regex
   {% end %}
 
   {% if compare_versions(Crystal::VERSION, "1.7.3") > 0 %}
-    def match?(str : String, pos : Int32 = 0, options : Regex::MatchOptions = Regex::MatchOptions::None)
-      matches?(str, pos, options)
-    end
   {% else %}
     def match?(str : String, pos : Int32 = 0, options : Regex::Options = Regex::Options::None)
       matches?(str, pos, options)
@@ -83,9 +77,6 @@ class Regex
   {% end %}
 
   {% if compare_versions(Crystal::VERSION, "1.7.3") > 0 %}
-    def match_at_byte_index(str : String, byte_index : Int32 = 0, options : Regex::MatchOptions = Regex::MatchOptions::None)
-      matches_at_byte_index?(str, byte_index, options)
-    end
   {% else %}
     def match_at_byte_index?(str : String, byte_index : Int32 = 0, options : Regex::Options = Regex::Options::None)
       matches_at_byte_index?(str, byte_index, options)
