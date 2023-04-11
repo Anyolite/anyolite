@@ -2,12 +2,20 @@
   {% skip_file %}
 {% end %}
 
-@[Anyolite::SpecializeInstanceMethod("initialize", [source : String, options : Options = Options::None], [source : String, options : Regex::Options = Regex::Options::None])]
 @[Anyolite::ExcludeConstant("SPECIAL_CHARACTERS")]
-@[Anyolite::SpecializeInstanceMethod("match", [str, pos = 0, options = Regex::Options::None], [str : String, pos : Int32 = 0, options : Regex::Options = Regex::Options::None])]
-@[Anyolite::SpecializeInstanceMethod("matches?", [str, pos = 0, options = Regex::Options::None], [str : String, pos : Int32 = 0, options : Regex::Options = Regex::Options::None])]
-@[Anyolite::SpecializeInstanceMethod("match_at_byte_index", [str, byte_index = 0, options = Regex::Options::None], [str : String, byte_index : Int32 = 0, options : Regex::Options = Regex::Options::None])]
-@[Anyolite::SpecializeInstanceMethod("matches_at_byte_index?", [str, byte_index = 0, options = Regex::Options::None], [str : String, byte_index : Int32 = 0, options : Regex::Options = Regex::Options::None])]
+{% if compare_versions(Crystal::VERSION, "1.7.3") > 0 %}
+  @[Anyolite::SpecializeInstanceMethod("initialize", [source : String, options : CompileOptions = CompileOptions::None], [source : String, options : Regex::CompileOptions = Regex::CompileOptions::None])]
+  @[Anyolite::SpecializeInstanceMethod("match", [str, pos = 0, options = Regex::MatchOptions::None], [str : String, pos : Int32 = 0, options : Regex::MatchOptions = Regex::MatchOptions::None])]
+  @[Anyolite::SpecializeInstanceMethod("matches?", [str, pos = 0, options = Regex::MatchOptions::None], [str : String, pos : Int32 = 0, options : Regex::MatchOptions = Regex::MatchOptions::None])]
+  @[Anyolite::SpecializeInstanceMethod("match_at_byte_index", [str, byte_index = 0, options = Regex::MatchOptions::None], [str : String, byte_index : Int32 = 0, options : Regex::MatchOptions = Regex::MatchOptions::None])]
+  @[Anyolite::SpecializeInstanceMethod("matches_at_byte_index?", [str, byte_index = 0, options = Regex::MatchOptions::None], [str : String, byte_index : Int32 = 0, options : Regex::MatchOptions = Regex::MatchOptions::None])]
+{% else %}
+  @[Anyolite::SpecializeInstanceMethod("initialize", [source : String, options : Options = Options::None], [source : String, options : Regex::Options = Regex::Options::None])]
+  @[Anyolite::SpecializeInstanceMethod("match", [str, pos = 0, options = Regex::Options::None], [str : String, pos : Int32 = 0, options : Regex::Options = Regex::Options::None])]
+  @[Anyolite::SpecializeInstanceMethod("matches?", [str, pos = 0, options = Regex::Options::None], [str : String, pos : Int32 = 0, options : Regex::Options = Regex::Options::None])]
+  @[Anyolite::SpecializeInstanceMethod("match_at_byte_index", [str, byte_index = 0, options = Regex::Options::None], [str : String, byte_index : Int32 = 0, options : Regex::Options = Regex::Options::None])]
+  @[Anyolite::SpecializeInstanceMethod("matches_at_byte_index?", [str, byte_index = 0, options = Regex::Options::None], [str : String, byte_index : Int32 = 0, options : Regex::Options = Regex::Options::None])]
+{% end %}
 @[Anyolite::SpecializeInstanceMethod("+", [other], [other : Regex])]
 @[Anyolite::SpecializeInstanceMethod("=~", [other], [other : String | Regex])]
 @[Anyolite::SpecializeInstanceMethod("===", [other : String])]
@@ -44,21 +52,43 @@ class Regex
     {% end %}
   end
 
-  {% if compare_versions(Crystal::VERSION, "1.6.2") > 0 %}
+  {% if compare_versions(Crystal::VERSION, "1.7.3") > 0 %}
+    def initialize(source : String, options : CompileOptions = CompileOptions::None)
+      super(_source: source, _options: options)
+    end
+  {% elsif compare_versions(Crystal::VERSION, "1.6.2") > 0 %}
     def initialize(source : String, options : Options = Options::None)
       super(_source: source, _options: options)
     end
   {% end %}
 
-  def self.compile(str : String, options : Regex::Options = Regex::Options::None)
-    self.new(str, options)
-  end
+  {% if compare_versions(Crystal::VERSION, "1.7.3") > 0 %}
+    def self.compile(str : String, options : Regex::CompileOptions = Regex::CompileOptions::None)
+      self.new(str, options)
+    end
+  {% else %}
+    def self.compile(str : String, options : Regex::Options = Regex::Options::None)
+      self.new(str, options)
+    end
+  {% end %}
 
-  def match?(str : String, pos : Int32 = 0, options : Regex::Options = Regex::Options::None)
-    matches?(str, pos, options)
-  end
+  {% if compare_versions(Crystal::VERSION, "1.7.3") > 0 %}
+    def match?(str : String, pos : Int32 = 0, options : Regex::MatchOptions = Regex::MatchOptions::None)
+      matches?(str, pos, options)
+    end
+  {% else %}
+    def match?(str : String, pos : Int32 = 0, options : Regex::Options = Regex::Options::None)
+      matches?(str, pos, options)
+    end
+  {% end %}
 
-  def match_at_byte_index?(str : String, byte_index : Int32 = 0, options : Regex::Options = Regex::Options::None)
-    matches_at_byte_index?(str, byte_index, options)
-  end
+  {% if compare_versions(Crystal::VERSION, "1.7.3") > 0 %}
+    def match_at_byte_index(str : String, byte_index : Int32 = 0, options : Regex::MatchOptions = Regex::MatchOptions::None)
+      matches_at_byte_index?(str, byte_index, options)
+    end
+  {% else %}
+    def match_at_byte_index?(str : String, byte_index : Int32 = 0, options : Regex::Options = Regex::Options::None)
+      matches_at_byte_index?(str, byte_index, options)
+    end
+  {% end %}
 end
