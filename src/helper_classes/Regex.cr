@@ -2,6 +2,11 @@
   {% skip_file %}
 {% end %}
 
+{% if compare_versions(Crystal::VERSION, "1.7.3") > 0 %}
+  # Crystal Regexes do change to quickly in recent snapshots
+  {% skip_file %}
+{% end %}
+
 @[Anyolite::ExcludeConstant("SPECIAL_CHARACTERS")]
 {% if compare_versions(Crystal::VERSION, "1.7.3") > 0 %}
   @[Anyolite::SpecializeInstanceMethod("initialize", [source : String, options : CompileOptions = CompileOptions::None], [source : String, options : Regex::CompileOptions = Regex::CompileOptions::None])]
