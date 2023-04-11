@@ -28,6 +28,7 @@
 @[Anyolite::DefaultOptionalArgsToKeywordArgs]
 @[Anyolite::RenameClass("Regexp")]
 @[Anyolite::ExcludeConstant("Engine")]
+@[Anyolite::ExcludeConstant("Options")]
 @[Anyolite::ExcludeConstant("PCRE2")]
 class Regex
   @[Anyolite::SpecializeInstanceMethod("[]?", [n : Int])]
