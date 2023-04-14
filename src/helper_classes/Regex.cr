@@ -2,24 +2,19 @@
   {% skip_file %}
 {% end %}
 
-{% if compare_versions(Crystal::VERSION, "1.7.3") > 0 %}
-  # Crystal Regexes do change to quickly in recent snapshots
-  {% skip_file %}
-{% end %}
-
 @[Anyolite::ExcludeConstant("SPECIAL_CHARACTERS")]
 {% if compare_versions(Crystal::VERSION, "1.7.3") > 0 %}
-  @[Anyolite::SpecializeInstanceMethod("initialize", [source : String, options : CompileOptions = CompileOptions::None], [source : String, options : Regex::CompileOptions = Regex::CompileOptions::None])]
-  @[Anyolite::SpecializeInstanceMethod("match", [str, pos = 0, options = Regex::MatchOptions::None], [str : String, pos : Int32 = 0, options : Regex::MatchOptions = Regex::MatchOptions::None])]
-  @[Anyolite::SpecializeInstanceMethod("matches?", [str, pos = 0, options = Regex::MatchOptions::None], [str : String, pos : Int32 = 0, options : Regex::MatchOptions = Regex::MatchOptions::None])]
-  @[Anyolite::SpecializeInstanceMethod("match_at_byte_index", [str, byte_index = 0, options = Regex::MatchOptions::None], [str : String, byte_index : Int32 = 0, options : Regex::MatchOptions = Regex::MatchOptions::None])]
-  @[Anyolite::SpecializeInstanceMethod("matches_at_byte_index?", [str, byte_index = 0, options = Regex::MatchOptions::None], [str : String, byte_index : Int32 = 0, options : Regex::MatchOptions = Regex::MatchOptions::None])]
+  @[Anyolite::SpecializeInstanceMethod("initialize", [source : String, options : Options = Options::None], [source : String])]
+  @[Anyolite::SpecializeInstanceMethod("match", [str : String, pos : Int32 = 0, options : Regex::MatchOptions = :none], [str : String, pos : Int32 = 0])]
+  @[Anyolite::SpecializeInstanceMethod("matches?", [str : String, pos : Int32 = 0, options : Regex::MatchOptions = :none], [str : String, pos : Int32 = 0])]
+  @[Anyolite::SpecializeInstanceMethod("match_at_byte_index", [str : String, byte_index : Int32 = 0, options : Regex::MatchOptions = :none], [str : String, byte_index : Int32 = 0])]
+  @[Anyolite::SpecializeInstanceMethod("matches_at_byte_index?", [str : String, byte_index : Int32 = 0, options : Regex::MatchOptions = :none], [str : String, byte_index : Int32 = 0])]
 {% else %}
-  @[Anyolite::SpecializeInstanceMethod("initialize", [source : String, options : Options = Options::None], [source : String, options : Regex::Options = Regex::Options::None])]
-  @[Anyolite::SpecializeInstanceMethod("match", [str, pos = 0, options = Regex::Options::None], [str : String, pos : Int32 = 0, options : Regex::Options = Regex::Options::None])]
-  @[Anyolite::SpecializeInstanceMethod("matches?", [str, pos = 0, options = Regex::Options::None], [str : String, pos : Int32 = 0, options : Regex::Options = Regex::Options::None])]
-  @[Anyolite::SpecializeInstanceMethod("match_at_byte_index", [str, byte_index = 0, options = Regex::Options::None], [str : String, byte_index : Int32 = 0, options : Regex::Options = Regex::Options::None])]
-  @[Anyolite::SpecializeInstanceMethod("matches_at_byte_index?", [str, byte_index = 0, options = Regex::Options::None], [str : String, byte_index : Int32 = 0, options : Regex::Options = Regex::Options::None])]
+  @[Anyolite::SpecializeInstanceMethod("initialize", [source : String, options : Options = Options::None], [source : String])]
+  @[Anyolite::SpecializeInstanceMethod("match", [str, pos = 0, options = Regex::Options::None], [str : String, pos : Int32 = 0])]
+  @[Anyolite::SpecializeInstanceMethod("matches?", [str, pos = 0, options = Regex::Options::None], [str : String, pos : Int32 = 0])]
+  @[Anyolite::SpecializeInstanceMethod("match_at_byte_index", [str, byte_index = 0, options = Regex::Options::None], [str : String, byte_index : Int32 = 0])]
+  @[Anyolite::SpecializeInstanceMethod("matches_at_byte_index?", [str, byte_index = 0, options = Regex::Options::None], [str : String, byte_index : Int32 = 0])]
 {% end %}
 @[Anyolite::SpecializeInstanceMethod("+", [other], [other : Regex])]
 @[Anyolite::SpecializeInstanceMethod("=~", [other], [other : String | Regex])]
@@ -33,8 +28,13 @@
 @[Anyolite::DefaultOptionalArgsToKeywordArgs]
 @[Anyolite::RenameClass("Regexp")]
 @[Anyolite::ExcludeConstant("Engine")]
-@[Anyolite::ExcludeConstant("Options")]
 @[Anyolite::ExcludeConstant("PCRE2")]
+@[Anyolite::ExcludeConstant("Error")]
+@[Anyolite::ExcludeConstant("Options")]
+{% if compare_versions(Crystal::VERSION, "1.7.3") > 0 %}
+  @[Anyolite::ExcludeConstant("MatchOptions")]
+  @[Anyolite::ExcludeConstant("CompileOptions")]
+{% end %}
 class Regex
   @[Anyolite::SpecializeInstanceMethod("[]?", [n : Int])]
   @[Anyolite::SpecializeInstanceMethod("[]", [n : Int])]
@@ -58,34 +58,21 @@ class Regex
     {% end %}
   end
 
-  {% if compare_versions(Crystal::VERSION, "1.7.3") > 0 %}
-    def initialize(source : String, options : CompileOptions = CompileOptions::None)
-      super(_source: source, _options: options)
-    end
-  {% elsif compare_versions(Crystal::VERSION, "1.6.2") > 0 %}
+  {% if compare_versions(Crystal::VERSION, "1.6.2") > 0 %}
     def initialize(source : String, options : Options = Options::None)
-      super(_source: source, _options: options)
+      super(_source: source, _options: Regex::Options::None)
     end
   {% end %}
 
-  {% if compare_versions(Crystal::VERSION, "1.7.3") > 0 %}
-  {% else %}
-    def self.compile(str : String, options : Regex::Options = Regex::Options::None)
-      self.new(str, options)
-    end
-  {% end %}
+  def self.compile(str : String)
+    self.new(str)
+  end
 
-  {% if compare_versions(Crystal::VERSION, "1.7.3") > 0 %}
-  {% else %}
-    def match?(str : String, pos : Int32 = 0, options : Regex::Options = Regex::Options::None)
-      matches?(str, pos, options)
-    end
-  {% end %}
+  def match?(str : String, pos : Int32 = 0)
+    matches?(str, pos)
+  end
 
-  {% if compare_versions(Crystal::VERSION, "1.7.3") > 0 %}
-  {% else %}
-    def match_at_byte_index?(str : String, byte_index : Int32 = 0, options : Regex::Options = Regex::Options::None)
-      matches_at_byte_index?(str, byte_index, options)
-    end
-  {% end %}
+  def match_at_byte_index?(str : String, byte_index : Int32 = 0)
+    matches_at_byte_index?(str, byte_index)
+  end
 end

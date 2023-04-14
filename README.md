@@ -146,8 +146,6 @@ NOTE: This version requires recompilation of mruby and the C files.
 
 NOTE: This version will only work with mruby 3.2.0 and above.
 
-NOTE: mruby Regexes are currently not supported in Crystal 1.8 nightlies due to the heavy and frequent changes in the Regex API
-
 #### Features
 
 * [X] Added direct bindings to `Regex` from Crystal (`Regexp` in Ruby)
@@ -187,7 +185,6 @@ NOTE: mruby Regexes are currently not supported in Crystal 1.8 nightlies due to 
 * [X] Fixed compiletime error when casting to `Char`
 * [X] Fixed errors when passing certain name arguments to Macros for calling Ruby functions 
 * [X] Fixed `Anyolite.call_rb_method_of_object` argument `args` not being optional
-* [X] Fixed problems with Regex in recent Crystal commits
 * [X] Fixed linker error due to typo in mruby bindings for block functions
 * [X] Fixed crash when casting Ruby numbers into objects in some cases
 * [X] Fixed script lines not printing exceptions

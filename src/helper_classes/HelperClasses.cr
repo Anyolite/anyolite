@@ -12,11 +12,7 @@ module Anyolite
 
       # We don't need two conflicting Regex classes in MRI
       {% unless flag?(:anyolite_implementation_ruby_3) %}
-        {% if compare_versions(Crystal::VERSION, "1.7.3") > 0 %}
-          {% puts "WARNING: Regexes in mruby do currently not work with Crystal version 1.8 snapshots" %}
-        {% else %}
-          Anyolite.wrap(rb, Regex)
-        {% end %}
+        Anyolite.wrap(rb, Regex)
       {% end %}
     end
   end
