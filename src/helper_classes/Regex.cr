@@ -34,6 +34,9 @@
 {% if compare_versions(Crystal::VERSION, "1.7.3") > 0 %}
   @[Anyolite::ExcludeConstant("MatchOptions")]
   @[Anyolite::ExcludeConstant("CompileOptions")]
+  {% if compare_versions(Crystal::VERSION, "1.8.0") > 0 %}
+    @[Anyolite::ExcludeInstanceMethod("each_named_capture_group")]
+  {% end %}
 {% end %}
 class Regex
   @[Anyolite::SpecializeInstanceMethod("[]?", [n : Int])]
