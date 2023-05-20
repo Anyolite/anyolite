@@ -10,14 +10,14 @@ module Anyolite
         # Crystal links against libucrt since 1.5.1
         @[Link(ldflags: "\"#{__DIR__}/../../../{{build_path.id}}/mruby/lib/libmruby.lib\"")]
       {% else %}
-        @[Link(ldflags: "\"#{__DIR__}/../../../{{build_path.id}}/mruby/lib/libmruby.lib\" libucrt.lib ")]
+        @[Link(ldflags: "\"#{__DIR__}/../../../{{build_path.id}}/mruby/lib/libmruby.lib\" libucrt.lib")]
       {% end %}
       @[Link(ldflags: "\"#{__DIR__}/../../../{{build_path.id}}/glue/mruby/return_functions.obj\"")]
       @[Link(ldflags: "\"#{__DIR__}/../../../{{build_path.id}}/glue/mruby/data_helper.obj\"")]
       @[Link(ldflags: "\"#{__DIR__}/../../../{{build_path.id}}/glue/mruby/script_helper.obj\"")]
       @[Link(ldflags: "\"#{__DIR__}/../../../{{build_path.id}}/glue/mruby/error_helper.obj\"")]
     {% else %}
-      @[Link(ldflags: "\"#{__DIR__}/../../../{{build_path.id}}/mruby/lib/libmruby.a\"")]
+      @[Link(ldflags: "\"#{__DIR__}/../../../{{build_path.id}}/mruby/lib/libmruby.a\" -lm")]
       @[Link(ldflags: "\"#{__DIR__}/../../../{{build_path.id}}/glue/mruby/return_functions.o\"")]
       @[Link(ldflags: "\"#{__DIR__}/../../../{{build_path.id}}/glue/mruby/data_helper.o\"")]
       @[Link(ldflags: "\"#{__DIR__}/../../../{{build_path.id}}/glue/mruby/script_helper.o\"")]
