@@ -158,6 +158,7 @@ NOTE: This version will only work with mruby 3.2.0 and above.
 * [X] Updated to MRI 3.0.5
 * [X] Added backtrace function for mruby
 * [X] Added option to fully protect Crystal values from the Ruby GC
+* [ ] Added standalone wrappers for class properties
 
 #### Usability
 
