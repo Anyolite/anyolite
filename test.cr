@@ -7,6 +7,8 @@ require "./anyolite.cr"
 {% end %}
 
 module SomeModule
+  class_property some_class_property : Int32 = 258
+
   def self.test_method(int : Int32, str : String)
     [str, int]
   end
@@ -555,6 +557,7 @@ end
 macro load_test_module
   Anyolite.wrap_module(rb, SomeModule, "TestModule")
   Anyolite.wrap_module_function_with_keywords(rb, SomeModule, "test_method", SomeModule.test_method, [int : Int32 = 19, str : String])
+  Anyolite.wrap_class_property(rb, SomeModule, "some_class_property", SomeModule.some_class_property, Int32)
   Anyolite.wrap_constant(rb, SomeModule, "SOME_CONSTANT", "Smile! 😊")
   Anyolite.wrap(rb, SomeModule::Bla, under: SomeModule, verbose: true)
   Anyolite.wrap(rb, SomeModule::TestStruct, under: SomeModule, verbose: true)

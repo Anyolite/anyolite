@@ -841,6 +841,47 @@ module Anyolite
     Anyolite.wrap_setter({{rb_interpreter}}, {{crystal_class}}, {{name + "="}}, {{proc}}, {{proc_arg}}, operator: {{operator_setter}}, context: {{context}})
   end
 
+  # Wraps a class setter into mruby.
+  #
+  # The class setter *proc* (without the `=`) of the Crystal `Class` *crystal_class* will be integrated into the `RbInterpreter` *rb_interpreter*,
+  # with the argument *proc_arg* as its respective `Class`.
+  #
+  # Its new name will be *name*.
+  #
+  # The value *operator* will append the specified `String`
+  # to the final name and *context* can give the function a `Path` for resolving types correctly.
+  macro wrap_class_setter(rb_interpreter, crystal_class, name, proc, proc_arg, operator = "=", context = nil)
+    {% options = {:context => context} %}
+    Anyolite::Macro.wrap_module_function_with_args({{rb_interpreter}}, {{crystal_class}}, {{name}}, {{proc}}, {{proc_arg}}, operator: {{operator}}, options: {{options}})
+  end
+
+  # Wraps a class getter into mruby.
+  #
+  # The class getter *proc* of the Crystal `Class` *crystal_class* will be integrated into the `RbInterpreter` *rb_interpreter*.
+  #
+  # Its new name will be *name*.
+  #
+  # The value *operator* will append the specified `String`
+  # to the final name and *context* can give the function a `Path` for resolving types correctly.
+  macro wrap_class_getter(rb_interpreter, crystal_class, name, proc, operator = "", context = nil)
+    {% options = {:context => context} %}
+    Anyolite::Macro.wrap_module_function_with_args({{rb_interpreter}}, {{crystal_class}}, {{name}}, {{proc}}, operator: {{operator}}, options: {{options}})
+  end
+
+  # Wraps a class property into mruby.
+  #
+  # The class property *proc* of the Crystal `Class` *crystal_class* will be integrated into the `RbInterpreter` *rb_interpreter*,
+  # with the argument *proc_arg* as its respective `Class`.
+  #
+  # Its new name will be *name*.
+  #
+  # The values *operator_getter* and *operator_setter* will append the specified `String`
+  # to the final names and *context* can give the function a `Path` for resolving types correctly.
+  macro wrap_class_property(rb_interpreter, crystal_class, name, proc, proc_arg, operator_getter = "", operator_setter = "=", context = nil)
+    Anyolite.wrap_class_getter({{rb_interpreter}}, {{crystal_class}}, {{name}}, {{proc}}, operator: {{operator_getter}}, context: {{context}})
+    Anyolite.wrap_class_setter({{rb_interpreter}}, {{crystal_class}}, {{name + "="}}, {{proc}}, {{proc_arg}}, operator: {{operator_setter}}, context: {{context}})
+  end
+
   # Wraps a constant value under a module into mruby.
   #
   # The value *crystal_value* will be integrated into the `RbInterpreter` *rb_interpreter*,

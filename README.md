@@ -148,53 +148,53 @@ NOTE: This version will only work with mruby 3.2.0 and above.
 
 #### Features
 
-* [X] Added direct bindings to `Regex` from Crystal (`Regexp` in Ruby)
-* [X] Added option to use a separate Ruby interpreter
-* [X] Added safeguard to catch non-fatal Crystal exceptions and raise them as Ruby errors
-* [X] Added option to transform procs into bytecode
-* [X] Added function to disable external program execution
-* [X] Added interpreter depth counter
-* [X] Updated to mruby 3.2.0
-* [X] Updated to MRI 3.0.5
-* [X] Added backtrace function for mruby
-* [X] Added option to fully protect Crystal values from the Ruby GC
-* [ ] Added standalone wrappers for class properties
+* Added direct bindings to `Regex` from Crystal (`Regexp` in Ruby)
+* Added option to use a separate Ruby interpreter
+* Added safeguard to catch non-fatal Crystal exceptions and raise them as Ruby errors
+* Added option to transform procs into bytecode
+* Added function to disable external program execution
+* Added interpreter depth counter
+* Updated to mruby 3.2.0
+* Updated to MRI 3.0.5
+* Added backtrace function for mruby
+* Added option to fully protect Crystal values from the Ruby GC
+* Added standalone wrappers for class properties
 
 #### Usability
 
-* [X] Updated mruby config file to use `libucrt` instead of `msvcrt`
-* [X] Discarded old and problematic Regex mruby gem
-* [X] Made arguments for `Anyolite.call_rb_method_of_object` optional
-* [X] Added automatic conversion from Ruby class names to class objects in method callers
-* [X] Improved testing script
-* [X] Added check for `RbValue` and `RbRef` to some macro methods
-* [X] Added ability to pass Ruby blocks via Crystal to Ruby function calls 
-* [X] Added some internal methods to mruby to handle fibers
-* [X] Added some exception checking methods
-* [X] Added methods to check reference table size
-* [X] Removed now optional `Dir` gem from default build config
-* [X] Removed need for `use_general_object_format_chars` flag for MRI
-* [X] Added global option to use keyword args for optional arguments only
+* Updated mruby config file to use `libucrt` instead of `msvcrt`
+* Discarded old and problematic Regex mruby gem
+* Made arguments for `Anyolite.call_rb_method_of_object` optional
+* Added automatic conversion from Ruby class names to class objects in method callers
+* Improved testing script
+* Added check for `RbValue` and `RbRef` to some macro methods
+* Added ability to pass Ruby blocks via Crystal to Ruby function calls 
+* Added some internal methods to mruby to handle fibers
+* Added some exception checking methods
+* Added methods to check reference table size
+* Removed now optional `Dir` gem from default build config
+* Removed need for `use_general_object_format_chars` flag for MRI
+* Added global option to use keyword args for optional arguments only
 
 #### Bugfixes
 
-* [X] Fixed error when running `shards install` on Windows
-* [X] Fixed compilation warning messages for Windows
-* [X] Fixed problems with Regexes due to PCRE conflicts
-* [X] Fixed problems with Anyolite on Crystal 1.5.1
-* [X] Unspecified arguments now always correctly throw warnings instead of confusing errors
-* [X] Fixed compiletime error when casting to `Char`
-* [X] Fixed errors when passing certain name arguments to Macros for calling Ruby functions 
-* [X] Fixed `Anyolite.call_rb_method_of_object` argument `args` not being optional
-* [X] Fixed linker error due to typo in mruby bindings for block functions
-* [X] Fixed crash when casting Ruby numbers into objects in some cases
-* [X] Fixed script lines not printing exceptions
-* [X] Fixed memory leak when calling Ruby scripts and script lines
-* [X] Updated tests to account for reworked `inspect` method for enums
-* [X] Fixed errors when building Anyolite in a path with spaces
-* [X] Fixed problems on Linux when `LD` is set, but `gcc` should compile
-* [X] Fixed Crystal functions for accessing global variables in mruby
-* [X] Fixed Anyolite to allow enums with types different than `Int32`
+* Fixed error when running `shards install` on Windows
+* Fixed compilation warning messages for Windows
+* Fixed problems with Regexes due to PCRE conflicts
+* Fixed problems with Anyolite on Crystal 1.5.1
+* Unspecified arguments now always correctly throw warnings instead of confusing errors
+* Fixed compiletime error when casting to `Char`
+* Fixed errors when passing certain name arguments to Macros for calling Ruby functions 
+* Fixed `Anyolite.call_rb_method_of_object` argument `args` not being optional
+* Fixed linker error due to typo in mruby bindings for block functions
+* Fixed crash when casting Ruby numbers into objects in some cases
+* Fixed script lines not printing exceptions
+* Fixed memory leak when calling Ruby scripts and script lines
+* Updated tests to account for reworked `inspect` method for enums
+* Fixed errors when building Anyolite in a path with spaces
+* Fixed problems on Linux when `LD` is set, but `gcc` should compile
+* Fixed Crystal functions for accessing global variables in mruby
+* Fixed Anyolite to allow enums with types different than `Int32`
 
 ### Later releases
 

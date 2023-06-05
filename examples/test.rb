@@ -561,6 +561,11 @@ begin
     end
   end
 
+  TestFramework.check(test_no: 63, should_be: 268) do
+    TestModule.some_class_property += 10
+    TestModule.some_class_property
+  end
+
   final_time = Time.now
 
   puts "Tests done."
