@@ -13,7 +13,7 @@
 <script type="text/javascript" src="../js/doc.js"></script>
 
   <meta name="repository-name" content="anyolite">
-  <title>Anyolite::NoKeywordArgs - anyolite 1.1.0</title>
+  <title>Regex::MatchData - anyolite 1.1.0</title>
   <script type="text/javascript">
     CrystalDocs.base_path = "../";
   </script>
@@ -56,7 +56,7 @@
       
     </li>
   
-  <li class="parent open current" data-id="anyolite/Anyolite" data-name="anyolite">
+  <li class="parent " data-id="anyolite/Anyolite" data-name="anyolite">
       <a href="../Anyolite.html">Anyolite</a>
       
         <ul>
@@ -156,7 +156,7 @@
       
     </li>
   
-  <li class=" current" data-id="anyolite/Anyolite/NoKeywordArgs" data-name="anyolite::nokeywordargs">
+  <li class=" " data-id="anyolite/Anyolite/NoKeywordArgs" data-name="anyolite::nokeywordargs">
       <a href="../Anyolite/NoKeywordArgs.html">NoKeywordArgs</a>
       
     </li>
@@ -331,12 +331,12 @@
       
     </li>
   
-  <li class="parent " data-id="anyolite/Regex" data-name="regex">
+  <li class="parent open current" data-id="anyolite/Regex" data-name="regex">
       <a href="../Regex.html">Regex</a>
       
         <ul>
   
-  <li class=" " data-id="anyolite/Regex/MatchData" data-name="regex::matchdata">
+  <li class=" current" data-id="anyolite/Regex/MatchData" data-name="regex::matchdata">
       <a href="../Regex/MatchData.html">MatchData</a>
       
     </li>
@@ -355,10 +355,12 @@
 <div class="main-content">
 <h1 class="type-name">
 
-  <span class="kind">annotation</span> Anyolite::NoKeywordArgs
+  <span class="kind">struct</span> Regex::MatchData
 
 </h1>
 
+
+  <ul class="superclass-hierarchy"><li class="superclass"><a href="../Regex/MatchData.html">Regex::MatchData</a></li><li class="superclass">Struct</li><li class="superclass">Value</li><li class="superclass">Object</li></ul>
 
 
 
@@ -372,13 +374,36 @@
     Overview
   </h2>
 
-  <p>The methods of the annotated class or module will not
-be wrapped with keyword arguments unless <code><a href="../Anyolite/ForceKeywordArg.html">ForceKeywordArg</a></code>
-or similar was used.</p>
+  <p><code><a href="../Regex/MatchData.html">Regex::MatchData</a></code> is the type of the special variable <code>$~</code>, and is the type
+returned by <code>Regex#match</code> and <code>String#match</code>. It encapsulates all the
+results of a regular expression match.</p>
+<pre><code class="language-crystal"><span class="k">if</span> md <span class="o">=</span> <span class="s">&quot;Crystal&quot;</span>.match(<span class="o">/</span>[p<span class="o">-</span>s]<span class="o">/</span>)
+  md.string <span class="c"># =&gt; &quot;Crystal&quot;</span>
+  md[<span class="n">0</span>]     <span class="c"># =&gt; &quot;r&quot;</span>
+  md[<span class="n">1</span>]?    <span class="c"># =&gt; nil</span>
+<span class="k">end</span></code></pre>
+<p>Many <code><a href="../Regex/MatchData.html">Regex::MatchData</a></code> methods deal with capture groups, and accept an integer
+argument to select the desired capture group. Capture groups are numbered
+starting from <code>1</code>, so that <code>0</code> can be used to refer to the entire regular
+expression without needing to capture it explicitly.</p>
 
 
 
 
+
+  <h2>
+    <a id="included-modules" class="anchor" href="#included-modules">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Included Modules
+  </h2>
+  <ul class="other-types-list">
+    
+      <li class="other-type">Regex::PCRE2::MatchData</li>
+    
+  </ul>
 
 
 
@@ -399,8 +424,8 @@ or similar was used.</p>
   </h2>
   
     
-      <a href="https://github.com/Anyolite/anyolite/blob/v1.1.0/src/Main.cr#L1029" target="_blank">
-        Main.cr
+      <a href="https://github.com/Anyolite/anyolite/blob/v1.1.0/src/helper_classes/Regex.cr#L50" target="_blank">
+        helper_classes/Regex.cr
       </a>
     
     <br/>
@@ -409,6 +434,23 @@ or similar was used.</p>
 
 
 
+
+  <h2>
+    <a id="constructors" class="anchor" href="#constructors">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Constructors
+  </h2>
+  <ul class="list-summary">
+    
+      <li class="entry-summary">
+        <a href="#new%28regex%3ARegex%2Ccode%3APointer%28LibPCRE2%3A%3ACode%29%2Cstring%3AString%2Cpos%3AInt32%2Covector%3APointer%28LibC%3A%3ASizeT%29%2Cgroup_size%3AInt32%29-class-method" class="signature"><strong>.new</strong>(regex : Regex, code : Pointer(LibPCRE2::Code), string : String, pos : Int32, ovector : Pointer(LibC::SizeT), group_size : Int32)</a>
+        
+      </li>
+    
+  </ul>
 
 
 
@@ -420,8 +462,74 @@ or similar was used.</p>
 
 <div class="methods-inherited">
   
+    
+
+
+    
+
+
+    
+
+
+  
+    
+
+
+    
+
+
+    
+
+
+  
+    
+
+
+    
+
+
+    
+
+
+  
+    
+
+
+    
+
+
+    
+
+
+  
 </div>
 
+
+  <h2>
+    <a id="constructor-detail" class="anchor" href="#constructor-detail">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Constructor Detail
+  </h2>
+  
+    <div class="entry-detail" id="new(regex:Regex,code:Pointer(LibPCRE2::Code),string:String,pos:Int32,ovector:Pointer(LibC::SizeT),group_size:Int32)-class-method">
+      <div class="signature">
+        
+        def self.<strong>new</strong>(regex : <a href="../Regex.html">Regex</a>, code : Pointer(LibPCRE2::Code), string : String, pos : Int32, ovector : Pointer(LibC::SizeT), group_size : Int32)
+
+        <a class="method-permalink" href="#new%28regex%3ARegex%2Ccode%3APointer%28LibPCRE2%3A%3ACode%29%2Cstring%3AString%2Cpos%3AInt32%2Covector%3APointer%28LibC%3A%3ASizeT%29%2Cgroup_size%3AInt32%29-class-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/Anyolite/anyolite/blob/v1.1.0/src/helper_classes/Regex.cr#L51" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
 
 
 

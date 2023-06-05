@@ -1,0 +1,784 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="generator" content="Crystal Docs 1.8.2">
+<meta name="crystal_docs.project_version" content="1.1.0">
+<meta name="crystal_docs.project_name" content="anyolite">
+
+
+
+<link href="css/style.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="js/doc.js"></script>
+
+  <meta name="repository-name" content="anyolite">
+  <title>Regex - anyolite 1.1.0</title>
+  <script type="text/javascript">
+    CrystalDocs.base_path = "";
+  </script>
+</head>
+<body>
+
+<svg class="hidden">
+  <symbol id="octicon-link" viewBox="0 0 16 16">
+    <path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path>
+  </symbol>
+</svg>
+<div class="sidebar">
+  <div class="sidebar-header">
+    <div class="search-box">
+      <input type="search" class="search-input" placeholder="Search..." spellcheck="false" aria-label="Search">
+    </div>
+
+    <div class="project-summary">
+      <h1 class="project-name">
+        <a href="index.html">
+          anyolite
+        </a>
+      </h1>
+
+      <span class="project-version">
+        1.1.0
+      </span>
+    </div>
+  </div>
+
+  <div class="search-results hidden">
+    <ul class="search-list"></ul>
+  </div>
+
+  <div class="types-list">
+    <ul>
+  
+  <li class=" " data-id="anyolite/toplevel" data-name="top level namespace">
+      <a href="toplevel.html">Top Level Namespace</a>
+      
+    </li>
+  
+  <li class="parent " data-id="anyolite/Anyolite" data-name="anyolite">
+      <a href="Anyolite.html">Anyolite</a>
+      
+        <ul>
+  
+  <li class=" " data-id="anyolite/Anyolite/AddBlockArg" data-name="anyolite::addblockarg">
+      <a href="Anyolite/AddBlockArg.html">AddBlockArg</a>
+      
+    </li>
+  
+  <li class=" " data-id="anyolite/Anyolite/AddBlockArgClassMethod" data-name="anyolite::addblockargclassmethod">
+      <a href="Anyolite/AddBlockArgClassMethod.html">AddBlockArgClassMethod</a>
+      
+    </li>
+  
+  <li class=" " data-id="anyolite/Anyolite/AddBlockArgInstanceMethod" data-name="anyolite::addblockarginstancemethod">
+      <a href="Anyolite/AddBlockArgInstanceMethod.html">AddBlockArgInstanceMethod</a>
+      
+    </li>
+  
+  <li class=" " data-id="anyolite/Anyolite/DefaultOptionalArgsToKeywordArgs" data-name="anyolite::defaultoptionalargstokeywordargs">
+      <a href="Anyolite/DefaultOptionalArgsToKeywordArgs.html">DefaultOptionalArgsToKeywordArgs</a>
+      
+    </li>
+  
+  <li class=" " data-id="anyolite/Anyolite/Empty" data-name="anyolite::empty">
+      <a href="Anyolite/Empty.html">Empty</a>
+      
+    </li>
+  
+  <li class=" " data-id="anyolite/Anyolite/Exclude" data-name="anyolite::exclude">
+      <a href="Anyolite/Exclude.html">Exclude</a>
+      
+    </li>
+  
+  <li class=" " data-id="anyolite/Anyolite/ExcludeClassMethod" data-name="anyolite::excludeclassmethod">
+      <a href="Anyolite/ExcludeClassMethod.html">ExcludeClassMethod</a>
+      
+    </li>
+  
+  <li class=" " data-id="anyolite/Anyolite/ExcludeConstant" data-name="anyolite::excludeconstant">
+      <a href="Anyolite/ExcludeConstant.html">ExcludeConstant</a>
+      
+    </li>
+  
+  <li class=" " data-id="anyolite/Anyolite/ExcludeInstanceMethod" data-name="anyolite::excludeinstancemethod">
+      <a href="Anyolite/ExcludeInstanceMethod.html">ExcludeInstanceMethod</a>
+      
+    </li>
+  
+  <li class=" " data-id="anyolite/Anyolite/ForceKeywordArg" data-name="anyolite::forcekeywordarg">
+      <a href="Anyolite/ForceKeywordArg.html">ForceKeywordArg</a>
+      
+    </li>
+  
+  <li class=" " data-id="anyolite/Anyolite/ForceKeywordArgClassMethod" data-name="anyolite::forcekeywordargclassmethod">
+      <a href="Anyolite/ForceKeywordArgClassMethod.html">ForceKeywordArgClassMethod</a>
+      
+    </li>
+  
+  <li class=" " data-id="anyolite/Anyolite/ForceKeywordArgInstanceMethod" data-name="anyolite::forcekeywordarginstancemethod">
+      <a href="Anyolite/ForceKeywordArgInstanceMethod.html">ForceKeywordArgInstanceMethod</a>
+      
+    </li>
+  
+  <li class="parent " data-id="anyolite/Anyolite/HelperClasses" data-name="anyolite::helperclasses">
+      <a href="Anyolite/HelperClasses.html">HelperClasses</a>
+      
+        <ul>
+  
+  <li class=" " data-id="anyolite/Anyolite/HelperClasses/AnyolitePointer" data-name="anyolite::helperclasses::anyolitepointer">
+      <a href="Anyolite/HelperClasses/AnyolitePointer.html">AnyolitePointer</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class=" " data-id="anyolite/Anyolite/IgnoreAncestorMethods" data-name="anyolite::ignoreancestormethods">
+      <a href="Anyolite/IgnoreAncestorMethods.html">IgnoreAncestorMethods</a>
+      
+    </li>
+  
+  <li class=" " data-id="anyolite/Anyolite/Include" data-name="anyolite::include">
+      <a href="Anyolite/Include.html">Include</a>
+      
+    </li>
+  
+  <li class=" " data-id="anyolite/Anyolite/IncludeInstanceMethod" data-name="anyolite::includeinstancemethod">
+      <a href="Anyolite/IncludeInstanceMethod.html">IncludeInstanceMethod</a>
+      
+    </li>
+  
+  <li class=" " data-id="anyolite/Anyolite/Macro" data-name="anyolite::macro">
+      <a href="Anyolite/Macro.html">Macro</a>
+      
+    </li>
+  
+  <li class=" " data-id="anyolite/Anyolite/NoKeywordArgs" data-name="anyolite::nokeywordargs">
+      <a href="Anyolite/NoKeywordArgs.html">NoKeywordArgs</a>
+      
+    </li>
+  
+  <li class="parent " data-id="anyolite/Anyolite/Preloader" data-name="anyolite::preloader">
+      <a href="Anyolite/Preloader.html">Preloader</a>
+      
+        <ul>
+  
+  <li class=" " data-id="anyolite/Anyolite/Preloader/AtCompiletime" data-name="anyolite::preloader::atcompiletime">
+      <a href="Anyolite/Preloader/AtCompiletime.html">AtCompiletime</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class=" " data-id="anyolite/Anyolite/RbArgCache" data-name="anyolite::rbargcache">
+      <a href="Anyolite/RbArgCache.html">RbArgCache</a>
+      
+    </li>
+  
+  <li class=" " data-id="anyolite/Anyolite/RbCast" data-name="anyolite::rbcast">
+      <a href="Anyolite/RbCast.html">RbCast</a>
+      
+    </li>
+  
+  <li class=" " data-id="anyolite/Anyolite/RbClass" data-name="anyolite::rbclass">
+      <a href="Anyolite/RbClass.html">RbClass</a>
+      
+    </li>
+  
+  <li class=" " data-id="anyolite/Anyolite/RbClassCache" data-name="anyolite::rbclasscache">
+      <a href="Anyolite/RbClassCache.html">RbClassCache</a>
+      
+    </li>
+  
+  <li class=" " data-id="anyolite/Anyolite/RbInterpreter" data-name="anyolite::rbinterpreter">
+      <a href="Anyolite/RbInterpreter.html">RbInterpreter</a>
+      
+    </li>
+  
+  <li class=" " data-id="anyolite/Anyolite/RbModule" data-name="anyolite::rbmodule">
+      <a href="Anyolite/RbModule.html">RbModule</a>
+      
+    </li>
+  
+  <li class=" " data-id="anyolite/Anyolite/RbRef" data-name="anyolite::rbref">
+      <a href="Anyolite/RbRef.html">RbRef</a>
+      
+    </li>
+  
+  <li class=" " data-id="anyolite/Anyolite/RbRefTable" data-name="anyolite::rbreftable">
+      <a href="Anyolite/RbRefTable.html">RbRefTable</a>
+      
+    </li>
+  
+  <li class=" " data-id="anyolite/Anyolite/RbTypeCache" data-name="anyolite::rbtypecache">
+      <a href="Anyolite/RbTypeCache.html">RbTypeCache</a>
+      
+    </li>
+  
+  <li class=" " data-id="anyolite/Anyolite/Rename" data-name="anyolite::rename">
+      <a href="Anyolite/Rename.html">Rename</a>
+      
+    </li>
+  
+  <li class=" " data-id="anyolite/Anyolite/RenameClass" data-name="anyolite::renameclass">
+      <a href="Anyolite/RenameClass.html">RenameClass</a>
+      
+    </li>
+  
+  <li class=" " data-id="anyolite/Anyolite/RenameClassMethod" data-name="anyolite::renameclassmethod">
+      <a href="Anyolite/RenameClassMethod.html">RenameClassMethod</a>
+      
+    </li>
+  
+  <li class=" " data-id="anyolite/Anyolite/RenameConstant" data-name="anyolite::renameconstant">
+      <a href="Anyolite/RenameConstant.html">RenameConstant</a>
+      
+    </li>
+  
+  <li class=" " data-id="anyolite/Anyolite/RenameInstanceMethod" data-name="anyolite::renameinstancemethod">
+      <a href="Anyolite/RenameInstanceMethod.html">RenameInstanceMethod</a>
+      
+    </li>
+  
+  <li class=" " data-id="anyolite/Anyolite/RenameModule" data-name="anyolite::renamemodule">
+      <a href="Anyolite/RenameModule.html">RenameModule</a>
+      
+    </li>
+  
+  <li class=" " data-id="anyolite/Anyolite/ReturnNil" data-name="anyolite::returnnil">
+      <a href="Anyolite/ReturnNil.html">ReturnNil</a>
+      
+    </li>
+  
+  <li class=" " data-id="anyolite/Anyolite/ReturnNilClassMethod" data-name="anyolite::returnnilclassmethod">
+      <a href="Anyolite/ReturnNilClassMethod.html">ReturnNilClassMethod</a>
+      
+    </li>
+  
+  <li class=" " data-id="anyolite/Anyolite/ReturnNilInstanceMethod" data-name="anyolite::returnnilinstancemethod">
+      <a href="Anyolite/ReturnNilInstanceMethod.html">ReturnNilInstanceMethod</a>
+      
+    </li>
+  
+  <li class=" " data-id="anyolite/Anyolite/Specialize" data-name="anyolite::specialize">
+      <a href="Anyolite/Specialize.html">Specialize</a>
+      
+    </li>
+  
+  <li class=" " data-id="anyolite/Anyolite/SpecializeClassMethod" data-name="anyolite::specializeclassmethod">
+      <a href="Anyolite/SpecializeClassMethod.html">SpecializeClassMethod</a>
+      
+    </li>
+  
+  <li class=" " data-id="anyolite/Anyolite/SpecializeInstanceMethod" data-name="anyolite::specializeinstancemethod">
+      <a href="Anyolite/SpecializeInstanceMethod.html">SpecializeInstanceMethod</a>
+      
+    </li>
+  
+  <li class=" " data-id="anyolite/Anyolite/SpecifyGenericTypes" data-name="anyolite::specifygenerictypes">
+      <a href="Anyolite/SpecifyGenericTypes.html">SpecifyGenericTypes</a>
+      
+    </li>
+  
+  <li class=" " data-id="anyolite/Anyolite/StoreBlockArg" data-name="anyolite::storeblockarg">
+      <a href="Anyolite/StoreBlockArg.html">StoreBlockArg</a>
+      
+    </li>
+  
+  <li class=" " data-id="anyolite/Anyolite/StoreBlockArgClassMethod" data-name="anyolite::storeblockargclassmethod">
+      <a href="Anyolite/StoreBlockArgClassMethod.html">StoreBlockArgClassMethod</a>
+      
+    </li>
+  
+  <li class=" " data-id="anyolite/Anyolite/StoreBlockArgInstanceMethod" data-name="anyolite::storeblockarginstancemethod">
+      <a href="Anyolite/StoreBlockArgInstanceMethod.html">StoreBlockArgInstanceMethod</a>
+      
+    </li>
+  
+  <li class=" " data-id="anyolite/Anyolite/StructWrapper" data-name="anyolite::structwrapper(t)">
+      <a href="Anyolite/StructWrapper.html">StructWrapper</a>
+      
+    </li>
+  
+  <li class=" " data-id="anyolite/Anyolite/Undefined" data-name="anyolite::undefined">
+      <a href="Anyolite/Undefined.html">Undefined</a>
+      
+    </li>
+  
+  <li class=" " data-id="anyolite/Anyolite/WrapWithoutKeywords" data-name="anyolite::wrapwithoutkeywords">
+      <a href="Anyolite/WrapWithoutKeywords.html">WrapWithoutKeywords</a>
+      
+    </li>
+  
+  <li class=" " data-id="anyolite/Anyolite/WrapWithoutKeywordsClassMethod" data-name="anyolite::wrapwithoutkeywordsclassmethod">
+      <a href="Anyolite/WrapWithoutKeywordsClassMethod.html">WrapWithoutKeywordsClassMethod</a>
+      
+    </li>
+  
+  <li class=" " data-id="anyolite/Anyolite/WrapWithoutKeywordsInstanceMethod" data-name="anyolite::wrapwithoutkeywordsinstancemethod">
+      <a href="Anyolite/WrapWithoutKeywordsInstanceMethod.html">WrapWithoutKeywordsInstanceMethod</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class="parent open current" data-id="anyolite/Regex" data-name="regex">
+      <a href="Regex.html">Regex</a>
+      
+        <ul>
+  
+  <li class=" " data-id="anyolite/Regex/MatchData" data-name="regex::matchdata">
+      <a href="Regex/MatchData.html">MatchData</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+</ul>
+
+  </div>
+</div>
+
+
+<div class="main-content">
+<h1 class="type-name">
+
+  <span class="kind">class</span> Regex
+
+</h1>
+
+
+  <ul class="superclass-hierarchy"><li class="superclass"><a href="Regex.html">Regex</a></li><li class="superclass">Reference</li><li class="superclass">Object</li></ul>
+
+
+
+
+  <h2>
+    <a id="overview" class="anchor" href="#overview">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Overview
+  </h2>
+
+  <p>A <code><a href="Regex.html">Regex</a></code> represents a regular expression, a pattern that describes the
+contents of strings. A <code><a href="Regex.html">Regex</a></code> can determine whether or not a string matches
+its description, and extract the parts of the string that match.</p>
+<p>A <code><a href="Regex.html">Regex</a></code> can be created using the literal syntax, in which it is delimited by
+forward slashes (<code>/</code>):</p>
+<pre><code class="language-crystal"><span class="s">/hay/</span> <span class="o">=~</span> <span class="s">&quot;haystack&quot;</span>   <span class="c"># =&gt; 0</span>
+<span class="o">/</span>y<span class="o">/</span>.match(<span class="s">&quot;haystack&quot;</span>) <span class="c"># =&gt; Regex::MatchData(&quot;y&quot;)</span></code></pre>
+<p>See <a href="https://crystal-lang.org/reference/syntax_and_semantics/literals/regex.html"><code>Regex</code> literals</a> in the language reference.</p>
+<p>Interpolation works in regular expression literals just as it does in string
+literals. Be aware that using this feature will cause an exception to be
+raised at runtime, if the resulting string would not be a valid regular
+expression.</p>
+<pre><code class="language-crystal">x <span class="o">=</span> <span class="s">&quot;a&quot;</span>
+<span class="o">/</span><span class="c">#{x}/.match(&quot;asdf&quot;) # =&gt; Regex::MatchData(&quot;a&quot;)</span>
+x <span class="o">=</span> <span class="s">&quot;(&quot;</span>
+<span class="o">/</span><span class="c">#{x}/ # raises ArgumentError</span></code></pre>
+<p>When we check to see if a particular regular expression describes a string,
+we can say that we are performing a match or matching one against the other.
+If we find that a regular expression does describe a string, we say that it
+matches, and we can refer to a part of the string that was described as
+a match.</p>
+<p>Here <code>&quot;haystack&quot;</code> does not contain the pattern <code>/needle/</code>, so it doesn't match:</p>
+<pre><code class="language-crystal"><span class="s">/needle/</span>.match(<span class="s">&quot;haystack&quot;</span>) <span class="c"># =&gt; nil</span></code></pre>
+<p>Here <code>&quot;haystack&quot;</code> contains the pattern <code>/hay/</code>, so it matches:</p>
+<pre><code class="language-crystal"><span class="s">/hay/</span>.match(<span class="s">&quot;haystack&quot;</span>) <span class="c"># =&gt; Regex::MatchData(&quot;hay&quot;)</span></code></pre>
+<p>Regex methods that perform a match usually return a truthy value if there was
+a match and <code>nil</code> if there was no match. After performing a match, the
+special variable <code>$~</code> will be an instance of <code><a href="Regex/MatchData.html">Regex::MatchData</a></code> if it matched, <code>nil</code>
+otherwise.</p>
+<p>When matching a regular expression using <code>=~</code> (either <code>String#=~</code> or
+<code>Regex#=~</code>), the returned value will be the index of the first match in the
+string if the expression matched, <code>nil</code> otherwise.</p>
+<pre><code class="language-crystal"><span class="s">/stack/</span> <span class="o">=~</span> <span class="s">&quot;haystack&quot;</span>  <span class="c"># =&gt; 3</span>
+<span class="s">&quot;haystack&quot;</span> <span class="o">=~</span> <span class="s">/stack/</span>  <span class="c"># =&gt; 3</span>
+$~                     <span class="c"># =&gt; Regex::MatchData(&quot;stack&quot;)</span>
+<span class="o">/</span>needle<span class="o">/</span> <span class="o">=~</span> <span class="s">&quot;haystack&quot;</span> <span class="c"># =&gt; nil</span>
+<span class="s">&quot;haystack&quot;</span> <span class="o">=~</span> <span class="s">/needle/</span> <span class="c"># =&gt; nil</span>
+$~                     <span class="c"># raises Exception</span></code></pre>
+<p>When matching a regular expression using <code>#match</code> (either <code>String#match</code> or
+<code>Regex#match</code>), the returned value will be a <code><a href="Regex/MatchData.html">Regex::MatchData</a></code> if the expression
+matched, <code>nil</code> otherwise.</p>
+<pre><code class="language-crystal"><span class="s">/hay/</span>.match(<span class="s">&quot;haystack&quot;</span>)    <span class="c"># =&gt; Regex::MatchData(&quot;hay&quot;)</span>
+<span class="s">&quot;haystack&quot;</span>.match(<span class="o">/</span>hay<span class="o">/</span>)    <span class="c"># =&gt; Regex::MatchData(&quot;hay&quot;)</span>
+$~                         <span class="c"># =&gt; Regex::MatchData(&quot;hay&quot;)</span>
+<span class="o">/</span>needle<span class="o">/</span>.match(<span class="s">&quot;haystack&quot;</span>) <span class="c"># =&gt; nil</span>
+<span class="s">&quot;haystack&quot;</span>.match(<span class="o">/</span>needle<span class="o">/</span>) <span class="c"># =&gt; nil</span>
+$~                         <span class="c"># raises Exception</span></code></pre>
+<p><a href="https://en.wikipedia.org/wiki/Regular_expression">Regular expressions</a>
+have their own language for describing strings.</p>
+<p>Many programming languages and tools implement their own regular expression
+language, but Crystal uses <a href="http://www.pcre.org/">PCRE2</a>, a popular C library, with
+<a href="http://www.pcre.org/current/doc/html/pcre2jit.html">JIT complication</a> enabled
+for providing regular expressions. Here give a brief summary of the most
+basic features of regular expressions - grouping, repetition, and
+alternation - but the feature set of PCRE2 extends far beyond these, and we
+don't attempt to describe it in full here. For more information, refer to
+the PCRE2 documentation, especially the
+<a href="http://www.pcre.org/current/doc/html/pcre2pattern.html">full pattern syntax</a>
+or
+<a href="http://www.pcre.org/current/doc/html/pcre2syntax.html">syntax quick reference</a>.</p>
+<p><span class="flag purple">NOTE</span>  Prior to Crystal 1.8 the compiler expected regex literals to follow the
+original <a href="https://www.pcre.org/original/doc/html/pcrepattern.html">PCRE pattern syntax</a>.
+The following summary applies to both PCRE and PCRE2.</p>
+<p>The regular expression language can be used to match much more than just the
+static substrings in the above examples. Certain characters, called
+<a href="http://www.pcre.org/current/doc/html/pcre2pattern.html#SEC4">metacharacters</a>,
+are given special treatment in regular expressions, and can be used to
+describe more complex patterns. To match metacharacters literally in a
+regular expression, they must be escaped by being preceded with a backslash
+(<code>\</code>). <code>escape</code> will do this automatically for a given String.</p>
+<p>A group of characters (often called a capture group or
+<a href="http://www.pcre.org/current/doc/html/pcre2pattern.html#SEC14">subpattern</a>)
+can be identified by enclosing it in parentheses (<code>()</code>). The contents of
+each capture group can be extracted on a successful match:</p>
+<pre><code class="language-crystal"><span class="s">/a(sd)f/</span>.match(<span class="s">&quot;_asdf_&quot;</span>)                     <span class="c"># =&gt; Regex::MatchData(&quot;asdf&quot; 1:&quot;sd&quot;)</span>
+<span class="o">/</span>a(sd)f<span class="o">/</span>.match(<span class="s">&quot;_asdf_&quot;</span>).try <span class="o">&amp;</span>.[<span class="n">1</span>]           <span class="c"># =&gt; &quot;sd&quot;</span>
+<span class="o">/</span>a(?<span class="o">&lt;</span>grp<span class="o">&gt;</span>sd)f<span class="o">/</span>.match(<span class="s">&quot;_asdf_&quot;</span>)               <span class="c"># =&gt; Regex::MatchData(&quot;asdf&quot; grp:&quot;sd&quot;)</span>
+<span class="o">/</span>a(?<span class="o">&lt;</span>grp<span class="o">&gt;</span>sd)f<span class="o">/</span>.match(<span class="s">&quot;_asdf_&quot;</span>).try <span class="o">&amp;</span>.[<span class="s">&quot;grp&quot;</span>] <span class="c"># =&gt; &quot;sd&quot;</span></code></pre>
+<p>Capture groups are indexed starting from 1. Methods that accept a capture
+group index will usually also accept 0 to refer to the full match. Capture
+groups can also be given names, using the <code>(?&amp;lt;name&amp;gt;...)</code> syntax, as in the
+previous example.</p>
+<p>Following a match, the special variables $N (e.g., $1, $2, $3, ...) can be used
+to access a capture group. Trying to access an invalid capture group will raise an
+exception. Note that it is possible to have a successful match with a nil capture:</p>
+<pre><code class="language-crystal"><span class="s">/(spice)(s)?/</span>.match(<span class="s">&quot;spice&quot;</span>) <span class="c"># =&gt; Regex::MatchData(&quot;spice&quot; 1:&quot;spice&quot; 2:nil)</span>
+$1                           <span class="c"># =&gt; &quot;spice&quot;</span>
+$2                           <span class="c"># =&gt; raises Exception</span></code></pre>
+<p>This can be mitigated by using the nilable version of the above: $N?,
+(e.g., $1? $2?, $3?, ...). Changing the above to use <code>$2?</code> instead of <code>$2</code>
+would return <code>nil</code>. <code>$2?.nil?</code> would return <code>true</code>.</p>
+<p>A character or group can be
+<a href="http://www.pcre.org/current/doc/html/pcre2pattern.html#SEC17">repeated</a>
+or made optional using an asterisk (<code>*</code> - zero or more), a plus sign
+(<code>+</code> - one or more), integer bounds in curly braces
+(<code>{n,m}</code>) (at least <code>n</code>, no more than <code>m</code>), or a question mark
+(<code>?</code>) (zero or one).</p>
+<pre><code class="language-crystal"><span class="s">/fo*/</span>.match(<span class="s">&quot;_f_&quot;</span>)         <span class="c"># =&gt; Regex::MatchData(&quot;f&quot;)</span>
+<span class="o">/</span>fo<span class="o">+</span><span class="o">/</span>.match(<span class="s">&quot;_f_&quot;</span>)         <span class="c"># =&gt; nil</span>
+<span class="o">/</span>fo<span class="o">*</span><span class="o">/</span>.match(<span class="s">&quot;_foo_&quot;</span>)       <span class="c"># =&gt; Regex::MatchData(&quot;foo&quot;)</span>
+<span class="o">/</span>fo{<span class="n">3</span>,}<span class="o">/</span>.match(<span class="s">&quot;_foo_&quot;</span>)    <span class="c"># =&gt; nil</span>
+<span class="o">/</span>fo{<span class="n">1</span>,<span class="n">3</span>}<span class="o">/</span>.match(<span class="s">&quot;_foo_&quot;</span>)   <span class="c"># =&gt; Regex::MatchData(&quot;foo&quot;)</span>
+<span class="o">/</span>fo<span class="o">*</span><span class="o">/</span>.match(<span class="s">&quot;_foo_&quot;</span>)       <span class="c"># =&gt; Regex::MatchData(&quot;foo&quot;)</span>
+<span class="o">/</span>fo<span class="o">*</span><span class="o">/</span>.match(<span class="s">&quot;_foooooooo_&quot;</span>) <span class="c"># =&gt; Regex::MatchData(&quot;foooooooo&quot;)</span>
+<span class="o">/</span>fo{,<span class="n">3</span>}<span class="o">/</span>.match(<span class="s">&quot;_foooo_&quot;</span>)  <span class="c"># =&gt; nil</span>
+<span class="o">/</span>f(op)<span class="o">*</span><span class="o">/</span>.match(<span class="s">&quot;fopopo&quot;</span>)   <span class="c"># =&gt; Regex::MatchData(&quot;fopop&quot; 1:&quot;op&quot;)</span>
+<span class="o">/</span>foo?bar<span class="o">/</span>.match(<span class="s">&quot;foobar&quot;</span>)  <span class="c"># =&gt; Regex::MatchData(&quot;foobar&quot;)</span>
+<span class="o">/</span>foo?bar<span class="o">/</span>.match(<span class="s">&quot;fobar&quot;</span>)   <span class="c"># =&gt; Regex::MatchData(&quot;fobar&quot;)</span></code></pre>
+<p>Alternatives can be separated using a
+<a href="http://www.pcre.org/current/doc/html/pcre2pattern.html#SEC12">vertical bar</a>
+(<code>|</code>). Any single character can be represented by
+<a href="http://www.pcre.org/current/doc/html/pcre2pattern.html#SEC7">dot</a>
+(<code>.</code>). When matching only one character, specific
+alternatives can be expressed as a
+<a href="http://www.pcre.org/current/doc/html/pcre2pattern.html#SEC9">character class</a>,
+enclosed in square brackets (<code>[]</code>):</p>
+<pre><code class="language-crystal"><span class="s">/foo|bar/</span>.match(<span class="s">&quot;foo&quot;</span>)     <span class="c"># =&gt; Regex::MatchData(&quot;foo&quot;)</span>
+<span class="o">/</span>foo<span class="o">|</span>bar<span class="o">/</span>.match(<span class="s">&quot;bar&quot;</span>)     <span class="c"># =&gt; Regex::MatchData(&quot;bar&quot;)</span>
+<span class="o">/</span>_(x<span class="o">|</span>y)_<span class="o">/</span>.match(<span class="s">&quot;_x_&quot;</span>)     <span class="c"># =&gt; Regex::MatchData(&quot;_x_&quot; 1:&quot;x&quot;)</span>
+<span class="o">/</span>_(x<span class="o">|</span>y)_<span class="o">/</span>.match(<span class="s">&quot;_y_&quot;</span>)     <span class="c"># =&gt; Regex::MatchData(&quot;_y_&quot; 1:&quot;y&quot;)</span>
+<span class="o">/</span>_(x<span class="o">|</span>y)_<span class="o">/</span>.match(<span class="s">&quot;_(x|y)_&quot;</span>) <span class="c"># =&gt; nil</span>
+<span class="o">/</span>_(x<span class="o">|</span>y)_<span class="o">/</span>.match(<span class="s">&quot;_(x|y)_&quot;</span>) <span class="c"># =&gt; nil</span>
+<span class="o">/</span>_._<span class="o">/</span>.match(<span class="s">&quot;_x_&quot;</span>)         <span class="c"># =&gt; Regex::MatchData(&quot;_x_&quot;)</span>
+<span class="o">/</span>_[xyz]_<span class="o">/</span>.match(<span class="s">&quot;_x_&quot;</span>)     <span class="c"># =&gt; Regex::MatchData(&quot;_x_&quot;)</span>
+<span class="o">/</span>_[a<span class="o">-</span>z]_<span class="o">/</span>.match(<span class="s">&quot;_x_&quot;</span>)     <span class="c"># =&gt; Regex::MatchData(&quot;_x_&quot;)</span>
+<span class="o">/</span>_[<span class="o">^</span>a<span class="o">-</span>z]_<span class="o">/</span>.match(<span class="s">&quot;_x_&quot;</span>)    <span class="c"># =&gt; nil</span>
+<span class="o">/</span>_[<span class="o">^</span>a<span class="o">-</span>wy<span class="o">-</span>z]_<span class="o">/</span>.match(<span class="s">&quot;_x_&quot;</span>) <span class="c"># =&gt; Regex::MatchData(&quot;_x_&quot;)</span></code></pre>
+<p>Regular expressions can be defined with these 3
+<a href="http://www.pcre.org/current/doc/html/pcre2pattern.html#SEC13">optional flags</a>:</p>
+<ul>
+<li><code>i</code>: ignore case (<code>Regex::Options::IGNORE_CASE</code>)</li>
+<li><code>m</code>: multiline (<code>Regex::Options::MULTILINE</code>)</li>
+<li><code>x</code>: extended (<code>Regex::Options::EXTENDED</code>)</li>
+</ul>
+<pre><code class="language-crystal"><span class="s">/asdf/</span> <span class="o">=~</span> <span class="s">&quot;ASDF&quot;</span>    <span class="c"># =&gt; nil</span>
+<span class="o">/</span>asdf<span class="o">/</span>i <span class="o">=~</span> <span class="s">&quot;ASDF&quot;</span>   <span class="c"># =&gt; 0</span>
+<span class="o">/</span><span class="o">^</span>z<span class="o">/</span>i <span class="o">=~</span> <span class="s">&quot;ASDF\nZ&quot;</span>  <span class="c"># =&gt; nil</span>
+<span class="o">/</span><span class="o">^</span>z<span class="o">/</span>im <span class="o">=~</span> <span class="s">&quot;ASDF\nZ&quot;</span> <span class="c"># =&gt; 5</span></code></pre>
+<p>PCRE2 supports other encodings, but Crystal strings are UTF-8 only, so Crystal
+regular expressions are also UTF-8 only (by default).</p>
+<p>PCRE2 optionally permits named capture groups (named subpatterns) to not be
+unique. Crystal exposes the name table of a <code><a href="Regex.html">Regex</a></code> as a
+<code>Hash</code> of <code>String</code> =&gt; <code>Int32</code>, and therefore requires named capture groups to have
+unique names within a single <code><a href="Regex.html">Regex</a></code>.</p>
+
+
+
+
+
+  <h2>
+    <a id="included-modules" class="anchor" href="#included-modules">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Included Modules
+  </h2>
+  <ul class="other-types-list">
+    
+      <li class="other-type">Regex::PCRE2</li>
+    
+  </ul>
+
+
+
+
+
+
+
+
+
+
+  <h2>
+    <a id="defined-in" class="anchor" href="#defined-in">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Defined in:
+  </h2>
+  
+    
+      <a href="https://github.com/Anyolite/anyolite/blob/v1.1.0/src/helper_classes/Regex.cr#L41" target="_blank">
+        helper_classes/Regex.cr
+      </a>
+    
+    <br/>
+  
+
+
+
+
+
+  <h2>
+    <a id="constructors" class="anchor" href="#constructors">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Constructors
+  </h2>
+  <ul class="list-summary">
+    
+      <li class="entry-summary">
+        <a href="#new%28source%3AString%2Coptions%3AOptions%3DOptions%3A%3ANone%29-class-method" class="signature"><strong>.new</strong>(source : String, options : Options = <span class="t">Options</span><span class="t">::</span><span class="t">None</span>)</a>
+        
+          <div class="summary"><p>Creates a new <code><a href="Regex.html">Regex</a></code> out of the given source <code>String</code>.</p></div>
+        
+      </li>
+    
+  </ul>
+
+
+
+  <h2>
+    <a id="class-method-summary" class="anchor" href="#class-method-summary">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Class Method Summary
+  </h2>
+  <ul class="list-summary">
+    
+      <li class="entry-summary">
+        <a href="#compile%28str%3AString%29-class-method" class="signature"><strong>.compile</strong>(str : String)</a>
+        
+      </li>
+    
+  </ul>
+
+
+
+  <h2>
+    <a id="instance-method-summary" class="anchor" href="#instance-method-summary">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Instance Method Summary
+  </h2>
+  <ul class="list-summary">
+    
+      <li class="entry-summary">
+        <a href="#match%3F%28str%3AString%2Cpos%3AInt32%3D0%29-instance-method" class="signature"><strong>#match?</strong>(str : String, pos : Int32 = <span class="n">0</span>)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#match_at_byte_index%3F%28str%3AString%2Cbyte_index%3AInt32%3D0%29-instance-method" class="signature"><strong>#match_at_byte_index?</strong>(str : String, byte_index : Int32 = <span class="n">0</span>)</a>
+        
+      </li>
+    
+  </ul>
+
+
+
+
+
+<div class="methods-inherited">
+  
+    
+
+
+    
+
+
+    
+
+
+  
+    
+
+
+    
+
+
+    
+
+
+  
+    
+
+
+    
+
+
+    
+
+
+  
+</div>
+
+
+  <h2>
+    <a id="constructor-detail" class="anchor" href="#constructor-detail">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Constructor Detail
+  </h2>
+  
+    <div class="entry-detail" id="new(source:String,options:Options=Options::None)-class-method">
+      <div class="signature">
+        
+        def self.<strong>new</strong>(source : String, options : Options = <span class="t">Options</span><span class="t">::</span><span class="t">None</span>)
+
+        <a class="method-permalink" href="#new%28source%3AString%2Coptions%3AOptions%3DOptions%3A%3ANone%29-class-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Creates a new <code><a href="Regex.html">Regex</a></code> out of the given source <code>String</code>.</p>
+<pre><code class="language-crystal"><span class="t">Regex</span>.new(<span class="s">&quot;^a-z+:\\s+\\w+&quot;</span>)                          <span class="c"># =&gt; /^a-z+:\s+\w+/</span>
+<span class="t">Regex</span>.new(<span class="s">&quot;cat&quot;</span>, <span class="t">Regex</span><span class="t">::</span><span class="t">CompileOptions</span><span class="t">::</span><span class="t">IGNORE_CASE</span>) <span class="c"># =&gt; /cat/i</span>
+options <span class="o">=</span> <span class="t">Regex</span><span class="t">::</span><span class="t">CompileOptions</span><span class="t">::</span><span class="t">IGNORE_CASE</span> <span class="o">|</span> <span class="t">Regex</span><span class="t">::</span><span class="t">CompileOptions</span><span class="t">::</span><span class="t">EXTENDED</span>
+<span class="t">Regex</span>.new(<span class="s">&quot;dog&quot;</span>, options) <span class="c"># =&gt; /dog/ix</span></code></pre>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/Anyolite/anyolite/blob/v1.1.0/src/helper_classes/Regex.cr#L64" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+
+
+
+  <h2>
+    <a id="class-method-detail" class="anchor" href="#class-method-detail">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Class Method Detail
+  </h2>
+  
+    <div class="entry-detail" id="compile(str:String)-class-method">
+      <div class="signature">
+        
+        def self.<strong>compile</strong>(str : String)
+
+        <a class="method-permalink" href="#compile%28str%3AString%29-class-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/Anyolite/anyolite/blob/v1.1.0/src/helper_classes/Regex.cr#L70" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+
+
+
+  <h2>
+    <a id="instance-method-detail" class="anchor" href="#instance-method-detail">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Instance Method Detail
+  </h2>
+  
+    <div class="entry-detail" id="match?(str:String,pos:Int32=0)-instance-method">
+      <div class="signature">
+        
+        def <strong>match?</strong>(str : String, pos : Int32 = <span class="n">0</span>)
+
+        <a class="method-permalink" href="#match%3F%28str%3AString%2Cpos%3AInt32%3D0%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/Anyolite/anyolite/blob/v1.1.0/src/helper_classes/Regex.cr#L74" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="match_at_byte_index?(str:String,byte_index:Int32=0)-instance-method">
+      <div class="signature">
+        
+        def <strong>match_at_byte_index?</strong>(str : String, byte_index : Int32 = <span class="n">0</span>)
+
+        <a class="method-permalink" href="#match_at_byte_index%3F%28str%3AString%2Cbyte_index%3AInt32%3D0%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/Anyolite/anyolite/blob/v1.1.0/src/helper_classes/Regex.cr#L78" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+
+
+
+
+</div>
+
+</body>
+</html>

@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8" />
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="generator" content="Crystal Docs 1.4.1">
-<meta name="crystal_docs.project_version" content="1.0.0">
+<meta name="generator" content="Crystal Docs 1.8.2">
+<meta name="crystal_docs.project_version" content="1.1.0">
 <meta name="crystal_docs.project_name" content="anyolite">
 
 
@@ -13,7 +13,7 @@
 <script type="text/javascript" src="js/doc.js"></script>
 
   <meta name="repository-name" content="anyolite">
-  <title>anyolite 1.0.0</title>
+  <title>anyolite 1.1.0</title>
   <script type="text/javascript">
   CrystalDocs.base_path = "";
   </script>
@@ -39,7 +39,7 @@
       </h1>
 
       <span class="project-version">
-        1.0.0
+        1.1.0
       </span>
     </div>
   </div>
@@ -50,6 +50,11 @@
 
   <div class="types-list">
     <ul>
+  
+  <li class=" " data-id="anyolite/toplevel" data-name="top level namespace">
+      <a href="toplevel.html">Top Level Namespace</a>
+      
+    </li>
   
   <li class="parent " data-id="anyolite/Anyolite" data-name="anyolite">
       <a href="Anyolite.html">Anyolite</a>
@@ -326,6 +331,21 @@
       
     </li>
   
+  <li class="parent " data-id="anyolite/Regex" data-name="regex">
+      <a href="Regex.html">Regex</a>
+      
+        <ul>
+  
+  <li class=" " data-id="anyolite/Regex/MatchData" data-name="regex::matchdata">
+      <a href="Regex/MatchData.html">MatchData</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
 </ul>
 
   </div>
@@ -398,10 +418,10 @@ This way, Ruby can be used as a scripting language to Crystal projects, with the
 </a>Installing</h1>
 <p>Put this shard as a requirement into your shard.yml project file and then call</p>
 <pre><code class="language-bash">shards install</code></pre>
-<p>from a terminal or the MSVC Developer Console (on Windows).</p>
+<p>from a terminal.</p>
 <p>Alternatively, you can clone this repository into the lib folder of your project and run</p>
 <pre><code class="language-bash">rake build_shard</code></pre>
-<p>manually to install the shard without using the crystal shards program.</p>
+<p>manually from a terminal or the MSVC Developer Console (on Windows) to install the shard without using the crystal shards program.</p>
 <p>If you want to use other options for Anyolite, visit <a href="https://github.com/Anyolite/anyolite/wiki/Changing-build-configurations">Changing build configurations</a> in the wiki.</p>
 <h1><a id="how-to-use" class="anchor" href="#how-to-use">
   <svg class="octicon-link" aria-hidden="true">
@@ -417,7 +437,7 @@ This way, Ruby can be used as a scripting language to Crystal projects, with the
     <span class="k">end</span>
 
     <span class="k">def</span> <span class="m">damage</span>(diff : <span class="t">Int32</span>)
-      @hp -= diff
+      @hp <span class="o">-=</span> diff
     <span class="k">end</span>
 
     <span class="k">def</span> <span class="m">yell</span>(sound : <span class="t">String</span>, loud : <span class="t">Bool</span> <span class="o">=</span> <span class="n">false</span>)
@@ -429,7 +449,7 @@ This way, Ruby can be used as a scripting language to Crystal projects, with the
     <span class="k">end</span>
 
     <span class="k">def</span> <span class="m">absorb_hp_from</span>(other : <span class="t">Entity</span>)
-      @hp += other.hp
+      @hp <span class="o">+=</span> other.hp
       other.hp <span class="o">=</span> <span class="n">0</span>
     <span class="k">end</span>
   <span class="k">end</span>
@@ -480,7 +500,7 @@ More features will be added in the future.</p>
     <use href="#octicon-link"/>
   </svg>
 </a>Upcoming releases</h2>
-<p>Currently none</p>
+<p>None yet</p>
 <h3><a id="later-releases" class="anchor" href="#later-releases">
   <svg class="octicon-link" aria-hidden="true">
     <use href="#octicon-link"/>
@@ -489,7 +509,11 @@ More features will be added in the future.</p>
 <ul>
 <li>[ ] Automated generation of Ruby documentations for wrapped functions</li>
 <li>[ ] MRI support on Windows (does currently not work for some reason)</li>
-<li>[ ] Mac support and continuous integration</li>
+<li>[ ] MRI support for version 3.1.0 and up</li>
+<li>[ ] Support and continuous integration for Mac</li>
+<li>[ ] Support for bindings using <code>Data</code> and <code>Struct</code> from Ruby</li>
+<li>[ ] Multiple interpreters for mruby</li>
+<li>[ ] Add option to make script calls thread-safe</li>
 </ul>
 <h3><a id="wishlist-entries-might-not-be-possible-to-implement" class="anchor" href="#wishlist-entries-might-not-be-possible-to-implement">
   <svg class="octicon-link" aria-hidden="true">
@@ -503,6 +527,7 @@ More features will be added in the future.</p>
 <li>[ ] Resolve context even in generic type union arguments</li>
 <li>[ ] General improvement of type resolution</li>
 <li>[ ] Bignum support</li>
+<li>[ ] Range support</li>
 </ul>
 </div>
 </body>

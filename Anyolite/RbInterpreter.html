@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8" />
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="generator" content="Crystal Docs 1.4.1">
-<meta name="crystal_docs.project_version" content="1.0.0">
+<meta name="generator" content="Crystal Docs 1.8.2">
+<meta name="crystal_docs.project_version" content="1.1.0">
 <meta name="crystal_docs.project_name" content="anyolite">
 
 
@@ -13,7 +13,7 @@
 <script type="text/javascript" src="../js/doc.js"></script>
 
   <meta name="repository-name" content="anyolite">
-  <title>Anyolite::RbInterpreter - anyolite 1.0.0</title>
+  <title>Anyolite::RbInterpreter - anyolite 1.1.0</title>
   <script type="text/javascript">
     CrystalDocs.base_path = "../";
   </script>
@@ -39,7 +39,7 @@
       </h1>
 
       <span class="project-version">
-        1.0.0
+        1.1.0
       </span>
     </div>
   </div>
@@ -50,6 +50,11 @@
 
   <div class="types-list">
     <ul>
+  
+  <li class=" " data-id="anyolite/toplevel" data-name="top level namespace">
+      <a href="../toplevel.html">Top Level Namespace</a>
+      
+    </li>
   
   <li class="parent open current" data-id="anyolite/Anyolite" data-name="anyolite">
       <a href="../Anyolite.html">Anyolite</a>
@@ -326,6 +331,21 @@
       
     </li>
   
+  <li class="parent " data-id="anyolite/Regex" data-name="regex">
+      <a href="../Regex.html">Regex</a>
+      
+        <ul>
+  
+  <li class=" " data-id="anyolite/Regex/MatchData" data-name="regex::matchdata">
+      <a href="../Regex/MatchData.html">MatchData</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
 </ul>
 
   </div>
@@ -380,7 +400,7 @@
   </h2>
   
     
-      <a href="https://github.com/Anyolite/anyolite/blob/v1.0.0/src/RbInterpreter.cr#L4" target="_blank">
+      <a href="https://github.com/Anyolite/anyolite/blob/v1.1.0/src/RbInterpreter.cr#L4" target="_blank">
         RbInterpreter.cr
       </a>
     
@@ -462,12 +482,22 @@
       </li>
     
       <li class="entry-summary">
+        <a href="#depth%3AUInt32-instance-method" class="signature"><strong>#depth</strong> : UInt32</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#depth%3D%28depth%3AUInt32%29-instance-method" class="signature"><strong>#depth=</strong>(depth : UInt32)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
         <a href="#execute_bytecode%28bytecode%3AArray%28UInt8%29%29-instance-method" class="signature"><strong>#execute_bytecode</strong>(bytecode : Array(UInt8))</a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#execute_script_line%28str%3AString%29-instance-method" class="signature"><strong>#execute_script_line</strong>(str : String)</a>
+        <a href="#execute_script_line%28str%3AString%2Cclear_error%3ABool%3Dtrue%29-instance-method" class="signature"><strong>#execute_script_line</strong>(str : String, clear_error : Bool = <span class="n">true</span>)</a>
         
       </li>
     
@@ -537,7 +567,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/Anyolite/anyolite/blob/v1.0.0/src/RbInterpreter.cr#L16" target="_blank">View source</a>]
+          [<a href="https://github.com/Anyolite/anyolite/blob/v1.1.0/src/RbInterpreter.cr#L17" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -565,7 +595,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/Anyolite/anyolite/blob/v1.0.0/src/RbInterpreter.cr#L7" target="_blank">View source</a>]
+          [<a href="https://github.com/Anyolite/anyolite/blob/v1.1.0/src/RbInterpreter.cr#L8" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -593,7 +623,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/Anyolite/anyolite/blob/v1.0.0/src/RbInterpreter.cr#L21" target="_blank">View source</a>]
+          [<a href="https://github.com/Anyolite/anyolite/blob/v1.1.0/src/RbInterpreter.cr#L27" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -609,7 +639,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/Anyolite/anyolite/blob/v1.0.0/src/RbInterpreter.cr#L65" target="_blank">View source</a>]
+          [<a href="https://github.com/Anyolite/anyolite/blob/v1.1.0/src/RbInterpreter.cr#L83" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -630,7 +660,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/Anyolite/anyolite/blob/v1.0.0/src/RbInterpreter.cr#L49" target="_blank">View source</a>]
+          [<a href="https://github.com/Anyolite/anyolite/blob/v1.1.0/src/RbInterpreter.cr#L67" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -646,7 +676,39 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/Anyolite/anyolite/blob/v1.0.0/src/RbInterpreter.cr#L57" target="_blank">View source</a>]
+          [<a href="https://github.com/Anyolite/anyolite/blob/v1.1.0/src/RbInterpreter.cr#L75" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="depth:UInt32-instance-method">
+      <div class="signature">
+        
+        def <strong>depth</strong> : UInt32
+
+        <a class="method-permalink" href="#depth%3AUInt32-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/Anyolite/anyolite/blob/v1.1.0/src/RbInterpreter.cr#L6" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="depth=(depth:UInt32)-instance-method">
+      <div class="signature">
+        
+        def <strong>depth=</strong>(depth : UInt32)
+
+        <a class="method-permalink" href="#depth%3D%28depth%3AUInt32%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/Anyolite/anyolite/blob/v1.1.0/src/RbInterpreter.cr#L6" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -662,23 +724,23 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/Anyolite/anyolite/blob/v1.0.0/src/RbInterpreter.cr#L40" target="_blank">View source</a>]
+          [<a href="https://github.com/Anyolite/anyolite/blob/v1.1.0/src/RbInterpreter.cr#L54" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="execute_script_line(str:String)-instance-method">
+    <div class="entry-detail" id="execute_script_line(str:String,clear_error:Bool=true)-instance-method">
       <div class="signature">
         
-        def <strong>execute_script_line</strong>(str : String)
+        def <strong>execute_script_line</strong>(str : String, clear_error : Bool = <span class="n">true</span>)
 
-        <a class="method-permalink" href="#execute_script_line%28str%3AString%29-instance-method">#</a>
+        <a class="method-permalink" href="#execute_script_line%28str%3AString%2Cclear_error%3ABool%3Dtrue%29-instance-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/Anyolite/anyolite/blob/v1.0.0/src/RbInterpreter.cr#L32" target="_blank">View source</a>]
+          [<a href="https://github.com/Anyolite/anyolite/blob/v1.1.0/src/RbInterpreter.cr#L40" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -694,7 +756,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/Anyolite/anyolite/blob/v1.0.0/src/RbInterpreter.cr#L44" target="_blank">View source</a>]
+          [<a href="https://github.com/Anyolite/anyolite/blob/v1.1.0/src/RbInterpreter.cr#L60" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -710,7 +772,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/Anyolite/anyolite/blob/v1.0.0/src/RbInterpreter.cr#L36" target="_blank">View source</a>]
+          [<a href="https://github.com/Anyolite/anyolite/blob/v1.1.0/src/RbInterpreter.cr#L48" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -726,7 +788,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/Anyolite/anyolite/blob/v1.0.0/src/RbInterpreter.cr#L28" target="_blank">View source</a>]
+          [<a href="https://github.com/Anyolite/anyolite/blob/v1.1.0/src/RbInterpreter.cr#L36" target="_blank">View source</a>]
         
       </div>
     </div>
