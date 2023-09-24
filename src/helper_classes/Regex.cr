@@ -4,6 +4,9 @@
 
 @[Anyolite::ExcludeConstant("SPECIAL_CHARACTERS")]
 {% if compare_versions(Crystal::VERSION, "1.7.3") > 0 %}
+  {% if compare_versions(Crystal::VERSION, "1.9.0") > 0 %}
+    @[Anyolite::ExcludeInstanceMethod("match!")]
+  {% end %}
   @[Anyolite::SpecializeInstanceMethod("initialize", [source : String, options : Options = Options::None], [source : String])]
   @[Anyolite::SpecializeInstanceMethod("match", [str : String, pos : Int32 = 0, options : Regex::MatchOptions = :none], [str : String, pos : Int32 = 0])]
   @[Anyolite::SpecializeInstanceMethod("matches?", [str : String, pos : Int32 = 0, options : Regex::MatchOptions = :none], [str : String, pos : Int32 = 0])]
@@ -32,6 +35,9 @@
 @[Anyolite::ExcludeConstant("Error")]
 @[Anyolite::ExcludeConstant("Options")]
 {% if compare_versions(Crystal::VERSION, "1.7.3") > 0 %}
+  {% if compare_versions(Crystal::VERSION, "1.9.0") > 0 %}
+    @[Anyolite::ExcludeClassMethod("literal")]
+  {% end %}
   @[Anyolite::ExcludeConstant("MatchOptions")]
   @[Anyolite::ExcludeConstant("CompileOptions")]
   {% if compare_versions(Crystal::VERSION, "1.8.0") > 0 %}
