@@ -1,6 +1,11 @@
-{% if flag?(:win32) %}
+command = {% if flag?(:win32) %}
   # TODO: Is there a better solution?
-  system("cmd /C rake build_shard")
+  "cmd /C rake build_shard"
 {% else %}
-  system("rake build_shard")
+  "rake build_shard"
 {% end %}
+
+# system() inherits the parent process' IO descriptors.
+# Failing here will cause the shards process to output this; if we succeed, it is silenced automatically.
+raise Exception.new("Failed to install Anyolite") unless system(command)
+
