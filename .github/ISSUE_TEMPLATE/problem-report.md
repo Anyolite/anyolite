@@ -12,7 +12,8 @@ Please describe your problem in a detailed way here, so others can understand it
 
 Some tips:
 * Be objective
-* Make sure you read the documentation and wiki
+* Make sure you read the Readme, documentation and wiki
+* Check if you installed all required programs (especially Rake)
 * Include all error messages and warnings potentially related to the problem
 * If the problem depends on specific steps, describe them in a way others can reproduce consistently
 
