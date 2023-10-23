@@ -142,9 +142,13 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 
 ### Version 1.1.1
 
+#### Usability
+
+* Added errors when Rake fails at installing
+
 #### Bugfixes
 
-* [ ] Fix Regex wrapper warnings when running Anyolite with newer Crystal versions
+* Fix Regex wrapper warnings when running Anyolite with newer Crystal versions
 
 ### Later releases
 
