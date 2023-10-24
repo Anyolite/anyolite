@@ -150,6 +150,27 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 
 * Fix Regex wrapper warnings when running Anyolite with newer Crystal versions
 
+### Version 2.0.0
+
+IMPORTANT: Version 2.0.0 will introduce breaking changes to improve the general user experience.
+
+This means that the build process and some parts of the API will change. There will be a dedicated
+section in the Wiki for migrating from Anyolite 1 to Anyolite 2, so compatibility can easily be
+restored.
+
+The list of features for Anyolite 2 will expand over time, while development on Anyolite 1 continues
+until Anyolite 2 is released.
+
+#### Breaking changes
+
+* [ ] Discard postinstall option in favor of more sophisticated build script
+* [ ] Simplify building with custom options
+* [ ] Set optional arguments being keywords for method as default
+
+#### Usability
+
+* [ ] Add Wiki section about migrating from Anyolite 1
+
 ### Later releases
 
 * [ ] Automated generation of Ruby documentations for wrapped functions
