@@ -1,12 +1,13 @@
-{% if flag?(:anyolite_implementation_ruby_3) %}
-  {% skip_file %}
-{% end %}
-
 module Anyolite
   macro link_libraries
     {% build_path = env("ANYOLITE_BUILD_PATH") ? env("ANYOLITE_BUILD_PATH") : "build" %}
 
-    {% libmruby_path = "#{__DIR__}/../../../#{build_path.id}/mruby/lib/libmruby.lib" %}
+    {% if flag?(:win32) %}
+      {% libmruby_path = "#{__DIR__}/../../../#{build_path.id}/mruby/lib/libmruby.lib" %}
+    {% else %}
+      {% libmruby_path = "#{__DIR__}/../../../#{build_path.id}/mruby/lib/libmruby.a" %}
+    {% end %}
+
     {% if !file_exists?(libmruby_path) %}
       {% raise "File #{libmruby_path} not found. Was mruby installed correctly?" %}
     {% end %}
@@ -26,7 +27,7 @@ module Anyolite
       @[Link(ldflags: "\"#{__DIR__}/../../../{{build_path.id}}/glue/mruby/script_helper.obj\"")]
       @[Link(ldflags: "\"#{__DIR__}/../../../{{build_path.id}}/glue/mruby/error_helper.obj\"")]
     {% else %}
-      @[Link(ldflags: "\"#{__DIR__}/../../../{{build_path.id}}/mruby/lib/libmruby.a\" -lm")]
+      @[Link(ldflags: {{libmruby_path.stringify + "-lm"}})]
       @[Link(ldflags: "\"#{__DIR__}/../../../{{build_path.id}}/glue/mruby/return_functions.o\"")]
       @[Link(ldflags: "\"#{__DIR__}/../../../{{build_path.id}}/glue/mruby/data_helper.o\"")]
       @[Link(ldflags: "\"#{__DIR__}/../../../{{build_path.id}}/glue/mruby/script_helper.o\"")]

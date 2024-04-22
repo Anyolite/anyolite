@@ -7,9 +7,9 @@ module Anyolite
     {% build_path = env("ANYOLITE_BUILD_PATH") ? env("ANYOLITE_BUILD_PATH") : "build" %}
 
     {% if flag?(:win32) %}
-      {% libruby_path = "#{__DIR__}/../../../{{build_path.id}}/mri/lib/x64-vcruntime140-ruby300-static.lib" %}
+      {% libruby_path = "#{__DIR__}/../../../#{build_path.id}/mri/lib/x64-vcruntime140-ruby300-static.lib" %}
     {% else %}
-      {% libruby_path = "#{__DIR__}/../../../{{build_path.id}}/mri/lib/libruby-static.a" %}
+      {% libruby_path = "#{__DIR__}/../../../#{build_path.id}/mri/lib/libruby-static.a" %}
     {% end %}
 
     {% if !file_exists?(libruby_path) %}
