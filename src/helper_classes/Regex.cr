@@ -52,6 +52,7 @@ class Regex
   @[Anyolite::ExcludeInstanceMethod("begin")]
   @[Anyolite::ExcludeInstanceMethod("end")]
   @[Anyolite::ExcludeInstanceMethod("pretty_print")]
+  @[Anyolite::SpecializeInstanceMethod("to_s", [io : IO])]
   @[Anyolite::DefaultOptionalArgsToKeywordArgs]
   struct MatchData
     {% if compare_versions(Crystal::VERSION, "1.7.3") > 0 %}
