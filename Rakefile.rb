@@ -18,8 +18,8 @@ class AnyoliteConfig
         :implementation => "mruby",
         :build_path => "build", 
         :rb_fork => "https://github.com/mruby/mruby",
-        :rb_release => "3.2.0",
-        :rb_minor => "3.2",
+        :rb_release => "3.3.0",
+        :rb_minor => "3.3",
         :rb_dir => "third_party", 
         :rb_config => "utility/mruby_build_config.rb", 
         :glue_dir => "glue/mruby",
@@ -139,6 +139,7 @@ task :build_glue => [:load_config] do
         if $config.implementation == "mruby"
             if ANYOLITE_COMPILER == :msvc
                 GLUE_FILES.each do |name|
+                    # NOTE: For later versions, add flag /MD for dynamic linking only
                     system "cl /I \"#{$config.rb_dir}/#{$config.implementation}/include\" /D MRB_INT64 /c \"#{$config.glue_dir}/#{name}.c\" /Fo\"#{$config.build_path}/glue/#{$config.implementation}/#{name}.obj\""
                 end
             elsif ANYOLITE_COMPILER == :gcc

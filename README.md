@@ -144,6 +144,7 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 
 #### Usability
 
+* Updated mruby to 3.3.0
 * Added error messages when Rake fails at installing
 * Added error messages when mruby/MRI is missing
 
@@ -168,6 +169,7 @@ until Anyolite 2 is released.
 * [ ] Discard postinstall option in favor of more sophisticated build script
 * [ ] Simplify building with custom options
 * [ ] Set optional arguments being keywords for method as default
+* [ ] Add option for using either dynamic or static linking
 
 #### Usability
 
