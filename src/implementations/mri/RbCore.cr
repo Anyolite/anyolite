@@ -5,15 +5,25 @@
 module Anyolite
   macro link_libraries
     {% build_path = env("ANYOLITE_BUILD_PATH") ? env("ANYOLITE_BUILD_PATH") : "build" %}
+
+    {% if flag?(:win32) %}
+      {% libruby_path = "#{__DIR__}/../../../{{build_path.id}}/mri/lib/x64-vcruntime140-ruby300-static.lib" %}
+    {% else %}
+      {% libruby_path = "#{__DIR__}/../../../{{build_path.id}}/mri/lib/libruby-static.a" %}
+    {% end %}
+
+    {% if !file_exists?(libruby_path) %}
+      {% raise "File #{libruby_path} not found. Was MRI installed correctly?" %}
+    {% end %}
     
     {% if flag?(:win32) %}
-      @[Link(ldflags: "\"#{__DIR__}/../../../{{build_path.id}}/mri/lib/x64-vcruntime140-ruby300-static.lib\" msvcrt.lib Ws2_32.lib iphlpapi.lib dbghelp.lib Shell32.lib User32.lib")]
+      @[Link(ldflags: {{libruby_path.stringify + "msvcrt.lib Ws2_32.lib iphlpapi.lib dbghelp.lib Shell32.lib User32.lib"}})]
       @[Link(ldflags: "\"#{__DIR__}/../../../{{build_path.id}}/glue/mri/return_functions.obj\"")]
       @[Link(ldflags: "\"#{__DIR__}/../../../{{build_path.id}}/glue/mri/data_helper.obj\"")]
       @[Link(ldflags: "\"#{__DIR__}/../../../{{build_path.id}}/glue/mri/script_helper.obj\"")]
       @[Link(ldflags: "\"#{__DIR__}/../../../{{build_path.id}}/glue/mri/error_helper.obj\"")]
     {% else %}
-      @[Link(ldflags: "\"#{__DIR__}/../../../{{build_path.id}}/mri/lib/libruby-static.a\" -lgmp -lcrypt -lz")]
+      @[Link(ldflags: {{libruby_path.stringify + "-lgmp -lcrypt -lz"}})]
       @[Link(ldflags: "\"#{__DIR__}/../../../{{build_path.id}}/glue/mri/return_functions.o\" -lgmp -lcrypt -lz")]
       @[Link(ldflags: "\"#{__DIR__}/../../../{{build_path.id}}/glue/mri/data_helper.o\" -lgmp -lcrypt -lz")]
       @[Link(ldflags: "\"#{__DIR__}/../../../{{build_path.id}}/glue/mri/script_helper.o\" -lgmp -lcrypt -lz")]

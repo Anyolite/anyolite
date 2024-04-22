@@ -1,16 +1,21 @@
 module Anyolite
   macro link_libraries
     {% build_path = env("ANYOLITE_BUILD_PATH") ? env("ANYOLITE_BUILD_PATH") : "build" %}
+
+    {% libmruby_path = "#{__DIR__}/../../../#{build_path.id}/mruby/lib/libmruby.lib" %}
+    {% if !file_exists?(libmruby_path) %}
+      {% raise "File #{libmruby_path} not found. Was mruby installed correctly?" %}
+    {% end %}
     
     {% if flag?(:win32) %}
       {% if flag?(:anyolite_use_msvcrt_lib) %}
         # Not recommended, might be removed in a later release
-        @[Link(ldflags: "\"#{__DIR__}/../../../{{build_path.id}}/mruby/lib/libmruby.lib\"" msvcrt.lib")]
+        @[Link(ldflags: {{libmruby_path.stringify + "msvcrt.lib"}})]
       {% elsif compare_versions(Crystal::VERSION, "1.5.1") >= 0 %}
         # Crystal links against libucrt since 1.5.1
-        @[Link(ldflags: "\"#{__DIR__}/../../../{{build_path.id}}/mruby/lib/libmruby.lib\"")]
+        @[Link(ldflags: {{libmruby_path.stringify}})]
       {% else %}
-        @[Link(ldflags: "\"#{__DIR__}/../../../{{build_path.id}}/mruby/lib/libmruby.lib\" libucrt.lib")]
+        @[Link(ldflags: {{libmruby_path.stringify + "libucrt.lib"}})]
       {% end %}
       @[Link(ldflags: "\"#{__DIR__}/../../../{{build_path.id}}/glue/mruby/return_functions.obj\"")]
       @[Link(ldflags: "\"#{__DIR__}/../../../{{build_path.id}}/glue/mruby/data_helper.obj\"")]
