@@ -27,7 +27,7 @@ module Anyolite
       @[Link(ldflags: "\"#{__DIR__}/../../../{{build_path.id}}/glue/mruby/script_helper.obj\"")]
       @[Link(ldflags: "\"#{__DIR__}/../../../{{build_path.id}}/glue/mruby/error_helper.obj\"")]
     {% else %}
-      @[Link(ldflags: {{libmruby_path.stringify + "-lm"}})]
+      @[Link(ldflags: {{libmruby_path.stringify + " -lm"}})]
       @[Link(ldflags: "\"#{__DIR__}/../../../{{build_path.id}}/glue/mruby/return_functions.o\"")]
       @[Link(ldflags: "\"#{__DIR__}/../../../{{build_path.id}}/glue/mruby/data_helper.o\"")]
       @[Link(ldflags: "\"#{__DIR__}/../../../{{build_path.id}}/glue/mruby/script_helper.o\"")]
