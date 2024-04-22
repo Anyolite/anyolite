@@ -1,3 +1,7 @@
+{% if flag?(:anyolite_implementation_ruby_3) %}
+  {% skip_file %}
+{% end %}
+
 module Anyolite
   macro link_libraries
     {% build_path = env("ANYOLITE_BUILD_PATH") ? env("ANYOLITE_BUILD_PATH") : "build" %}
