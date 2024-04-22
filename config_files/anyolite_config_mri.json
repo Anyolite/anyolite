@@ -2,7 +2,7 @@
   "implementation": "mri",
   "build_path": "build",
   "rb_fork": "https://github.com/ruby/ruby",
-  "rb_release": "v3_0_5",
+  "rb_release": "v3_0_6",
   "rb_minor": "3.0.0",
   "rb_dir": "third_party",
   "rb_config": "",

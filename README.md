@@ -145,6 +145,7 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 #### Usability
 
 * Updated mruby to 3.3.0
+* Updated MRI to 3.0.6
 * Added error messages when Rake fails at installing
 * Added error messages when mruby/MRI is missing
 
