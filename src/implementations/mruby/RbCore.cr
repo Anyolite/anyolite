@@ -15,12 +15,12 @@ module Anyolite
     {% if flag?(:win32) %}
       {% if flag?(:anyolite_use_msvcrt_lib) %}
         # Not recommended, might be removed in a later release
-        @[Link(ldflags: {{libmruby_path.stringify + "msvcrt.lib"}})]
+        @[Link(ldflags: {{libmruby_path.stringify + " msvcrt.lib"}})]
       {% elsif compare_versions(Crystal::VERSION, "1.5.1") >= 0 %}
         # Crystal links against libucrt since 1.5.1
         @[Link(ldflags: {{libmruby_path.stringify}})]
       {% else %}
-        @[Link(ldflags: {{libmruby_path.stringify + "libucrt.lib"}})]
+        @[Link(ldflags: {{libmruby_path.stringify + " libucrt.lib"}})]
       {% end %}
       @[Link(ldflags: "\"#{__DIR__}/../../../{{build_path.id}}/glue/mruby/return_functions.obj\"")]
       @[Link(ldflags: "\"#{__DIR__}/../../../{{build_path.id}}/glue/mruby/data_helper.obj\"")]

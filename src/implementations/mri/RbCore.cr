@@ -17,13 +17,13 @@ module Anyolite
     {% end %}
     
     {% if flag?(:win32) %}
-      @[Link(ldflags: {{libruby_path.stringify + "msvcrt.lib Ws2_32.lib iphlpapi.lib dbghelp.lib Shell32.lib User32.lib"}})]
+      @[Link(ldflags: {{libruby_path.stringify + " msvcrt.lib Ws2_32.lib iphlpapi.lib dbghelp.lib Shell32.lib User32.lib"}})]
       @[Link(ldflags: "\"#{__DIR__}/../../../{{build_path.id}}/glue/mri/return_functions.obj\"")]
       @[Link(ldflags: "\"#{__DIR__}/../../../{{build_path.id}}/glue/mri/data_helper.obj\"")]
       @[Link(ldflags: "\"#{__DIR__}/../../../{{build_path.id}}/glue/mri/script_helper.obj\"")]
       @[Link(ldflags: "\"#{__DIR__}/../../../{{build_path.id}}/glue/mri/error_helper.obj\"")]
     {% else %}
-      @[Link(ldflags: {{libruby_path.stringify + "-lgmp -lcrypt -lz"}})]
+      @[Link(ldflags: {{libruby_path.stringify + " -lgmp -lcrypt -lz"}})]
       @[Link(ldflags: "\"#{__DIR__}/../../../{{build_path.id}}/glue/mri/return_functions.o\" -lgmp -lcrypt -lz")]
       @[Link(ldflags: "\"#{__DIR__}/../../../{{build_path.id}}/glue/mri/data_helper.o\" -lgmp -lcrypt -lz")]
       @[Link(ldflags: "\"#{__DIR__}/../../../{{build_path.id}}/glue/mri/script_helper.o\" -lgmp -lcrypt -lz")]
