@@ -2,8 +2,8 @@
   "implementation": "mri",
   "build_path": "build",
   "rb_fork": "https://github.com/ruby/ruby",
-  "rb_release": "v3_0_5",
-  "rb_minor": "3.0.0",
+  "rb_release": "v3_3_0",
+  "rb_minor": "3.3.0",
   "rb_dir": "third_party",
   "rb_config": "",
   "glue_dir": "glue/mri"
