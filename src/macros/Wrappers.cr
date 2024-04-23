@@ -400,16 +400,23 @@ module Anyolite
           end
         {% end %}
 
-        Anyolite::Macro.allocate_constructed_object(_rb, {{crystal_class}}, _obj, %new_obj)
+        # TODO: Just create an allocated dummy object (Void*?) with "new" and initialize it with "initialize"?
+        # TODO: This might be necessary to avoid inheritance breaking classes
+
+        # TODO: Outsource this into the specific implementation files
+
+        %created_new_rb_obj = Anyolite::Macro.create_new_allocated_object(_rb, {{crystal_class}}, _obj, %new_obj)
+
+        #Anyolite::Macro.allocate_constructed_object(_rb, {{crystal_class}}, _obj, %new_obj)
 
         {% if options[:store_block_arg] %}
           Anyolite::RbArgCache.pop_block_cache
         {% end %}
 
-        _obj
+        %created_new_rb_obj
       end
 
-      {{rb_interpreter}}.define_method("initialize", Anyolite::RbClassCache.get({{crystal_class}}), %wrapped_method)
+      {{rb_interpreter}}.define_class_method("new", Anyolite::RbClassCache.get({{crystal_class}}), %wrapped_method)
     end
 
     macro wrap_constructor_function_with_keyword_args(rb_interpreter, crystal_class, proc, keyword_args, regular_args = nil, operator = "", options = {} of Symbol => NoReturn)
@@ -493,16 +500,18 @@ module Anyolite
           end
         {% end %}
 
-        Anyolite::Macro.allocate_constructed_object(_rb, {{crystal_class}}, _obj, %new_obj)
+        %created_new_rb_obj = Anyolite::Macro.create_new_allocated_object(_rb, {{crystal_class}}, _obj, %new_obj)
+
+        #Anyolite::Macro.allocate_constructed_object(_rb, {{crystal_class}}, _obj, %new_obj)
 
         {% if options[:store_block_arg] %}
           Anyolite::RbArgCache.pop_block_cache
         {% end %}
         
-        _obj
+        %created_new_rb_obj
       end
 
-      {{rb_interpreter}}.define_method("initialize", Anyolite::RbClassCache.get({{crystal_class}}), %wrapped_method)
+      {{rb_interpreter}}.define_class_method("new", Anyolite::RbClassCache.get({{crystal_class}}), %wrapped_method)
     end
 
     macro wrap_equality_function(rb_interpreter, crystal_class, name, proc, operator = "", options = {} of Symbol => NoReturn)

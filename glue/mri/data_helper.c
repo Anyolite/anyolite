@@ -2,13 +2,17 @@
 
 extern VALUE rb_define_class_under_helper(void* rb, VALUE under, const char* name, VALUE superclass) {
 
-  rb_define_class_under(under, name, superclass);
+  VALUE klass = rb_define_class_under(under, name, superclass);
+  rb_undef_alloc_func(klass);
+  return klass;
 
 }
 
 extern VALUE rb_define_class_helper(void* rb, const char* name, VALUE superclass) {
 
-  rb_define_class(name, superclass);
+  VALUE klass = rb_define_class(name, superclass);
+  rb_undef_alloc_func(klass);
+  return klass;
 
 }
 
@@ -97,6 +101,12 @@ extern void rb_define_class_method_helper(void* rb, VALUE ruby_class, const char
 extern void rb_define_module_function_helper(void* rb, VALUE ruby_module, const char* name, VALUE (*func)(int argc, VALUE* argv, VALUE self), int aspec) {
 
   rb_define_module_function(ruby_module, name, func, -1);
+
+}
+
+extern void rb_define_singleton_function_helper(void* rb, VALUE ruby_class, const char* name, VALUE (*func)(int argc, VALUE* argv, VALUE self), int aspec) {
+
+  rb_define_singleton_method(ruby_class, name, func, -1);
 
 }
 
