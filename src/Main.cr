@@ -612,6 +612,7 @@ module Anyolite
         :store_block_arg   => store_block_arg,
       }
     %}
+    Anyolite::Macro.wrap_allocator_dummy_with_args({{rb_interpreter}}, {{crystal_class}}, {{proc_args}}, operator: {{operator}}, options: {{options}})
     Anyolite::Macro.wrap_constructor_function_with_args({{rb_interpreter}}, {{crystal_class}}, {{crystal_class}}.new, {{proc_args}}, operator: {{operator}}, options: {{options}})
   end
 
@@ -635,6 +636,7 @@ module Anyolite
         :store_block_arg   => store_block_arg,
       }
     %}
+    Anyolite::Macro.wrap_allocator_dummy_with_keyword_args({{rb_interpreter}}, {{crystal_class}}, {{keyword_args}}, {{regular_args}}, operator: {{operator}}, options: {{options}})
     Anyolite::Macro.wrap_constructor_function_with_keyword_args({{rb_interpreter}}, {{crystal_class}}, {{crystal_class}}.new, {{keyword_args}}, {{regular_args}}, operator: {{operator}}, options: {{options}})
   end
 

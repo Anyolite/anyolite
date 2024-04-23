@@ -297,3 +297,9 @@ extern VALUE rb_undef_method_helper(void* rb, VALUE mod, const char* name) {
   rb_undef_method(mod, name);
 
 }
+
+extern int pass_called_keywords() {
+
+  return RB_PASS_CALLED_KEYWORDS; 
+
+}

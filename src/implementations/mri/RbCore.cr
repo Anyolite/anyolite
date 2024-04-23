@@ -135,6 +135,8 @@ module Anyolite
 
     fun rb_get_args = rb_scan_args(argc : RbInt, argv : RbValue*, format : LibC::Char*, ...) : RbInt
 
+    fun pass_called_keywords = pass_called_keywords() : RbInt
+
     # UNUSED
     # fun rb_get_argc = mrb_get_argc(rb : State*) : RbInt
     # fun rb_get_argv = mrb_get_argv(rb : State*) : RbValue*
@@ -211,6 +213,9 @@ module Anyolite
     fun get_data_ptr(ruby_object : RbValue) : Void*
 
     fun get_rb_obj_value(p : RClassPtr) : RbValue
+
+    fun rb_obj_call_init(obj : RbValue, argc : RbInt, argv : RbValue*) : RbValue
+    fun rb_obj_call_init_kw(obj : RbValue, argc : RbInt, argv : RbValue*, kw_splat : RbInt) : RbValue
 
     fun rb_obj_is_kind_of = rb_obj_is_kind_of_helper(rb : State*, obj : RbValue, c : RClassPtr) : RbBool
     fun get_class_of_obj = rb_obj_class_helper(rb : State*, obj : RbValue) : RClassPtr

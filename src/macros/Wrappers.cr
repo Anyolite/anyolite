@@ -336,6 +336,26 @@ module Anyolite
       {{rb_interpreter}}.define_method({{name}}, Anyolite::RbClassCache.get({{crystal_class}}), %wrapped_method)
     end
 
+    macro wrap_allocator_dummy_with_args(rb_interpreter, crystal_class, regular_args = nil, operator = "", options = {} of Symbol => NoReturn)
+      %wrapped_method = Anyolite::Macro.new_rb_func do
+        %created_new_rb_obj = Anyolite::Macro.create_new_allocated_object(_rb, {{crystal_class}}, _obj)
+
+        Anyolite::RbCore.rb_obj_call_init(%created_new_rb_obj, _argc, _argv)
+      end
+
+      {{rb_interpreter}}.define_class_method("new", Anyolite::RbClassCache.get({{crystal_class}}), %wrapped_method)
+    end
+
+    macro wrap_allocator_dummy_with_keyword_args(rb_interpreter, crystal_class, keyword_args, regular_args = nil, operator = "", options = {} of Symbol => NoReturn)
+      %wrapped_method = Anyolite::Macro.new_rb_func do
+        %created_new_rb_obj = Anyolite::Macro.create_new_allocated_object(_rb, {{crystal_class}}, _obj)
+
+        Anyolite::RbCore.rb_obj_call_init_kw(%created_new_rb_obj, _argc, _argv, Anyolite::RbCore.pass_called_keywords)
+      end
+
+      {{rb_interpreter}}.define_class_method("new", Anyolite::RbClassCache.get({{crystal_class}}), %wrapped_method)
+    end
+
     macro wrap_constructor_function_with_args(rb_interpreter, crystal_class, proc, regular_args = nil, operator = "", options = {} of Symbol => NoReturn)
       {% if regular_args.is_a?(ArrayLiteral) %}
         {% regular_arg_array = regular_args %}
@@ -400,23 +420,16 @@ module Anyolite
           end
         {% end %}
 
-        # TODO: Just create an allocated dummy object (Void*?) with "new" and initialize it with "initialize"?
-        # TODO: This might be necessary to avoid inheritance breaking classes
-
-        # TODO: Outsource this into the specific implementation files
-
-        %created_new_rb_obj = Anyolite::Macro.create_new_allocated_object(_rb, {{crystal_class}}, _obj, %new_obj)
-
-        #Anyolite::Macro.allocate_constructed_object(_rb, {{crystal_class}}, _obj, %new_obj)
+        Anyolite::Macro.initialize_allocated_object(_rb, {{crystal_class}}, _obj, %new_obj)
 
         {% if options[:store_block_arg] %}
           Anyolite::RbArgCache.pop_block_cache
         {% end %}
 
-        %created_new_rb_obj
+        _obj
       end
 
-      {{rb_interpreter}}.define_class_method("new", Anyolite::RbClassCache.get({{crystal_class}}), %wrapped_method)
+      {{rb_interpreter}}.define_method("initialize", Anyolite::RbClassCache.get({{crystal_class}}), %wrapped_method)
     end
 
     macro wrap_constructor_function_with_keyword_args(rb_interpreter, crystal_class, proc, keyword_args, regular_args = nil, operator = "", options = {} of Symbol => NoReturn)
@@ -465,6 +478,8 @@ module Anyolite
           %kw_args = Anyolite::Macro.load_kw_args_into_vars({{regular_arg_array}}, {{keyword_args}}, %format_string, %regular_arg_tuple)
         {% end %}
 
+        puts "Keyword args for {{crystal_class}}: #{%kw_args}"
+
         %converted_regular_args = Anyolite::Macro.convert_regular_args(_rb, %regular_arg_tuple, {{regular_arg_array}}, options: {{options}})
 
         {% if !regular_arg_array || regular_arg_array.size == 0 %}
@@ -500,18 +515,16 @@ module Anyolite
           end
         {% end %}
 
-        %created_new_rb_obj = Anyolite::Macro.create_new_allocated_object(_rb, {{crystal_class}}, _obj, %new_obj)
-
-        #Anyolite::Macro.allocate_constructed_object(_rb, {{crystal_class}}, _obj, %new_obj)
+        Anyolite::Macro.initialize_allocated_object(_rb, {{crystal_class}}, _obj, %new_obj)
 
         {% if options[:store_block_arg] %}
           Anyolite::RbArgCache.pop_block_cache
         {% end %}
         
-        %created_new_rb_obj
+        _obj
       end
 
-      {{rb_interpreter}}.define_class_method("new", Anyolite::RbClassCache.get({{crystal_class}}), %wrapped_method)
+      {{rb_interpreter}}.define_method("initialize", Anyolite::RbClassCache.get({{crystal_class}}), %wrapped_method)
     end
 
     macro wrap_equality_function(rb_interpreter, crystal_class, name, proc, operator = "", options = {} of Symbol => NoReturn)
