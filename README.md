@@ -175,6 +175,7 @@ until Anyolite 2 is released.
 #### Usability
 
 * [ ] Add Wiki section about migrating from Anyolite 1
+* [ ] Add error messages when using wrong annotation syntax
 
 ### Later releases
 
