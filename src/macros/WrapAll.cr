@@ -72,7 +72,7 @@ module Anyolite
 
           {% if method.annotation(Anyolite::Rename) %}
             {% ruby_name = method.annotation(Anyolite::Rename)[0].id %}
-          {% elsif annotation_rename_im && method.name.stringify == annotation_rename_im[0].stringify %}
+          {% elsif annotation_rename_im && method.name.stringify == annotation_rename_im[0].id.stringify %}
             {% ruby_name = annotation_rename_im[1].id %}
           {% else %}
             {% ruby_name = method.name %}
@@ -81,7 +81,7 @@ module Anyolite
           {% if method.annotation(Anyolite::AddBlockArg) %}
             {% block_arg_number = method.annotation(Anyolite::AddBlockArg)[0] %}
             {% block_return_type = method.annotation(Anyolite::AddBlockArg)[1] %}
-          {% elsif annotation_add_block_arg_im && method.name.stringify == annotation_add_block_arg_im[0].stringify %}
+          {% elsif annotation_add_block_arg_im && method.name.stringify == annotation_add_block_arg_im[0].id.stringify %}
             {% block_arg_number = annotation_add_block_arg_im[1] %}
             {% block_return_type = annotation_add_block_arg_im[2] %}
           {% else %}
