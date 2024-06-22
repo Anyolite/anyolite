@@ -153,6 +153,7 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 
 * Fixed Regex wrapper warnings when running Anyolite with newer Crystal versions
 * Fixed warning message when compiling glue files
+* Fixed some annotations not working properly
 
 ### Version 2.0.0
 
