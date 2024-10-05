@@ -53,7 +53,10 @@ shards install
 ```
 from a terminal.
 
-Alternatively, you can clone this repository into the lib folder of your project and run
+NOTE: Postinstall was dropped in Version 2.0.0. If you use this version, you
+have to run the build process manually.
+
+In order to install the necesary Ruby libraries, run
 ```bash
 rake build_shard
 ```
@@ -153,10 +156,11 @@ until Anyolite 2 is released.
 
 #### Breaking changes
 
-* [ ] Discard postinstall option in favor of more sophisticated build script
+* [X] Discard postinstall option in favor of more sophisticated build script
 * [ ] Simplify building with custom options
 * [X] Set optional arguments being keywords for method as default
 * [ ] Add option for using either dynamic or static linking
+* [X] Drop support for older Crystal versions
 
 #### Usability
 
@@ -164,6 +168,7 @@ until Anyolite 2 is released.
 * [X] Added `ANYOLITE_DEFAULT_REQUIRED_ARGS_TO_KEYWORD_ARGS` constant for legacy support
 * [ ] Add Wiki section about migrating from Anyolite 1
 * [ ] Add error messages when using wrong annotation syntax
+* [ ] Remove boilerplate code for older Crystal versions
 
 ### Later releases
 
