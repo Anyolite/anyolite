@@ -35,7 +35,9 @@ module Anyolite
     {% end %}
   end
 
-  Anyolite.link_libraries
+  {% unless env("ANYOLITE_DOCUMENTATION_MODE") %}
+    Anyolite.link_libraries
+  {% end %}
 
   lib RbCore
     alias RbFunc = Proc(State*, RbValue, RbValue)

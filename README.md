@@ -144,7 +144,7 @@ The term 'anyoli' means 'green' in the Maasai language, thus naming 'anyolite'.
 
 #### Bugfixes
 
-* [ ] Fixed broken documentation
+* [X] Fixed broken documentation
 * [X] Fixed pointers not working as regular arguments
 
 ### Version 2.0.0
