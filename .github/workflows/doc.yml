@@ -16,7 +16,7 @@ jobs:
       with:
         crystal: nightly
     - name: Build documentation
-      run: crystal docs
+      run: ANYOLITE_DOCUMENTATION_MODE=1 crystal docs
     - name: Deployment
       uses: peaceiris/actions-gh-pages@v3
       with:
