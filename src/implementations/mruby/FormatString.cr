@@ -38,7 +38,9 @@ module Anyolite
         {% else %}
           {% if arg.resolve <= Bool %}
             "b"
-          {% elsif arg.resolve <= Int || arg.resolve <= Pointer %}
+          {% elsif arg.resolve <= Pointer %}
+            "o"
+          {% elsif arg.resolve <= Int %}
             "i"
           {% elsif arg.resolve <= Float || arg.resolve == Number %}
             "f"
