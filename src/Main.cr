@@ -1029,12 +1029,8 @@ module Anyolite
   annotation NoKeywordArgs; end
 
   # All methods of the respective class have their required arguments
-  # wrapped as regular arguments and their optional arguments wrapped
-  # as keyword arguments.
-  #
-  # The annotation can be overwritten with the respective
-  # `WrapWithoutKeywords` annotations for specific methods.
-  annotation DefaultOptionalArgsToKeywordArgs; end
+  # wrapped as keyword arguments.
+  annotation DefaultRequiredArgsToKeywordArgs; end
 
   # Specifies that only the directly defined methods of the respective
   # class are wrapped, and no inherited methods.

@@ -28,7 +28,6 @@
 @[Anyolite::SpecializeClassMethod("error?", [source], [source : String])]
 @[Anyolite::SpecializeClassMethod("escape", [str], [str : String])]
 @[Anyolite::SpecializeClassMethod("needs_escape?", [str : String], [str : String | Char])]
-@[Anyolite::DefaultOptionalArgsToKeywordArgs]
 @[Anyolite::RenameClass("Regexp")]
 @[Anyolite::ExcludeConstant("Engine")]
 @[Anyolite::ExcludeConstant("PCRE2")]
@@ -53,7 +52,6 @@ class Regex
   @[Anyolite::ExcludeInstanceMethod("end")]
   @[Anyolite::ExcludeInstanceMethod("pretty_print")]
   @[Anyolite::SpecializeInstanceMethod("to_s", [io : IO])]
-  @[Anyolite::DefaultOptionalArgsToKeywordArgs]
   struct MatchData
     {% if compare_versions(Crystal::VERSION, "1.7.3") > 0 %}
       @[Anyolite::Specialize]

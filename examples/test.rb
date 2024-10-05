@@ -19,20 +19,20 @@ begin
   # Testing instance methods and returned arrays
   TestFramework.check(test_no: 3, should_be: [19, false, "Example string", 0.4, 5 + 19]) do
     a = TestModule::Test.new(x: 5)
-    a.test(int: 19, bool: false, str: 'Example string')
+    a.test(19, false, 'Example string')
   end
 
   # Testing attribute changes using an instance method
   TestFramework.check(test_no: 4, should_be: 5 + 19) do
     a = TestModule::Test.new(x: 5)
-    a.test(int: 19, bool: false, str: 'Example string')
+    a.test(19, false, 'Example string')
     a.x
   end
 
   # Testing instance methods with keyword arguments
   TestFramework.check(test_no: 5, should_be: [19, false, "Example string", 0.5, 5 + 19]) do
     a = TestModule::Test.new(x: 5)
-    a.test(int: 19, bool: false, str: 'Example string', float: 0.5)
+    a.test(19, false, 'Example string', float: 0.5)
   end
 
   # Testing module methods
@@ -70,7 +70,7 @@ begin
     a = TestModule::Test.new(x: 5)
     ts = TestModule::TestStructRenamed.new
     some_struct = TestModule::Test.give_me_a_struct
-    [a.output_together_with(str: ts), a.output_together_with(str: some_struct)]
+    [a.output_together_with(ts), a.output_together_with(some_struct)]
   end
 
   # Testing class methods
@@ -102,7 +102,7 @@ begin
   TestFramework.check(test_no: 16, should_be: "str = Hi there, int = -121212, float = -0.313, stringkw = 💎, bool = true, other.x = 32") do
     a = TestModule::Test.new(x: 5)
     b = TestModule::Test.new(x: 32)
-    a.keyword_test(strvar: "Hi there", intvar: -121212, floatvar: -0.313, strvarkw: "💎", othervar: b)
+    a.keyword_test("Hi there", -121212, floatvar: -0.313, strvarkw: "💎", othervar: b)
   end
 
   # Testing constants in a more nested type tree
@@ -145,7 +145,7 @@ begin
     a_5 = a.overload_test(arg: 3.0 / 5.0)
     a_6 = a.overload_test(arg: b)
     a_7 = a.overload_test(arg: TestModule::Test::TestEnum::Four).split("::")[-1]
-    a_8 = a.overload_test(arg: TestModule::Test::GTIntInt.new(u: 1, v: 3))
+    a_8 = a.overload_test(arg: TestModule::Test::GTIntInt.new(1, 3))
     a_9 = a.overload_test
     [a_1, a_2, a_3, a_4, a_5, a_6, a_7, a_8, a_9]
   end
@@ -153,7 +153,7 @@ begin
   # Testing nilable methods
   TestFramework.check(test_no: 23, should_be: ["Received argument 123", "Received argument nil"]) do
     a = TestModule::Test.new(x: 5)
-    [a.nilable_test(arg: 123), a.nilable_test(arg: nil)]
+    [a.nilable_test(123), a.nilable_test(nil)]
   end
 
   # Testing struct attributes
@@ -181,14 +181,14 @@ begin
 
   # Testing generic types
   TestFramework.check(test_no: 27, should_be: ["u1 = 3 of Int32, v1 = 5.5 of Float32.", "u1 = 3 of Int32, v1 = 9 of Int32."]) do
-    first = TestModule::Test::GTIntFloat.new(u: 1, v: 0.4).test(u1: 3, v1: 5.5)
-    second = TestModule::Test::GTIntInt.new(u: 7, v: 10).test(u1: 3, v1: 9)
+    first = TestModule::Test::GTIntFloat.new(1, 0.4).test(3, 5.5)
+    second = TestModule::Test::GTIntInt.new(7, 10).test(3, 9)
     [first, second]
   end
 
   # Testing generic type functions with generics as arguments
   TestFramework.check(test_no: 28, should_be: "This has 1 and 10.0, the other has 2 and 5.0.") do
-    TestModule::Test::GTIntFloat.new(u: 1, v: 10.0).compare(other: TestModule::Test::GTIntFloat.new(u: 2, v: 5.0))
+    TestModule::Test::GTIntFloat.new(1, 10.0).compare(TestModule::Test::GTIntFloat.new(2, 5.0))
   end
 
   results = []
@@ -218,7 +218,7 @@ begin
     a_8 = a.complicated_method(88, 0.888, 0.8, TestModule::Test::TestEnum::Four)
     a_9 = a.complicated_method(99, 0.999, 0.9, arg_opt_2: 5)
     a_10 = a.complicated_method(100, 0.000, 1.0)
-    a_11 = a.complicated_method(0, 0.0, 0.0, TestModule::Test::GTIntInt.new(u: 1, v: 1))
+    a_11 = a.complicated_method(0, 0.0, 0.0, TestModule::Test::GTIntInt.new(1, 1))
     [a_1, a_2, a_3, a_4, a_5, a_6, a_7, a_8, a_9, a_10, a_11]
   end
 
@@ -226,7 +226,7 @@ begin
   TestFramework.check(test_no: 30, should_be: "😀 for number 1234567") do
     a = TestModule::Test.new(x: 5)
     # TODO: For some reason, this does not work in MRI
-    a.inside_mri? ? "😀 for number 1234567" : a.happy😀emoji😀test😀😀😀(arg: 1234567)
+    a.inside_mri? ? "😀 for number 1234567" : a.happy😀emoji😀test😀😀😀(1234567)
   end
 
   # Testing equality methods
@@ -241,7 +241,7 @@ begin
   # Testing UInt8 and nil-returning methods
   TestFramework.check(test_no: 32, should_be: ["123", NilClass]) do
     a = TestModule::Test.new(x: 5)
-    [a.uint_test(arg: 123), a.noreturn_test.class]
+    [a.uint_test(123), a.noreturn_test.class]
   end
 
   # Testing indirect overloads
@@ -302,7 +302,7 @@ begin
       x + y
     end
 
-    other_result_3 = TestModule::Test.block_test_3(arg: "They said") do |x, y|
+    other_result_3 = TestModule::Test.block_test_3("They said") do |x, y|
       "#{x}, #{y}"
     end
 
@@ -312,7 +312,7 @@ begin
   # Testing arrays
   TestFramework.check(test_no: 37, should_be: [[2, 4, "HelloHello"], ["Not an array"]]) do
     a = TestModule::Test.new(x: 5)
-    [a.array_test(arg: [1, 2, "Hello"]), a.array_test(arg: "Not an array")]
+    [a.array_test([1, 2, "Hello"]), a.array_test("Not an array")]
   end
 
   # Testing hashes
@@ -324,13 +324,13 @@ begin
   # Testing unspecified floats
   TestFramework.check(test_no: 39, should_be: 3.0) do
     a = TestModule::Test.new(x: 5)
-    a.float_test(arg: 3)
+    a.float_test(3)
   end
 
   # Testing chars
   TestFramework.check(test_no: 40, should_be: "🌈") do
     a = TestModule::Test.new(x: 5)
-    a.char_test(arg: "🌈")
+    a.char_test("🌈")
   end
 
   results = []
@@ -347,7 +347,7 @@ begin
     b = TestModule::Test.new(x: 32)
     test_hash = {"Hello" => "World", "Test" => b, 12334 => "A number", 999 => a, :test_symbol => "The symbol should become a string", :enum => TestModule::Test::TestEnum::Three}
 
-    result = a.hash_test(arg: test_hash).each do |key, value|
+    result = a.hash_test(test_hash).each do |key, value|
       puts "Ruby: #{key} -> #{value.is_a?(TestModule::Test) ? "Test with x = #{value.x}" : value.is_a?(TestModule::Test::TestEnum) ? value.value : value}"
     end
 
@@ -361,9 +361,9 @@ begin
 
     ptr = a.ptr_return_test
     
-    a_1 = a.ptr_arg_test(arg: ptr)
-    a_2 = a.ptr_star_arg_test(arg: ptr)
-    a_3 = a.test_int_or_ptr(arg: ptr)
+    a_1 = a.ptr_arg_test(ptr)
+    a_2 = a.ptr_star_arg_test(ptr)
+    a_3 = a.test_int_or_ptr(ptr)
 
     [a_1, a_2, a_3, ptr.class]
   end
@@ -378,7 +378,7 @@ begin
 
   class InheritedContentTest < TestModule::Test::ContentTest
     def initialize(content, another_content)
-      super(content: content)
+      super(content)
       @another_content = another_content
     end
 
@@ -390,7 +390,7 @@ begin
   # Testing inheriting wrapped classes
   TestFramework.check(test_no: 43, should_be: [789789, 3, 4]) do
     it = InheritedContentTest.new([InheritedTest.new(x: 123456, z: "Hello"), InheritedTest.new(x: 789789, z: "World")], InheritedTest.new(x: 111, z: "Nice day"))
-    mt = TestModule::Test::NewContentTest.new(content: [TestModule::Test::TestChild.new(x: 1), InheritedTest.new(x: 2, z: "2")], more_content: [InheritedTest.new(x: 3, z: "3"), InheritedTest.new(x: 4, z: "4")])
+    mt = TestModule::Test::NewContentTest.new([TestModule::Test::TestChild.new(x: 1), InheritedTest.new(x: 2, z: "2")], [InheritedTest.new(x: 3, z: "3"), InheritedTest.new(x: 4, z: "4")])
     
     # NOTE: This works, but only for methods directly inherited from Test.
     # Overloading is therefore possible, but the other content will be cut.
@@ -440,7 +440,7 @@ begin
   # Testing Ruby value references in Crystal
   TestFramework.check(test_no: 48, should_be: "Hello and a reference with 1223 were given.") do
     a = TestModule::Test.new(x: 5)
-    a.ref_test(str: "Hello", ref: 1223)
+    a.ref_test("Hello", 1223)
   end
 
   # Testing struct constructors with custom default values
@@ -463,7 +463,7 @@ begin
 
   # Testing self as argument type
   TestFramework.check(test_no: 51, should_be: "Value is 1 and 2.3") do
-    TestModule::Test::GTIntFloat.self_test(other: TestModule::Test::GTIntFloat.new(u: 1, v: 2.3))
+    TestModule::Test::GTIntFloat.self_test(TestModule::Test::GTIntFloat.new(1, 2.3))
   end
 
   # Testing equality methods of enums and structs
@@ -475,7 +475,7 @@ begin
   TestFramework.check(test_no: 53, should_be: ["[x is 5, x is 5]", "[x is 32, x is 5, x is 32]"]) do
     a = TestModule::Test.new(x: 5)
     b = TestModule::Test.new(x: 32)
-    inherited_content_test = TestModule::Test::NewContentTest.new(content: [a, a], more_content: [b, a, b])
+    inherited_content_test = TestModule::Test::NewContentTest.new([a, a], [b, a, b])
     [inherited_content_test.content.inspect, inherited_content_test.more_content.inspect]
   end
 
@@ -489,9 +489,9 @@ begin
   # Testing access to instance variables
   TestFramework.check(test_no: 55, should_be: [nil, 15667]) do
     a = TestModule::Test.new(x: 5)
-    before = a.get_instance_variable(name: "hello")
-    a.set_instance_variable_to_int(name: "hello", value: 15667)
-    after = a.get_instance_variable(name: "hello")
+    before = a.get_instance_variable("hello")
+    a.set_instance_variable_to_int("hello", 15667)
+    after = a.get_instance_variable("hello")
     [before, after]
   end
 
@@ -518,7 +518,7 @@ begin
 
     a_4 = enum_copy.value
 
-    intfloat = TestModule::Test::GTIntFloat.new(u: 1, v: 2.3)
+    intfloat = TestModule::Test::GTIntFloat.new(1, 2.3)
     intfloat_copy = intfloat.dup
 
     intfloat_copy.u -= 1
@@ -544,7 +544,7 @@ begin
   # Testing giving Regex values to Crystal
   TestFramework.check(test_no: 60, should_be: "Hello") do
     a = TestModule::Test.new(x: 5)
-    a.check_some_regex(r: /([\S]+) [\S]+/, str: "Hello World")
+    a.check_some_regex(/([\S]+) [\S]+/, "Hello World")
   end
 
   # Testing getting Regex values from Crystal

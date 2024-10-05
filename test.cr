@@ -532,7 +532,7 @@ module RPGTest
   class Entity
     property hp : Int32
 
-    def initialize(@hp : Int32)
+    def initialize(@hp : Int32 = 0)
     end
 
     def damage(diff : Int32)

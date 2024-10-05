@@ -70,7 +70,7 @@ module RPGTest
   class Entity
     property hp : Int32
 
-    def initialize(@hp : Int32)
+    def initialize(@hp : Int32 = 0)
     end
 
     def damage(diff : Int32)
@@ -110,15 +110,15 @@ The last line in the block calls the following example script:
 
 ```ruby
 a = RPGTest::Entity.new(hp: 20)
-a.damage(diff: 13)
+a.damage(13)
 puts a.hp
 
 b = RPGTest::Entity.new(hp: 10)
-a.absorb_hp_from(other: b)
+a.absorb_hp_from(b)
 puts a.hp
 puts b.hp
-b.yell(sound: 'Ouch, you stole my HP!', loud: true)
-a.yell(sound: 'Well, take better care of your public attributes!')
+b.yell('Ouch, you stole my HP!', loud: true)
+a.yell('Well, take better care of your public attributes!')
 ```
 
 The example above gives a good overview over the things you can already do with Anyolite.
@@ -155,11 +155,13 @@ until Anyolite 2 is released.
 
 * [ ] Discard postinstall option in favor of more sophisticated build script
 * [ ] Simplify building with custom options
-* [ ] Set optional arguments being keywords for method as default
+* [X] Set optional arguments being keywords for method as default
 * [ ] Add option for using either dynamic or static linking
 
 #### Usability
 
+* [X] Added `DefaultRequiredArgsToKeywordArgs` annotation for legacy support
+* [X] Added `ANYOLITE_DEFAULT_REQUIRED_ARGS_TO_KEYWORD_ARGS` constant for legacy support
 * [ ] Add Wiki section about migrating from Anyolite 1
 * [ ] Add error messages when using wrong annotation syntax
 

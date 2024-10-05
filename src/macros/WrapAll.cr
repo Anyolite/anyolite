@@ -6,14 +6,15 @@ module Anyolite
 
       {% method_source = other_source ? other_source : crystal_class %}
 
-      {% default_optional_args_to_keyword_args = parse_type("ANYOLITE_DEFAULT_OPTIONAL_ARGS_TO_KEYWORD_ARGS").resolve? %}
+      # NOTE: This is default behavior since Anyolite 2.0.0!
+      {% default_optional_args_to_keyword_args = !parse_type("ANYOLITE_DEFAULT_REQUIRED_ARGS_TO_KEYWORD_ARGS").resolve? %}
 
-      {% if !crystal_class.resolve.annotations(Anyolite::DefaultOptionalArgsToKeywordArgs).empty? %}
-        {% default_optional_args_to_keyword_args = true %}
+      {% if !crystal_class.resolve.annotations(Anyolite::DefaultRequiredArgsToKeywordArgs).empty? %}
+        {% default_optional_args_to_keyword_args = false %}
       {% else %}
         {% for class_ancestor in crystal_class.resolve.ancestors %}
-          {% if !class_ancestor.resolve.annotations(Anyolite::DefaultOptionalArgsToKeywordArgs).empty? %}
-            {% default_optional_args_to_keyword_args = true %}
+          {% if !class_ancestor.resolve.annotations(Anyolite::DefaultRequiredArgsToKeywordArgs).empty? %}
+            {% default_optional_args_to_keyword_args = false %}
           {% end %}
         {% end %}
       {% end %}
@@ -223,14 +224,14 @@ module Anyolite
 
       {% how_many_times_wrapped = {} of String => UInt32 %}
 
-      {% default_optional_args_to_keyword_args = false %}
+      {% default_optional_args_to_keyword_args = !parse_type("ANYOLITE_DEFAULT_REQUIRED_ARGS_TO_KEYWORD_ARGS").resolve? %}
 
-      {% if !crystal_class.resolve.annotations(Anyolite::DefaultOptionalArgsToKeywordArgs).empty? %}
-        {% default_optional_args_to_keyword_args = true %}
+      {% if !crystal_class.resolve.annotations(Anyolite::DefaultRequiredArgsToKeywordArgs).empty? %}
+        {% default_optional_args_to_keyword_args = false %}
       {% else %}
         {% for class_ancestor in crystal_class.resolve.ancestors %}
-          {% if !class_ancestor.resolve.annotations(Anyolite::DefaultOptionalArgsToKeywordArgs).empty? %}
-            {% default_optional_args_to_keyword_args = true %}
+          {% if !class_ancestor.resolve.annotations(Anyolite::DefaultRequiredArgsToKeywordArgs).empty? %}
+            {% default_optional_args_to_keyword_args = false %}
           {% end %}
         {% end %}
       {% end %}
