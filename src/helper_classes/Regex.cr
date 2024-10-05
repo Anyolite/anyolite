@@ -3,22 +3,12 @@
 {% end %}
 
 @[Anyolite::ExcludeConstant("SPECIAL_CHARACTERS")]
-{% if compare_versions(Crystal::VERSION, "1.7.3") > 0 %}
-  {% if compare_versions(Crystal::VERSION, "1.9.0") > 0 %}
-    @[Anyolite::ExcludeInstanceMethod("match!")]
-  {% end %}
-  @[Anyolite::SpecializeInstanceMethod("initialize", [source : String, options : Options = Options::None], [source : String])]
-  @[Anyolite::SpecializeInstanceMethod("match", [str : String, pos : Int32 = 0, options : Regex::MatchOptions = :none], [str : String, pos : Int32 = 0])]
-  @[Anyolite::SpecializeInstanceMethod("matches?", [str : String, pos : Int32 = 0, options : Regex::MatchOptions = :none], [str : String, pos : Int32 = 0])]
-  @[Anyolite::SpecializeInstanceMethod("match_at_byte_index", [str : String, byte_index : Int32 = 0, options : Regex::MatchOptions = :none], [str : String, byte_index : Int32 = 0])]
-  @[Anyolite::SpecializeInstanceMethod("matches_at_byte_index?", [str : String, byte_index : Int32 = 0, options : Regex::MatchOptions = :none], [str : String, byte_index : Int32 = 0])]
-{% else %}
-  @[Anyolite::SpecializeInstanceMethod("initialize", [source : String, options : Options = Options::None], [source : String])]
-  @[Anyolite::SpecializeInstanceMethod("match", [str, pos = 0, options = Regex::Options::None], [str : String, pos : Int32 = 0])]
-  @[Anyolite::SpecializeInstanceMethod("matches?", [str, pos = 0, options = Regex::Options::None], [str : String, pos : Int32 = 0])]
-  @[Anyolite::SpecializeInstanceMethod("match_at_byte_index", [str, byte_index = 0, options = Regex::Options::None], [str : String, byte_index : Int32 = 0])]
-  @[Anyolite::SpecializeInstanceMethod("matches_at_byte_index?", [str, byte_index = 0, options = Regex::Options::None], [str : String, byte_index : Int32 = 0])]
-{% end %}
+@[Anyolite::ExcludeInstanceMethod("match!")]
+@[Anyolite::SpecializeInstanceMethod("initialize", [source : String, options : Options = Options::None], [source : String])]
+@[Anyolite::SpecializeInstanceMethod("match", [str : String, pos : Int32 = 0, options : Regex::MatchOptions = :none], [str : String, pos : Int32 = 0])]
+@[Anyolite::SpecializeInstanceMethod("matches?", [str : String, pos : Int32 = 0, options : Regex::MatchOptions = :none], [str : String, pos : Int32 = 0])]
+@[Anyolite::SpecializeInstanceMethod("match_at_byte_index", [str : String, byte_index : Int32 = 0, options : Regex::MatchOptions = :none], [str : String, byte_index : Int32 = 0])]
+@[Anyolite::SpecializeInstanceMethod("matches_at_byte_index?", [str : String, byte_index : Int32 = 0, options : Regex::MatchOptions = :none], [str : String, byte_index : Int32 = 0])]
 @[Anyolite::SpecializeInstanceMethod("+", [other], [other : Regex])]
 @[Anyolite::SpecializeInstanceMethod("=~", [other], [other : String | Regex])]
 @[Anyolite::SpecializeInstanceMethod("===", [other : String])]
@@ -33,16 +23,10 @@
 @[Anyolite::ExcludeConstant("PCRE2")]
 @[Anyolite::ExcludeConstant("Error")]
 @[Anyolite::ExcludeConstant("Options")]
-{% if compare_versions(Crystal::VERSION, "1.7.3") > 0 %}
-  {% if compare_versions(Crystal::VERSION, "1.9.0") > 0 %}
-    @[Anyolite::ExcludeClassMethod("literal")]
-  {% end %}
-  @[Anyolite::ExcludeConstant("MatchOptions")]
-  @[Anyolite::ExcludeConstant("CompileOptions")]
-  {% if compare_versions(Crystal::VERSION, "1.8.0") > 0 %}
-    @[Anyolite::ExcludeInstanceMethod("each_named_capture_group")]
-  {% end %}
-{% end %}
+@[Anyolite::ExcludeClassMethod("literal")]
+@[Anyolite::ExcludeConstant("MatchOptions")]
+@[Anyolite::ExcludeConstant("CompileOptions")]
+@[Anyolite::ExcludeInstanceMethod("each_named_capture_group")]
 class Regex
   @[Anyolite::SpecializeInstanceMethod("[]?", [n : Int])]
   @[Anyolite::SpecializeInstanceMethod("[]", [n : Int])]
@@ -53,24 +37,15 @@ class Regex
   @[Anyolite::ExcludeInstanceMethod("pretty_print")]
   @[Anyolite::SpecializeInstanceMethod("to_s", [io : IO])]
   struct MatchData
-    {% if compare_versions(Crystal::VERSION, "1.7.3") > 0 %}
-      @[Anyolite::Specialize]
-      def initialize(@regex : ::Regex, @code : LibPCRE2::Code*, @string : String, @pos : Int32, @ovector : LibC::SizeT*, @group_size : Int32)
-        super
-      end
-    {% elsif compare_versions(Crystal::VERSION, "1.6.2") > 0 %}
-      @[Anyolite::Specialize]
-      def initialize(@regex : ::Regex, @code : LibPCRE::Pcre, @string : String, @pos : Int32, @ovector : Int32*, @group_size : Int32)
-        super
-      end
-    {% end %}
+    @[Anyolite::Specialize]
+    def initialize(@regex : ::Regex, @code : LibPCRE2::Code*, @string : String, @pos : Int32, @ovector : LibC::SizeT*, @group_size : Int32)
+      super
+    end
   end
 
-  {% if compare_versions(Crystal::VERSION, "1.6.2") > 0 %}
-    def initialize(source : String, options : Options = Options::None)
-      super(_source: source, _options: Regex::Options::None)
-    end
-  {% end %}
+  def initialize(source : String, options : Options = Options::None)
+    super(_source: source, _options: Regex::Options::None)
+  end
 
   def self.compile(str : String)
     self.new(str)

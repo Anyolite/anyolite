@@ -139,8 +139,7 @@ task :build_glue => [:load_config] do
         if $config.implementation == "mruby"
             if ANYOLITE_COMPILER == :msvc
                 GLUE_FILES.each do |name|
-                    # NOTE: For later versions, add flag /MD for dynamic linking only
-                    system "cl /I \"#{$config.rb_dir}/#{$config.implementation}/include\" /D MRB_INT64 /c \"#{$config.glue_dir}/#{name}.c\" /Fo\"#{$config.build_path}/glue/#{$config.implementation}/#{name}.obj\""
+                    system "cl /I \"#{$config.rb_dir}/#{$config.implementation}/include\" /MD /D MRB_INT64 /c \"#{$config.glue_dir}/#{name}.c\" /Fo\"#{$config.build_path}/glue/#{$config.implementation}/#{name}.obj\""
                 end
             elsif ANYOLITE_COMPILER == :gcc
                 GLUE_FILES.each do |name|

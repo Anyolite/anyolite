@@ -159,6 +159,7 @@ until Anyolite 2 is released.
 * [X] Discard postinstall option in favor of more sophisticated build script
 * [ ] Simplify building with custom options
 * [X] Set optional arguments being keywords for method as default
+* [X] Now defaults to dynamic linking for mruby
 * [ ] Add option for using either dynamic or static linking
 * [X] Drop support for older Crystal versions
 
