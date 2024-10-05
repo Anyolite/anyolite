@@ -2,6 +2,25 @@
 
 ## Releases
 
+### Version 1.1.1
+
+NOTE: This version requires recompilation of mruby and the C files.
+
+NOTE: This version will only work with mruby 3.3.0 and above.
+
+#### Usability
+
+* Updated mruby to 3.3.0
+* Updated MRI to 3.0.6
+* Added error messages when Rake fails at installing
+* Added error messages when mruby/MRI is missing
+
+#### Bugfixes
+
+* Fixed Regex wrapper warnings when running Anyolite with newer Crystal versions
+* Fixed warning message when compiling glue files
+* Fixed some annotations not working properly
+
 ### Version 1.1.0
 
 NOTE: This version requires recompilation of mruby and the C files.
