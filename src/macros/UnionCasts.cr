@@ -4,7 +4,6 @@ module Anyolite
       _final_value = :invalid
 
       {% for type in types %}
-        {% puts "Type: #{type.stringify} for type array #{types.stringify}" %}
         {% if type.resolve? %}
           Anyolite::Macro.check_and_cast_union_type({{rb}}, {{value}}, {{type}}, {{type}}, options: {{options}})
         {% elsif options[:context] %}
