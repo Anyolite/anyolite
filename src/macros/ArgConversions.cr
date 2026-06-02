@@ -188,16 +188,10 @@ module Anyolite
 
     macro resolve_from_ruby_to_crystal(rb, arg, arg_type, raw_arg_type, options = {} of Symbol => NoReturn, debug_information = nil)
       {% if arg_type.stringify.starts_with?("Union") || arg_type.stringify.starts_with?("::Union") %}
-        # This sadly needs some uncanny magic
-        {% char_parser = "" %}
-        {% brace_counter = 0 %}
-        {% for c in arg_type.stringify[(arg_type.stringify.starts_with?("::") ? 8 : 6)..-2].chars %}
-          {% brace_counter += 1 if c == '(' %}
-          {% brace_counter -= 1 if c == ')' %}
-          {% char_parser += (brace_counter == 0 && c == '|' ? ',' : c) %}
-        {% end %}
-
-        Anyolite::Macro.cast_to_union_value({{rb}}, {{arg}}, {{"[#{char_parser.id}]".id}}, options: {{options}}, debug_information: {{debug_information}})
+        # This sadly needs some uncanny magic, but essentially just gets all types (including recursive generics) out of the union
+        # Don't question it too much, it seems to work properly after testing it
+        {% types_to_check = arg_type.stringify.gsub(/::Union/, "").gsub(/Union/, "").scan(/[\w:]+(\((?:[^()]|((?R)))+\))*/).map{|element| element[0].id} %}
+        Anyolite::Macro.cast_to_union_value({{rb}}, {{arg}}, {{types_to_check}}, options: {{options}}, debug_information: {{debug_information}})
       {% elsif arg_type.resolve? %}
         {% if arg_type.resolve <= Nil %}
           Anyolite::RbCast.cast_to_nil({{rb}}, {{arg}})
