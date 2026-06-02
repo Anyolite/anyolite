@@ -2,7 +2,7 @@ name: WinTest
 
 on:
   push:
-    branches: [main]
+    branches: [main, test]
   pull_request:
     branches: [main]
   schedule:
