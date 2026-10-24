@@ -1,8 +1,12 @@
+require "mutex"
+
 module Anyolite
   # Wrapper for an mruby state reference
   # NOTE: Do not create more than one at a time!
   class RbInterpreter
     @rb_ptr : RbCore::State*
+    # mruby is not thread-safe; serialize script entry while allowing same-fiber re-entry.
+    @execution_mutex = Mutex.new(:reentrant)
     property depth : UInt32 = 0
 
     def self.create
@@ -37,30 +41,41 @@ module Anyolite
       return @rb_ptr
     end
 
+    private def with_execution_lock(&block : -> T) : T forall T
+      @execution_mutex.synchronize do
+        @depth += 1
+        begin
+          yield
+        ensure
+          @depth -= 1
+        end
+      end
+    end
+
     def execute_script_line(str : String, clear_error : Bool = true)
-      @depth += 1
-      value = RbCore.execute_script_line(@rb_ptr, str)
-      @depth -= 1
-      RbCore.clear_last_rb_error(@rb_ptr) if clear_error
-      value
+      with_execution_lock do
+        value = RbCore.execute_script_line(@rb_ptr, str)
+        RbCore.clear_last_rb_error(@rb_ptr) if clear_error
+        value
+      end
     end
 
     def load_script_from_file(filename : String)
-      @depth += 1
-      RbCore.load_script_from_file(@rb_ptr, filename)
-      @depth -= 1
+      with_execution_lock do
+        RbCore.load_script_from_file(@rb_ptr, filename)
+      end
     end
 
     def execute_bytecode(bytecode : Array(UInt8))
-      @depth += 1
-      RbCore.execute_bytecode(@rb_ptr, bytecode)
-      @depth -= 1
+      with_execution_lock do
+        RbCore.execute_bytecode(@rb_ptr, bytecode)
+      end
     end
 
     def load_bytecode_from_file(filename : String)
-      @depth += 1
-      RbCore.load_bytecode_from_file(@rb_ptr, filename)
-      @depth -= 1
+      with_execution_lock do
+        RbCore.load_bytecode_from_file(@rb_ptr, filename)
+      end
     end
 
     # TODO: Use internal mruby arg count in future versions

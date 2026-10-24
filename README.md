@@ -22,6 +22,7 @@ Useful links for an overview:
 # Features
 
 * Bindings to an mruby interpreter
+* Script and bytecode entry points on one interpreter are serialized, since mruby state is not thread-safe
 * Near complete support to regular Ruby as alternative implementation (also known as MRI or CRuby)
 * Wrapping of nearly arbitrary Crystal classes and methods to Ruby
 * Easy syntax without unnecessary boilerplate code

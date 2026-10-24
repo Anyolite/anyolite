@@ -142,6 +142,12 @@ module SomeModule
       int * 10
     end
 
+    def self.yield_during_interpreter_call : Int32
+      Fiber.yield
+      Fiber.yield
+      7
+    end
+
     @[Anyolite::Rename("test")]
     def test_instance_method(int : Int32, bool : Bool, str : String, float : Float32 = 0.4f32)
       @x += int
@@ -565,6 +571,18 @@ macro load_test_module
   Anyolite.wrap_instance_method(rb, SomeModule::Test, "add", add, [SomeModule::Test])
 end
 
+def test_concurrent_script_calls
+  results = Channel(Int32).new
+  8.times do
+    spawn do
+      results.send(Anyolite.eval("TestModule::Test.yield_during_interpreter_call", cast_to: Int32))
+    end
+  end
+
+  values = Array(Int32).new(8) { results.receive }
+  raise "Unexpected concurrent interpreter results: #{values}" unless values.all? { |value| value == 7 }
+end
+
 {% unless flag?(:anyolite_implementation_ruby_3) %}
   Anyolite::RbInterpreter.create do |rb|
     Anyolite.wrap(rb, RPGTest)
@@ -580,6 +598,7 @@ end
 
     rb.load_script_from_file("examples/test_framework.rb")
     rb.load_script_from_file("examples/test.rb")
+    test_concurrent_script_calls
   end
 {% else %}
   Anyolite::RbInterpreter.create do |rb|
@@ -594,5 +613,6 @@ end
     rb.load_script_from_file("examples/mri_test.rb")
 
     Anyolite.eval("puts TestModule::Test.new(x: 67890).inspect")
+    test_concurrent_script_calls
   end
 {% end %}
